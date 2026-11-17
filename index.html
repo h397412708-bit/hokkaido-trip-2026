@@ -464,6 +464,57 @@ dialog.sh-lightbox::backdrop{background:rgba(24,34,54,.79);-webkit-backdrop-filt
 .sh-product-detail .sh-mini-actions{gap:4px}
 .sh-mini-actions button{font-size:9px;min-width:0;padding:5px 7px;border-radius:7px;line-height:1.25}
 
+
+/* 購物清單微調｜圖片填滿原有方框，保留置中及點擊放大 */
+.sh-image,
+.sh-image.sh-image-open{
+  box-sizing:border-box;
+  padding:0;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.sh-image img,
+.sh-image.sh-image-open img{
+  width:100%;height:100%;max-width:none;max-height:none;
+  object-fit:cover;object-position:center;
+  display:block;margin:0;
+}
+/* 商品編輯視窗｜增加留白與字距，保留 iPhone 輸入欄位的 16px 設定 */
+.sh-form{
+  padding:22px 19px calc(21px + env(safe-area-inset-bottom,0px));
+}
+.sh-form h3{font-size:16px;line-height:1.5;letter-spacing:.025em;margin:0 0 5px}
+.sh-form .sh-caption{font-size:11px;line-height:1.75;letter-spacing:.025em;margin:0 0 20px;color:#8895aa}
+.sh-form .sh-photo-field{gap:15px;padding:3px 0 10px}
+.sh-form .sh-photo-controls{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.sh-form .sh-photo-help{font-size:10px;line-height:1.7;letter-spacing:.012em;margin:5px 0}
+.sh-form label:not(.sh-photo-upload){font-size:11px;line-height:1.7;letter-spacing:.035em;font-weight:750;margin:16px 0 0;color:#596d91}
+.sh-form input:not([type=file]),.sh-form textarea{
+  margin-top:8px;min-height:42px;padding:10px 12px;
+  font-size:16px!important;line-height:1.5;letter-spacing:.01em;font-weight:450;
+}
+.sh-form textarea{min-height:82px;line-height:1.65}
+.sh-form .sh-hints{gap:7px;margin-top:10px}
+.sh-form .sh-hints button{padding:6px 10px;line-height:1.5;letter-spacing:.012em}
+.sh-form .sh-edit-qty{margin-top:9px;gap:10px}
+.sh-form .sh-edit-qty input[type=number]{margin-top:0;font-size:16px!important;font-weight:700}
+.sh-form .sh-edit-qty button{min-height:42px;width:42px}
+.sh-form .fb{margin-top:22px;padding-top:13px;gap:10px}
+.sh-form .fb button{font-size:12px;min-height:41px;line-height:1.5}
+@media(max-width:360px){
+ .sh-form{padding:20px 15px calc(19px + env(safe-area-inset-bottom,0px))}
+ .sh-form label:not(.sh-photo-upload){margin-top:15px}
+}
+
+
+/* 圖片以固定框尺寸顯示，避免直式照片撐高商品卡片 */
+.sh-image{position:relative}
+.sh-image img,.sh-image.sh-image-open img{
+  position:absolute;inset:0;width:100%;height:100%;
+  max-width:100%;max-height:100%;object-fit:cover;object-position:center;
+}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
