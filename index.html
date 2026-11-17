@@ -422,6 +422,16 @@ main{padding-bottom:calc(108px + var(--sb))}
   .bottom-nav button{transition:none!important}
 }
 
+
+/* iPhone Safari：輸入時避免因表單字體小於 16px 而自動放大畫面。
+   保留使用者手動雙指縮放，不使用 maximum-scale/user-scalable=no。 */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+textarea,select{font-size:16px!important}
+/* Liquid Glass：去掉底部選單的外部投影，保留透明、模糊及反光。 */
+.bottom-nav{box-shadow:none!important}
+.nav-lens-core{box-shadow:inset 0 1px 2px rgba(255,255,255,.78)!important}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
