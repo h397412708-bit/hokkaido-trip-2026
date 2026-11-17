@@ -161,7 +161,7 @@ dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(
       activity('12:00–13:00','午餐','溫泉街用餐。','用餐'),
       activity('13:00–15:00','大湯沼方向探索（條件式）','僅限官方開放、雪況安全時前往；否則保留飯店休息與其他室內活動。','待確認',{pending:true,places:[place('大湯沼','Oyunuma Noboribetsu'),place('天然足湯','Oyunuma River Natural Footbath')]}),
       activity('15:00–18:00','返回飯店・泡湯休息','這天不需要趕行程。','休息',{places:[place('第一瀧本館','Dai-ichi Takimotokan Noboribetsu')]}),
-      activity('18:30–20:00','晚餐','如住宿含晚餐則在飯店用餐；實際方案待確認。','用餐',{pending:true}),
+      activity('18:30–20:00','飯店內晚餐','已確認在第一瀧本館用晚餐，實際用餐時段依飯店安排。','已預訂',{booked:true}),
       activity('20:00 後','自由活動・泡湯','補充體力，準備隔天前往洞爺湖。','休息')
     ]},
     {d:'24',week:'四',city:'登別 → 洞爺湖',tone:'toya',title:'移動到湖的另一邊',sub:'JR 北斗・洞爺湖畔散步・乃之風景觀溫泉',sleep:'洞爺湖景乃之風度假酒店（入住）',low:4000,high:7000,note:'登別 → 洞爺 JR 車次尚未確認。乃之風飯店沒有洞爺 JR 站的免費接駁，請搭巴士或計程車。',items:[
@@ -174,7 +174,7 @@ dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(
       activity('14:30–15:30','乃之風飯店入住・休息','已訂 12/24–12/26，2 晚；依飯店實際入住時間。','已預訂',{booked:true}),
       activity('15:30–16:30','洞爺湖畔散步','欣賞冬季湖景，注意風寒。','觀光'),
       activity('16:30–18:00','湖景溫泉・休息','好好享受飯店設施。','休息'),
-      activity('18:00–20:00','飯店晚餐','訂房截圖顯示自助餐資訊；請以訂房確認函核實實際含餐項目。','用餐',{pending:true}),
+      activity('18:00–20:00','飯店內晚餐','已確認在洞爺湖景乃之風度假酒店內用晚餐，實際用餐時段依飯店安排。','已預訂',{booked:true}),
       activity('20:00 後','飯店自由活動','可休息、看湖景。','休息')
     ]},
     {d:'25',week:'五',city:'洞爺湖',tone:'toya',title:'湖邊的雪地冒險',sub:'雪地摩托車（未訂）・Silo 展望台・溫泉',sleep:'洞爺湖景乃之風度假酒店',low:10000,high:17000,note:'雪地摩托車尚未預約，12/25 是否開放取決於積雪與營運公告。若未開放，保留洞爺湖周邊觀景、咖啡與飯店溫泉替代。',items:[
@@ -186,7 +186,7 @@ dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(
       activity('13:30–14:30','Silo 展望台','眺望洞爺湖雪景；往返需安排車輛。','觀光',{places:[place('Silo 展望台','Silo Observatory Lake Toya','driving')]}),
       activity('14:30–15:30','返回飯店・湖畔散步','依天氣決定散步長度。','觀光',{places:[place('洞爺湖畔','Toyako Onsen Lakeside')]}),
       activity('15:30–18:00','乃之風溫泉與自由時間','泡湯、放鬆。','休息'),
-      activity('18:00–20:00','晚餐','依實際含餐方案確認。','用餐',{pending:true}),
+      activity('18:00–20:00','飯店內晚餐','已確認在洞爺湖景乃之風度假酒店內用晚餐，實際用餐時段依飯店安排。','已預訂',{booked:true}),
       activity('20:00 後','休息・整理行李','隔天回千歲地區。','休息')
     ]},
     {d:'26',week:'六',city:'洞爺湖 → 千歲',tone:'airport',title:'告別湖景，回到千歲',sub:'退房・JR 往南千歲・機場附近住宿',sleep:'新千歲機場附近飯店（名稱待補）',low:6000,high:10000,note:'最後一晚住機場附近，因此先比較洞爺 → 南千歲／新千歲機場的路線，不直接假定要繞去札幌。末晚飯店地址仍待補充。',items:[
@@ -212,8 +212,8 @@ dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(
 
   const hotels = [
     {date:'12/18（五）入住・12/22（二）退房',nights:'4 晚',name:'SAPPORO STREAM HOTEL',addr:'北海道札幌市中央區南4條西4丁目1-1',q:'Sapporo Stream Hotel',ok:true,detail:'連住 4 晚；位於薄野／COCONO SUSUKINO，適合札幌市區景點與購物。12/19 小樽一日遊可輕裝出發。'},
-    {date:'12/22（二）入住・12/24（四）退房',nights:'2 晚',name:'第一瀧本館 Dai-ichi Takimotokan',addr:'北海道登別市登別溫泉町55',q:'Dai-ichi Takimotokan Noboribetsu',ok:true,detail:'鄰近地獄谷；早餐、晚餐是否包含及用餐時間請以確認函為準。'},
-    {date:'12/24（四）入住・12/26（六）退房',nights:'2 晚',name:'洞爺湖景乃之風度假酒店',addr:'北海道虻田郡洞爺湖町洞爺湖溫泉29-1',q:'The Lake View Toya Nonokaze Resort',ok:true,detail:'湖畔住宿；截圖顯示自助餐房型資訊，請再確認實際含餐方案。'},
+    {date:'12/22（二）入住・12/24（四）退房',nights:'2 晚',name:'第一瀧本館 Dai-ichi Takimotokan',addr:'北海道登別市登別溫泉町55',q:'Dai-ichi Takimotokan Noboribetsu',ok:true,detail:'鄰近地獄谷；12/23 已安排飯店內晚餐，12/22 晚餐與每日用餐時間可再依飯店安排確認。'},
+    {date:'12/24（四）入住・12/26（六）退房',nights:'2 晚',name:'洞爺湖景乃之風度假酒店',addr:'北海道虻田郡洞爺湖町洞爺湖溫泉29-1',q:'The Lake View Toya Nonokaze Resort',ok:true,detail:'湖畔住宿；12/24、12/25 晚餐均已確認在飯店內享用，實際用餐時段依飯店安排。'},
     {date:'12/26（六）入住・12/27（日）退房',nights:'1 晚',name:'新千歲機場附近飯店（待補）',addr:'尚未提供飯店名稱及地址',ok:false,detail:'最後一晚已預訂住宿，但尚未得知具體飯店名稱。需確認隔天航廈接駁。'}
   ];
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -224,7 +224,7 @@ const HOURS=[[/天狗山纜車與/,'冬季約 9:30–21:00，天候可能停駛'
 const find=(L,t)=>{const m=L.find(x=>x[0].test(t));return m?m[1]:''};
 const uid=()=>Math.random().toString(36).slice(2,9);
 const prep=()=>DAYS.map(d=>({d:d.d,week:d.week,city:d.city,tone:d.tone,title:d.title,sub:d.sub,sleep:d.sleep,note:d.note,items:d.items.map(a=>({id:uid(),time:String(a.time).split(/[–\- ]/)[0],title:a.title,desc:a.desc||'',kind:a.kind,booked:!!a.booked,pending:!!a.pending,cost:find(COST,a.title)||a.meta||'',hours:find(HOURS,a.title),places:a.places||[]}))}));
-const T0=()=>[['JR 特急北斗 12/22 札幌 → 登別（指定席）','票券'],['JR 12/24 登別 → 洞爺、12/26 洞爺 → 南千歲 車票','票券'],['札幌啤酒博物館／AOAO 票券（12/21）','票券'],['天狗山纜車票價與營運確認（12/19）','票券'],['雪地摩托車預約（12/25，需確認開放）','預約'],['確認兩間溫泉飯店含餐內容','預約'],['補上 12/26 機場附近飯店名稱','預約'],['奧芝商店 12/20 訂位確認','訂位'],['Visit Japan Web 入境資料','其他'],['eSIM／網路與海外旅遊保險','其他']].map(x=>({t:x[0],c:x[1],done:false})).concat([{t:'小樽倉庫 No.1｜12/19 17:30｜4 人',c:'訂位',done:true},{t:'寺田壽司｜12/21 20:30｜4 人',c:'訂位',done:true},{t:'機票：酷航 TR892／亞航 FD243',c:'票券',done:true},{t:'四段住宿（已訂）',c:'預約',done:true}]);
+const T0=()=>[['JR 特急北斗 12/22 札幌 → 登別（指定席）','票券'],['JR 12/24 登別 → 洞爺 車票','票券'],['JR 12/26 洞爺 → 南千歲 車票','票券'],['札幌啤酒博物館票券（12/21）','票券'],['AOAO SAPPORO 水族館票券（12/21）','票券'],['天狗山纜車票券（12/19）','票券'],['雪地摩托車預約（12/25，需確認開放）','預約'],['確認 12/22 飯店晚餐安排與飯店用餐時段','預約'],['補上 12/26 機場附近飯店名稱','預約'],['奧芝商店 12/20 訂位確認','訂位'],['Visit Japan Web 入境資料','其他'],['eSIM／網路與海外旅遊保險','其他']].map(x=>({t:x[0],c:x[1],done:false})).concat([{t:'小樽倉庫 No.1｜12/19 17:30｜4 人',c:'訂位',done:true},{t:'寺田壽司｜12/21 20:30｜4 人',c:'訂位',done:true},{t:'機票：酷航 TR892／亞航 FD243',c:'票券',done:true},{t:'四段住宿（已訂）',c:'預約',done:true}]);
 const P0=()=>['護照（檢查效期）','機票與住宿確認資料','信用卡、日圓現金、交通卡','海外旅遊保險資料','保暖防風羽絨外套','防滑防水雪靴','發熱衣與保暖褲','保暖襪與備用襪','毛帽、圍巾、防水手套','暖暖包','eSIM／SIM 卡','手機、充電線與行動電源','常備藥品、護唇膏、乳液','隱形眼鏡與個人用品'].map(t=>({t:t,done:false}));
 
 // 每天依實際旅遊城市配對座標；預報只呈現 Open-Meteo 已可提供的日期。
@@ -321,20 +321,107 @@ function todoLinks(t){
  if(/AOAO|水族館/.test(title))put('AOAO 官方購票',BOOKING_URLS.aoao);
  if(/雪地摩托車|Snow Park/.test(title))put('洞爺湖雪地摩托車預約',BOOKING_URLS.snow);
  if(/奧芝商店|おくしば/.test(title))put('奧芝商店訂位資訊',BOOKING_URLS.soup);
- if(/溫泉飯店含餐/.test(title)){put('第一瀧本館官網',BOOKING_URLS.takimoto);put('乃之風官網',BOOKING_URLS.nonokaze)}
+ if(/溫泉飯店含餐|飯店晚餐安排|飯店用餐時段/.test(title)){put('第一瀧本館官網',BOOKING_URLS.takimoto);put('乃之風官網',BOOKING_URLS.nonokaze)}
  if(/Visit Japan Web/i.test(title))put('Visit Japan Web',BOOKING_URLS.vjw);
  if(t.url&&safeLink(t.url))put('自訂網址',t.url);
  return list.length?'<div class="todo-sites">'+[...new Map(list.map(x=>[x.url,x])).values()].map(x=>'<a href="'+esc(safeLink(x.url))+'" target="_blank" rel="noopener noreferrer">🔗 '+esc(x.name)+' ↗</a>').join('')+'</div>':'';
 }
 
-let days=LS('days',null)||prep(),todos=LS('todos',null)||T0(),packs=LS('packs',null)||P0(),st={tab:'home',day:Math.min(Math.max(+LS('day',0)||0,0),days.length-1),cat:'全部'};
+// 每張票券及訂位獨立同步，不會因為完成其中一張票就誤把其他活動顯示已訂。
+const BOOKING_RULES = [
+ {key:'jr22',day:'22',activity:/^JR 特急北斗｜札幌/,todo:/JR.*12\/22|特急北斗.*12\/22/},
+ {key:'jr24',day:'24',activity:/^JR 北斗｜登別/,todo:/JR.*12\/24/},
+ {key:'jr26',day:'26',activity:/^JR 往南千歲/,todo:/JR.*12\/26/},
+ {key:'tenguyama',day:'19',activity:/^天狗山纜車與/,todo:/天狗山纜車|天狗山.*票/},
+ {key:'beer',day:'21',activity:/^札幌啤酒博物館$/,todo:/札幌啤酒博物館/},
+ {key:'aoao',day:'21',activity:/^AOAO SAPPORO 水族館$/,todo:/AOAO|水族館/},
+ {key:'snow',day:'25',activity:/^雪地摩托車體驗/,todo:/雪地摩托車|Snow Park/i},
+ {key:'soup',day:'20',activity:/^奧芝商店.*湯咖哩/,todo:/奧芝商店|おくしば/},
+ {key:'otaru_dinner',day:'19',activity:/^小樽倉庫 No\.1 晚餐/,todo:/小樽倉庫 No\.1/},
+ {key:'terada_dinner',day:'21',activity:/^寺田壽司｜/,todo:/寺田壽司|Sushi Terada/}
+];
+function taskKeys(t){
+ if(typeof t.bookingKey==='string' && t.bookingKey)return [t.bookingKey];
+ return BOOKING_RULES.filter(r=>r.todo.test(String(t.t||''))).map(r=>r.key);
+}
+// 舊版曾把 AOAO 與啤酒館、12/24 與 12/26 JR 合併為一個待辦。
+// 保留舊勾選進度並拆分，才能分開顯示每個行程的「已訂」。
+function migrateTodos(original){
+ const converted=[];
+ for(const t of (Array.isArray(original)?original:T0())){
+  const name=String(t.t||'');
+  if(/札幌啤酒博物館/.test(name) && /AOAO/.test(name)){
+   converted.push({...t,t:'札幌啤酒博物館票券（12/21）',bookingKey:'beer'});
+   converted.push({...t,t:'AOAO SAPPORO 水族館票券（12/21）',bookingKey:'aoao'});
+  }else if(/JR/.test(name)&&/12\/24/.test(name)&&/12\/26/.test(name)){
+   converted.push({...t,t:'JR 12/24 登別 → 洞爺 車票',bookingKey:'jr24'});
+   converted.push({...t,t:'JR 12/26 洞爺 → 南千歲 車票',bookingKey:'jr26'});
+  }else if(/確認兩間溫泉飯店含餐內容/.test(name)){
+   converted.push({...t,t:'確認 12/22 飯店晚餐安排與飯店用餐時段'});
+  }else if(/天狗山纜車票價與營運確認/.test(name)){
+   converted.push({...t,t:'天狗山纜車票券（12/19）',bookingKey:'tenguyama'});
+  }else{
+   const keys=taskKeys(t);
+   converted.push({...t,...(keys.length===1?{bookingKey:keys[0]}:{})});
+  }
+ }
+ return converted;
+}
+function matchBookingKey(d,a){
+ const rule=BOOKING_RULES.find(r=>r.day===String(d.d) && r.activity.test(String(a.title||'')));
+ return rule?rule.key:'';
+}
+function migrateDays(source){
+ const list=Array.isArray(source)?source:prep();
+ for(const d of list){
+  for(const a of d.items||[]){
+   const key=matchBookingKey(d,a);
+   if(key&&!a.bookingKey)a.bookingKey=key;
+   // 既有使用者的行程會儲存在 localStorage，所以同步修正三天晚餐的舊資料。
+   if(['23','24','25'].includes(String(d.d))&&/^(飯店內晚餐|飯店晚餐|晚餐)$/.test(String(a.title||''))){
+    a.title='飯店內晚餐';
+    a.desc=String(d.d)==='23'?'已確認在第一瀧本館用晚餐，實際用餐時段依飯店安排。':'已確認在洞爺湖景乃之風度假酒店內用晚餐，實際用餐時段依飯店安排。';
+    a.booked=true;a.pending=false;a.kind='已預訂';
+    a.cost='飯店內晚餐；費用依已訂的用餐方案';
+   }
+  }
+ }
+ return list;
+}
+let days=migrateDays(LS('days',null)),todos=migrateTodos(LS('todos',null)),packs=LS('packs',null)||P0(),st={tab:'home',day:Math.min(Math.max(+LS('day',0)||0,0),days.length-1),cat:'全部'};
+// 用待辦勾選狀態決定行程標籤，不破壞行程手動修改與既有資料。
+function bookingStatus(a){
+ if(a.bookingKey){
+  const matching=todos.filter(t=>taskKeys(t).includes(a.bookingKey));
+  if(matching.length){const done=matching.some(t=>t.done);return {booked:done,pending:!done};}
+ }
+ return {booked:!!a.booked,pending:!!a.pending};
+}
+function bookedText(a,status){
+ let desc=String(a.desc||'');
+ if(!status.booked)return desc;
+ if(a.bookingKey==='beer')desc=desc.replace('門票尚未買。','已在待辦標記訂票完成。');
+ if(a.bookingKey==='aoao')desc=desc.replace('門票尚未購買。','已在待辦標記訂票完成。');
+ if(a.bookingKey==='soup')desc=desc.replace('尚非已訂位。','已在待辦標記訂位完成。');
+ if(a.bookingKey==='snow')desc=desc.replace('尚未預約','已完成預約');
+ if(['jr22','jr24','jr26'].includes(a.bookingKey)){
+  desc=desc.replace('實際列車與座位未確認','車票已在待辦標記訂妥，請以票券資訊為準').replace('車次與票價待訂','已在待辦標記訂票完成，請以車票資訊為準').replace('列車尚未訂','已在待辦標記訂票完成');
+ }
+ return desc;
+}
+
 const ov=new Set(),app=document.getElementById('app'),dlg=document.getElementById('dlg');
 const save=()=>{SV('days',days);SV('todos',todos);SV('packs',packs)};
 const links=pl=>{const u=[...new Map((pl||[]).map(p=>[p.q,p])).values()];return u.length?'<div class="lk">'+u.map(p=>'<a href="'+esc(OVR[p.q]||(p.search?SEARCH(p.q):MAP(p.q,p.mode)))+'" target="_blank" rel="noopener noreferrer">📍 '+esc(p.name)+'</a>').join('')+'</div>':''};
 const tool=(l,i)=>['↑|-1|mv','↓|1|mv','編輯|0|ed','刪除|0|rm'].map(s=>{const x=s.split('|');return '<button data-a="'+x[2]+'" data-l="'+l+'" data-i="'+i+'" data-d="'+x[1]+'">'+x[0]+'</button>'}).join('');
-const row=(a,i)=>{const mv=a.kind==='交通';const bd=[a.desc&&'<p>'+esc(a.desc)+'</p>',a.cost&&'<p class="c">💴 '+esc(a.cost)+'</p>',a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',links(a.places)].filter(Boolean).join('');
-return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span>'+(mv?'↳ ':'')+esc(a.title)+'</span>'+(a.booked?'<i class="bk">已訂</i>':a.pending?'<i class="pd">待確認</i>':'')+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
-function plan(){const d=days[st.day];return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(d.sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(d.note)+'</p></details><div class="tlw">'+d.items.map(row).join('')+'</div><button class="add" data-a="add" data-l="d">＋ 新增行程</button><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
+const row=(a,i)=>{const mv=a.kind==='交通',status=bookingStatus(a),desc=bookedText(a,status);
+const title=status.booked&&a.bookingKey==='snow'?a.title.replace('（待訂）',''):a.title;
+const cost=status.booked&&a.bookingKey==='snow'?String(a.cost||'').replace('尚未預訂','依已訂方案'):a.cost;
+const bd=[desc&&'<p>'+esc(desc)+'</p>',cost&&'<p class="c">💴 '+esc(cost)+'</p>',a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',links(a.places)].filter(Boolean).join('');
+return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span>'+(mv?'↳ ':'')+esc(title)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
+function plan(){const d=days[st.day],snowBooked=String(d.d)==='25'&&todos.some(t=>taskKeys(t).includes('snow')&&t.done);const sub=snowBooked?d.sub.replace('雪地摩托車（未訂）','雪地摩托車（已訂）'):d.sub;let note=snowBooked?d.note.replace('雪地摩托車尚未預約，','雪地摩托車已在待辦標記預約完成，'):d.note;
+if(String(d.d)==='22'&&todos.some(t=>t.done&&taskKeys(t).includes('jr22')))note=note.replace('JR 車票還沒買。','JR 車票已在待辦標記訂妥。');
+if(String(d.d)==='24'&&todos.some(t=>t.done&&taskKeys(t).includes('jr24')))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 已在待辦標記訂妥。');return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(note)+'</p></details><div class="tlw">'+d.items.map(row).join('')+'</div><button class="add" data-a="add" data-l="d">＋ 新增行程</button><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
 function todo(){const cats=['全部','預約','訂位','票券','其他'];const L=todos.map((t,i)=>({t:t,i:i})).filter(x=>st.cat==='全部'||x.t.c===st.cat);const s=L.filter(x=>!x.t.done).concat(L.filter(x=>x.t.done));
 return '<div class="ph"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct">'+esc(x.t.c)+'</i>'+todoLinks(x.t)+'</div><div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div><button class="add" data-a="add" data-l="t">＋ 新增待辦</button>'}
 const fl=(lb,a,at,b,bt)=>'<div class="fl"><small>'+lb+'</small><div><p><b>'+at+'</b><span>'+a+'</span></p><i>✈︎</i><p><b>'+bt+'</b><span>'+b+'</span></p></div></div>';
@@ -353,7 +440,7 @@ const hero=()=>'<header class="hero"><div class="topline"><div class="brand">❄
 function render(){app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():todo())+'</main>';document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===st.tab));getWxForecast(false)}
 function form(title,fs,v,cb){dlg.innerHTML='<form><h3>'+title+'</h3>'+fs.map(f=>'<label>'+f[1]+(f[2]==='area'?'<textarea name="'+f[0]+'" rows="3">'+esc(v[f[0]])+'</textarea>':f[2]==='sel'?'<select name="'+f[0]+'">'+f[3].map(o=>'<option'+(o===v[f[0]]?' selected':'')+'>'+o+'</option>').join('')+'</select>':'<input name="'+f[0]+'" value="'+esc(v[f[0]])+'">')+'</label>').join('')+'<div class="fb"><button type="button" data-a="cx">取消</button><button class="pri">儲存</button></div></form>';dlg.querySelector('form').onsubmit=e=>{e.preventDefault();const o={};new FormData(e.target).forEach((x,k)=>o[k]=String(x).trim());dlg.close();cb(o)};dlg.showModal()}
 function edit(l,n){const add=n<0;
-if(l==='d'){const L=days[st.day].items,a=add?{id:uid(),time:'',title:'',desc:'',cost:'',hours:'',kind:'觀光',places:[]}:L[n];form(add?'新增行程':'編輯行程',[['time','開始時間（例 09:30）'],['title','行程名稱'],['desc','行程細節','area'],['cost','費用說明'],['hours','營業時間']],a,o=>{if(!o.title)return;Object.assign(a,o);if(add)L.push(a);ov.add(a.id);save();render()})}
+if(l==='d'){const L=days[st.day].items,a=add?{id:uid(),time:'',title:'',desc:'',cost:'',hours:'',kind:'觀光',places:[]}:L[n];form(add?'新增行程':'編輯行程',[['time','開始時間（例 09:30）'],['title','行程名稱'],['desc','行程細節','area'],['cost','費用說明'],['hours','營業時間']],a,o=>{if(!o.title)return;Object.assign(a,o);if(add){a.bookingKey=matchBookingKey(days[st.day],a);L.push(a)};ov.add(a.id);save();render()})}
 else if(l==='t'){const a=add?{t:'',c:'預約',done:false,url:''}:todos[n];form(add?'新增待辦':'編輯待辦',[['t','待辦事項'],['c','類別','sel',['預約','訂位','票券','其他']],['url','相關網址（選填，https://）']],a,o=>{if(!o.t)return;if(o.url&&!safeLink(o.url)){alert('網址必須以 https:// 或 http:// 開頭');return}Object.assign(a,o);if(add)todos.unshift(a);save();render()})}
 else{const a=add?{t:'',done:false}:packs[n];form(add?'新增物品':'編輯物品',[['t','物品名稱']],a,o=>{if(!o.t)return;a.t=o.t;if(add)packs.push(a);ov.add('p');save();render()})}}
 function move(L,i,d,l){const same=l==='t'?x=>x.done===L[i].done:()=>true;let j=i+d;while(L[j]&&!same(L[j]))j+=d;if(L[j]){const t=L[i];L[i]=L[j];L[j]=t}}
@@ -364,6 +451,6 @@ else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';render();w
 else if(a==='tg'){L[n].done=!L[n].done;save();render()}else if(a==='ed')edit(D.l,n);else if(a==='add')edit(D.l,-1);else if(a==='cx')dlg.close();
 else if(a==='rs'){if(confirm('還原為預設內容？自訂的行程與待辦會被清除。')){days=prep();todos=T0();packs=P0();st.day=0;save();render()}}});
 document.addEventListener('toggle',e=>{const k=e.target.dataset&&e.target.dataset.k;if(k){e.target.open?ov.add(k):ov.delete(k)}},true);
-render();
+save();render();
 })();
 </script></body></html>
