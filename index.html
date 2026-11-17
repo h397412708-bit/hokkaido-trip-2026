@@ -37,7 +37,7 @@ i.bk,i.pd{font-style:normal;font-size:10px;border-radius:6px;padding:2px 7px;fon
 .row.mv{background:none;border:0;box-shadow:none;border-radius:0;margin-bottom:3px}.row.mv:before{width:6px;height:6px;left:-21px;top:10px;border:0;background:#aab2c8;box-shadow:0 0 0 3px var(--pale)}
 .row.mv summary{padding:4px 2px;font-size:11px;font-weight:500;color:#6f7891}.row.mv time{font-size:10.5px;color:#8089a3;font-weight:500}.row.mv .bd{padding:0 2px 6px;font-size:10.5px}
 .fn{font-size:11px;color:#8089a3;text-align:center}
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,640px);height:calc(72px + var(--sb));padding:7px 4px calc(8px + var(--sb));background:#fffdfdfa;backdrop-filter:blur(18px);border-top:1px solid #dde2ef;box-shadow:0 -8px 30px #163a4e0d;z-index:100;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,640px);height:calc(72px + var(--sb));padding:7px 4px calc(8px + var(--sb));background:#fffdfdfa;backdrop-filter:blur(18px);border-top:1px solid #dde2ef;box-shadow:0 -8px 30px #163a4e0d;z-index:100;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
 .bottom-nav button{border:0;background:transparent;color:#8089a3;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 1px 1px;border-radius:11px}.bottom-nav svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.bottom-nav span{font-size:10px;font-weight:750}.bottom-nav .on{color:#3f4f7a;background:#eceffa}
 dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(--ink);box-shadow:0 20px 60px #10304a55}dialog::backdrop{background:#1a223666}dialog h3{margin:0 0 6px}dialog label{display:block;font-size:12px;color:var(--muted);margin-top:9px}dialog input,dialog textarea,dialog select{width:100%;border:1px solid #d0d7e8;border-radius:11px;padding:9px 10px;color:var(--ink);background:#f7f9fd}
 .fb{display:flex;gap:10px;margin-top:15px}.fb button{flex:1;border:1px solid #d0d7e8;background:#fff;border-radius:11px;padding:10px;font-weight:800}.fb .pri{background:var(--navy);border-color:var(--navy);color:#fff}
@@ -178,8 +178,80 @@ dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(
 @media(max-width:360px){.route-map{height:205px}.route-map-bar-tag{display:none}}
 @media(min-width:480px){.route-map{height:272px}}
 
+
+/* 購物清單：與冬日旅誌一致的霧藍紫／奶白簡約 UI */
+.sh-heading{margin:5px 1px 15px}
+.sh-heading .kicker{display:flex;align-items:center;gap:8px}
+.sh-heading h2{font-size:25px;line-height:1.3;margin:6px 0 4px;letter-spacing:-.025em}
+.sh-heading p{font-size:12px;margin:0;color:#77829a}
+.sh-views{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:0 0 12px}
+.sh-views button{border:1px solid #dbe1ef;border-radius:12px;min-height:43px;background:#fff;color:#6b7692;font-weight:750;font-size:12px;white-space:nowrap;padding:8px 3px}
+.sh-views button.on{background:#52688e;color:#fff;border-color:#52688e;box-shadow:0 4px 12px rgba(66,87,133,.13)}
+.sh-views small{font-size:10px;opacity:.8;margin-left:3px}
+.sh-bar{display:flex;align-items:center;justify-content:space-between;gap:9px;margin:0 0 12px}
+.sh-filter-label{color:#78849c;font-size:11px;font-weight:750;display:flex;align-items:center;gap:7px;flex:1;min-width:0}
+.sh-filter-label select{border:1px solid #d9e0ee;border-radius:11px;padding:9px 26px 9px 10px;max-width:210px;min-width:0;width:100%;background:#fff;color:#4a5e80;font-size:12px;outline-offset:2px}
+.sh-add{background:#52688e;color:#fff;border:0;border-radius:11px;font-size:12px;font-weight:800;padding:11px 13px;white-space:nowrap;box-shadow:0 3px 12px #3e54791e;display:flex;align-items:center;gap:5px}
+.sh-add svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round}
+.sh-group{margin:0 0 12px;border:1px solid #dfe4ef;background:#fff;border-radius:17px;overflow:hidden;box-shadow:0 3px 18px #31496f09}
+.sh-group>summary{display:flex;align-items:center;gap:11px;padding:13px 14px;min-height:53px;color:#344663}
+.sh-group>summary:after{content:'⌄';margin-left:auto;font-size:20px;line-height:1;color:#8899b2;transition:transform .18s}
+.sh-group[open]>summary:after{transform:rotate(180deg)}
+.sh-group-title{font-weight:850;font-size:13px;white-space:normal;overflow-wrap:anywhere}
+.sh-count{font-size:10px;color:#8b97ac;font-weight:750;margin-left:4px}
+.sh-group-mark{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;color:#657995;background:#eef2f8;flex:none}
+.sh-group-mark svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sh-list{padding:0 12px 3px}
+.sh-product{display:grid;grid-template-columns:23px 70px minmax(0,1fr);gap:10px;border-top:1px solid #edf0f6;padding:13px 0 14px;align-items:start}
+.sh-product:first-child{border-top:0}
+.sh-tick{width:19px;height:19px;accent-color:#667ba4;margin:19px 0 0 1px;cursor:pointer}
+.sh-image{height:76px;width:70px;border-radius:12px;background:#eef2f8;border:1px solid #e2e8f2;display:grid;place-items:center;overflow:hidden;color:#9aaac0}
+.sh-image img{display:block;width:100%;height:100%;object-fit:cover}
+.sh-image svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
+.sh-product-detail{min-width:0}
+.sh-product-name{font-size:13px;line-height:1.5;font-weight:850;color:#2f405a;overflow-wrap:anywhere}
+.sh-product.done .sh-product-name{text-decoration:line-through;color:#8793a8}
+.sh-tags{display:flex;flex-wrap:wrap;gap:5px;margin:5px 0 7px}
+.sh-tag{font-size:10px;color:#6a7d9d;background:#eef2f9;padding:2px 7px;border-radius:7px;max-width:100%;overflow-wrap:anywhere}
+.sh-note{font-size:11px;line-height:1.5;color:#79869d;white-space:pre-wrap;overflow-wrap:anywhere;margin:5px 0}
+.sh-link{display:inline-flex;align-items:center;gap:3px;color:#4c6694;font-size:11px;font-weight:850;text-decoration:none;border-bottom:1px solid #c7d1e3;margin:3px 0 8px;padding-bottom:1px}
+.sh-link svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sh-product-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:4px}
+.sh-qty{display:flex;align-items:center;border:1px solid #dfe6f1;border-radius:10px;overflow:hidden;min-height:31px;background:#f9fafd}
+.sh-qty button{background:transparent;color:#566c94;border:0;width:30px;min-height:30px;font-weight:900;font-size:15px;display:grid;place-items:center}
+.sh-qty b{font-size:11px;color:#475c80;min-width:27px;text-align:center;font-variant-numeric:tabular-nums}
+.sh-mini-actions{display:flex;gap:5px}
+.sh-mini-actions button{border:1px solid #e1e6f0;background:#fff;color:#7888a1;font-size:10px;font-weight:700;padding:7px 9px;border-radius:9px}
+.sh-empty{background:#fff;border:1px solid #dfe6f1;border-radius:17px;text-align:center;padding:38px 20px;color:#8491a6;box-shadow:0 2px 16px #334c7108}
+.sh-empty svg{width:35px;height:35px;fill:none;stroke:#9cabc2;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.sh-empty b{display:block;font-size:14px;color:#435574;margin:7px 0 5px}
+.sh-empty p{font-size:11px;line-height:1.6;margin:0 auto 14px;max-width:250px}
+.sh-footnote{font-size:10px;color:#8a96aa;line-height:1.7;margin:14px 4px 0}
+/* 商品編輯表單 */
+dialog.sh-dialog{max-height:min(90dvh,760px);overflow:auto;overscroll-behavior:contain;padding:0;border-radius:20px}
+.sh-form{padding:21px 19px calc(19px + env(safe-area-inset-bottom,0px));}
+.sh-form h3{font-size:18px;font-weight:850;margin:0 0 3px}
+.sh-form .sh-caption{font-size:11px;color:#8995a9;margin:0 0 15px}
+.sh-form label{margin:11px 0 0;display:block;font-size:11px;color:#596d91;font-weight:800}
+.sh-form input:not([type=file]),.sh-form textarea{display:block;box-sizing:border-box;width:100%;background:#f8fafd;border:1px solid #dce3ef;border-radius:11px;min-height:41px;margin-top:5px;padding:10px 11px;color:#344863;font-size:13px;outline-color:#8ca2c5}
+.sh-form textarea{min-height:75px;resize:vertical}
+.sh-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sh-hints{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.sh-hints button{padding:4px 8px;border:1px solid #dbe3f0;background:#f0f4fb;color:#627797;border-radius:999px;font-weight:750;font-size:10px;line-height:1.3}
+.sh-photo-field{display:flex;align-items:center;gap:12px;padding:8px 0 5px}
+.sh-photo-preview{display:grid;place-items:center;width:88px;height:88px;flex:none;border-radius:14px;border:1px dashed #ced8e8;background:#f3f6fb;color:#93a4ba;overflow:hidden}
+.sh-photo-preview img{width:100%;height:100%;object-fit:cover}
+.sh-photo-preview svg{width:29px;height:29px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sh-photo-controls{min-width:0;flex:1}
+.sh-photo-upload{display:inline-block!important;margin:0!important;background:#eef3fb;color:#48638d!important;border:1px solid #d4dff0;border-radius:10px;padding:9px 12px;font-size:12px!important;cursor:pointer}
+.sh-photo-upload input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.sh-photo-help{font-size:10px;color:#8b99ae;margin:5px 0;line-height:1.5}
+.sh-remove-photo{display:block;border:0;background:transparent;padding:4px 0;color:#8b98ae;font-size:11px;text-decoration:underline}
+.sh-form .fb{position:sticky;bottom:0;z-index:2;background:#fff;border-top:1px solid #edf1f6;padding:12px 0 0;margin-top:15px}
+.sh-form .fb button{font-size:13px;cursor:pointer}
+@media(max-width:360px){.sh-product{grid-template-columns:20px 58px minmax(0,1fr);gap:8px}.sh-image{width:58px;height:68px}.sh-list{padding:0 10px}.sh-mini-actions button{padding:6px}.sh-form{padding:18px 14px}}
 </style></head><body><div id="app"></div>
-<nav class="bottom-nav" aria-label="功能導航"><button data-a="tab" data-v="home"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg><span>總覽</span></button><button data-a="tab" data-v="plan"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg><span>行程</span></button><button data-a="tab" data-v="todo"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg><span>待辦</span></button></nav><dialog id="dlg"></dialog>
+<nav class="bottom-nav" aria-label="功能導航"><button data-a="tab" data-v="home"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg><span>總覽</span></button><button data-a="tab" data-v="plan"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg><span>行程</span></button><button data-a="tab" data-v="todo"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg><span>待辦</span></button><button data-a="tab" data-v="shop"><svg viewBox="0 0 24 24"><path d="M4 8h16l-1.2 12H5.2L4 8z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span>購物</span></button></nav><dialog id="dlg"></dialog>
 <script>
 (function(){
   const MAP = (q, mode='walking') => `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(q)}&travelmode=${mode}`;
@@ -618,6 +690,112 @@ function dailyRouteCard(d){
 function plan(){const d=days[st.day],snowBooked=String(d.d)==='25'&&todos.some(t=>taskKeys(t).includes('snow')&&t.done);const sub=snowBooked?d.sub.replace('雪地摩托車（未訂）','雪地摩托車（已訂）'):d.sub;let note=snowBooked?d.note.replace('雪地摩托車尚未預約，','雪地摩托車已在待辦標記預約完成，'):d.note;
 if(String(d.d)==='22'&&todos.some(t=>t.done&&taskKeys(t).includes('jr22')))note=note.replace('JR 車票還沒買。','JR 車票已在待辦標記訂妥。');
 if(String(d.d)==='24'&&todos.some(t=>t.done&&taskKeys(t).includes('jr24')))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 已在待辦標記訂妥。');return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(note)+'</p></details><div class="tlw">'+d.items.map(row).join('')+'</div><button class="add" data-a="add" data-l="d">＋ 新增行程</button><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
+
+// 購物清單以相同的 hk26v2_ 儲存空間保存。圖像會縮小為 JPEG，僅儲存在目前瀏覽器。
+let shopping=LS('shopping',[]);
+if(!Array.isArray(shopping))shopping=[];
+let shopHints=LS('shopHints',{categories:[],stores:[]});
+if(!shopHints||typeof shopHints!=='object')shopHints={categories:[],stores:[]};
+for(const key of ['categories','stores'])if(!Array.isArray(shopHints[key]))shopHints[key]=[];
+let shopClosed=new Set(LS('shopClosed',[]));
+let shopMode='all',shopCategory='all',shopPhotoTemp='';
+const shopEmptyArt='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m5 19 6-6 4 3 3-3 3 3"/></svg>';
+const shopBagArt='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16l-1 12H5L4 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>';
+const shopGroupArt='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M9 5v14"/></svg>';
+const shopExternalArt='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 4h7v7M20 4l-9 9"/><path d="M20 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4"/></svg>';
+function shopUnique(items){
+ const seen=new Set();return items.map(x=>String(x||'').trim()).filter(x=>{const k=x.toLocaleLowerCase();if(!k||seen.has(k))return false;seen.add(k);return true});
+}
+function shopChoices(which){return shopUnique([...(shopHints[which]||[]),...shopping.map(p=>which==='categories'?p.category:p.store)]).slice(0,16)}
+function shopPersist(previous){
+ try{localStorage.setItem('hk26v2_shopping',JSON.stringify(shopping));return true}
+ catch(e){if(previous)shopping=previous;alert('購物清單無法儲存：瀏覽器空間不足。請改用較小的圖片，或先刪除不需要的圖片後再試一次。');return false}
+}
+function shopAddHint(key,val){
+ val=String(val||'').trim();if(!val)return;
+ shopHints[key]=shopUnique([val,...shopHints[key]]).slice(0,24);
+ try{localStorage.setItem('hk26v2_shopHints',JSON.stringify(shopHints))}catch(e){}
+}
+function shopImageTag(p){return p.image&&/^data:image\/(?:jpeg|png|webp);base64,/.test(p.image)
+ ? '<img src="'+esc(p.image)+'" alt="'+esc(p.name)+' 的商品圖片" loading="lazy">'
+ :shopEmptyArt}
+function shopPage(){
+ const total=shopping.length,pending=shopping.filter(p=>!p.done).length,bought=total-pending;
+ const selected=shopping.filter(p=>(shopMode==='all'||(shopMode==='pending'?!p.done:p.done)) && (shopCategory==='all'||String(p.category||'未分類')===shopCategory));
+ const allCats=shopUnique([...shopping.map(p=>p.category||'未分類'),...shopChoices('categories')]);
+ const cats=shopUnique(selected.map(p=>p.category||'未分類'));
+ const tab=(code,label,count)=>'<button type="button" data-a="shop-mode" data-v="'+code+'" class="'+(shopMode===code?'on':'')+'">'+label+' <small>'+count+'</small></button>';
+ let body='';
+ if(!selected.length){body='<div class="sh-empty">'+shopBagArt+'<b>'+(total===0?'還沒有購物項目':'這裡還沒有商品')+'</b><p>'+(total===0?'新增想買的商品、圖片和店家，開始整理北海道購物清單。':'可切換「全部」或其他分類，查看購物清單。')+'</p>'+(total===0?'<button type="button" data-a="shop-add" class="sh-add" style="margin:auto">＋ 新增第一個商品</button>':'')+'</div>'}
+ else{body=cats.map(cat=>{
+   const group=selected.filter(p=>(p.category||'未分類')===cat).sort((a,b)=>Number(a.done)-Number(b.done));
+   return '<details class="sh-group" data-shop-group="'+esc(cat)+'"'+(shopClosed.has(cat)?'':' open')+'><summary><span class="sh-group-mark">'+shopGroupArt+'</span><span class="sh-group-title">'+esc(cat)+'</span><span class="sh-count">'+group.length+' 項</span></summary><div class="sh-list">'+group.map(p=>{
+     const url=p.url?safeLink(p.url):'';
+     const id=esc(p.id);
+     return '<article class="sh-product'+(p.done?' done':'')+'"><input type="checkbox" class="sh-tick" aria-label="'+esc(p.name)+' 標記已購買" data-a="shop-check" data-id="'+id+'"'+(p.done?' checked':'')+'><div class="sh-image">'+shopImageTag(p)+'</div><div class="sh-product-detail"><div class="sh-product-name">'+esc(p.name)+'</div><div class="sh-tags">'+(p.store?'<span class="sh-tag">'+esc(p.store)+'</span>':'')+'<span class="sh-tag">'+(p.done?'已購買':'待購買')+'</span></div>'+(p.note?'<p class="sh-note">'+esc(p.note)+'</p>':'')+(url?'<a class="sh-link" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">開啟連結 '+shopExternalArt+'</a>':'')+'<div class="sh-product-actions"><div class="sh-qty"><button type="button" aria-label="減少 '+esc(p.name)+' 數量" data-a="shop-qty" data-id="'+id+'" data-change="-1">−</button><b>'+Math.max(1,Number(p.qty)||1)+'</b><button type="button" aria-label="增加 '+esc(p.name)+' 數量" data-a="shop-qty" data-id="'+id+'" data-change="1">＋</button></div><div class="sh-mini-actions"><button type="button" data-a="shop-edit" data-id="'+id+'">編輯</button><button type="button" data-a="shop-delete" data-id="'+id+'">刪除</button></div></div></div></article>';
+   }).join('')+'</div></details>';
+ }).join('')}
+ return '<div class="sh-heading"><div class="kicker">SHOPPING LIST</div><h2>購物清單</h2><p>把想買的北海道好物，收藏在這裡。</p></div>'+
+ '<div class="sh-views">'+tab('all','全部',total)+tab('pending','待購買',pending)+tab('bought','已購買',bought)+'</div>'+
+ '<div class="sh-bar"><label class="sh-filter-label">分類 <select aria-label="篩選購物分類" data-a="shop-category"><option value="all">全部分類</option>'+allCats.map(x=>'<option value="'+esc(x)+'"'+(shopCategory===x?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select></label><button type="button" class="sh-add" data-a="shop-add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增商品</button></div>'+
+ body+'<p class="sh-footnote">購物清單與圖片只會保存在這台裝置的這個瀏覽器中，不會自動同步到其他旅伴的手機。請勿清除網站資料。</p>';
+}
+function shopPreviewUpdate(){
+ const holder=dlg.querySelector('#sh-preview');if(!holder)return;
+ holder.innerHTML=shopPhotoTemp?'<img src="'+esc(shopPhotoTemp)+'" alt="商品圖片預覽">':shopEmptyArt;
+ const remove=dlg.querySelector('#sh-remove-photo');if(remove)remove.hidden=!shopPhotoTemp;
+}
+function shopEditor(id){
+ const item=shopping.find(x=>x.id===id),adding=!item;
+ const o=item||{name:'',category:'',store:'',qty:1,url:'',note:'',image:'',done:false};
+ shopPhotoTemp=o.image||'';
+ const hints=(field,kind)=>{const vals=shopChoices(kind);return vals.length?'<div class="sh-hints">'+vals.map(v=>'<button type="button" data-a="shop-hint" data-field="'+field+'" data-value="'+esc(v)+'">'+esc(v)+'</button>').join('')+'</div>':'<div class="sh-photo-help">填寫後會在這裡顯示常用選項</div>'};
+ dlg.classList.add('sh-dialog');
+ dlg.innerHTML='<form class="sh-form" id="sh-form"><h3>'+(adding?'新增購物項目':'編輯購物項目')+'</h3><p class="sh-caption">記錄商品資訊與想購買的數量</p>'+
+ '<div class="sh-photo-field"><div class="sh-photo-preview" id="sh-preview"></div><div class="sh-photo-controls"><label class="sh-photo-upload" for="sh-photo-file">上傳商品圖片<input id="sh-photo-file" type="file" accept="image/*" data-a="shop-photo"></label><p class="sh-photo-help">從照片圖庫或檔案選取，自動縮小後儲存</p><button type="button" id="sh-remove-photo" class="sh-remove-photo" data-a="shop-photo-remove">移除圖片</button></div></div>'+
+ '<label>商品名稱 *<input name="name" maxlength="140" required placeholder="例如：北海道限定護手霜" value="'+esc(o.name)+'"></label>'+
+ '<div class="sh-two"><div><label>分類<input name="category" maxlength="45" list="sh-category-list" placeholder="例如：美妝" value="'+esc(o.category)+'"></label>'+hints('category','categories')+'</div><div><label>店家<input name="store" maxlength="70" list="sh-store-list" placeholder="例如：札幌三越" value="'+esc(o.store)+'"></label>'+hints('store','stores')+'</div></div>'+
+ '<datalist id="sh-category-list">'+shopChoices('categories').map(v=>'<option value="'+esc(v)+'"></option>').join('')+'</datalist><datalist id="sh-store-list">'+shopChoices('stores').map(v=>'<option value="'+esc(v)+'"></option>').join('')+'</datalist>'+
+ '<label>數量<input name="qty" type="number" min="1" max="9999" inputmode="numeric" value="'+Math.min(9999,Math.max(1,Number(o.qty)||1))+'"></label>'+
+ '<label>商品連結<input name="url" inputmode="url" placeholder="https://example.com/item" value="'+esc(o.url)+'"></label>'+
+ '<label>備註<textarea name="note" rows="3" maxlength="900" placeholder="尺寸、顏色、預算、購買提醒…">'+esc(o.note)+'</textarea></label>'+
+ '<div class="fb"><button type="button" data-a="shop-cancel">取消</button><button type="submit" class="pri">'+(adding?'新增商品':'儲存修改')+'</button></div></form>';
+ shopPreviewUpdate();
+ dlg.querySelector('form').onsubmit=e=>{
+   e.preventDefault();const data=new FormData(e.target);
+   const name=String(data.get('name')||'').trim(),category=String(data.get('category')||'').trim(),store=String(data.get('store')||'').trim();
+   if(!name){alert('請填寫商品名稱');return}
+   const rawUrl=String(data.get('url')||'').trim();
+   const url=rawUrl?safeLink(/^https?:\/\//i.test(rawUrl)?rawUrl:'https://'+rawUrl):'';
+   if(rawUrl&&!url){alert('請輸入有效的商品連結，例如 https://example.com/item');return}
+   const qty=Math.min(9999,Math.max(1,Math.floor(Number(data.get('qty'))||1)));
+   const updated={...(item||{}),id:item?.id||uid(),name,category,store,qty,url,note:String(data.get('note')||'').trim(),image:shopPhotoTemp,done:item?.done||false};
+   const old=shopping.slice();
+   if(item){shopping=shopping.map(x=>x.id===item.id?updated:x)}else shopping.unshift(updated);
+   if(!shopPersist(old))return;
+   shopAddHint('categories',category);shopAddHint('stores',store);
+   dlg.close();dlg.classList.remove('sh-dialog');shopPhotoTemp='';render();
+ };
+ dlg.showModal();
+}
+async function shopReadPhoto(file){
+ if(!file)return;
+ if(!file.type.startsWith('image/')&&!/\.(heic|heif|jpg|jpeg|png|webp|gif)$/i.test(file.name)){alert('請選擇圖片檔案');return}
+ if(file.size>40*1024*1024){alert('圖片過大，請選擇 40 MB 以下的照片');return}
+ const objUrl=URL.createObjectURL(file),photo=new Image();
+ try{
+   await new Promise((resolve,reject)=>{photo.onload=resolve;photo.onerror=reject;photo.src=objUrl});
+   const scale=Math.min(1,640/Math.max(photo.naturalWidth,photo.naturalHeight));
+   const w=Math.max(1,Math.round(photo.naturalWidth*scale)),h=Math.max(1,Math.round(photo.naturalHeight*scale));
+   const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+   const ctx=canvas.getContext('2d');if(!ctx)throw Error('canvas');
+   ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h);ctx.drawImage(photo,0,0,w,h);
+   shopPhotoTemp=canvas.toDataURL('image/jpeg',0.7);
+   shopPreviewUpdate();
+ }catch(e){alert('這張圖片無法讀取，請試試 JPG 或 PNG 格式。')}
+ finally{URL.revokeObjectURL(objUrl)}
+}
+
 function todo(){const cats=['全部','預約','訂位','票券','其他'];const L=todos.map((t,i)=>({t:t,i:i})).filter(x=>st.cat==='全部'||x.t.c===st.cat);const s=L.filter(x=>!x.t.done).concat(L.filter(x=>x.t.done));
 return '<div class="ph"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct">'+esc(x.t.c)+'</i>'+todoLinks(x.t)+'</div><div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div><button class="add" data-a="add" data-l="t">＋ 新增待辦</button>'}
 const fl=(lb,a,at,b,bt)=>'<div class="fl"><small>'+lb+'</small><div><p><b>'+at+'</b><span>'+a+'</span></p><i>'+iconSvg('planeMini')+'</i><p><b>'+bt+'</b><span>'+b+'</span></p></div></div>';
@@ -650,7 +828,7 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():todo())+'</main>';
+    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():shopPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
@@ -667,9 +845,28 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
 if(a==='tab'){st.tab=D.v;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
 else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
+else if(a==='shop-add')shopEditor(null)
+else if(a==='shop-edit')shopEditor(D.id)
+else if(a==='shop-delete'){const p=shopping.find(x=>x.id===D.id);if(p&&confirm('確定刪除「'+p.name+'」嗎？')){const previous=shopping.slice();shopping=shopping.filter(x=>x.id!==D.id);if(shopPersist(previous))render()}}
+else if(a==='shop-qty'){const p=shopping.find(x=>x.id===D.id);if(p){const old=p.qty;p.qty=Math.max(1,Math.min(9999,(Number(p.qty)||1)+Number(D.change)));if(!shopPersist()){p.qty=old}else render()}}
+else if(a==='shop-check'){const p=shopping.find(x=>x.id===D.id);if(p){p.done=!p.done;if(shopPersist())render();else p.done=!p.done}}
+else if(a==='shop-mode'){shopMode=D.v;render()}
+else if(a==='shop-hint'){if(D.field==='category'||D.field==='store'){const f=dlg.querySelector('[name="'+D.field+'"]');if(f){f.value=D.value;f.focus()}}}
+else if(a==='shop-photo-remove'){shopPhotoTemp='';const f=dlg.querySelector('#sh-photo-file');if(f)f.value='';shopPreviewUpdate()}
+else if(a==='shop-cancel'){dlg.close();dlg.classList.remove('sh-dialog');shopPhotoTemp=''}
 else if(a==='tg'){L[n].done=!L[n].done;save();render()}else if(a==='ed')edit(D.l,n);else if(a==='add')edit(D.l,-1);else if(a==='cx')dlg.close();
 else if(a==='rs'){if(confirm('還原為預設內容？自訂的行程與待辦會被清除。')){days=prep();todos=T0();packs=P0();st.day=0;save();render()}}});
-document.addEventListener('toggle',e=>{const k=e.target.dataset&&e.target.dataset.k;if(k){e.target.open?ov.add(k):ov.delete(k)}},true);
+document.addEventListener('change',e=>{
+ const t=e.target;
+ if(t.dataset?.a==='shop-category'){shopCategory=t.value;render()}
+ if(t.dataset?.a==='shop-photo'&&t.files?.[0])shopReadPhoto(t.files[0]);
+});
+document.addEventListener('toggle',e=>{
+ const k=e.target.dataset&&e.target.dataset.k;
+ if(k){e.target.open?ov.add(k):ov.delete(k)}
+ const c=e.target.dataset&&e.target.dataset.shopGroup;
+ if(c!==undefined){if(e.target.open)shopClosed.delete(c);else shopClosed.add(c);SV('shopClosed',[...shopClosed])}
+},true);
 save();render();
 })();
 </script></body></html>
