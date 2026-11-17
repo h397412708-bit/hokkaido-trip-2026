@@ -138,6 +138,17 @@ dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(
 .route-segment-links svg{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .route-day .route-note{font-size:10px;color:#7a88a0;line-height:1.65;margin-top:9px}
 
+
+.route-map-wrap{margin:2px 0 12px}
+.route-map{position:relative;overflow:hidden;border-radius:16px;border:1px solid #d9e2ef;background:#eef3fb;height:210px;box-shadow:inset 0 1px 0 rgba(255,255,255,.65)}
+.route-map iframe{width:100%;height:100%;border:0;display:block}
+.route-map-tip{font-size:10px;color:#7a88a0;line-height:1.55;margin:7px 2px 0}
+.route-map-fallback{display:flex;align-items:center;justify-content:center;height:100%;font-size:12px;color:#617390;padding:18px;text-align:center}
+.route-segment-maps{display:grid;gap:10px;margin-top:12px}
+.route-seg-map{border:1px solid #d9e2ef;border-radius:14px;background:#f6f8fc;padding:10px}
+.route-seg-map b{display:block;font-size:11px;color:#4a5d80;margin-bottom:8px}
+.route-seg-map .route-map{height:170px;border-radius:12px}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="功能導航"><button data-a="tab" data-v="home"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg><span>總覽</span></button><button data-a="tab" data-v="plan"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg><span>行程</span></button><button data-a="tab" data-v="todo"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg><span>待辦</span></button></nav><dialog id="dlg"></dialog>
 <script>
@@ -548,23 +559,34 @@ const googleRouteURL=points=>{
  const q=points.map(p=>encodeURIComponent(p.q));
  return 'https://www.google.com/maps/dir/?api=1&origin='+q[0]+'&destination='+q[q.length-1]+(q.length>2?'&waypoints='+q.slice(1,-1).join('%7C'):'');
 };
+const googleEmbedRouteURL=points=>{
+ if(!points.length)return 'about:blank';
+ if(points.length===1)return 'https://www.google.com/maps?q='+encodeURIComponent(points[0].q)+'&output=embed';
+ const origin=encodeURIComponent(points[0].q);
+ const daddr=points.slice(1).map(p=>encodeURIComponent(p.q)).join('+to:');
+ return 'https://www.google.com/maps?output=embed&saddr='+origin+'&daddr='+daddr;
+};
+
 function dailyRouteCard(d){
  const points=dayRouteStops(d),key='r'+d.d;
  const rows=points.map((p,i)=>'<div class="route-stop"><b>'+String(i+1).padStart(2,'0')+'</b><span>'+esc(p.label)+'</span></div>').join('');
+ const mapHtml=points.length>=2
+   ?'<div class="route-map-wrap"><div class="route-map"><iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="'+esc(googleEmbedRouteURL(points))+'" title="12/'+esc(d.d)+' 當日旅行路線地圖"></iframe></div><p class="route-map-tip">地圖會依停靠順序顯示點到點路線；如未顯示完整中途點，可用下方完整路線或分段導航開啟。</p></div>'
+   :'<div class="route-map-wrap"><div class="route-map"><div class="route-map-fallback">此日主要為單點行程，請直接使用下方 Google Maps 按鈕。</div></div></div>';
  let segs='';
- // 每段最多 5 點（含起訖，各段最多 3 個中途點），符合手機瀏覽器的官方限制。
+ let segMaps='';
  if(points.length>5){
    const parts=[];
    for(let at=0;at<points.length-1;at+=4){
      const part=points.slice(at,Math.min(at+5,points.length));
      if(part.length>=2)parts.push(part);
    }
-   segs='<div class="route-segments"><div class="route-small-title">手機分段導航 · 不漏任何停靠點</div><div class="route-segment-links">'+parts.map((part,i)=>'<a href="'+esc(googleRouteURL(part))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('route')+' 第 '+(i+1)+' 段（'+esc(part[0].label)+' → '+esc(part[part.length-1].label)+'）</a>').join('')+'</div></div>';
+   segMaps='<div class="route-segment-maps">'+parts.map((part,i)=>'<div class="route-seg-map"><b>第 '+(i+1)+' 段地圖 · '+esc(part[0].label)+' → '+esc(part[part.length-1].label)+'</b><div class="route-map"><iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="'+esc(googleEmbedRouteURL(part))+'" title="12/'+esc(d.d)+' 第 '+(i+1)+' 段路線地圖"></iframe></div></div>').join('')+'</div>';
+   segs='<div class="route-segments"><div class="route-small-title">Google Maps 分段導航</div><div class="route-segment-links">'+parts.map((part,i)=>'<a href="'+esc(googleRouteURL(part))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('route')+' 第 '+(i+1)+' 段（'+esc(part[0].label)+' → '+esc(part[part.length-1].label)+'）</a>').join('')+'</div></div>';
  }
  const caveat=String(d.d)==='27'?'12/26 最後一晚飯店尚未確定，12/27 暫以千歲市區為出發地，訂房後請更新起點。':String(d.d)==='26'?'12/26 晚上飯店地址尚未確定，路線先排至新千歲機場，不包含未知住宿地點。':String(d.d)==='23'?'大湯沼屬冬季視開放情況而定的備選路線，暫不放入固定導航。':String(d.d)==='19'?'午餐是二選一，尚未確定，因此不強制加入固定路線。':'';
- return '<details class="card route-day" data-k="'+key+'"'+(ov.has(key)?' open':'')+'><summary><span class="sum-ic">'+iconSvg('route')+'</span><div><b>當日旅行路線</b><small>'+points.length+' 個停靠點 · 點擊展開地圖導航</small></div></summary><div class="bd"><p class="route-intro">依當天行程順序排列，點擊下方可於 Google Maps 開啟。</p><div class="route-stops">'+rows+'</div><a class="go route-all" href="'+esc(googleRouteURL(points))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('map')+' 在 Google Maps 開啟完整路線</a>'+segs+(points.length>5?'<p class="route-note">Google Maps 手機瀏覽器的完整路線可能忽略部分中途點；建議使用上方分段導航，每段起訖銜接。</p>':'')+(caveat?'<p class="route-note">'+esc(caveat)+'</p>':'')+'<p class="route-note">路線為停靠點順序示意；列車、巴士與步行請在 Google Maps 內依實際路段選擇交通方式。</p></div></details>';
+ return '<details class="card route-day" data-k="'+key+'"'+(ov.has(key)?' open':'')+'><summary><span class="sum-ic">'+iconSvg('route')+'</span><div><b>當日旅行路線</b><small>'+points.length+' 個停靠點 · 地圖顯示點到點路線</small></div></summary><div class="bd"><p class="route-intro">依當天行程順序排列，下方直接顯示地圖路線，也可在 Google Maps 開啟完整導航。</p>'+mapHtml+'<div class="route-stops">'+rows+'</div><a class="go route-all" href="'+esc(googleRouteURL(points))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('map')+' 在 Google Maps 開啟完整路線</a>'+segMaps+segs+(points.length>5?'<p class="route-note">若完整路線因中途點過多而顯示不完整，請使用上方分段地圖或分段導航。</p>':'')+(caveat?'<p class="route-note">'+esc(caveat)+'</p>':'')+'<p class="route-note">地圖僅顯示停靠點順序；實際列車、巴士與步行請在 Google Maps 內依當下路況選擇交通方式。</p></div></details>';
 }
-
 function plan(){const d=days[st.day],snowBooked=String(d.d)==='25'&&todos.some(t=>taskKeys(t).includes('snow')&&t.done);const sub=snowBooked?d.sub.replace('雪地摩托車（未訂）','雪地摩托車（已訂）'):d.sub;let note=snowBooked?d.note.replace('雪地摩托車尚未預約，','雪地摩托車已在待辦標記預約完成，'):d.note;
 if(String(d.d)==='22'&&todos.some(t=>t.done&&taskKeys(t).includes('jr22')))note=note.replace('JR 車票還沒買。','JR 車票已在待辦標記訂妥。');
 if(String(d.d)==='24'&&todos.some(t=>t.done&&taskKeys(t).includes('jr24')))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 已在待辦標記訂妥。');return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+dailyRouteCard(d)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(note)+'</p></details><div class="tlw">'+d.items.map(row).join('')+'</div><button class="add" data-a="add" data-l="d">＋ 新增行程</button><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
