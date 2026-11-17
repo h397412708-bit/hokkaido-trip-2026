@@ -639,6 +639,49 @@ input::selection,textarea::selection{background:#dbe4ee;color:#29384d}
   .tl button,.sh-mini-actions button{transition:none}
 }
 
+
+/* 介面微互動：輕觸編輯、刪除、上／下移時，在按鈕內浮現片刻淡灰黑色。 */
+.tl button,.sh-mini-actions button{
+  position:relative;
+  -webkit-tap-highlight-color:transparent;
+  border-radius:9px;
+  outline:none;
+  transition:background-color .15s ease,color .15s ease,border-color .15s ease,transform .15s ease;
+}
+.tl button:active,.sh-mini-actions button:active{
+  background:rgba(40,46,56,.085)!important;
+  border-color:rgba(73,81,91,.22)!important;
+  color:#374152!important;
+  transform:scale(.97);
+  box-shadow:inset 0 0 0 1px rgba(40,45,54,.04)!important;
+}
+.tl button:focus:not(:focus-visible),.sh-mini-actions button:focus:not(:focus-visible){outline:none;box-shadow:none}
+.tl button:focus-visible,.sh-mini-actions button:focus-visible{
+  outline:2px solid rgba(72,83,99,.32)!important;
+  outline-offset:2px;
+  box-shadow:0 0 0 2px rgba(76,89,111,.065)!important;
+}
+/* 閃一下的淡灰黑觸感，即使按下後清單立即重新渲染，也能看見。 */
+.tool-tap-flash{
+  position:fixed;z-index:350;pointer-events:none;box-sizing:border-box;
+  border:1px solid rgba(47,55,68,.12);
+  background:rgba(35,42,53,.095);
+  box-shadow:inset 0 0 0 .5px rgba(35,42,53,.08);
+  animation:toolTapFlash .24s ease-out both;
+  transform-origin:center center;
+}
+@keyframes toolTapFlash{
+  0%{opacity:0;transform:scale(.985)}
+  16%{opacity:1;transform:scale(.975)}
+  42%{opacity:1;transform:scale(.985)}
+  100%{opacity:0;transform:scale(1)}
+}
+@media(prefers-reduced-motion:reduce){
+  .tool-tap-flash{animation:toolTapFade .15s linear both}
+  @keyframes toolTapFade{0%,40%{opacity:1}100%{opacity:0}}
+  .tl button,.sh-mini-actions button{transition:none}
+}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1288,6 +1331,32 @@ if(l==='d'){const L=days[st.day].items,a=add?{id:uid(),time:'',title:'',desc:'',
 else if(l==='t'){const a=add?{t:'',c:'預約',done:false,url:''}:todos[n];form(add?'新增待辦':'編輯待辦',[['t','待辦事項'],['c','類別','sel',['預約','訂位','票券','其他']],['url','相關網址（選填，https://）']],a,o=>{if(!o.t)return;if(o.url&&!safeLink(o.url)){alert('網址必須以 https:// 或 http:// 開頭');return}Object.assign(a,o);if(add)todos.unshift(a);save();render()})}
 else{const a=add?{t:'',done:false}:packs[n];form(add?'新增物品':'編輯物品',[['t','物品名稱']],a,o=>{if(!o.t)return;a.t=o.t;if(add)packs.push(a);ov.add('p');save();render()})}}
 function move(L,i,d,l){const same=l==='t'?x=>x.done===L[i].done:()=>true;let j=i+d;while(L[j]&&!same(L[j]))j+=d;if(L[j]){const t=L[i];L[i]=L[j];L[j]=t}}
+// 按鈕觸感以獨立暫時圖層呈現：點擊若立即開啟編輯視窗或移動項目，回饋也不會消失。
+const TAP_ACTIONS=new Set(['ed','rm','mv','shop-edit','shop-delete']);
+function tapToolFlash(btn){
+ if(!btn||!TAP_ACTIONS.has(btn.dataset.a))return;
+ const rect=btn.getBoundingClientRect();
+ if(rect.width<1||rect.height<1)return;
+ const flash=document.createElement('span');
+ flash.className='tool-tap-flash';flash.setAttribute('aria-hidden','true');
+ const radius=getComputedStyle(btn).borderRadius||'9px';
+ Object.assign(flash.style,{
+   left:rect.left+'px',top:rect.top+'px',width:rect.width+'px',height:rect.height+'px',borderRadius:radius
+ });
+ document.body.appendChild(flash);
+ flash.addEventListener('animationend',()=>flash.remove(),{once:true});
+ window.setTimeout(()=>flash.remove(),350);
+}
+document.addEventListener('pointerdown',e=>{
+ if(e.button!==0&&e.pointerType==='mouse')return;
+ tapToolFlash(e.target.closest('button[data-a]'));
+},{passive:true});
+document.addEventListener('keydown',e=>{
+ if((e.key==='Enter'||e.key===' ')&&!e.repeat){
+   const active=document.activeElement;
+   if(active&&active.matches('button[data-a]'))tapToolFlash(active);
+ }
+});
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const D=b.dataset,a=D.a,n=+D.i,L=D.l==='d'?days[st.day].items:D.l==='t'?todos:packs;
 if(a==='tab'){st.tab=D.v;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);render()}else if(a==='cat'){st.cat=D.v;render()}
