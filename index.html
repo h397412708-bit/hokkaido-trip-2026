@@ -71,6 +71,20 @@ dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(
 @media(min-width:480px){.wx-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:360px){.wx-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wx-day{grid-template-columns:1fr auto;gap:2px}.wx-day em{display:none}}
 
+/* 每日行程：縮小天氣卡片，視覺重量低於頂部的行程主題色塊。總覽仍維持原尺寸。 */
+.weather-card.weather-mini{border-radius:14px;padding:10px 12px;margin:10px 0 12px;box-shadow:0 3px 10px rgba(48,73,108,.045);background:linear-gradient(135deg,#fafcff,#f0f4fb)}
+.weather-card.weather-mini:after{font-size:35px;right:12px;top:28px;opacity:.65}
+.weather-mini .wx-kicker{font-size:10px;letter-spacing:0}
+.weather-mini .wx-area{font-size:10px;padding:2px 6px;border-radius:6px}
+.wx-mini-line{display:flex;align-items:center;gap:9px;margin:6px 0 0;min-height:34px}
+.wx-mini-emoji{font-size:23px;line-height:1;flex:none;width:27px;text-align:center}
+.wx-mini-text{min-width:0;flex:1}
+.wx-mini-main{font-weight:850;font-size:13px;color:#243654;line-height:1.4}
+.wx-mini-desc{font-size:10px;color:#667691;line-height:1.4;margin-top:1px}
+.wx-mini-bottom{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:6px}
+.wx-mini-bottom .wx-source{margin:0;font-size:9px;color:#8392a6;line-height:1.35;flex:1;min-width:0}
+.wx-mini-bottom .wx-refresh{flex:none;padding:4px 8px;font-size:10px;line-height:1.35;border-radius:8px}
+@media(max-width:360px){.wx-mini-main{font-size:12px}.wx-mini-desc{font-size:9px}.wx-mini-bottom .wx-source{font-size:8px}}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="功能導航"><button data-a="tab" data-v="home"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg><span>總覽</span></button><button data-a="tab" data-v="plan"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg><span>行程</span></button><button data-a="tab" data-v="todo"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg><span>待辦</span></button></nav><dialog id="dlg"></dialog>
 <script>
@@ -244,19 +258,21 @@ const wxRecord=i=>WX_INFO.records[WX_KEYS[i]+'|'+wxDate(i)]||null;
 function wxCard(i){
  const d=days[i],loc=WX_LOCATION[WX_KEYS[i]],date=wxDate(i),rec=wxRecord(i),inRange=wxAvailable(date);
  const past=japanToday()>date;
- let main;
+ let icon='❄️',main='',secondary='',foot='';
  if(rec){
    const [emoji,desc]=wxDesc(rec.code);
-   main='<div class="wx-current"><span class="wx-emoji">'+emoji+'</span><div><div class="wx-temperatures">'+esc(Math.round(rec.max))+'° / '+esc(Math.round(rec.min))+'°C</div><div class="wx-subtitle">'+esc(desc)+' · 預報高／低溫</div></div></div>'+
-     '<div class="wx-meta"><span class="wx-chip">降水機率 '+(rec.rain===null?'—':esc(rec.rain)+'%')+'</span><span class="wx-chip">日本當地時間</span></div>'+
-     '<p class="wx-hint">山區、纜車與湖畔的實際狀況可能不同，出發前請再次查看。</p>';
+   icon=emoji;
+   main=esc(Math.round(rec.max))+'° / '+esc(Math.round(rec.min))+'°C';
+   secondary=esc(desc)+' · 降水 '+(rec.rain===null?'—':esc(rec.rain)+'%');
+   foot='預報：<a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> · 日本時間 '+new Date(WX_INFO.updated).toLocaleTimeString('zh-TW',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit'});
  }else{
-   const message=past?'該日期已過，無法顯示當日預報':!inRange?'距離旅行尚遠，還沒有可靠的逐日預報':WX_INFO.loading?'正在更新當地天氣…':WX_INFO.error?'暫時無法載入天氣，請檢查網路':'正在等待最新預報資料';
-   main='<div class="wx-current"><span class="wx-emoji">❄️</span><div><div class="wx-subtitle">'+message+'</div><div class="wx-temperatures" style="font-size:17px">'+esc(loc.climate)+'</div></div></div>'+
-     (!past&&!inRange?'<p class="wx-hint">約從 '+wxFirstDay(date).slice(5).replace('-','/')+' 起可逐步查看該天預報（最遠 16 天），以上為 12 月氣候參考，非 2026 年該日預測。</p>':'<p class="wx-hint">以上為 12 月氣候參考，不代表當日會晴、雨或降雪。</p>');
+   main=past?'該日已過 · 顯示氣候參考':!inRange?'預報尚未開放':WX_INFO.loading?'正在更新預報…':WX_INFO.error?'目前無法取得預報':'等待預報資料';
+   secondary=esc(loc.climate);
+   foot=!past&&!inRange?'預計約 '+wxFirstDay(date).slice(5).replace('-','/')+' 起可查逐日預報 · 非當日預測':'冬季氣候參考 · 非當日預測';
  }
- return '<section class="weather-card" aria-label="12/'+esc(d.d)+' '+esc(loc.label)+' 當地天氣"><div class="wx-top"><span class="wx-kicker">☁️ 12/'+esc(d.d)+'｜當地天氣</span><span class="wx-area">📍 '+esc(loc.label)+'</span></div>'+main+
- '<div class="wx-top" style="margin-top:8px"><span class="wx-source">'+(rec?'來源：Open-Meteo · 更新 '+new Date(WX_INFO.updated).toLocaleString('zh-TW',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit'})+'（日本時間）':(['sapporo','otaru'].includes(WX_KEYS[i])?'JMA 1991–2020 月平均氣候參考':'冬季旅行提醒（非當日預報）'))+'</span><button type="button" class="wx-refresh" data-a="weather-refresh">⟳ 更新天氣</button></div><div class="wx-source">預報：<a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> ｜氣候參考：<a href="https://www.data.jma.go.jp/stats/data/en/normal/normal.html" target="_blank" rel="noopener noreferrer">日本氣象廳</a></div></section>';
+ return '<section class="weather-card weather-mini" aria-label="12/'+esc(d.d)+' '+esc(loc.label)+' 當地天氣"><div class="wx-top"><span class="wx-kicker">☁️ 12/'+esc(d.d)+'｜當地天氣</span><span class="wx-area">📍 '+esc(loc.label)+'</span></div>'+
+ '<div class="wx-mini-line"><span class="wx-mini-emoji" aria-hidden="true">'+icon+'</span><div class="wx-mini-text"><div class="wx-mini-main">'+main+'</div><div class="wx-mini-desc">'+secondary+'</div></div></div>'+
+ '<div class="wx-mini-bottom"><span class="wx-source">'+foot+'</span><button type="button" class="wx-refresh" data-a="weather-refresh">⟳ 更新</button></div></section>';
 }
 function wxOverview(){
  return '<section class="weather-overview"><div class="wx-overhead"><strong>🌤️ 每日當地天氣</strong><button type="button" data-a="weather-refresh" class="wx-refresh">⟳ 更新</button></div><p class="wx-overview-note">10 天依當天所在地顯示；接近出發時會自動取得逐日預報，尚未開放的日期不顯示猜測天氣。</p>'+
@@ -287,7 +303,7 @@ const BOOKING_URLS={
  jr:'https://www.jrhokkaido.co.jp/global/chinese/ticket/reservation/index.html',
  reserve:'https://www.eki-net.com/en/jreast-train-reservation/Top/Index',
  tenguyama:'https://tenguyama.ckk.chuo-bus.co.jp/hours-and-fees/',
- beer:'https://www.sapporobeer.jp/brewery/s_museum/kengaku/',
+ beer:'https://sapporobeer-museum.ticket.smarthello.jp/8658f3e4d8cd4f44aaa9869787bcb906',
  aoao:'https://aoao-sapporo.blue/ticket/',
  snow:'https://snow.toyako.biz/',
  soup:'https://okushiba.net/okushibachan/',
@@ -301,7 +317,7 @@ function todoLinks(t){
  const put=(name,url)=>list.push({name,url});
  if(/JR|特急北斗|鐵路周遊券/.test(title)){put('JR 北海道訂票說明',BOOKING_URLS.jr);put('線上預訂車票',BOOKING_URLS.reserve)}
  if(/天狗山/.test(title))put('天狗山纜車票價與營運',BOOKING_URLS.tenguyama);
- if(/札幌啤酒博物館/.test(title))put('啤酒博物館參觀／導覽預約',BOOKING_URLS.beer);
+ if(/札幌啤酒博物館/.test(title))put('札幌啤酒博物館｜購票／預約',BOOKING_URLS.beer);
  if(/AOAO|水族館/.test(title))put('AOAO 官方購票',BOOKING_URLS.aoao);
  if(/雪地摩托車|Snow Park/.test(title))put('洞爺湖雪地摩托車預約',BOOKING_URLS.snow);
  if(/奧芝商店|おくしば/.test(title))put('奧芝商店訂位資訊',BOOKING_URLS.soup);
