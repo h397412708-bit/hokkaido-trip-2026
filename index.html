@@ -833,6 +833,32 @@ input::selection,textarea::selection{background:#dbe4ee;color:#29384d}
  .fl.flight-ticket .flight-location span{font-size:10px}
 }
 
+
+/* 航班資訊新版：參考資訊卡式排版，維持霧藍灰整體風格 */
+.overview-f .bd{padding-top:4px}
+.flight-board{margin-top:8px;border:1px solid #d7dfeb;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(248,250,254,.94) 44%,rgba(239,244,251,.90) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.78),0 8px 22px rgba(78,98,130,.05);overflow:hidden}
+.flight-leg{padding:18px 18px 16px}
+.flight-leg+.flight-leg{border-top:1px solid #e2e7f0}
+.flight-leg-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.flight-leg-id{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
+.flight-leg-id b{font-size:18px;line-height:1.32;letter-spacing:-.02em;color:#24344c;font-weight:800}
+.flight-leg-id span{color:#acb7c8;font-weight:600}
+.flight-leg-airline{font-size:13px;line-height:1.42;color:#72819a;font-weight:700;text-align:right;white-space:nowrap}
+.flight-leg-route{display:grid;grid-template-columns:minmax(0,1fr) 112px minmax(0,1fr);align-items:center;gap:8px}
+.flight-node{min-width:0}
+.flight-node.arrive{text-align:right}
+.flight-clock{display:block;font-size:30px;line-height:1.05;letter-spacing:-.045em;font-variant-numeric:tabular-nums;color:#17263f;font-weight:850}
+.flight-airport{margin-top:10px}
+.flight-airport strong{display:block;font-size:13px;line-height:1.35;color:#5b6b85;font-weight:800;letter-spacing:.01em}
+.flight-airport span{display:block;margin-top:2px;font-size:12px;line-height:1.45;color:#7d8ba2;font-weight:650}
+.flight-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-width:0}
+.flight-mid-icon{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,rgba(246,249,255,.96),rgba(231,238,249,.9));border:1px solid rgba(205,216,233,.95);color:#677a9a;box-shadow:inset 0 1px 0 rgba(255,255,255,.84)}
+.flight-mid-icon svg{width:22px;height:22px;display:block;transform:rotate(90deg)}
+.flight-mid-duration{font-size:13px;line-height:1.4;color:#607290;font-weight:750;letter-spacing:.01em;text-align:center}
+.flight-board-note{padding:0 18px 17px;margin:0;font-size:12px;line-height:1.55;color:#7a889f;font-weight:650}
+@media(max-width:390px){.flight-leg{padding:16px 14px 14px}.flight-leg-route{grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr);gap:6px}.flight-leg-id b{font-size:17px}.flight-leg-airline{font-size:12px}.flight-clock{font-size:27px}.flight-airport strong{font-size:12.5px}.flight-airport span{font-size:11.5px}.flight-mid-icon{width:40px;height:40px}.flight-mid-icon svg{width:20px;height:20px}.flight-mid-duration{font-size:12px}.flight-board-note{padding:0 14px 15px}}
+@media(max-width:340px){.flight-leg-top{gap:10px}.flight-leg-route{grid-template-columns:1fr 78px 1fr}.flight-leg-id b{font-size:16px}.flight-clock{font-size:24px}.flight-airport span{font-size:11px}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1416,25 +1442,22 @@ function todo(){const cats=['全部','預約','訂位','票券','其他'];const 
 return '<div class="ph"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct">'+esc(x.t.c)+'</i>'+todoLinks(x.t)+'</div><div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div><button class="add" data-a="add" data-l="t">＋ 新增待辦</button>'}
 const fl=(lb,a,at,b,bt,duration)=>{
  const parts=lb.split('｜'),date=parts[0]||'',rawAirline=parts.slice(1).join('｜')||'';
- const direction=date.includes('去程')?'去程':'回程';
  const codeMatch=rawAirline.match(/\b([A-Z]{2}\s*\d{2,4})\b/),flightNo=codeMatch?codeMatch[1].replace(/\s/g,''):'';
  const airline=flightNo?rawAirline.replace(codeMatch[0],'').trim():rawAirline;
  const airport=label=>{
-   if(label.includes('桃園'))return {code:'TPE',name:'台北・桃園國際機場 T1'};
-   if(label.includes('新千歲'))return {code:'CTS',name:'札幌・新千歲機場'};
+   if(label.includes('桃園'))return {code:'TPE',name:'桃園機場 T1'};
+   if(label.includes('新千歲'))return {code:'CTS',name:'新千歲機場'};
    return {code:'',name:label};
  };
  const dep=airport(a),arr=airport(b);
- const stop=(time,place,type)=>'<div class="flight-stop '+type+'"><span class="flight-dot" aria-hidden="true"></span><time class="flight-time">'+esc(time)+'</time><div class="flight-location"><strong>'+esc(place.code)+'</strong><span>'+esc(place.name)+'</span></div></div>';
- return '<article class="fl flight-card flight-ticket" aria-label="'+direction+' '+esc(flightNo)+'">'+
-  '<div class="flight-ticket-head"><span class="flight-tag">'+direction+'</span><span class="flight-date">'+esc(date.replace(/去程|回程/g,''))+'</span><span class="flight-number">'+esc(flightNo)+'</span></div>'+
-  '<div class="flight-ticket-body">'+stop(at,dep,'depart')+
-  '<div class="flight-journey"><span class="flight-timeline-stroke" aria-hidden="true"></span><span class="flight-journey-icon" aria-hidden="true">'+iconSvg('planeMini')+'</span><span class="flight-journey-text">飛行 '+esc(duration)+'</span></div>'+
-  stop(bt,arr,'arrive')+'</div>'+
-  '<div class="flight-ticket-footer"><span>'+esc(airline)+'</span><small>起降時間皆為當地時間</small></div></article>';
+ const route=(time,place,side)=>'<div class="flight-node '+side+'"><time class="flight-clock">'+esc(time)+'</time><div class="flight-airport"><strong>'+esc(place.code)+'</strong><span>'+esc(place.name)+'</span></div></div>';
+ return '<section class="flight-leg" aria-label="'+esc(date)+' '+esc(flightNo)+'">'+
+   '<div class="flight-leg-top"><div class="flight-leg-id"><b>'+esc(date)+'</b><span>・</span><b>'+esc(flightNo)+'</b></div><span class="flight-leg-airline">'+esc(airline)+'</span></div>'+
+   '<div class="flight-leg-route">'+route(at,dep,'depart')+'<div class="flight-mid" aria-hidden="true"><span class="flight-mid-icon">'+iconSvg('planeMini')+'</span><span class="flight-mid-duration">'+esc(duration)+'</span></div>'+route(bt,arr,'arrive')+'</div>'+
+ '</section>';
 }; const sec=(k,ic,t,sub,body)=>'<details class="card overview-panel overview-'+k+'" data-k="'+k+'"'+(ov.has(k)?' open':'')+'><summary><span class="sum-ic">'+ic+'</span><div><b>'+t+'</b><small>'+sub+'</small></div></summary><div class="bd">'+body+'</div></details>';
 function home(){const n=packs.filter(p=>p.done).length;
-return wxOverview()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程',fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分'))
+return wxOverview()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程','<div class="flight-board">'+fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分')+'<p class="flight-board-note">起飛及抵達時間均為當地時間。</p></div>')
 +sec('h',iconSvg('hotel'),'住宿一覽','4 間・共 9 晚',hotels.map(h=>'<div class="ht"><small>'+esc(h.date)+'・'+esc(h.nights)+'</small><b>'+esc(h.name)+'</b><p class="overview-address">'+iconSvg('pin')+esc(h.addr)+'</p><p>'+esc(h.detail)+'</p>'+(h.q?links([place('在 Google Maps 開啟',h.q)]):'')+'</div>').join(''))
 +sec('r',iconSvg('utensils'),'已訂餐廳','2 間・各 4 人','<div class="rs"><small>12/19（六）17:30</small><b>小樽倉庫 No.1 啤酒釀造所</b><p>晚餐後搭 JR 返回札幌。</p>'+links([place('小樽倉庫 No.1','Otaru Soko No.1 Otaru')])+'</div><div class="rs"><small>12/21（一）20:30</small><b>寺田壽司 Sushi Terada</b><div class="meal-info"><p class="meal-heading">Terada 的季節全套餐 <span>4 道</span></p><div class="meal-meta"><span>¥18,000／人（含稅）</span><span>用餐約 2 小時</span></div><ul class="meal-courses"><li>前菜五道</li><li>壽司十三貫</li><li>湯品</li><li>甜點</li></ul></div>'+links([place('Sushi Terada てら田','寺田 寿司 狸小路 札幌')])+'</div>')
 +sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join('')+'<button class="add" data-a="add" data-l="p">＋ 新增物品</button>')
