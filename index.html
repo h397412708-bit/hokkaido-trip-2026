@@ -39,6 +39,38 @@ i.bk,i.pd{font-style:normal;font-size:10px;border-radius:6px;padding:2px 7px;fon
 .bottom-nav button{border:0;background:transparent;color:#8089a3;display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 1px 1px;border-radius:11px}.bottom-nav svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.bottom-nav span{font-size:10px;font-weight:750}.bottom-nav .on{color:#3f4f7a;background:#eceffa}
 dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(--ink);box-shadow:0 20px 60px #10304a55}dialog::backdrop{background:#1a223666}dialog h3{margin:0 0 6px}dialog label{display:block;font-size:12px;color:var(--muted);margin-top:9px}dialog input,dialog textarea,dialog select{width:100%;border:1px solid #d0d7e8;border-radius:11px;padding:9px 10px;color:var(--ink);background:#f7f9fd}
 .fb{display:flex;gap:10px;margin-top:15px}.fb button{flex:1;border:1px solid #d0d7e8;background:#fff;border-radius:11px;padding:10px;font-weight:800}.fb .pri{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* 2026 北海道行程｜天氣與預約連結擴充 */
+.weather-card,.weather-overview{background:linear-gradient(135deg,#fff,#f2f6fc);border:1px solid #d9e1ee;border-radius:18px;padding:15px;margin:14px 0;box-shadow:0 4px 18px rgba(48,73,108,.06)}
+.weather-card{position:relative;overflow:hidden}
+.weather-card:after{content:"❄";position:absolute;right:12px;top:26px;color:#dbe6f4;font-size:66px;line-height:1;pointer-events:none;z-index:0}
+.weather-card>*{position:relative;z-index:1}
+.wx-top,.wx-overhead{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.wx-kicker{font-size:11px;font-weight:850;color:#566c94;letter-spacing:.07em}
+.wx-area{font-size:11px;color:#617494;background:#e9eef8;border-radius:8px;padding:4px 8px;font-weight:750}
+.wx-current{display:flex;align-items:center;gap:13px;margin:9px 0 4px}
+.wx-emoji{font-size:31px;line-height:1.3;flex:none}
+.wx-temperatures{font-size:22px;font-weight:850;color:#243654;font-variant-numeric:tabular-nums}
+.wx-subtitle{font-size:12px;font-weight:700;color:#364968}
+.wx-hint{font-size:11px;line-height:1.75;color:#677691;margin:7px 0}
+.wx-meta{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0 3px}
+.wx-chip{font-size:11px;color:#4c648d;background:#e9eff9;border:1px solid #dce5f4;border-radius:9px;padding:4px 8px;font-weight:650}
+.wx-source{font-size:10px;color:#8a93a8;margin-top:10px;line-height:1.55}
+.wx-source a{color:#4d618c;text-decoration:underline;text-underline-offset:2px}
+.wx-refresh{font-size:11px;border:1px solid #cad4e7;background:#fff;color:#4d6087;border-radius:9px;padding:6px 10px;font-weight:800}
+.wx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:13px 0 9px}
+.wx-day{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:7px;text-align:left;min-height:47px;padding:9px;border:1px solid #e2e7f1;border-radius:12px;background:#fff;color:#374862;line-height:1.35}
+.wx-day b{font-size:12px}.wx-day em{font-style:normal;font-size:11px;color:#61718b}.wx-day small{font-size:10px;color:#8a97a9}.wx-day .wicon{font-size:20px}
+.weather-overview .wx-overhead strong{font-size:15px;color:#253753}
+.wx-overview-note{font-size:11px;line-height:1.6;color:#7b87a0;margin:5px 0 0}
+.td>.todo-body{flex:1;min-width:0;font-size:13px;color:var(--ink)}
+.todo-sites{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.todo-sites a{display:inline-flex;align-items:center;gap:5px;border:1px solid #cfdcf0;background:#eef3fb;border-radius:9px;padding:7px 9px;color:#475f8e;font-size:11px;font-weight:800;line-height:1.4;max-width:100%;min-height:33px}
+.todo-sites a:focus-visible,.wx-day:focus-visible,.wx-refresh:focus-visible{outline:2px solid #5875b5;outline-offset:2px}
+.todo-sites a:active,.wx-day:active{transform:scale(.98)}
+@media(min-width:480px){.wx-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:360px){.wx-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wx-day{grid-template-columns:1fr auto;gap:2px}.wx-day em{display:none}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="功能導航"><button data-a="tab" data-v="home"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg><span>總覽</span></button><button data-a="tab" data-v="plan"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg><span>行程</span></button><button data-a="tab" data-v="todo"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg><span>待辦</span></button></nav><dialog id="dlg"></dialog>
 <script>
@@ -180,6 +212,105 @@ const uid=()=>Math.random().toString(36).slice(2,9);
 const prep=()=>DAYS.map(d=>({d:d.d,week:d.week,city:d.city,tone:d.tone,title:d.title,sub:d.sub,sleep:d.sleep,note:d.note,items:d.items.map(a=>({id:uid(),time:String(a.time).split(/[–\- ]/)[0],title:a.title,desc:a.desc||'',kind:a.kind,booked:!!a.booked,pending:!!a.pending,cost:find(COST,a.title)||a.meta||'',hours:find(HOURS,a.title),places:a.places||[]}))}));
 const T0=()=>[['JR 特急北斗 12/22 札幌 → 登別（指定席）','票券'],['JR 12/24 登別 → 洞爺、12/26 洞爺 → 南千歲 車票','票券'],['札幌啤酒博物館／AOAO 票券（12/21）','票券'],['天狗山纜車票價與營運確認（12/19）','票券'],['雪地摩托車預約（12/25，需確認開放）','預約'],['確認兩間溫泉飯店含餐內容','預約'],['補上 12/26 機場附近飯店名稱','預約'],['奧芝商店 12/20 訂位確認','訂位'],['Visit Japan Web 入境資料','其他'],['eSIM／網路與海外旅遊保險','其他']].map(x=>({t:x[0],c:x[1],done:false})).concat([{t:'小樽倉庫 No.1｜12/19 17:30｜4 人',c:'訂位',done:true},{t:'寺田壽司｜12/21 20:30｜4 人',c:'訂位',done:true},{t:'機票：酷航 TR892／亞航 FD243',c:'票券',done:true},{t:'四段住宿（已訂）',c:'預約',done:true}]);
 const P0=()=>['護照（檢查效期）','機票與住宿確認資料','信用卡、日圓現金、交通卡','海外旅遊保險資料','保暖防風羽絨外套','防滑防水雪靴','發熱衣與保暖褲','保暖襪與備用襪','毛帽、圍巾、防水手套','暖暖包','eSIM／SIM 卡','手機、充電線與行動電源','常備藥品、護唇膏、乳液','隱形眼鏡與個人用品'].map(t=>({t:t,done:false}));
+
+// 每天依實際旅遊城市配對座標；預報只呈現 Open-Meteo 已可提供的日期。
+const WX_LOCATION={
+  sapporo:{label:'札幌',lat:43.0621,lon:141.3544,climate:'12 月平年約高溫 2°C、低溫 -4°C（札幌測站）'},
+  otaru:{label:'小樽',lat:43.1907,lon:140.9947,climate:'12 月平年約高溫 2°C、低溫 -4°C（小樽測站）'},
+  noboribetsu:{label:'登別溫泉',lat:42.4914,lon:141.1443,climate:'冬季氣溫低，地獄谷步道可能結冰'},
+  toya:{label:'洞爺湖溫泉',lat:42.5635,lon:140.8159,climate:'湖畔風大，雪地活動受積雪與風勢影響'},
+  chitose:{label:'新千歲／千歲',lat:42.7752,lon:141.6924,climate:'12 月寒冷，機場周邊須留意降雪與交通'}
+};
+const WX_KEYS=['sapporo','otaru','sapporo','sapporo','noboribetsu','noboribetsu','toya','toya','chitose','chitose'];
+const WX_INFO={loading:false,attempted:0,error:false,updated:0,records:{}};
+const wxDate=i=>'2026-12-'+String(days[i].d).padStart(2,'0');
+const japanToday=()=>new Date(Date.now()+9*3600000).toISOString().slice(0,10);
+const wxFirstDay=iso=>{const d=new Date(iso+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-15);return d.toISOString().slice(0,10)};
+const wxAvailable=iso=>japanToday()>=wxFirstDay(iso)&&japanToday()<=iso;
+function wxDesc(code){
+  code=Number(code);
+  if(code===0)return ['☀️','晴朗'];
+  if(code===1)return ['🌤️','晴時多雲'];
+  if(code===2)return ['⛅','多雲時晴'];
+  if(code===3)return ['☁️','多雲'];
+  if(code===45||code===48)return ['🌫️','有霧'];
+  if([51,53,55,56,57].includes(code))return ['🌧️','毛毛雨'];
+  if([61,63,65,66,67,80,81,82].includes(code))return ['🌧️','有雨'];
+  if([71,73,75,77,85,86].includes(code))return ['🌨️','降雪'];
+  if(code>=95)return ['⛈️','雷雨'];
+  return ['🌥️','天氣變化'];
+}
+const wxRecord=i=>WX_INFO.records[WX_KEYS[i]+'|'+wxDate(i)]||null;
+function wxCard(i){
+ const d=days[i],loc=WX_LOCATION[WX_KEYS[i]],date=wxDate(i),rec=wxRecord(i),inRange=wxAvailable(date);
+ const past=japanToday()>date;
+ let main;
+ if(rec){
+   const [emoji,desc]=wxDesc(rec.code);
+   main='<div class="wx-current"><span class="wx-emoji">'+emoji+'</span><div><div class="wx-temperatures">'+esc(Math.round(rec.max))+'° / '+esc(Math.round(rec.min))+'°C</div><div class="wx-subtitle">'+esc(desc)+' · 預報高／低溫</div></div></div>'+
+     '<div class="wx-meta"><span class="wx-chip">降水機率 '+(rec.rain===null?'—':esc(rec.rain)+'%')+'</span><span class="wx-chip">日本當地時間</span></div>'+
+     '<p class="wx-hint">山區、纜車與湖畔的實際狀況可能不同，出發前請再次查看。</p>';
+ }else{
+   const message=past?'該日期已過，無法顯示當日預報':!inRange?'距離旅行尚遠，還沒有可靠的逐日預報':WX_INFO.loading?'正在更新當地天氣…':WX_INFO.error?'暫時無法載入天氣，請檢查網路':'正在等待最新預報資料';
+   main='<div class="wx-current"><span class="wx-emoji">❄️</span><div><div class="wx-subtitle">'+message+'</div><div class="wx-temperatures" style="font-size:17px">'+esc(loc.climate)+'</div></div></div>'+
+     (!past&&!inRange?'<p class="wx-hint">約從 '+wxFirstDay(date).slice(5).replace('-','/')+' 起可逐步查看該天預報（最遠 16 天），以上為 12 月氣候參考，非 2026 年該日預測。</p>':'<p class="wx-hint">以上為 12 月氣候參考，不代表當日會晴、雨或降雪。</p>');
+ }
+ return '<section class="weather-card" aria-label="12/'+esc(d.d)+' '+esc(loc.label)+' 當地天氣"><div class="wx-top"><span class="wx-kicker">☁️ 12/'+esc(d.d)+'｜當地天氣</span><span class="wx-area">📍 '+esc(loc.label)+'</span></div>'+main+
+ '<div class="wx-top" style="margin-top:8px"><span class="wx-source">'+(rec?'來源：Open-Meteo · 更新 '+new Date(WX_INFO.updated).toLocaleString('zh-TW',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit'})+'（日本時間）':(['sapporo','otaru'].includes(WX_KEYS[i])?'JMA 1991–2020 月平均氣候參考':'冬季旅行提醒（非當日預報）'))+'</span><button type="button" class="wx-refresh" data-a="weather-refresh">⟳ 更新天氣</button></div><div class="wx-source">預報：<a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> ｜氣候參考：<a href="https://www.data.jma.go.jp/stats/data/en/normal/normal.html" target="_blank" rel="noopener noreferrer">日本氣象廳</a></div></section>';
+}
+function wxOverview(){
+ return '<section class="weather-overview"><div class="wx-overhead"><strong>🌤️ 每日當地天氣</strong><button type="button" data-a="weather-refresh" class="wx-refresh">⟳ 更新</button></div><p class="wx-overview-note">10 天依當天所在地顯示；接近出發時會自動取得逐日預報，尚未開放的日期不顯示猜測天氣。</p>'+
+ '<div class="wx-grid">'+days.map((d,i)=>{const r=wxRecord(i),loc=WX_LOCATION[WX_KEYS[i]],ic=r?wxDesc(r.code)[0]:'❄️';return '<button type="button" class="wx-day" data-a="weather-day" data-i="'+i+'"><b>12/'+esc(d.d)+'</b><div><em>'+esc(loc.label)+'</em><br><small>'+(r?esc(Math.round(r.max))+'° / '+esc(Math.round(r.min))+'°C':'預報待開放')+'</small></div><span class="wicon">'+ic+'</span></button>'}).join('')+'</div><p class="wx-source">資料：Open-Meteo（最多約 16 天）· 遠期無預報時請點選日期查看氣候提示</p></section>';
+}
+function getWxForecast(force){
+ const today=japanToday();
+ if(today>'2026-12-27'||today<'2026-12-03')return;
+ if(WX_INFO.loading)return;
+ if(!force&&Date.now()-WX_INFO.attempted<45*60*1000)return;
+ WX_INFO.loading=true;WX_INFO.error=false;WX_INFO.attempted=Date.now();
+ const keys=[...new Set(WX_KEYS)];
+ Promise.allSettled(keys.map(async key=>{
+  const p=WX_LOCATION[key];
+  const url='https://api.open-meteo.com/v1/forecast?latitude='+p.lat+'&longitude='+p.lon+'&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&forecast_days=16';
+  const response=await fetch(url);
+  if(!response.ok)throw new Error('weather HTTP '+response.status);
+  const data=await response.json(),daily=data.daily;
+  if(!daily||!Array.isArray(daily.time))throw new Error('weather response missing days');
+  for(let j=0;j<daily.time.length;j++){
+   const max=daily.temperature_2m_max?.[j],min=daily.temperature_2m_min?.[j];
+   if(Number.isFinite(max)&&Number.isFinite(min))WX_INFO.records[key+'|'+daily.time[j]]={code:daily.weather_code?.[j],max,min,rain:Number.isFinite(daily.precipitation_probability_max?.[j])?daily.precipitation_probability_max[j]:null};
+  }
+ })).then(results=>{WX_INFO.error=results.every(x=>x.status==='rejected');WX_INFO.updated=Date.now()}).catch(()=>{WX_INFO.error=true}).finally(()=>{WX_INFO.loading=false;render()});
+}
+// 既有待辦（包含先前已儲存在 localStorage 的項目）可依關鍵字顯示官方網站。
+const BOOKING_URLS={
+ jr:'https://www.jrhokkaido.co.jp/global/chinese/ticket/reservation/index.html',
+ reserve:'https://www.eki-net.com/en/jreast-train-reservation/Top/Index',
+ tenguyama:'https://tenguyama.ckk.chuo-bus.co.jp/hours-and-fees/',
+ beer:'https://www.sapporobeer.jp/brewery/s_museum/kengaku/',
+ aoao:'https://aoao-sapporo.blue/ticket/',
+ snow:'https://snow.toyako.biz/',
+ soup:'https://okushiba.net/okushibachan/',
+ takimoto:'https://takimotokan.co.jp/',
+ nonokaze:'https://nonokaze-resort.com/',
+ vjw:'https://www.vjw.digital.go.jp/'
+};
+const safeLink=raw=>{try{const url=new URL(raw);return url.protocol==='https:'||url.protocol==='http:'?url.href:''}catch(e){return ''}};
+function todoLinks(t){
+ const title=t.t||'', list=[];
+ const put=(name,url)=>list.push({name,url});
+ if(/JR|特急北斗|鐵路周遊券/.test(title)){put('JR 北海道訂票說明',BOOKING_URLS.jr);put('線上預訂車票',BOOKING_URLS.reserve)}
+ if(/天狗山/.test(title))put('天狗山纜車票價與營運',BOOKING_URLS.tenguyama);
+ if(/札幌啤酒博物館/.test(title))put('啤酒博物館參觀／導覽預約',BOOKING_URLS.beer);
+ if(/AOAO|水族館/.test(title))put('AOAO 官方購票',BOOKING_URLS.aoao);
+ if(/雪地摩托車|Snow Park/.test(title))put('洞爺湖雪地摩托車預約',BOOKING_URLS.snow);
+ if(/奧芝商店|おくしば/.test(title))put('奧芝商店訂位資訊',BOOKING_URLS.soup);
+ if(/溫泉飯店含餐/.test(title)){put('第一瀧本館官網',BOOKING_URLS.takimoto);put('乃之風官網',BOOKING_URLS.nonokaze)}
+ if(/Visit Japan Web/i.test(title))put('Visit Japan Web',BOOKING_URLS.vjw);
+ if(t.url&&safeLink(t.url))put('自訂網址',t.url);
+ return list.length?'<div class="todo-sites">'+[...new Map(list.map(x=>[x.url,x])).values()].map(x=>'<a href="'+esc(safeLink(x.url))+'" target="_blank" rel="noopener noreferrer">🔗 '+esc(x.name)+' ↗</a>').join('')+'</div>':'';
+}
+
 let days=LS('days',null)||prep(),todos=LS('todos',null)||T0(),packs=LS('packs',null)||P0(),st={tab:'home',day:Math.min(Math.max(+LS('day',0)||0,0),days.length-1),cat:'全部'};
 const ov=new Set(),app=document.getElementById('app'),dlg=document.getElementById('dlg');
 const save=()=>{SV('days',days);SV('todos',todos);SV('packs',packs)};
@@ -187,32 +318,33 @@ const links=pl=>{const u=[...new Map((pl||[]).map(p=>[p.q,p])).values()];return 
 const tool=(l,i)=>['↑|-1|mv','↓|1|mv','編輯|0|ed','刪除|0|rm'].map(s=>{const x=s.split('|');return '<button data-a="'+x[2]+'" data-l="'+l+'" data-i="'+i+'" data-d="'+x[1]+'">'+x[0]+'</button>'}).join('');
 const row=(a,i)=>{const mv=a.kind==='交通';const bd=[a.desc&&'<p>'+esc(a.desc)+'</p>',a.cost&&'<p class="c">💴 '+esc(a.cost)+'</p>',a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',links(a.places)].filter(Boolean).join('');
 return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span>'+(mv?'↳ ':'')+esc(a.title)+'</span>'+(a.booked?'<i class="bk">已訂</i>':a.pending?'<i class="pd">待確認</i>':'')+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
-function plan(){const d=days[st.day];return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(d.sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section><details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(d.note)+'</p></details><div class="tlw">'+d.items.map(row).join('')+'</div><button class="add" data-a="add" data-l="d">＋ 新增行程</button><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
+function plan(){const d=days[st.day];return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(d.sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(d.note)+'</p></details><div class="tlw">'+d.items.map(row).join('')+'</div><button class="add" data-a="add" data-l="d">＋ 新增行程</button><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
 function todo(){const cats=['全部','預約','訂位','票券','其他'];const L=todos.map((t,i)=>({t:t,i:i})).filter(x=>st.cat==='全部'||x.t.c===st.cat);const s=L.filter(x=>!x.t.done).concat(L.filter(x=>x.t.done));
-return '<div class="ph"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div><span>'+esc(x.t.t)+'</span><i class="ct">'+esc(x.t.c)+'</i></div><div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div><button class="add" data-a="add" data-l="t">＋ 新增待辦</button>'}
+return '<div class="ph"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct">'+esc(x.t.c)+'</i>'+todoLinks(x.t)+'</div><div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div><button class="add" data-a="add" data-l="t">＋ 新增待辦</button>'}
 const fl=(lb,a,at,b,bt)=>'<div class="fl"><small>'+lb+'</small><div><p><b>'+at+'</b><span>'+a+'</span></p><i>✈︎</i><p><b>'+bt+'</b><span>'+b+'</span></p></div></div>';
 const sec=(k,ic,t,sub,body)=>'<details class="card" data-k="'+k+'"'+(ov.has(k)?' open':'')+'><summary><span>'+ic+'</span><div><b>'+t+'</b><small>'+sub+'</small></div></summary><div class="bd">'+body+'</div></details>';
 function home(){const rt='https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent('New Chitose Airport')+'&destination='+encodeURIComponent('New Chitose Airport')+'&waypoints='+['Sapporo Station','Otaru Station','Sapporo Station','Noboribetsu Station','Toya Station','Minami-Chitose Station'].map(encodeURIComponent).join('%7C');
 const N=(x,y,t,s)=>'<circle cx="'+x+'" cy="'+y+'" r="5" fill="#fff" stroke="#4d7fa6" stroke-width="2.5"/><text x="'+x+'" y="'+(y-10)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#38536b">'+t+'</text><text x="'+x+'" y="'+(y+17)+'" text-anchor="middle" font-size="8.5" fill="#8ba3b8">'+s+'</text>';
 const svg='<svg viewBox="0 0 320 220" role="img" aria-label="北海道路線示意圖"><g fill="none" stroke="#8fb9d9" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"><path d="M190 128Q175 95 152 72"/><path d="M148 68Q100 40 64 52"/><path d="M64 58Q104 74 146 76"/><path d="M154 78Q220 120 250 172"/><path d="M246 178Q180 192 112 170"/><path d="M114 166Q150 142 186 134"/></g>'+N(64,54,'小樽','12/19 日歸')+N(150,72,'札幌','12/18–22')+N(190,130,'新千歲','12/18・26–27')+N(250,174,'登別','12/22–24')+N(110,168,'洞爺湖','12/24–26')+'</svg>';
 const n=packs.filter(p=>p.done).length;
-return sec('f','✈️','航班','12/18 去程・12/27 回程',fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55'))
+return wxOverview()+sec('f','✈️','航班','12/18 去程・12/27 回程',fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55'))
 +sec('h','🏨','住宿一覽','4 間・共 9 晚',hotels.map(h=>'<div class="ht"><small>'+esc(h.date)+'・'+esc(h.nights)+'</small><b>'+esc(h.name)+'</b><p>📍 '+esc(h.addr)+'</p><p>'+esc(h.detail)+'</p>'+(h.q?links([place('在 Google Maps 開啟',h.q)]):'')+'</div>').join(''))
 +sec('r','🍽️','已訂餐廳','2 間・各 4 人','<div class="rs"><small>12/19（六）17:30</small><b>小樽倉庫 No.1 啤酒釀造所</b><p>晚餐後搭 JR 返回札幌。</p>'+links([place('小樽倉庫 No.1','Otaru Soko No.1 Otaru')])+'</div><div class="rs"><small>12/21（一）20:30</small><b>寺田壽司 Sushi Terada</b><p>狸小路附近；套餐內容尚待確認。</p>'+links([place('Sushi Terada てら田','寺田 寿司 狸小路 札幌')])+'</div>')
 +sec('m','🗺️','旅行路線','新千歲 → 札幌 → 小樽 → 登別 → 洞爺湖 → 新千歲','<a class="map" href="'+esc(rt)+'" target="_blank" rel="noopener noreferrer">'+svg+'</a><p>12/18 抵達札幌 → 12/19 小樽日歸 → 12/20–21 札幌 → 12/22 登別 → 12/24 洞爺湖 → 12/26 回千歲 → 12/27 返台</p><a class="go" href="'+esc(rt)+'" target="_blank" rel="noopener noreferrer">在 Google Maps 開啟完整路線</a>')
 +sec('p','🧳','行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join('')+'<button class="add" data-a="add" data-l="p">＋ 新增物品</button>')
 +'<button class="add ghost" data-a="rs">還原預設內容</button>'}
 const hero=()=>'<header class="hero"><div class="topline"><div class="brand">❄ HOKKAIDO / 2026</div><div class="pill">WINTER JOURNAL</div></div><div class="hc"><div class="eb">WINTER TRAVEL NOTES • JAPAN</div><h1 class="ht1">A winter<br>to remember.</h1><div class="hs">北海道冬日旅誌</div><div class="hm">12.18 — 12.27 ✦ 札幌 · 小樽 · 登別 · 洞爺湖</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><div class="summary"><div><strong>10 天 9 夜</strong><span>旅程天數</span></div><div><strong>4 位旅伴</strong><span>一同出發</span></div><div><strong>12/18–27</strong><span>2026・北海道</span></div></div>';
-function render(){app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():todo())+'</main>';document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===st.tab))}
+function render(){app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():todo())+'</main>';document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===st.tab));getWxForecast(false)}
 function form(title,fs,v,cb){dlg.innerHTML='<form><h3>'+title+'</h3>'+fs.map(f=>'<label>'+f[1]+(f[2]==='area'?'<textarea name="'+f[0]+'" rows="3">'+esc(v[f[0]])+'</textarea>':f[2]==='sel'?'<select name="'+f[0]+'">'+f[3].map(o=>'<option'+(o===v[f[0]]?' selected':'')+'>'+o+'</option>').join('')+'</select>':'<input name="'+f[0]+'" value="'+esc(v[f[0]])+'">')+'</label>').join('')+'<div class="fb"><button type="button" data-a="cx">取消</button><button class="pri">儲存</button></div></form>';dlg.querySelector('form').onsubmit=e=>{e.preventDefault();const o={};new FormData(e.target).forEach((x,k)=>o[k]=String(x).trim());dlg.close();cb(o)};dlg.showModal()}
 function edit(l,n){const add=n<0;
 if(l==='d'){const L=days[st.day].items,a=add?{id:uid(),time:'',title:'',desc:'',cost:'',hours:'',kind:'觀光',places:[]}:L[n];form(add?'新增行程':'編輯行程',[['time','開始時間（例 09:30）'],['title','行程名稱'],['desc','行程細節','area'],['cost','費用說明'],['hours','營業時間']],a,o=>{if(!o.title)return;Object.assign(a,o);if(add)L.push(a);ov.add(a.id);save();render()})}
-else if(l==='t'){const a=add?{t:'',c:'預約',done:false}:todos[n];form(add?'新增待辦':'編輯待辦',[['t','待辦事項'],['c','類別','sel',['預約','訂位','票券','其他']]],a,o=>{if(!o.t)return;Object.assign(a,o);if(add)todos.unshift(a);save();render()})}
+else if(l==='t'){const a=add?{t:'',c:'預約',done:false,url:''}:todos[n];form(add?'新增待辦':'編輯待辦',[['t','待辦事項'],['c','類別','sel',['預約','訂位','票券','其他']],['url','相關網址（選填，https://）']],a,o=>{if(!o.t)return;if(o.url&&!safeLink(o.url)){alert('網址必須以 https:// 或 http:// 開頭');return}Object.assign(a,o);if(add)todos.unshift(a);save();render()})}
 else{const a=add?{t:'',done:false}:packs[n];form(add?'新增物品':'編輯物品',[['t','物品名稱']],a,o=>{if(!o.t)return;a.t=o.t;if(add)packs.push(a);ov.add('p');save();render()})}}
 function move(L,i,d,l){const same=l==='t'?x=>x.done===L[i].done:()=>true;let j=i+d;while(L[j]&&!same(L[j]))j+=d;if(L[j]){const t=L[i];L[i]=L[j];L[j]=t}}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const D=b.dataset,a=D.a,n=+D.i,L=D.l==='d'?days[st.day].items:D.l==='t'?todos:packs;
 if(a==='tab'){st.tab=D.v;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
+else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
 else if(a==='tg'){L[n].done=!L[n].done;save();render()}else if(a==='ed')edit(D.l,n);else if(a==='add')edit(D.l,-1);else if(a==='cx')dlg.close();
 else if(a==='rs'){if(confirm('還原為預設內容？自訂的行程與待辦會被清除。')){days=prep();todos=T0();packs=P0();st.day=0;save();render()}}});
 document.addEventListener('toggle',e=>{const k=e.target.dataset&&e.target.dataset.k;if(k){e.target.open?ov.add(k):ov.delete(k)}},true);
