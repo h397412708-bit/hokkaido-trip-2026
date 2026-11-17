@@ -515,6 +515,41 @@ dialog.sh-lightbox::backdrop{background:rgba(24,34,54,.79);-webkit-backdrop-filt
   max-width:100%;max-height:100%;object-fit:cover;object-position:center;
 }
 
+
+/* 北海道冬日旅誌｜點擊回饋與表單焦點，取自封面霧藍灰調 */
+:root{--mist-focus:#a7b4c6;--mist-focus-border:#a3b2c5;--mist-focus-halo:rgba(152,170,193,.18)}
+/* iOS Safari 的黑色點擊高亮與 summary 預設焦點框 */
+summary,details>summary,[data-a],button,a,label[for],.sh-image-open{
+  -webkit-tap-highlight-color:transparent;
+}
+summary:focus,details>summary:focus{outline:none!important}
+/* 僅鍵盤導覽保留低彩度、柔和但清晰的焦點提示 */
+summary:focus-visible,details>summary:focus-visible{
+  outline:none!important;
+  box-shadow:inset 0 0 0 2px rgba(136,156,182,.43);
+  border-radius:inherit;
+}
+/* 避免點擊折疊時框線閃爍；底色微變取代黑色框線 */
+.card>summary,.row>summary,.soft>summary,.weather-overview>summary{
+  -webkit-tap-highlight-color:transparent;
+  transition:background-color .2s ease;
+}
+.card>summary:active,.row>summary:active,.soft>summary:active,
+.weather-overview>summary:active{background-color:rgba(214,225,238,.23)}
+/* 輸入焦點：霧藍灰邊框與淡薄光暈，避免高飽和藍色 */
+dialog input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+dialog textarea:focus,dialog select:focus,
+.sh-form input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+.sh-form textarea:focus,
+.sh-form select:focus{
+  outline:none!important;
+  border-color:var(--mist-focus-border)!important;
+  box-shadow:0 0 0 3px var(--mist-focus-halo)!important;
+  background-color:#fcfdff!important;
+  transition:border-color .18s ease,box-shadow .18s ease,background-color .18s ease;
+}
+input::selection,textarea::selection{background:#dbe4ee;color:#29384d}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
