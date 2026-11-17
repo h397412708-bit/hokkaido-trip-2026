@@ -889,6 +889,82 @@ input::selection,textarea::selection{background:#dbe4ee;color:#29384d}
   .flight-mid-duration{font-size:10px}
   .flight-board-note{padding:0 12px 16px}
 }
+
+/* 購物頁與待辦頁同一套版面語言：標題、分類籤、清單、行動按鈕 */
+.sh-heading.ph{margin:3px 2px 15px}
+.sh-heading.ph .kicker{display:block;align-items:initial;gap:0}
+.sh-heading.ph h2{font-size:23px;line-height:inherit;font-weight:850;letter-spacing:-.025em;margin:5px 0}
+.sh-heading.ph p{font-size:12px;color:var(--muted);line-height:inherit}
+.sh-filters.days.cats{display:flex;grid-template-columns:none;gap:9px;overflow-x:auto;margin:0 -16px 15px;padding:2px 16px 6px}
+.sh-filters.days.cats button{flex:none;min-height:auto;min-width:0;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--muted);font-size:12.5px;font-weight:750;padding:7px 15px;white-space:nowrap;box-shadow:none}
+.sh-filters.days.cats button.on{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 6px 18px #2255752a}
+.sh-filters.days.cats small{font-size:10px;font-weight:750;margin-left:3px;opacity:.9;color:inherit}
+/* 待辦清單的白色卡片、細分隔線和行距 */
+.sh-flat.card.pad{padding:6px 16px;border:1px solid var(--line);border-radius:19px;background:#fff;box-shadow:0 4px 18px #2d516207;overflow:hidden;margin-bottom:13px}
+.sh-flat .sh-product{grid-template-columns:22px 70px minmax(0,1fr);gap:10px;min-height:0;border-top:1px solid var(--line);padding:12px 0;align-items:start}
+.sh-flat .sh-product:first-child{border-top:0}
+.sh-flat .sh-tick{width:18px;height:18px;accent-color:var(--blue);margin:24px 0 0 0}
+/* 保留 70×70 圖片框與點擊放大能力 */
+.sh-flat .sh-image,.sh-flat .sh-image.sh-image-open{height:70px;width:70px;min-height:70px;min-width:70px;border-radius:12px;flex:none;border-color:var(--line);background:#f1f3fa}
+.sh-flat .sh-product-name{font-size:13px;line-height:1.55;font-weight:800;color:var(--ink)}
+.sh-flat .sh-product.done .sh-product-name{color:#8089a3}
+.sh-flat .sh-tags{gap:5px;margin:6px 0 7px}
+.sh-flat .sh-tag{font-size:10px;font-weight:700;background:#e9edf8;color:#5b6a95;border-radius:6px;padding:2px 7px;line-height:1.5}
+.sh-flat .sh-note{font-size:12px;line-height:1.65;color:var(--muted);margin:6px 0}
+.sh-flat .sh-link{font-size:11px;font-weight:800;color:#3f4f7a;border-color:#d5dcec}
+.sh-flat .sh-qty-label{font-size:11px;font-weight:650;color:var(--muted)}
+.sh-flat .sh-product-footer{margin-top:8px;gap:8px;align-items:center;justify-content:space-between}
+.sh-flat .sh-mini-actions{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.sh-flat .sh-mini-actions button,.sh-flat .sh-mini-actions button:last-child{border:1px solid #d0d7e8;background:#fff;border-radius:9px;color:var(--navy);font-size:11px;font-weight:800;padding:3px 10px;line-height:1.65;min-width:0}
+.sh-empty{border:1px solid var(--line);border-radius:19px;background:#fff;box-shadow:0 4px 18px #2d516207;color:var(--muted)}
+.sh-empty b{color:var(--ink)}
+.sh-footnote{font-size:10px;line-height:1.7;color:var(--muted);margin:8px 4px 16px}
+/* 編輯視窗中的文字、按鈕也採用待辦對話框的主色與次要文字色 */
+.sh-form h3{color:var(--ink);font-weight:850}
+.sh-form .sh-caption{color:var(--muted)}
+.sh-form label:not(.sh-photo-upload){color:var(--muted);font-weight:750}
+.sh-form input:not([type=file]),.sh-form textarea{color:var(--ink);background:#f7f9fd;border-color:#d0d7e8}
+.sh-form .sh-hints button,.sh-photo-upload{background:#e9edf8!important;color:#5b6a95!important;border-color:#d0d7e8!important}
+.sh-form .sh-edit-qty button{background:#f2f4fa;border-color:#d0d7e8;color:var(--navy)}
+@media(max-width:360px){
+ .sh-flat.card.pad{padding:6px 12px}
+ .sh-flat .sh-product{grid-template-columns:20px 70px minmax(0,1fr);gap:8px}
+ .sh-flat .sh-image,.sh-flat .sh-image.sh-image-open{height:70px;width:70px}
+ .sh-flat .sh-mini-actions button,.sh-flat .sh-mini-actions button:last-child{font-size:10px;padding:3px 7px}
+ .sh-filters.days.cats{gap:7px}
+ .sh-filters.days.cats button{padding:7px 12px}
+}
+
+
+/* 購物頁右上方新增：透明玻璃圓框，保留原本新增商品行為 */
+.sh-heading.ph{position:relative;padding-right:54px}
+.sh-heading .shop-glass-add{
+  position:absolute;right:1px;top:5px;
+  width:44px;height:44px;min-width:44px;min-height:44px;
+  display:grid;place-items:center;padding:0;
+  border:1px solid rgba(255,255,255,.78);border-radius:50%;
+  outline:1px solid rgba(120,137,163,.25);outline-offset:0;
+  background:linear-gradient(145deg,rgba(255,255,255,.62),rgba(233,240,251,.27) 57%,rgba(255,255,255,.4));
+  -webkit-backdrop-filter:blur(14px) saturate(155%);
+  backdrop-filter:blur(14px) saturate(155%);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.85),0 2px 9px rgba(70,91,127,.065);
+  color:#536784;-webkit-tap-highlight-color:transparent;
+  transition:background-color .18s ease,transform .18s ease;
+}
+.sh-heading .shop-glass-add svg{
+  width:21px;height:21px;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;fill:none;
+}
+.sh-heading .shop-glass-add:active{
+  transform:scale(.94);
+  background:rgba(112,132,161,.14);
+}
+.sh-heading .shop-glass-add:focus:not(:focus-visible){outline:1px solid rgba(120,137,163,.25)}
+.sh-heading .shop-glass-add:focus-visible{
+  outline:2px solid #93a7c5;outline-offset:3px;
+}
+@media(prefers-reduced-motion:reduce){.sh-heading .shop-glass-add{transition:none}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1392,9 +1468,9 @@ function shopPage(){
  const tab=(code,label,count)=>'<button type="button" data-a="shop-mode" data-v="'+code+'" class="'+(shopMode===code?'on':'')+'">'+label+' <small>'+count+'</small></button>';
  let body='';
  if(!selected.length){
-   body='<div class="sh-empty">'+shopBagArt+'<b>'+(total===0?'還沒有購物項目':'這裡還沒有商品')+'</b><p>'+(total===0?'新增想買的商品、圖片和店家，開始整理北海道購物清單。':'可以切換「全部」、「待購買」或「已購買」查看商品。')+'</p>'+(total===0?'<button type="button" data-a="shop-add" class="sh-add" style="margin:auto">＋ 新增第一個商品</button>':'')+'</div>';
+   body='<div class="sh-empty">'+shopBagArt+'<b>'+(total===0?'還沒有購物項目':'這裡還沒有商品')+'</b><p>'+(total===0?'新增想買的商品、圖片和店家，開始整理北海道購物清單。':'可以切換「全部」、「待購買」或「已購買」查看商品。')+'</p>'+'</div>';
  }else{
-   body='<div class="sh-flat sh-list">'+selected.map(p=>{
+   body='<div class="card pad sh-flat sh-list">'+selected.map(p=>{
      const url=p.url?safeLink(p.url):'',id=esc(p.id),qty=Math.min(9999,Math.max(1,Number(p.qty)||1));
      return '<article class="sh-product'+(p.done?' done':'')+'" data-shop-id="'+id+'">'+
        '<input class="sh-tick" type="checkbox" data-a="shop-check" data-id="'+id+'" aria-label="標記 '+esc(p.name)+' 已購買"'+(p.done?' checked':'')+'>'+
@@ -1406,10 +1482,11 @@ function shopPage(){
        '<div class="sh-product-footer"><span class="sh-qty-label">數量 × '+qty+'</span><div class="sh-mini-actions"><button type="button" data-a="shop-edit" data-id="'+id+'">編輯</button><button type="button" data-a="shop-delete" data-id="'+id+'">刪除</button></div></div></div></article>';
    }).join('')+'</div>';
  }
- return '<div class="sh-heading"><div class="kicker">SHOPPING LIST</div><h2>購物清單</h2><p>把想買的北海道好物，收藏在這裡。</p></div>'+
- '<div class="sh-views">'+tab('all','全部',total)+tab('pending','待購買',pending)+tab('bought','已購買',bought)+'</div>'+
- '<div class="sh-bar"><span class="sh-gesture-hint">商品資料可隨時編輯</span><button type="button" class="sh-add" data-a="shop-add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增商品</button></div>'+
- body+'<p class="sh-footnote">購物清單與圖片只會保存在這台裝置的這個瀏覽器中，不會自動同步到其他旅伴的手機。請勿清除網站資料。</p>';
+ return '<div class="ph sh-heading"><div class="kicker">Shopping list</div><h2>購物清單</h2><p>還有 '+pending+' 項待購買・已購買的會自動移到最下方</p>'+
+ '<button type="button" class="shop-glass-add" data-a="shop-add" aria-label="新增商品" title="新增商品"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
+ '<div class="days cats sh-filters">'+tab('all','全部',total)+tab('pending','待購買',pending)+tab('bought','已購買',bought)+'</div>'+
+ body+
+ '<p class="sh-footnote">購物清單與圖片儲存在這台裝置的瀏覽器，不會自動同步至其他裝置，請勿清除網站資料。</p>';
 }
 function shopPreviewUpdate(){
  const holder=dlg.querySelector('#sh-preview');if(!holder)return;
