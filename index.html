@@ -149,6 +149,35 @@ dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(
 .route-seg-map b{display:block;font-size:11px;color:#4a5d80;margin-bottom:8px}
 .route-seg-map .route-map{height:170px;border-radius:12px}
 
+
+/* 每日地圖：極簡霧藍灰，保留真正地圖與 Google Maps 轉跳 */
+.route-day{margin:10px 0 13px;background:#fff;border-color:#dbe2ee;box-shadow:0 3px 16px rgba(41,62,94,.045)}
+.route-day>summary{min-height:68px;padding:14px 16px}
+.route-day>summary .sum-ic{background:#eaf0f9;color:#557092}
+.route-day>.bd{padding:0 14px 14px}
+.route-map-shell{margin:0 0 12px;border:1px solid #dde5ef;border-radius:15px;background:#f4f7fb;overflow:hidden}
+.route-map-bar{height:38px;display:flex;justify-content:space-between;align-items:center;gap:9px;padding:0 12px;background:#f1f5fa;border-bottom:1px solid #e0e7f1}
+.route-map-bar-date{display:flex;align-items:center;gap:8px;color:#4c5d79;font-size:11px;font-weight:800;letter-spacing:.02em}
+.route-map-bar-date i{width:7px;height:7px;border-radius:50%;background:#7993b4;box-shadow:0 0 0 3px #e0e9f5}
+.route-map-bar-tag{color:#8a98ad;font-size:9px;font-weight:750;letter-spacing:.12em}
+.route-map{height:232px;border:0;border-radius:0;box-shadow:none;background:#edf2f8}
+.route-map iframe{width:100%;height:100%;display:block;border:0;filter:saturate(.62) contrast(.96) brightness(1.03)}
+.route-map-caption{display:flex;align-items:center;gap:7px;min-height:37px;padding:8px 12px;color:#7c899c;font-size:10px;line-height:1.45;background:#f6f8fc}
+.route-map-caption svg{width:14px;height:14px;flex:none;fill:none;stroke:#778da9;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.route-day .route-all{display:flex;align-items:center;justify-content:center;gap:8px;background:#546c90;color:#fff;border:1px solid #546c90;border-radius:11px;padding:12px 10px;margin:0;font-size:12px;font-weight:780;box-shadow:none}
+.route-day .route-all svg{width:16px;height:16px;flex:none}
+.route-day .route-all svg:last-child{width:14px;height:14px;opacity:.72}
+.route-day .route-note{color:#8a94a5;font-size:10px;line-height:1.6;margin:9px 3px 0}
+.route-segment-fold{margin-top:9px;border:1px solid #e4e9f2;border-radius:11px;background:#f8fafc;overflow:hidden}
+.route-segment-fold>summary{display:flex;gap:8px;align-items:center;padding:10px 12px;color:#566b88;font-size:11px;font-weight:750}
+.route-segment-fold>summary:after{content:'⌄';margin-left:auto;color:#93a1b5}
+.route-segment-fold[open]>summary:after{transform:rotate(180deg)}
+.route-segment-fold>summary svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.route-segment-fold .route-segment-links{display:grid;gap:6px;padding:0 10px 10px}
+.route-segment-fold .route-segment-links a{border:1px solid #e0e7f1;background:#fff;border-radius:9px;padding:9px 10px;font-weight:650;color:#5d7090}
+@media(max-width:360px){.route-map{height:205px}.route-map-bar-tag{display:none}}
+@media(min-width:480px){.route-map{height:272px}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="功能導航"><button data-a="tab" data-v="home"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg><span>總覽</span></button><button data-a="tab" data-v="plan"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg><span>行程</span></button><button data-a="tab" data-v="todo"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg><span>待辦</span></button></nav><dialog id="dlg"></dialog>
 <script>
@@ -312,6 +341,7 @@ function iconSvg(name){
     flight:'<path d="M12 2c.9 0 1.3.9 1.3 1.7v7l7.7 5V18l-7.7-2.5v4l2.1 1.5V23L12 21.7 8.6 23v-2l2.1-1.5v-4L3 18v-2.3l7.7-5v-7C10.7 2.9 11.1 2 12 2z"/>',
     bed:'<path d="M3 5v15M3 10h18v10M3 16h18M7 10V7c0-1 .8-2 2-2h3c1.1 0 2 1 2 2v3"/>',
     dining:'<path d="M4 3v6a3 3 0 0 0 6 0V3M7 3v18M16 21V3c3.5 1.5 5 4.7 5 8v2h-5"/>',
+    externalLink:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M20 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4"/>',
     route:'<circle cx="6" cy="5" r="2"/><path d="M6 7v3c0 2 3 2 6 2h1c3 0 5 1 5 4v2"/><path d="m15 16 3 3 3-3"/><path d="M10 17h-2M6 17H4"/>',
     suitcase:'<rect x="4" y="7" width="16" height="14" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M8 7v14M16 7v14M7 21v1M17 21v1"/>',
     partlyCloudy:'<circle cx="8" cy="7.5" r="3"/><path d="M8 1.5v1M2 7.5h1M3.7 3.2l.9.9M11.5 3.2l.9-.9"/><path d="M8 19a4 4 0 1 1 1.2-7.8A5.1 5.1 0 0 1 19 13a3 3 0 0 1-.2 6H8z"/>',
@@ -569,23 +599,21 @@ const googleEmbedRouteURL=points=>{
 
 function dailyRouteCard(d){
  const points=dayRouteStops(d),key='r'+d.d;
- const rows=points.map((p,i)=>'<div class="route-stop"><b>'+String(i+1).padStart(2,'0')+'</b><span>'+esc(p.label)+'</span></div>').join('');
+ const label=String(d.city||'北海道').replace(/\s*→\s*/g,'・');
  const mapHtml=points.length>=2
-   ?'<div class="route-map-wrap"><div class="route-map"><iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="'+esc(googleEmbedRouteURL(points))+'" title="12/'+esc(d.d)+' 當日旅行路線地圖"></iframe></div><p class="route-map-tip">地圖會依停靠順序顯示點到點路線；如未顯示完整中途點，可用下方完整路線或分段導航開啟。</p></div>'
-   :'<div class="route-map-wrap"><div class="route-map"><div class="route-map-fallback">此日主要為單點行程，請直接使用下方 Google Maps 按鈕。</div></div></div>';
+   ?'<div class="route-map-shell"><div class="route-map-bar"><span class="route-map-bar-date"><i aria-hidden="true"></i>12/'+esc(d.d)+' · '+esc(label)+'</span><span class="route-map-bar-tag">ROUTE MAP</span></div><div class="route-map"><iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="'+esc(googleEmbedRouteURL(points))+'" title="12/'+esc(d.d)+' 當日旅行路線地圖"></iframe></div><div class="route-map-caption">'+iconSvg('map')+' <span>依當日景點順序連接 · 實際交通路線請以 Google Maps 為準</span></div></div>'
+   :'<div class="route-map-shell"><div class="route-map-bar"><span class="route-map-bar-date"><i aria-hidden="true"></i>12/'+esc(d.d)+' · '+esc(label)+'</span><span class="route-map-bar-tag">ROUTE MAP</span></div><div class="route-map"><div class="route-map-fallback">當日路線以單點為主，請點選下方 Google Maps 查看。</div></div></div>';
  let segs='';
- let segMaps='';
  if(points.length>5){
    const parts=[];
    for(let at=0;at<points.length-1;at+=4){
      const part=points.slice(at,Math.min(at+5,points.length));
      if(part.length>=2)parts.push(part);
    }
-   segMaps='<div class="route-segment-maps">'+parts.map((part,i)=>'<div class="route-seg-map"><b>第 '+(i+1)+' 段地圖 · '+esc(part[0].label)+' → '+esc(part[part.length-1].label)+'</b><div class="route-map"><iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="'+esc(googleEmbedRouteURL(part))+'" title="12/'+esc(d.d)+' 第 '+(i+1)+' 段路線地圖"></iframe></div></div>').join('')+'</div>';
-   segs='<div class="route-segments"><div class="route-small-title">Google Maps 分段導航</div><div class="route-segment-links">'+parts.map((part,i)=>'<a href="'+esc(googleRouteURL(part))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('route')+' 第 '+(i+1)+' 段（'+esc(part[0].label)+' → '+esc(part[part.length-1].label)+'）</a>').join('')+'</div></div>';
+   segs='<details class="route-segment-fold"><summary>'+iconSvg('route')+'手機分段導航（共 '+parts.length+' 段）</summary><div class="route-segment-links">'+parts.map((part,i)=>'<a href="'+esc(googleRouteURL(part))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('route')+' 第 '+(i+1)+' 段 · '+esc(part[0].label)+' → '+esc(part[part.length-1].label)+'</a>').join('')+'</div></details>';
  }
  const caveat=String(d.d)==='27'?'12/26 最後一晚飯店尚未確定，12/27 暫以千歲市區為出發地，訂房後請更新起點。':String(d.d)==='26'?'12/26 晚上飯店地址尚未確定，路線先排至新千歲機場，不包含未知住宿地點。':String(d.d)==='23'?'大湯沼屬冬季視開放情況而定的備選路線，暫不放入固定導航。':String(d.d)==='19'?'午餐是二選一，尚未確定，因此不強制加入固定路線。':'';
- return '<details class="card route-day" data-k="'+key+'"'+(ov.has(key)?' open':'')+'><summary><span class="sum-ic">'+iconSvg('route')+'</span><div><b>當日旅行路線</b><small>'+points.length+' 個停靠點 · 地圖顯示點到點路線</small></div></summary><div class="bd"><p class="route-intro">依當天行程順序排列，下方直接顯示地圖路線，也可在 Google Maps 開啟完整導航。</p>'+mapHtml+'<div class="route-stops">'+rows+'</div><a class="go route-all" href="'+esc(googleRouteURL(points))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('map')+' 在 Google Maps 開啟完整路線</a>'+segMaps+segs+(points.length>5?'<p class="route-note">若完整路線因中途點過多而顯示不完整，請使用上方分段地圖或分段導航。</p>':'')+(caveat?'<p class="route-note">'+esc(caveat)+'</p>':'')+'<p class="route-note">地圖僅顯示停靠點順序；實際列車、巴士與步行請在 Google Maps 內依當下路況選擇交通方式。</p></div></details>';
+ return '<details class="card route-day" data-k="'+key+'"'+(ov.has(key)?' open':'')+'><summary><span class="sum-ic">'+iconSvg('route')+'</span><div><b>當日旅行路線</b><small>展開查看地圖與 Google Maps 導航</small></div></summary><div class="bd">'+mapHtml+'<a class="go route-all" href="'+esc(googleRouteURL(points))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('map')+' 在 Google Maps 開啟完整路線'+iconSvg('externalLink')+'</a>'+segs+(points.length>5?'<p class="route-note">中途點較多時，手機版 Google Maps 可能省略部分地點；可展開分段導航。</p>':'')+(caveat?'<p class="route-note">'+esc(caveat)+'</p>':'')+'</div></details>';
 }
 function plan(){const d=days[st.day],snowBooked=String(d.d)==='25'&&todos.some(t=>taskKeys(t).includes('snow')&&t.done);const sub=snowBooked?d.sub.replace('雪地摩托車（未訂）','雪地摩托車（已訂）'):d.sub;let note=snowBooked?d.note.replace('雪地摩托車尚未預約，','雪地摩托車已在待辦標記預約完成，'):d.note;
 if(String(d.d)==='22'&&todos.some(t=>t.done&&taskKeys(t).includes('jr22')))note=note.replace('JR 車票還沒買。','JR 車票已在待辦標記訂妥。');
