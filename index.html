@@ -834,61 +834,31 @@ input::selection,textarea::selection{background:#dbe4ee;color:#29384d}
 }
 
 
-/* 航班資訊｜依照參考圖重排，保留北海道旅誌的柔霧藍灰視覺 */
-.overview-f .bd{padding-top:3px}
-.flight-board{
-  margin-top:9px;overflow:hidden;border-radius:19px;
-  background:linear-gradient(145deg,rgba(255,255,255,.91),rgba(249,251,255,.9) 57%,rgba(239,245,253,.83));
-  border:1px solid rgba(208,219,235,.86);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.84);
-}
-.flight-leg{padding:18px 17px 22px}
-.flight-leg+.flight-leg{border-top:1px solid #e2e8f1;padding-top:23px}
-.flight-leg-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:19px}
-.flight-leg-id{display:flex;align-items:center;gap:5px;min-width:0;flex-wrap:wrap;line-height:1.3}
-.flight-leg-date{font-size:14px;font-weight:790;letter-spacing:-.025em;color:#33445d;white-space:nowrap}
-.flight-leg-direction{font-size:14px;font-weight:800;color:#33445d;white-space:nowrap}
-.flight-leg-separator{font-size:14px;color:#a6b5c8;padding:0 1px}
-.flight-leg-number{font-size:15px;font-weight:800;color:#263853;letter-spacing:.01em;white-space:nowrap}
-.flight-leg-airline{
-  flex:none;font-size:11px;font-weight:750;line-height:1.45;
-  color:#71849d;white-space:nowrap;text-align:right;
-}
-.flight-leg-route{
-  display:grid;grid-template-columns:minmax(0,1fr) 94px minmax(0,1fr);
-  align-items:start;gap:5px;
-}
+/* 航班資訊新版：參考資訊卡式排版，維持霧藍灰整體風格 */
+.overview-f .bd{padding-top:4px}
+.flight-board{margin-top:8px;border:1px solid #d7dfeb;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(248,250,254,.94) 44%,rgba(239,244,251,.90) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.78),0 8px 22px rgba(78,98,130,.05);overflow:hidden}
+.flight-leg{padding:18px 18px 16px}
+.flight-leg+.flight-leg{border-top:1px solid #e2e7f0}
+.flight-leg-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.flight-leg-id{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
+.flight-leg-id b{font-size:18px;line-height:1.32;letter-spacing:-.02em;color:#24344c;font-weight:800}
+.flight-leg-id span{color:#acb7c8;font-weight:600}
+.flight-leg-airline{font-size:13px;line-height:1.42;color:#72819a;font-weight:700;text-align:right;white-space:nowrap}
+.flight-leg-route{display:grid;grid-template-columns:minmax(0,1fr) 112px minmax(0,1fr);align-items:center;gap:8px}
 .flight-node{min-width:0}
 .flight-node.arrive{text-align:right}
-.flight-clock{display:block;font-size:27px;line-height:1.11;font-weight:825;letter-spacing:-.055em;color:#243550;font-variant-numeric:tabular-nums}
-.flight-airport{display:flex;align-items:baseline;gap:4px;margin-top:12px;flex-wrap:wrap;line-height:1.4}
-.flight-node.arrive .flight-airport{justify-content:flex-end}
-.flight-airport strong{font-size:12px;font-weight:800;color:#586b89;white-space:nowrap}
-.flight-airport span{font-size:11px;font-weight:580;color:#8794a9;white-space:nowrap}
-.flight-mid{display:flex;align-items:center;flex-direction:column;gap:9px;padding-top:4px;min-width:0}
-.flight-mid-symbol{width:76px;height:25px;display:flex;align-items:center;justify-content:center;gap:8px;color:#6f82a0}
-.flight-mid-symbol svg{width:21px;height:21px;display:block;flex:none;transform:rotate(90deg);stroke:currentColor;stroke-width:1.8;fill:none}
-.flight-mid-rule{height:1px;min-width:0;flex:1;background:linear-gradient(90deg,rgba(158,175,203,.13),rgba(133,157,191,.48))}
-.flight-mid-rule:last-child{transform:rotate(180deg)}
-.flight-mid-duration{font-size:11px;font-weight:700;line-height:1.4;text-align:center;white-space:nowrap;color:#71839f;letter-spacing:.005em}
-.flight-board-note{padding:0 17px 18px;margin:0;font-size:10.5px;line-height:1.55;font-weight:550;color:#8b99ae}
-@media(max-width:375px){
-  .flight-leg{padding:16px 12px 20px}
-  .flight-leg+.flight-leg{padding-top:20px}
-  .flight-leg-top{margin-bottom:17px}
-  .flight-leg-date,.flight-leg-direction{font-size:12px}
-  .flight-leg-number{font-size:13px}
-  .flight-leg-airline{font-size:10px}
-  .flight-leg-route{grid-template-columns:minmax(0,1fr) 78px minmax(0,1fr);gap:2px}
-  .flight-clock{font-size:24px}
-  .flight-airport{gap:2px;margin-top:9px}
-  .flight-airport strong{font-size:11px}
-  .flight-airport span{font-size:10px}
-  .flight-mid-symbol{width:68px}
-  .flight-mid-symbol svg{width:19px;height:19px}
-  .flight-mid-duration{font-size:10px}
-  .flight-board-note{padding:0 12px 16px}
-}
+.flight-clock{display:block;font-size:30px;line-height:1.05;letter-spacing:-.045em;font-variant-numeric:tabular-nums;color:#17263f;font-weight:850}
+.flight-airport{margin-top:10px}
+.flight-airport strong{display:block;font-size:13px;line-height:1.35;color:#5b6b85;font-weight:800;letter-spacing:.01em}
+.flight-airport span{display:block;margin-top:2px;font-size:12px;line-height:1.45;color:#7d8ba2;font-weight:650}
+.flight-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-width:0}
+.flight-mid-icon{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,rgba(246,249,255,.96),rgba(231,238,249,.9));border:1px solid rgba(205,216,233,.95);color:#677a9a;box-shadow:inset 0 1px 0 rgba(255,255,255,.84)}
+.flight-mid-icon svg{width:22px;height:22px;display:block;transform:rotate(90deg)}
+.flight-mid-duration{font-size:13px;line-height:1.4;color:#607290;font-weight:750;letter-spacing:.01em;text-align:center}
+.flight-board-note{padding:0 18px 17px;margin:0;font-size:12px;line-height:1.55;color:#7a889f;font-weight:650}
+@media(max-width:390px){.flight-leg{padding:16px 14px 14px}.flight-leg-route{grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr);gap:6px}.flight-leg-id b{font-size:17px}.flight-leg-airline{font-size:12px}.flight-clock{font-size:27px}.flight-airport strong{font-size:12.5px}.flight-airport span{font-size:11.5px}.flight-mid-icon{width:40px;height:40px}.flight-mid-icon svg{width:20px;height:20px}.flight-mid-duration{font-size:12px}.flight-board-note{padding:0 14px 15px}}
+@media(max-width:340px){.flight-leg-top{gap:10px}.flight-leg-route{grid-template-columns:1fr 78px 1fr}.flight-leg-id b{font-size:16px}.flight-clock{font-size:24px}.flight-airport span{font-size:11px}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1472,11 +1442,8 @@ function todo(){const cats=['全部','預約','訂位','票券','其他'];const 
 return '<div class="ph"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct">'+esc(x.t.c)+'</i>'+todoLinks(x.t)+'</div><div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div><button class="add" data-a="add" data-l="t">＋ 新增待辦</button>'}
 const fl=(lb,a,at,b,bt,duration)=>{
  const parts=lb.split('｜'),date=parts[0]||'',rawAirline=parts.slice(1).join('｜')||'';
- const direction=date.includes('去程')?'去程':'回程';
- const day=date.replace(/去程|回程/g,'').trim();
  const codeMatch=rawAirline.match(/\b([A-Z]{2}\s*\d{2,4})\b/),flightNo=codeMatch?codeMatch[1].replace(/\s/g,''):'';
  const airline=flightNo?rawAirline.replace(codeMatch[0],'').trim():rawAirline;
- const airlineShort=airline.replace(/\s+(Scoot|AirAsia)$/i,'');
  const airport=label=>{
    if(label.includes('桃園'))return {code:'TPE',name:'桃園機場 T1'};
    if(label.includes('新千歲'))return {code:'CTS',name:'新千歲機場'};
@@ -1484,9 +1451,9 @@ const fl=(lb,a,at,b,bt,duration)=>{
  };
  const dep=airport(a),arr=airport(b);
  const route=(time,place,side)=>'<div class="flight-node '+side+'"><time class="flight-clock">'+esc(time)+'</time><div class="flight-airport"><strong>'+esc(place.code)+'</strong><span>'+esc(place.name)+'</span></div></div>';
- return '<section class="flight-leg" aria-label="'+esc(day+' '+direction+' '+flightNo)+'">'+
-   '<div class="flight-leg-top"><div class="flight-leg-id"><span class="flight-leg-date">'+esc(day)+'</span><span class="flight-leg-direction">'+direction+'</span><span class="flight-leg-separator">·</span><b class="flight-leg-number">'+esc(flightNo)+'</b></div><span class="flight-leg-airline" title="'+esc(airline)+'">'+esc(airlineShort)+'</span></div>'+
-   '<div class="flight-leg-route">'+route(at,dep,'depart')+'<div class="flight-mid"><div class="flight-mid-symbol" aria-hidden="true"><span class="flight-mid-rule"></span>'+iconSvg('planeMini')+'<span class="flight-mid-rule"></span></div><span class="flight-mid-duration">'+esc(duration)+'</span></div>'+route(bt,arr,'arrive')+'</div>'+
+ return '<section class="flight-leg" aria-label="'+esc(date)+' '+esc(flightNo)+'">'+
+   '<div class="flight-leg-top"><div class="flight-leg-id"><b>'+esc(date)+'</b><span>・</span><b>'+esc(flightNo)+'</b></div><span class="flight-leg-airline">'+esc(airline)+'</span></div>'+
+   '<div class="flight-leg-route">'+route(at,dep,'depart')+'<div class="flight-mid" aria-hidden="true"><span class="flight-mid-icon">'+iconSvg('planeMini')+'</span><span class="flight-mid-duration">'+esc(duration)+'</span></div>'+route(bt,arr,'arrive')+'</div>'+
  '</section>';
 }; const sec=(k,ic,t,sub,body)=>'<details class="card overview-panel overview-'+k+'" data-k="'+k+'"'+(ov.has(k)?' open':'')+'><summary><span class="sum-ic">'+ic+'</span><div><b>'+t+'</b><small>'+sub+'</small></div></summary><div class="bd">'+body+'</div></details>';
 function home(){const n=packs.filter(p=>p.done).length;
