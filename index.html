@@ -1019,7 +1019,7 @@ input::selection,textarea::selection{background:#dbe4ee;color:#29384d}
 .row>summary>i.bk,.row>summary>i.pd{flex-shrink:0;margin-top:1px}
 @media(max-width:380px){.row>summary{gap:7px}.row summary time{min-width:36px}.row-summary-duration{font-size:10px}.row.mv .row-summary-duration{font-size:9.5px}}
 
-</style></head><body><div id="app"></div>
+.transport-guide{margin:10px 0 12px;padding:12px 13px;border:1px solid #dce3ee;background:#f7f9fc;border-radius:12px;font-size:12px;line-height:1.65}.transport-guide b{display:block;color:#566e89;font-size:11px;margin:5px 0 2px}.transport-guide b:first-child{margin-top:0}.transport-guide p{margin:0 0 6px;color:#43516a}.row-summary-duration.is-spot{gap:0}</style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
@@ -1455,13 +1455,45 @@ const durationLine=(a,d)=>{
  : travel&&/巴士|公車/.test(a.title)
  ? '<rect x="5" y="3" width="14" height="16" rx="4"/><path d="M5 11h14M8 15h.01M16 15h.01M8 19l-1 2m9-2 1 2"/>'
  : '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>';
- return '<small class="row-summary-duration '+(travel?'is-transport':'is-spot')+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+iconPath+'</svg><span class="row-duration-text">'+esc(label)+'</span></small>';
+ return '<small class="row-summary-duration '+(travel?'is-transport':'is-spot')+'">'+(travel?'<svg viewBox="0 0 24 24" aria-hidden="true">'+iconPath+'</svg>':'')+'<span class="row-duration-text">'+esc(label)+'</span></small>';
 };
 
+// 補齊交通方式與預估費用；尚未決定的接駁不假設已訂票。
+const TRANSIT_GUIDE={
+'JR 前往札幌':['🚆 JR 快速 Airport：新千歲機場站 → 札幌站；再轉地鐵南北線至薄野／步行到飯店，或搭計程車。','JR 約 ¥1,230／人（普通車參考）；札幌市內地鐵另計約 ¥210–290／人；計程車依跳錶。'],
+'前往小樽站':['🚆 JR 函館本線：札幌站 → 小樽站，快速列車約 35–40 分鐘。','JR 約 ¥800／人／單程（參考）。'],
+'前往天狗山':['🚌 小樽站前搭中央巴士天狗山線至纜車站；或四人共乘計程車。','巴士約 ¥240／人；計程車依跳錶，約 ¥1,800–2,800／車（估）。'],
+'回到小樽市區':['🚌 天狗山纜車站搭中央巴士返回小樽站周邊；或共乘計程車。','巴士約 ¥240／人；計程車約 ¥1,800–2,800／車（估）。'],
+'步行前往小樽倉庫 No.1':['👟 從小樽運河沿運河步道前往小樽倉庫 No.1，雪天放慢腳步。','步行免費（¥0）；預留時間包含拍照與雪地慢行。'],
+'搭 JR 返回札幌':['🚆 小樽站搭 JR 函館本線返回札幌站，再搭地鐵或計程車返回薄野飯店。','JR 約 ¥800／人；地鐵約 ¥210–290／人，或計程車依跳錶。'],
+'搭地鐵往圓山公園':['🚇 薄野站搭南北線至大通站，轉東西線至圓山公園站，再步行。','地鐵約 ¥250–290／人（參考），步行免費。'],
+'前往奧芝商店':['👟 北海道神宮／圓山公園周邊步行前往宮之森的奧芝商店；積雪時可改搭計程車。','步行免費（¥0）；計程車短程約 ¥800–1,500／車（估）。'],
+'前往北海道立近代美術館':['🚕 從奧芝商店共乘計程車至北海道立近代美術館；或步行至地鐵站後轉乘東西線。','計程車約 ¥1,200–2,200／車（估）；地鐵另計約 ¥210–290／人。'],
+'前往札幌啤酒博物館':['🚌 從札幌市中心搭公車前往札幌啤酒博物館周邊；或四人共乘計程車。','公車約 ¥240–300／人（估）；計程車約 ¥1,500–2,500／車（估）。'],
+'前往寺田壽司':['👟 從狸小路／薄野商圈步行前往寺田壽司，依實際所在位置導航。','步行免費（¥0）。'],
+'前往 JR 札幌站・候車':['🚇 從薄野搭南北線至札幌站，步行至 JR 月台；攜行李可改搭計程車。','地鐵約 ¥210–250／人；計程車依跳錶（約 ¥1,000–1,800／車，估）。'],
+'JR 特急北斗｜札幌 → 登別':['🚆 JR 特急北斗：札幌站 → 登別站；建議預訂指定席並確認車次。','JR 約 ¥4,890／人（原行程參考；實際依車次、席別及購票日期）。'],
+'登別站 → 登別溫泉':['🚌 登別站搭道南巴士至登別溫泉站，再步行至第一瀧本館；或搭計程車。','巴士約 ¥450／人（原行程參考）；計程車依跳錶。'],
+'前往登別 JR 站':['🚌 從登別溫泉搭道南巴士回登別站；或四人共乘計程車。','巴士約 ¥450／人（參考）；計程車依跳錶。'],
+'JR 北斗｜登別 → 洞爺':['🚆 JR 特急北斗：登別站 → 洞爺站，請依訂票車次確認。','特急車票尚未確認；請以 JR 官方查價為準（不以時程預留時間推算票價）。'],
+'洞爺站 → 乃之風':['🚌 洞爺站搭道南巴士至洞爺湖溫泉站附近，步行前往乃之風；或共乘計程車。','巴士約 ¥400／人（原行程參考）；計程車依跳錶。'],
+'前往雪地活動場地':['🚕 Snow Park Toya 位於洞爺湖町成香，建議先向活動業者確認接駁；無接駁則預約計程車往返。','接駁是否提供及收費待業者確認；計程車需依出發地、雪況詢價。'],
+'乃之風退房 → 洞爺站':['🚌 從洞爺湖溫泉站搭道南巴士至洞爺站；或共乘計程車。','巴士約 ¥400／人（參考）；計程車依跳錶。'],
+'JR 往南千歲／新千歲方向':['🚆 洞爺站搭 JR 特急北斗往南千歲方向，再依班次轉乘 JR 快速 Airport 前往新千歲機場／千歲。','跨城 JR 票價待查；轉乘、指定席及目的站不同會影響費用。'],
+'前往最後一晚飯店':['🚌／🚕 依最後一晚飯店位置，確認是否提供機場／南千歲站接駁，否則搭 JR 或計程車。','飯店尚未確認，交通費用待定；免費接駁須由飯店確認。'],
+'前往新千歲機場':['🚌／🚆／🚕 依最後一晚飯店位置選擇飯店接駁、JR 或計程車前往新千歲機場。','飯店位置尚未確認，費用待定；接駁是否免費需向飯店確認。']
+};
+const transportGuide=a=>{
+ if(a.kind!=='交通')return '';
+ if(/報到|託運/.test(a.title))return '<div class="transport-guide"><b>辦理方式</b><p>於航空公司櫃台辦理報到及行李託運。</p><b>費用</b><p>已含於機票／依航空公司行李方案；非市區交通費。</p></div>';
+ const guide=TRANSIT_GUIDE[a.title];
+ if(!guide)return '<div class="transport-guide"><b>交通方式</b><p>'+esc(a.desc||'依當日路線確認')+'</p><b>費用</b><p>尚待確認，請依當日交通業者公告。</p></div>';
+ return '<div class="transport-guide"><b>交通方式</b><p>'+esc(guide[0])+'</p><b>預估費用</b><p>'+esc(guide[1])+'</p></div>';
+};
 const row=(a,i,d)=>{const mv=a.kind==='交通',status=bookingStatus(a),desc=bookedText(a,status);
 const title=status.booked&&a.bookingKey==='snow'?a.title.replace('（待訂）',''):a.title;
 const cost=status.booked&&a.bookingKey==='snow'?String(a.cost||'').replace('尚未預訂','依已訂方案'):a.cost;
-const media=spotMedia(a);const bd=[desc&&'<p>'+esc(desc)+'</p>',cost&&'<p class="c">💴 '+esc(cost)+'</p>',a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',mv?transportInfo(a):a.kind==='觀光'&&timeSpan(a)?'<div class="stay-duration">'+esc(timeSpan(a))+'</div>':'',media?'<section class="spot-card">'+((media.photos&&media.photos.length>1)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide"><img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div><span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div></div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p></div></section>':'',links(a.places)].filter(Boolean).join('');
+const media=spotMedia(a);const bd=[desc&&'<p>'+esc(desc)+'</p>',cost&&'<p class="c">💴 '+esc(cost)+'</p>',a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',mv?transportInfo(a)+transportGuide(a):a.kind==='觀光'&&timeSpan(a)?'<div class="stay-duration">'+esc(timeSpan(a))+'</div>':'',media?'<section class="spot-card">'+((media.photos&&media.photos.length>1)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide"><img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div><span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div></div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p></div></section>':'',links(a.places)].filter(Boolean).join('');
 return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span class="row-summary-main"><span class="row-summary-title">'+(mv?'↳ ':'')+esc(title)+'</span>'+durationLine(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
 
 
