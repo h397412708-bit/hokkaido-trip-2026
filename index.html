@@ -1026,6 +1026,35 @@ input::selection,textarea::selection{background:#dbe4ee;color:#29384d}
 
 /* 美術館：完整原圖置中，模糊背景已合成進每張 16:9 照片 */
 .spot-carousel-slide.composed-photo img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important}
+
+/* 2026-11-18｜常用網站：可分別摺疊的分類，緊湊型長矩形網站列 */
+.overview-useful>.bd{padding:6px 14px 16px}
+.trip-web-intro{margin:9px 1px 12px!important;color:#7b899e;font-size:10.5px;line-height:1.65}
+.trip-web-group{overflow:hidden;margin:0 0 8px;border:1px solid #dce4ef;border-radius:10px;background:rgba(248,250,253,.76)}
+.trip-web-group+.trip-web-group{margin-top:8px}
+.trip-web-group-title{list-style:none;display:flex;align-items:center;gap:9px;min-height:48px;margin:0;padding:9px 12px;cursor:pointer;user-select:none;-webkit-user-select:none;color:#506783;transition:background-color .2s ease}
+.trip-web-group-title::-webkit-details-marker{display:none}
+.trip-web-group-title::marker{content:''}
+.trip-web-group-title:hover{background:#edf3f9}
+.trip-web-group-title:active{background:#e9f0f8}
+.trip-web-group-title:after{content:'';width:7px;height:7px;margin-left:auto;margin-right:2px;border-right:1.7px solid #8495af;border-bottom:1.7px solid #8495af;transform:rotate(45deg);transition:transform .18s ease;flex:none}
+.trip-web-group[open]>.trip-web-group-title:after{transform:rotate(225deg)}
+.trip-web-group-title b{font-size:12px;font-weight:800;letter-spacing:.016em;line-height:1.35}
+.trip-web-group-title small{font-size:10px;color:#9ba9bd;font-weight:500;line-height:1.4}
+.trip-web-group-title .trip-web-count{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;min-width:23px;height:19px;padding:0 5px;border-radius:6px;background:#edf2f9;color:#788ca8;font-size:10px;font-weight:750;flex:none}
+.trip-web-group[open]>.trip-web-group-title{background:#f2f6fb;border-bottom:1px solid #e2e8f1}
+.trip-web-grid{display:flex;flex-direction:column;gap:5px;width:100%;padding:8px 9px 10px}
+.trip-web-link{box-sizing:border-box;position:relative;display:flex;flex-direction:row;align-items:center;justify-content:space-between;min-height:47px;width:100%;padding:7px 10px;border:1px solid #dee5ef;border-radius:6px;background:#fff;text-decoration:none;color:#394d68;box-shadow:none;transition:background .16s ease,border-color .16s ease}
+.trip-web-link:active{background:#eaf1f9;border-color:#bdccdf}
+.trip-web-link:focus-visible{outline:2px solid #7796bf;outline-offset:1px}
+.trip-web-link-top{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1;align-items:flex-start;justify-content:center}
+.trip-web-link b{display:block;font-size:11.5px;line-height:1.34;font-weight:780;overflow-wrap:anywhere;letter-spacing:0}
+.trip-web-link span.trip-web-desc{display:block;color:#8999ad;font-size:9.5px;line-height:1.28;overflow-wrap:anywhere}
+.trip-web-link svg{height:14px;width:14px;flex:none;color:#8b9eb6;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-left:8px}
+.trip-web-footer{display:flex;align-items:center;gap:6px;margin:10px 1px 0!important;color:#8b9ab0;font-size:9.5px;line-height:1.55}
+.trip-web-footer svg{height:12px;width:12px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8}
+@media(max-width:350px){.trip-web-group-title{gap:6px;padding:9px 10px}.trip-web-group-title small{font-size:9px}.trip-web-link{padding:6px 8px;min-height:45px}.trip-web-link b{font-size:11px}}
+@media(min-width:600px){.trip-web-grid{display:flex;flex-direction:column}.trip-web-link{min-height:47px}}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1416,7 +1445,7 @@ function bookedText(a,status){
  return desc;
 }
 
-const ov=new Set(),app=document.getElementById('app'),dlg=document.getElementById('dlg');
+const ov=new Set(['useful']),app=document.getElementById('app'),dlg=document.getElementById('dlg');
 const save=()=>{SV('days',days);SV('todos',todos);SV('packs',packs)};
 const links=pl=>{const u=[...new Map((pl||[]).map(p=>[p.q,p])).values()];return u.length?'<div class="lk">'+u.map(p=>'<a href="'+esc(OVR[p.q]||(p.search?SEARCH(p.q):MAP(p.q,p.mode)))+'" target="_blank" rel="noopener noreferrer">📍 '+esc(p.name)+'</a>').join('')+'</div>':''};
 const tool=(l,i)=>['↑|-1|mv','↓|1|mv','編輯|0|ed','刪除|0|rm'].map(s=>{const x=s.split('|');return '<button data-a="'+x[2]+'" data-l="'+l+'" data-i="'+i+'" data-d="'+x[1]+'">'+x[0]+'</button>'}).join('');
@@ -1710,8 +1739,35 @@ const fl=(lb,a,at,b,bt,duration)=>{
    '<div class="flight-leg-route">'+route(at,dep,'depart')+'<div class="flight-mid"><div class="flight-mid-symbol" aria-hidden="true"><span class="flight-mid-rule"></span>'+iconSvg('planeMini')+'<span class="flight-mid-rule"></span></div><span class="flight-mid-duration">'+esc(duration)+'</span></div>'+route(bt,arr,'arrive')+'</div>'+
  '</section>';
 }; const sec=(k,ic,t,sub,body)=>'<details class="card overview-panel overview-'+k+'" data-k="'+k+'"'+(ov.has(k)?' open':'')+'><summary><span class="sum-ic">'+ic+'</span><div><b>'+t+'</b><small>'+sub+'</small></div></summary><div class="bd">'+body+'</div></details>';
+
+const TRIP_WEBS=[
+ {group:'交通・班次',hint:'下雪天先查運行情況',links:[
+  {name:'JR 北海道｜運行資訊',desc:'延誤、停駛與列車動態',url:'https://www3.jrhokkaido.co.jp/webunkou/index_en.html'},
+  {name:'JR 北海道｜時刻查詢',desc:'札幌、小樽、登別、洞爺',url:'https://www.jrhokkaido.co.jp/global/english/train/index.html'},
+  {name:'道南巴士｜登別溫泉',desc:'登別站 ↔ 溫泉街班次',url:'https://www.donanbus.co.jp/map/noboribetsu_ashiyu/'},
+  {name:'道南巴士｜洞爺湖溫泉',desc:'洞爺站 ↔ 溫泉街班次',url:'https://www.donanbus.co.jp/map/toyako_toyakoonsen/'}
+ ]},
+ {group:'景點・活動',hint:'出發前確認最新公告',links:[
+  {name:'北海道神宮｜X',desc:'官方最新貼文與公告',url:'https://x.com/hokkaido_jingu?s=11'},
+  {name:'北海道神宮｜官網',desc:'參拜時間與神社公告',url:'https://www.hokkaidojingu.or.jp/'},
+  {name:'天狗山纜車',desc:'營運時間、票價及纜車資訊',url:'https://tenguyama.ckk.chuo-bus.co.jp/hours-and-fees/'},
+  {name:'慕尼黑聖誕市集',desc:'2026 年活動與攤位資訊',url:'https://www.sapporo.travel/zh-tw/event/event-list/munich_christmas_market/'},
+  {name:'札幌白色燈飾節',desc:'點燈會場及最新活動',url:'https://www.sapporo.travel/white-illumination/'}
+ ]},
+ {group:'入境準備',hint:'出發前需要用到',links:[
+  {name:'Visit Japan Web',desc:'日本入境資料線上申報',url:'https://www.vjw.digital.go.jp/'}
+ ]}
+];
+const travelLinksPanel=()=>{
+ const card=(x)=>'<a class="trip-web-link" href="'+esc(safeLink(x.url))+'" target="_blank" rel="noopener noreferrer" aria-label="開啟 '+esc(x.name)+'"><span class="trip-web-link-top"><b>'+esc(x.name)+'</b><span class="trip-web-desc">'+esc(x.desc)+'</span></span>'+iconSvg('externalLink')+'</a>';
+ const body='<p class="trip-web-intro">依旅程整理的常用網站；點選分類展開，點擊網站列可直接開啟。</p>'+
+ TRIP_WEBS.map((g,i)=>'<details class="trip-web-group" data-k="trip-web-group-'+i+'"'+(ov.has('trip-web-group-'+i)?' open':'')+'><summary class="trip-web-group-title"><b>'+esc(g.group)+'</b><small>'+esc(g.hint)+'</small><span class="trip-web-count">'+g.links.length+'</span></summary><div class="trip-web-grid">'+g.links.map(card).join('')+'</div></details>').join('')+
+ '<p class="trip-web-footer">'+iconSvg('externalLink')+'冬季班次及營業情況可能臨時變更，以各網站當日公告為準。</p>';
+ return sec('useful',iconSvg('externalLink'),'旅途中常用網站','交通・景點・入境｜3 類・10 個連結',body);
+};
+
 function home(){const n=packs.filter(p=>p.done).length;
-return wxOverview()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程','<div class="flight-board">'+fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分')+'<p class="flight-board-note">起飛及抵達時間均為當地時間。</p></div>')
+return wxOverview()+travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程','<div class="flight-board">'+fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分')+'<p class="flight-board-note">起飛及抵達時間均為當地時間。</p></div>')
 +sec('h',iconSvg('hotel'),'住宿一覽','4 間・共 9 晚',hotels.map(h=>'<div class="ht"><small>'+esc(h.date)+'・'+esc(h.nights)+'</small><b>'+esc(h.name)+'</b><p class="overview-address">'+iconSvg('pin')+esc(h.addr)+'</p><p>'+esc(h.detail)+'</p>'+(h.q?links([place('在 Google Maps 開啟',h.q)]):'')+'</div>').join(''))
 +sec('r',iconSvg('utensils'),'已訂餐廳','2 間・各 4 人','<div class="rs"><small>12/19（六）17:30</small><b>小樽倉庫 No.1 啤酒釀造所</b><p>晚餐後搭 JR 返回札幌。</p>'+links([place('小樽倉庫 No.1','Otaru Soko No.1 Otaru')])+'</div><div class="rs"><small>12/21（一）20:30</small><b>寺田壽司 Sushi Terada</b><div class="meal-info"><p class="meal-heading">Terada 的季節全套餐 <span>4 道</span></p><div class="meal-meta"><span>¥18,000／人（含稅）</span><span>用餐約 2 小時</span></div><ul class="meal-courses"><li>前菜五道</li><li>壽司十三貫</li><li>湯品</li><li>甜點</li></ul></div>'+links([place('Sushi Terada てら田','寺田 寿司 狸小路 札幌')])+'</div>')
 +sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join('')+'<button class="add" data-a="add" data-l="p">＋ 新增物品</button>')
