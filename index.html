@@ -1095,6 +1095,9 @@ button.info-edit-tap{font-family:inherit;cursor:pointer;border:1px dashed #b8c9d
 /* Itinerary travel-time and visit-duration labels */
 .row summary .activity-time-short{display:block;margin-top:4px;font-size:10px;line-height:1.45;font-weight:650;color:#7486a1;letter-spacing:0;overflow-wrap:anywhere}
 .row.mv summary .activity-time-short{font-size:9.5px}
+.activity-time-short{display:flex!important;align-items:center;gap:5px}
+.activity-time-short .travel-line-icon{width:13px;height:13px;flex:none;fill:none;stroke:#7486a1;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.activity-time-short .travel-time-text{min-width:0}
 
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
@@ -1648,6 +1651,11 @@ const spotGuideFor=a=>{
   return SPOT_GUIDES.find(g=>g.match.test(title))||null;
 };
 const spotCard=a=>{
+  if(a&&a.kind==='交通'){
+    const g=spotGuideFor(a);
+    if(!g)return '';
+    return '<div class="spot spot-text-only"><div class="spot-tx"><small>地點資訊</small><b>'+esc(g.name)+'</b><p>'+esc(g.intro)+'</p></div></div>';
+  }
   // 以程式內建圖集供應預設景點，避免圖片 Base64 存進 localStorage 造成空間不足；舊版行程仍可正常顯示。
   const title=String(a&&a.title||'');
   const preset=/^船見坂拍照/.test(title)?{
@@ -1690,31 +1698,51 @@ const scheduleMinutes=time=>{
 const durationLabel=n=>!n?'':(n>=60?Math.floor(n/60)+' 小時'+(n%60?' '+(n%60)+' 分鐘':''):n+' 分鐘');
 // Explicit ride times come from the existing itinerary; reserved time is not mistaken for actual travel duration.
 const ITINERARY_TRAVEL_HINTS=[
- [/^JR 前往札幌$/,'🚆 JR 車程約 40 分鐘（另計步行／接駁）'],
- [/^前往小樽站$/,'🚆 JR 車程約 35–50 分鐘'],
- [/^前往天狗山$/,'🚌 巴士車程約 17–20 分鐘'],
- [/^回到小樽市區$/,'🚌 巴士車程約 20 分鐘（班次另計）'],
- [/^步行前往小樽倉庫/,'🚶 步行及餐廳報到預留約 30 分鐘'],
- [/^搭 JR 返回札幌$/,'🚆 JR 車程約 35–50 分鐘（另計候車）'],
- [/^搭地鐵往圓山公園$/,'🚇 地鐵＋步行預留約 30 分鐘'],
- [/^前往奧芝商店$/,'🚶 步行約 15–25 分鐘（視積雪）'],
- [/^前往北海道立近代美術館$/,'🚕 計程車及上下車預留約 30 分鐘'],
- [/^前往札幌啤酒博物館$/,'🚌 地鐵／巴士／計程車預留約 30 分鐘'],
- [/^前往寺田壽司$/,'🚶 步行及入店預留約 20 分鐘'],
- [/^前往 JR 札幌站・候車$/,'🚶 到站及候車預留約 45 分鐘'],
- [/^JR 特急北斗｜札幌/,'🚆 JR 車程約 75–90 分鐘（車次未訂）'],
- [/^登別站 → 登別溫泉$/,'🚌 巴士車程約 27 分鐘'],
- [/^前往登別 JR 站$/,'🚌 巴士車程約 27 分鐘（另計候車）'],
- [/^JR 北斗｜登別/,'🚆 JR 車程約 40–50 分鐘（車次待確認）'],
- [/^洞爺站 → 乃之風$/,'🚌 巴士車程約 26 分鐘'],
- [/^前往雪地活動場地$/,'🚗 交通方式待確認，預留約 1 小時'],
- [/^乃之風退房 → 洞爺站$/,'🚌 巴士車程約 26 分鐘（另計候車）'],
- [/^JR 往南千歲／新千歲方向$/,'🚆 移動及可能轉乘預留約 2 小時 30 分鐘'],
- [/^前往最後一晚飯店$/,'🚗 飯店接駁方式待確認，預留約 1 小時'],
- [/^前往新千歲機場$/,'🚌／🚆 依最後一晚住宿地點，預留約 45 分鐘'],
- [/^桃園機場報到$/,'✈️ 報到作業預留約 1 小時（請提早抵達）'],
- [/^航空公司報到・託運$/,'✈️ 報到及託運預留約 45 分鐘']
+ [/^JR 前往札幌$/,'JR 車程約 40 分鐘（另計步行／接駁）'],
+ [/^前往小樽站$/,'JR 車程約 35–50 分鐘'],
+ [/^前往天狗山$/,'巴士車程約 17–20 分鐘'],
+ [/^回到小樽市區$/,'巴士車程約 20 分鐘（班次另計）'],
+ [/^步行前往小樽倉庫/,'步行及餐廳報到預留約 30 分鐘'],
+ [/^搭 JR 返回札幌$/,'JR 車程約 35–50 分鐘（另計候車）'],
+ [/^搭地鐵往圓山公園$/,'地鐵＋步行預留約 30 分鐘'],
+ [/^前往奧芝商店$/,'步行約 15–25 分鐘（視積雪）'],
+ [/^前往北海道立近代美術館$/,'計程車及上下車預留約 30 分鐘'],
+ [/^前往札幌啤酒博物館$/,'地鐵／巴士／計程車預留約 30 分鐘'],
+ [/^前往寺田壽司$/,'步行及入店預留約 20 分鐘'],
+ [/^前往 JR 札幌站・候車$/,'到站及候車預留約 45 分鐘'],
+ [/^JR 特急北斗｜札幌/,'JR 車程約 75–90 分鐘（車次未訂）'],
+ [/^登別站 → 登別溫泉$/,'巴士車程約 27 分鐘'],
+ [/^前往登別 JR 站$/,'巴士車程約 27 分鐘（另計候車）'],
+ [/^JR 北斗｜登別/,'JR 車程約 40–50 分鐘（車次待確認）'],
+ [/^洞爺站 → 乃之風$/,'巴士車程約 26 分鐘'],
+ [/^前往雪地活動場地$/,'交通方式待確認，預留約 1 小時'],
+ [/^乃之風退房 → 洞爺站$/,'巴士車程約 26 分鐘（另計候車）'],
+ [/^JR 往南千歲／新千歲方向$/,'移動及可能轉乘預留約 2 小時 30 分鐘'],
+ [/^前往最後一晚飯店$/,'飯店接駁方式待確認，預留約 1 小時'],
+ [/^前往新千歲機場$/,'依最後一晚住宿地點，預留約 45 分鐘'],
+ [/^桃園機場報到$/,'報到作業預留約 1 小時（請提早抵達）'],
+ [/^航空公司報到・託運$/,'報到及託運預留約 45 分鐘']
 ];
+const travelIconFor=(title,hint)=>{
+ const t=String(title||''),h=String(hint||'');
+ if(/巴士/.test(h))return 'bus';
+ if(/JR|地鐵/.test(h)||/JR|列車/.test(t))return 'train';
+ if(/步行/.test(h))return 'walk';
+ if(/計程車|接駁/.test(h))return 'car';
+ if(/報到|託運/.test(h))return 'plane';
+ return 'route';
+};
+const travelLineIcon=name=>{
+ const paths={
+  walk:'<circle cx="12" cy="5" r="1.8"/><path d="m10.4 9 2.1-1 2.2 2.1 2.3.6M10.4 9 8.8 13l2.8 2 1.1 4M8.8 13l-2.4 4.2M13 8l-1 4 2.4 2.4"/>',
+  bus:'<rect x="5" y="4" width="14" height="14" rx="2.5"/><path d="M5 9h14M8 18v2m8-2v2M8 14h.01M16 14h.01"/>',
+  train:'<rect x="6" y="3.5" width="12" height="16" rx="3"/><path d="M6 9h12M9 15h.01M15 15h.01M8 19.5l-2 2m10-2 2 2M9 12h6"/>',
+  car:'<path d="m5 11 1.5-4h11L19 11v6H5zM6.5 11h11M7 17v2m10-2v2M8 14h.01M16 14h.01"/>',
+  plane:'<path d="m3 14 7-2 3-8c.4-1 1.8-.8 1.9.3l-.2 6.6 5.7 2.1c1 .4.8 1.8-.3 1.9l-5.5-.1-2.6 5.1c-.5.9-1.8.6-1.8-.4l.2-4.9-4.9 1.2c-1 .2-1.6-1.1-.8-1.8z"/>',
+  route:'<circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h2a3 3 0 0 0 3-3v-3a3 3 0 0 1 3-3h0"/>'
+ };
+ return '<svg class="travel-line-icon" viewBox="0 0 24 24" aria-hidden="true">'+(paths[name]||paths.route)+'</svg>';
+};
 const activityTimeInfo=(a,day)=>{
  const kind=String(a.kind||''),title=String(a.title||'');
  // Existing localStorage entries keep only start time; recover planned duration from default schedule.
@@ -1724,14 +1752,14 @@ const activityTimeInfo=(a,day)=>{
  const slot=scheduleMinutes(a.time)??scheduleMinutes(reference?.time);
  if(kind==='交通'){
    const found=ITINERARY_TRAVEL_HINTS.find(([re])=>re.test(title));
-   const txt=found?found[1]:(slot?'🚶／🚆 交通時段預留 '+durationLabel(slot):'交通時間依實際班次');
-   return {summary:txt,detail:txt,mode:'travel'};
+   const txt=found?found[1]:(slot?'交通時段預留 '+durationLabel(slot):'交通時間依實際班次');
+   return {summary:txt,detail:txt,mode:'travel',icon:travelIconFor(title,txt)};
  }
  if(['觀光','購物','用餐'].includes(kind)&&slot){
-   return {summary:'⏱ 停留約 '+durationLabel(slot),detail:'⏱ 預計停留 '+durationLabel(slot)+'（依當日行程安排）',mode:'stay'};
+   return {summary:'停留約 '+durationLabel(slot),detail:'預計停留 '+durationLabel(slot)+'（依當日行程安排）',mode:'stay'};
  }
  if(/^(寺田壽司|小樽倉庫 No\.1 晚餐)/.test(title)&&slot){
-   return {summary:'⏱ 用餐約 '+durationLabel(slot),detail:'⏱ 預計用餐 '+durationLabel(slot),mode:'stay'};
+   return {summary:'用餐約 '+durationLabel(slot),detail:'預計用餐 '+durationLabel(slot),mode:'stay'};
  }
  return null;
 };
@@ -1741,7 +1769,7 @@ const title=status.booked&&a.bookingKey==='snow'?a.title.replace('（待訂）',
 const cost=status.booked&&a.bookingKey==='snow'?String(a.cost||'').replace('尚未預訂','依已訂方案'):a.cost;
 const timing=activityTimeInfo(a,day);
 const bd=[desc&&'<p>'+esc(desc)+'</p>',cost&&'<p class="c">💴 '+esc(cost)+'</p>',a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',spotCard(a),links(a.places)].filter(Boolean).join('');
-return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span>'+(mv?'↳ ':'')+esc(title)+(timing?'<small class="activity-time-short">'+esc(timing.summary)+'</small>':'')+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
+return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span>'+(mv?'↳ ':'')+esc(title)+(timing?'<small class="activity-time-short">'+(timing.mode==='travel'?travelLineIcon(timing.icon)+'<span class="travel-time-text">'+esc(timing.summary)+'</span>':esc(timing.summary))+'</small>':'')+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
 
 // 每日路線採用當前行程的 places 順序；同一天重新編輯景點後也可更新路線。
 // 手機瀏覽器的 Maps URLs 中途點數有限，因此同時提供不遺漏景點的分段路線。
