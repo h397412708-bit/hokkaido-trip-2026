@@ -1001,6 +1001,24 @@ input::selection,textarea::selection{background:#dbe4ee;color:#29384d}
   background:#fffafa;
 }
 
+
+/* 2026-11-18｜收合中的行程，直接顯示交通時長／景點停留時間 */
+.row>summary{align-items:flex-start;gap:10px}
+.row>summary>time{padding-top:2px;flex-shrink:0}
+.row>summary>.row-summary-main{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+.row-summary-title{display:block;flex:none!important;overflow-wrap:anywhere;line-height:1.45}
+.row-summary-duration{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;max-width:100%;color:#7a8aa4;font-size:10.5px;font-weight:550;line-height:1.5;letter-spacing:.006em}
+.row-summary-duration svg{width:12.5px;height:12.5px;flex-shrink:0;fill:none;stroke:#8e9db4;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.row-summary-duration .row-duration-text{display:block;flex:none!important;min-width:0;overflow-wrap:anywhere}
+.row-summary-duration.is-transport{color:#7b8aa1}
+.row-summary-duration.is-spot{color:#70859e}
+.row.mv>summary{align-items:flex-start;padding:7px 2px 9px}
+.row.mv>summary>time{padding-top:1px}
+.row.mv .row-summary-duration{font-size:10px;color:#8190a6}
+.row.mv .row-summary-duration svg{width:12px;height:12px}
+.row>summary>i.bk,.row>summary>i.pd{flex-shrink:0;margin-top:1px}
+@media(max-width:380px){.row>summary{gap:7px}.row summary time{min-width:36px}.row-summary-duration{font-size:10px}.row.mv .row-summary-duration{font-size:9.5px}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1400,11 +1418,51 @@ const SPOT_MEDIA=[
  [/溫泉街/, '', '沿著登別溫泉街散步，可逛伴手禮店並感受溫泉鄉的街景。']
 ];
 const spotMedia=a=>{if(a.kind!=='觀光'||/^前往/.test(String(a.title||'')))return null;const hit=SPOT_MEDIA.find(x=>x[0].test(String(a.title||'')));if(!hit&&!a.photo)return null;return {src:a.photo||hit?.[1]||'',photos:a.photos||hit?.[3]||null,alt:a.photoAlt||a.title,intro:a.photoIntro||hit?.[2]||String(a.desc||'')}};
-const row=(a,i)=>{const mv=a.kind==='交通',status=bookingStatus(a),desc=bookedText(a,status);
+
+// 原始行程的完整起訖時間仍在 DAYS；即使 localStorage 只保存起始時間，也可顯示時長。
+// 「交通約」取自明確的搭乘／車程描述；只有缺少資料時才顯示「交通預留」。
+const originalDayItem=(a,d)=>DAYS.find(x=>String(x.d)===String(d?.d))?.items.find(x=>x.title===a.title);
+const minutesOfRange=value=>{
+ const m=String(value||'').match(/(\d{1,2}):(\d{2})\s*[–—-]\s*(\d{1,2}):(\d{2})/);
+ if(!m)return null;
+ let n=(+m[3]*60 + +m[4])-(+m[1]*60 + +m[2]);
+ if(n<=0)n+=1440;
+ return n>0&&n<=720?n:null;
+};
+const compactMinutes=n=> n>=60 ? `${Math.floor(n/60)} 小時${n%60?' '+n%60+' 分鐘':''}` : `${n} 分鐘`;
+const durationFromSchedule=(a,d)=>minutesOfRange(a.time)??minutesOfRange(originalDayItem(a,d)?.time);
+const explicitTravelTime=(a,d)=>{
+ if(/報到|託運/.test(a.title||''))return '';
+ const original=originalDayItem(a,d);
+ for(const text of [a.transportDuration,original?.meta,a.desc,a.cost]){
+  const matched=String(text||'').match(/(?:約\s*)?(\d+(?:\.\d+)?\s*(?:[–—~～-]\s*\d+(?:\.\d+)?)?\s*(?:小時(?:\s*\d+\s*分(?:鐘)?)?|分鐘|分))/);
+  if(matched)return matched[1].replace(/\s+/g,' ').trim();
+ }
+ return '';
+};
+const isScenicStop=a=>a.kind==='觀光'||a.kind==='購物'||(a.kind==='待確認'&&/體驗|探索|參觀|展望|觀景/.test(a.title||''));
+const durationLine=(a,d)=>{
+ const travel=a.kind==='交通';
+ if(!travel&&!isScenicStop(a))return '';
+ const sourceMinutes=durationFromSchedule(a,d);
+ const explicit=travel?explicitTravelTime(a,d):'';
+ const label=travel?(explicit?'交通約 '+explicit:sourceMinutes?'交通預留 '+compactMinutes(sourceMinutes):'交通時間待確認'):(sourceMinutes?'預計停留 '+compactMinutes(sourceMinutes):'停留時間待確認');
+ const isWalk=travel&&/步行|散步|走路/.test(a.title+' '+a.desc)&&!/JR|列車|地鐵|巴士/.test(a.title);
+ const iconPath=isWalk
+ ? '<path d="M7.6 3.5c1.8-.4 2.8 1.1 3.2 3.6l.6 3.6c.2 1.5-.6 2.5-1.9 2.8-1.6.4-2.8-.5-3.2-2.1L5.2 7.2C4.7 5.2 5.6 3.9 7.6 3.5Z"/><path d="M16.7 10.4c1.7-.2 2.6 1.2 2.8 3.4l.3 3.1c.1 1.4-.7 2.3-2 2.5-1.5.2-2.5-.6-2.8-2.1l-.6-4c-.3-1.6.6-2.7 2.3-2.9Z"/>'
+ : travel&&/JR|列車|電車|鐵路|地鐵/.test(a.title)
+ ? '<rect x="5" y="3" width="14" height="15" rx="4"/><path d="M8 7h8M8 11h8M8 15h.01M16 15h.01M8 18l-2 3m10-3 2 3"/>'
+ : travel&&/巴士|公車/.test(a.title)
+ ? '<rect x="5" y="3" width="14" height="16" rx="4"/><path d="M5 11h14M8 15h.01M16 15h.01M8 19l-1 2m9-2 1 2"/>'
+ : '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>';
+ return '<small class="row-summary-duration '+(travel?'is-transport':'is-spot')+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+iconPath+'</svg><span class="row-duration-text">'+esc(label)+'</span></small>';
+};
+
+const row=(a,i,d)=>{const mv=a.kind==='交通',status=bookingStatus(a),desc=bookedText(a,status);
 const title=status.booked&&a.bookingKey==='snow'?a.title.replace('（待訂）',''):a.title;
 const cost=status.booked&&a.bookingKey==='snow'?String(a.cost||'').replace('尚未預訂','依已訂方案'):a.cost;
 const media=spotMedia(a);const bd=[desc&&'<p>'+esc(desc)+'</p>',cost&&'<p class="c">💴 '+esc(cost)+'</p>',a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',mv?transportInfo(a):a.kind==='觀光'&&timeSpan(a)?'<div class="stay-duration">'+esc(timeSpan(a))+'</div>':'',media?'<section class="spot-card">'+((media.photos&&media.photos.length>1)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide"><img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div><span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div></div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p></div></section>':'',links(a.places)].filter(Boolean).join('');
-return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span>'+(mv?'↳ ':'')+esc(title)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
+return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span class="row-summary-main"><span class="row-summary-title">'+(mv?'↳ ':'')+esc(title)+'</span>'+durationLine(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
 
 
 app.addEventListener('scroll',e=>{const track=e.target.closest?.('.spot-carousel-track');if(!track)return;const box=track.closest('.spot-carousel');const slides=[...track.children];const i=Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/(track.clientWidth||1))));const count=box.querySelector('.spot-carousel-count');if(count)count.textContent=(i+1)+'/'+slides.length;box.querySelectorAll('.spot-carousel-dot').forEach((d,j)=>d.classList.toggle('active',j===i));},{capture:true,passive:true});
@@ -1484,7 +1542,7 @@ function dailyRouteCard(d){
 }
 function plan(){const d=days[st.day],snowBooked=String(d.d)==='25'&&todos.some(t=>taskKeys(t).includes('snow')&&t.done);const sub=snowBooked?d.sub.replace('雪地摩托車（未訂）','雪地摩托車（已訂）'):d.sub;let note=snowBooked?d.note.replace('雪地摩托車尚未預約，','雪地摩托車已在待辦標記預約完成，'):d.note;
 if(String(d.d)==='22'&&todos.some(t=>t.done&&taskKeys(t).includes('jr22')))note=note.replace('JR 車票還沒買。','JR 車票已在待辦標記訂妥。');
-if(String(d.d)==='24'&&todos.some(t=>t.done&&taskKeys(t).includes('jr24')))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 已在待辦標記訂妥。');return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(note)+'</p></details><div class="tlw">'+d.items.map(row).join('')+'</div><button class="add" data-a="add" data-l="d">＋ 新增行程</button><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
+if(String(d.d)==='24'&&todos.some(t=>t.done&&taskKeys(t).includes('jr24')))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 已在待辦標記訂妥。');return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(note)+'</p></details><div class="tlw">'+d.items.map((a,i)=>row(a,i,d)).join('')+'</div><button class="add" data-a="add" data-l="d">＋ 新增行程</button><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
 
 // 購物清單以相同的 hk26v2_ 儲存空間保存。圖像會縮小為 JPEG，僅儲存在目前瀏覽器。
 let shopping=LS('shopping',[]);
