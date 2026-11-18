@@ -178,13 +178,6 @@ dialog{border:0;border-radius:20px;width:min(92vw,420px);padding:20px;color:var(
 .route-day .route-all svg{width:16px;height:16px;flex:none}
 .route-day .route-all svg:last-child{width:14px;height:14px;opacity:.72}
 .route-day .route-note{color:#8a94a5;font-size:10px;line-height:1.6;margin:9px 3px 0}
-.route-segment-fold{margin-top:9px;border:1px solid #e4e9f2;border-radius:11px;background:#f8fafc;overflow:hidden}
-.route-segment-fold>summary{display:flex;gap:8px;align-items:center;padding:10px 12px;color:#566b88;font-size:11px;font-weight:750}
-.route-segment-fold>summary:after{content:'⌄';margin-left:auto;color:#93a1b5}
-.route-segment-fold[open]>summary:after{transform:rotate(180deg)}
-.route-segment-fold>summary svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.route-segment-fold .route-segment-links{display:grid;gap:6px;padding:0 10px 10px}
-.route-segment-fold .route-segment-links a{border:1px solid #e0e7f1;background:#fff;border-radius:9px;padding:9px 10px;font-weight:650;color:#5d7090}
 @media(max-width:360px){.route-map{height:205px}.route-map-bar-tag{display:none}}
 @media(min-width:480px){.route-map{height:272px}}
 
@@ -1122,6 +1115,10 @@ input::selection,textarea::selection{background:#dbe4ee;color:#29384d}
 .route-map-card .route-segment-fold{margin:10px 0!important}
 @media(max-width:360px){.route-live-map{height:255px}.route-map-legend{gap:8px}.route-map-legend>span{font-size:9px}.route-pin{height:30px;width:30px;font-size:12px}}
 
+/* 景點實際位置至避讓標號的短引線：不混淆三種交通線型 */
+.route-map-vectors .route-pin-leader{fill:none;stroke:#8b9ab0;stroke-width:1.35;stroke-dasharray:2 3;opacity:.88}
+.route-map-vectors .route-pin-leader.dim{opacity:.2}
+.route-map-vectors .route-location-anchor{fill:#fff;stroke:#7287a4;stroke-width:1.15}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1728,62 +1725,86 @@ function routeMapCard(d){
     fragments.push('<button class="route-leg" type="button" data-a="mapsegment" data-v="'+i+'"><span class="route-leg-index">'+(i+1)+' → '+(i+2)+'</span><span class="route-leg-dest">'+esc(stops[i].label)+' → '+esc(stops[i+1].label)+'</span><span class="route-leg-mode">'+routeLegend(mode)+'</span></button>');
   }
   const navPoints=dayRouteStops(d);
-  let segs='';
-  if(navPoints.length>5){
-    const parts=[];
-    for(let i=0;i<navPoints.length-1;i+=4){
-      const part=navPoints.slice(i,Math.min(i+5,navPoints.length));
-      if(part.length>=2)parts.push(part);
-    }
-    segs='<details class="route-segment-fold"><summary>'+iconSvg('route')+' 分段 Google Maps 導航</summary><div class="route-segment-links">'+parts.map((part,i)=>'<a href="'+esc(googleRouteURL(part))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('route')+' 第 '+(i+1)+' 段 · '+esc(part[0].label)+' → '+esc(part[part.length-1].label)+'</a>').join('')+'</div></details>';
-  }
   const caveat=id==='26'?'12/26 最後一晚的飯店尚未確定，暫時排至新千歲機場。':id==='27'?'最後一晚住宿地點尚未確認，暫以千歲市區作為起點。':id==='23'?'大湯沼為冬季條件式行程，暫不列入固定路線。':id==='19'?'午餐有兩個備選地點，路線暫不包含尚未選定的午餐。':'';
   return '<details class="card route-day route-map-card" data-k="r'+id+'" data-route-panel="'+id+'"'+(!routeClosedDays.has(id)?' open':'')+'><summary><span class="sum-ic">'+iconSvg('route')+'</span><div><b>當日旅行路線</b><small>12/'+id+' · '+esc(city)+'｜點開查看整日地圖</small></div></summary><div class="bd">'
   +'<div class="route-map-shell"><div class="route-map-bar"><b>地圖</b><span class="route-map-bar-tag">12/'+id+' · '+esc(city)+'</span></div>'
   +'<div class="route-live-map" data-map-day="'+id+'" role="group" aria-label="12/'+id+' 行程路線地圖"><div class="route-map-fallback-art"></div><div class="route-map-tiles"></div><div class="route-map-vectors"></div><div class="route-map-pins"></div><div class="route-map-area-tag">'+esc(city)+'</div><div class="route-zoom-controls"><button type="button" data-a="mapzoom" data-v="1" aria-label="放大地圖">+</button><button type="button" data-a="mapzoom" data-v="-1" aria-label="縮小地圖">−</button></div><button class="route-map-fit" type="button" data-a="mapfit">全部站點</button><span class="route-map-attribution">地圖資料 © OpenStreetMap</span></div>'
   +'<div class="route-map-information"><b>整天 '+marks+' 站</b><span>點下方任一段交通，地圖會移到那一段</span></div><div class="route-map-legend">'+['walk','car','transit'].map(m=>'<span>'+routeLegend(m)+'</span>').join('')+'</div></div>'
   +'<div class="route-leg-header"><b>交通路段</b><button class="route-leg-reset" type="button" data-a="mapfit">顯示整天</button></div><div class="route-legs">'+fragments.join('')+'</div>'
-  +'<a class="go route-all" href="'+esc(googleRouteURL(navPoints))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('map')+' 在 Google Maps 開啟完整路線'+iconSvg('externalLink')+'</a>'+segs
+  +'<a class="go route-all" href="'+esc(googleRouteURL(navPoints))+'" target="_blank" rel="noopener noreferrer">'+iconSvg('map')+' 在 Google Maps 開啟完整路線'+iconSvg('externalLink')+'</a>'
   +'<p class="route-note">站點依行程先後編號；線條僅表示站點間的方向，不是實際道路或列車軌跡。實際路線、交通方式及班次請以導航和業者公告為準。</p>'
   +(missing.length?'<p class="route-note">另有 '+missing.length+' 個未定位的自訂地點，可使用 Google Maps 導航查詢。</p>':'')
   +(caveat?'<p class="route-note">'+esc(caveat)+'</p>':'')+'</div></details>';
 }
+// 地圖線段連接「編號站點的顯示中心」，並保留原始地理位置的細短引線。
+// 注意：線條表示行程地點之間的連接方向，不代表實際鐵道／道路形狀。
 function paintRouteMap(d){
   const map=app.querySelector('.route-live-map[data-map-day="'+d.d+'"]');
   if(!map||!map.closest('details[open]'))return;
-  const stops=routeGeoPoints(d).filter(s=>s.position);
-  if(!stops.length)return;
+  const all=routeGeoPoints(d);
+  const known=all.filter(s=>s.position);
+  if(!known.length)return;
   const w=Math.max(260,map.clientWidth||335),h=Math.max(205,map.clientHeight||275);
   const view=routeFocusByDay[d.d]||{segment:null,extra:0};
-  let focus=stops;
-  if(Number.isInteger(view.segment)&&stops[view.segment+1])focus=[stops[view.segment],stops[view.segment+1]];
-  const zoom=Math.max(6,Math.min(17,routeZoomBounds(focus,w,h)+(view.extra||0)));
-  const pos=focus.map(x=>routeProjected(x.position[0],x.position[1],zoom));
-  const center={x:(Math.min(...pos.map(x=>x.x))+Math.max(...pos.map(x=>x.x)))/2,
-                y:(Math.min(...pos.map(x=>x.y))+Math.max(...pos.map(x=>x.y)))/2};
-  const points=stops.map((stop,i)=>{const pp=routeProjected(stop.position[0],stop.position[1],zoom);return {...stop,i,x:pp.x-center.x+w/2,y:pp.y-center.y+h/2};});
-  const paths=[];
-  for(let i=0;i<points.length-1;i++){
-    const p1=points[i],p2=points[i+1];
-    const mode=(ROUTE_MODES[d.d]||[])[p1.sourceIndex-1]||'transit';
-    const on=view.segment===null||view.segment===i;
-    paths.push('<path d="M'+p1.x.toFixed(1)+' '+p1.y.toFixed(1)+' L'+p2.x.toFixed(1)+' '+p2.y.toFixed(1)+'" class="route-path '+mode+(on?'':' dim')+'"/>');
+  let focus=known;
+  if(Number.isInteger(view.segment)&&all[view.segment]?.position&&all[view.segment+1]?.position){
+    focus=[all[view.segment],all[view.segment+1]];
   }
+  const zoom=Math.max(6,Math.min(17,routeZoomBounds(focus,w,h)+(view.extra||0)));
+  const projectedFocus=focus.map(x=>routeProjected(x.position[0],x.position[1],zoom));
+  const center={
+    x:(Math.min(...projectedFocus.map(p=>p.x))+Math.max(...projectedFocus.map(p=>p.x)))/2,
+    y:(Math.min(...projectedFocus.map(p=>p.y))+Math.max(...projectedFocus.map(p=>p.y)))/2
+  };
+  const points=all.map((stop,i)=>{
+    if(!stop.position)return {...stop,i,visible:false};
+    const pp=routeProjected(stop.position[0],stop.position[1],zoom);
+    const x=pp.x-center.x+w/2,y=pp.y-center.y+h/2;
+    return {...stop,i,x,y,pinX:x,pinY:y,visible:x>=-15&&x<=w+15&&y>=-15&&y<=h+15};
+  });
+  // 若相鄰站非常近，讓編號微幅錯開，不再發生線條接著地點但沒有接到可見編號的情況。
+  // 遠離目前視窗的站點不會被硬拉回地圖內，避免虛假的地理位置。
   const occupied=[];
-  const offsets=[[0,0],[0,-35],[35,0],[-35,0],[0,35],[34,-34],[-34,-34],[34,34],[-34,34],[0,-70],[70,0],[-70,0],[0,70],[70,-35],[-70,-35],[70,35],[-70,35]];
+  const shifts=[[0,0],[0,-32],[32,0],[-32,0],[0,32],[27,-27],[-27,-27],[27,27],[-27,27],[0,-58],[58,0],[-58,0],[0,58],[52,-32],[-52,-32],[52,32],[-52,32]];
+  for(const p of points){
+    if(!p.visible)continue;
+    const valid=shifts.map(([dx,dy])=>({x:p.x+dx,y:p.y+dy,delta:Math.hypot(dx,dy)}))
+      .filter(c=>c.x>=17&&c.x<=w-17&&c.y>=18&&c.y<=h-18)
+      .map(c=>({...c,overlap:occupied.filter(q=>Math.hypot(q.x-c.x,q.y-c.y)<36).length}));
+    valid.sort((a,b)=>a.overlap-b.overlap||a.delta-b.delta);
+    const best=valid[0];
+    if(best){p.pinX=best.x;p.pinY=best.y;occupied.push({x:best.x,y:best.y});}
+    else{p.visible=false;}
+  }
+  const f=v=>Number(v).toFixed(1);
+  const paths=[];
+  const leaders=[];
+  const modeFor=i=>(ROUTE_MODES[String(d.d)]||[])[i]||'transit';
+  for(let i=0;i<points.length-1;i++){
+    const a=points[i],b=points[i+1];
+    // 路段只連接行程中真正相鄰且有已知座標的地點；不跨越無座標地點。
+    if(!a.position||!b.position)continue;
+    const mode=modeFor(i),isCurrent=view.segment===null||view.segment===undefined||view.segment===i;
+    // 用與站點編號完全一致的端點，確保即使標號避讓也看得到兩站確實相連。
+    const x1=a.visible?a.pinX:a.x,y1=a.visible?a.pinY:a.y;
+    const x2=b.visible?b.pinX:b.x,y2=b.visible?b.pinY:b.y;
+    const geometry='M'+f(x1)+' '+f(y1)+' L'+f(x2)+' '+f(y2);
+    paths.push('<path data-leg="'+i+'" d="'+geometry+'" class="route-path '+mode+(isCurrent?'':' dim')+'"/>');
+  }
+  for(const p of points){
+    if(!p.visible||Math.hypot(p.pinX-p.x,p.pinY-p.y)<5)continue;
+    // 細引線回到地圖上的原始座標，不讓視覺避讓被誤認為景點真的換了位置。
+    const connected=view.segment==null||view.segment===p.i||view.segment+1===p.i;
+    leaders.push('<path d="M'+f(p.x)+' '+f(p.y)+' L'+f(p.pinX)+' '+f(p.pinY)+'" class="route-pin-leader'+(connected?'':' dim')+'"/>');
+    leaders.push('<circle cx="'+f(p.x)+'" cy="'+f(p.y)+'" r="3" class="route-location-anchor"/>');
+  }
   const pins=points.map(p=>{
-    // 間距不足的市中心站點自動錯開，避免編號重疊不可點擊。
-    const scored=offsets.map(([dx,dy])=>({x:p.x+dx,y:p.y+dy,delta:Math.hypot(dx,dy)}))
-      .filter(v=>v.x>=18&&v.x<=w-18&&v.y>=19&&v.y<=h-18)
-      .map(v=>({...v,collisions:occupied.filter(q=>Math.hypot(q.x-v.x,q.y-v.y)<36).length}));
-    scored.sort((a,b)=>a.collisions-b.collisions||a.delta-b.delta);
-    const choice=scored[0]||{x:Math.max(18,Math.min(w-18,p.x)),y:Math.max(19,Math.min(h-18,p.y))};
-    occupied.push(choice);
-    const selected=view.segment===null||view.segment===p.i||view.segment+1===p.i;
-    return '<button type="button" class="route-pin'+(p.i===0?' start':'')+(p.i===points.length-1?' end':'')+(selected?'':' dim')+'" data-a="mapstop" data-v="'+p.i+'" style="left:'+choice.x.toFixed(1)+'px;top:'+choice.y.toFixed(1)+'px" title="'+esc(p.label)+'" aria-label="第 '+p.sourceIndex+' 站：'+esc(p.label)+'">'+p.sourceIndex+'</button>';
+    if(!p.visible)return '';
+    const selected=view.segment==null||view.segment===p.i||view.segment+1===p.i;
+    return '<button type="button" class="route-pin'+(p.i===0?' start':'')+(p.i===points.length-1?' end':'')+(selected?'':' dim')+'" data-a="mapstop" data-v="'+p.i+'" style="left:'+f(p.pinX)+'px;top:'+f(p.pinY)+'px" title="'+esc(p.label)+'" aria-label="第 '+p.sourceIndex+' 站：'+esc(p.label)+'">'+p.sourceIndex+'</button>';
   }).join('');
   let tiles='';
-  // 瓦片僅在連線時由用戶端載入；不需要第三方地圖金鑰。
+  // 網路正常時顯示 OpenStreetMap；離線預覽保留可讀取的路線及站點。
   if(!window.__ROUTE_PREVIEW_OFFLINE){
     const tileX0=Math.floor((center.x-w/2)/256),tileY0=Math.floor((center.y-h/2)/256),tx1=Math.floor((center.x+w/2)/256),ty1=Math.floor((center.y+h/2)/256);
     for(let ty=tileY0;ty<=ty1;ty++)for(let tx=tileX0;tx<=tx1;tx++){
@@ -1793,10 +1814,10 @@ function paintRouteMap(d){
     }
   }
   map.querySelector('.route-map-tiles').innerHTML=tiles;
-  const svg='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g class="route-paths-under">'+paths.map(p=>p.replace('class="route-path','class="route-path-under')).join('')+'</g><g>'+paths.join('')+'</g></svg>';
+  const svg='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g>'+paths.map(path=>path.replace('class="route-path','class="route-path-under')).join('')+'</g><g>'+paths.join('')+'</g><g>'+leaders.join('')+'</g></svg>';
   map.querySelector('.route-map-vectors').innerHTML=svg;
   map.querySelector('.route-map-pins').innerHTML=pins;
-  map.closest('.route-map-card').querySelectorAll('.route-leg').forEach((b,i)=>b.classList.toggle('selected',view.segment===i));
+  map.closest('.route-map-card').querySelectorAll('.route-leg').forEach(b=>b.classList.toggle('selected',Number(b.dataset.v)===view.segment));
 }
 
 
@@ -2074,7 +2095,7 @@ if(a==='mapzoom'||a==='mapfit'||a==='mapsegment'||a==='mapstop'){
  if(a==='mapfit'){v.segment=null;v.extra=0;}
  else if(a==='mapzoom')v.extra=Math.max(-5,Math.min(6,(v.extra||0)+Number(D.v)));
  else if(a==='mapsegment'){v.segment=Number(D.v);v.extra=0;}
- else {const n=Number(D.v),all=routeGeoPoints(d).filter(p=>p.position);if(all[n]){v.segment=n<all.length-1?n:Math.max(0,n-1);v.extra=0;}}
+ else {const n=Number(D.v),all=routeGeoPoints(d);if(all[n]?.position){v.segment=n<all.length-1&&all[n+1]?.position?n:Math.max(0,n-1);v.extra=0;}}
  routeFocusByDay[key]=v;paintRouteMap(d);return;
 }
 if(a==='tab'){st.tab=D.v;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);render()}else if(a==='cat'){st.cat=D.v;render()}
