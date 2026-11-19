@@ -1211,6 +1211,47 @@ body.pack-drag-active{cursor:grabbing;user-select:none!important;-webkit-user-se
   .pack-drag-floating{transition:none!important}
 }
 
+
+/* 2026-11-19｜待辦新增：與購物清單相同的液態玻璃圓形＋按鈕 */
+.todo-heading{position:relative;padding-right:58px;min-height:83px}
+.todo-heading .shop-glass-add{top:9px;right:2px}
+/* 新增行程：輕量添加選單＋可上傳圖片的編輯表單 */
+.itinerary-add-area{display:flex;justify-content:flex-end;align-items:center;margin:17px 1px 12px}
+.itinerary-add-trigger{display:flex;align-items:center;justify-content:center;gap:5px;min-width:112px;min-height:42px;padding:9px 16px;border:1px solid #d0d9e8;border-radius:14px;background:linear-gradient(140deg,#ffffff,#ecf2fa);color:#526a8d;font-size:13px;font-weight:800;letter-spacing:.012em;box-shadow:inset 0 1px rgba(255,255,255,.85),0 3px 14px rgba(62,83,116,.06)}
+.itinerary-add-trigger:active{transform:scale(.98);background:#e8eff9}
+dialog.itinerary-chooser{width:min(88vw,370px);padding:22px 19px 18px;border-radius:24px;max-height:85dvh;overflow:auto;background:#fff}
+.itinerary-chooser h3{font-size:19px;color:#344763;letter-spacing:-.01em}
+.itinerary-choice-sub{font-size:11px;color:#8c9bb1;margin:4px 0 17px;line-height:1.6}
+.itinerary-type-list{display:flex;flex-direction:column;gap:9px}
+.itinerary-type-option{display:flex;gap:13px;align-items:center;text-align:left;width:100%;min-height:79px;padding:14px 12px;border:1px solid #dfe6f1;border-radius:15px;background:linear-gradient(135deg,#fff,#f6f9fd);color:#3c516f;transition:background .18s ease,transform .18s ease}
+.itinerary-type-option:active{transform:scale(.985);background:#eef4fa}
+.itinerary-type-icon{width:41px;height:41px;border:1px solid #d9e3ef;border-radius:13px;background:#ecf2f8;color:#6681a0;display:grid;place-items:center;flex:none}
+.itinerary-type-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.itinerary-type-option strong{display:block;font-size:14px;margin-bottom:5px}
+.itinerary-type-option small{display:block;color:#8393a8;font-size:10.5px;line-height:1.5}
+.itinerary-choice-cancel{width:100%;margin-top:14px;background:transparent;border:0;color:#8795ab;padding:10px;font-size:12px}
+dialog.itinerary-editor{box-sizing:border-box;width:min(92vw,440px);max-height:89dvh;overflow:auto;overscroll-behavior:contain;border-radius:22px;padding:0}
+.itinerary-edit-form{padding:21px 19px 22px}
+.itinerary-edit-form h3{font-size:19px;font-weight:850;color:#344763;margin:0 0 3px}
+.itinerary-edit-form .form-sub{font-size:11px;color:#8999ae;margin:0 0 14px;line-height:1.55}
+.itinerary-edit-form label{font-size:11px;font-weight:750;color:#607590;margin-top:13px}
+.itinerary-edit-form input,.itinerary-edit-form textarea{box-sizing:border-box;margin-top:5px;width:100%;min-height:43px;border:1px solid #dce4ef;border-radius:12px;padding:11px;background:#f7f9fd;font-size:13px;color:#344760;outline-color:#8ca6c7}
+.itinerary-edit-form textarea{min-height:83px;resize:vertical;line-height:1.6}
+.itinerary-edit-form .edit-two-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.itinerary-edit-form .edit-two-fields label{min-width:0}
+.itinerary-edit-form .fb{position:sticky;bottom:-22px;padding:12px 0 max(0px, env(safe-area-inset-bottom));margin-top:12px;background:linear-gradient(0deg,#fff 85%,rgba(255,255,255,.8));z-index:1}
+.itinerary-photo-section{margin:16px 0 9px;padding:14px 12px;border:1px solid #dae3ee;background:linear-gradient(150deg,#fbfdff,#f5f8fc);border-radius:16px}
+.itinerary-photo-section>b{display:block;font-size:12px;color:#526c8c;margin:0 0 8px}
+.itinerary-photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 10px}
+.itinerary-photo-thumb{position:relative;aspect-ratio:1;border:1px solid #d7e1ee;border-radius:12px;overflow:hidden;background:#e9f0f7}
+.itinerary-photo-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.itinerary-photo-thumb button{position:absolute;top:4px;right:4px;width:25px;height:25px;padding:0;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(40,53,77,.7);color:white;font-size:16px;line-height:1}
+.itinerary-photo-upload{display:flex!important;align-items:center;justify-content:center;gap:7px;min-height:42px;margin:4px 0!important;border:1px dashed #a9bdd2;border-radius:11px;background:#f1f6fc;color:#627b9c!important;cursor:pointer;font-size:12px!important}
+.itinerary-photo-upload input[type=file]{display:none}
+.itinerary-photo-help{font-size:10px;line-height:1.5;color:#8e9fb3;margin:6px 0 0}
+@media(prefers-reduced-motion:reduce){.itinerary-type-option,.itinerary-add-trigger{transition:none}}
+
+figure.itinerary-photo:empty{display:none}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1636,12 +1677,12 @@ const spotMedia=a=>{
  :name==='慕尼黑聖誕市集'?{photos:MUNICH_MARKET_GALLERY,intro:'大通公園 2 丁目的慕尼黑聖誕市集，以聖誕樹、德式木屋攤位和夜間燈飾營造冬季氣氛。'}
  :null;
  if(a.kind!=='觀光'&&!(a.kind==='已預訂'&&galleryRule))return null;
- if(/^前往/.test(name))return null;
+ if(/^前往/.test(name)&&!a.userPhotos)return null;
  const hit=SPOT_MEDIA.find(x=>x[0].test(name));
- if(!hit&&!galleryRule&&!a.photo&&!a.photos)return null;
+ if(!hit&&!galleryRule&&!a.photo&&!a.photos&&!a.photoIntro)return null;
  const isMuseum=/北海道立近代美術館/.test(name);
  // Always show this updated three-photo gallery, including on phones with older saved data.
- const photos=isMuseum?MUSEUM_GALLERY:(galleryRule?.photos||a.photos||hit?.[3]||null);
+ const photos=(a.userPhotos&&Array.isArray(a.photos)&&a.photos.length)?a.photos:(isMuseum?MUSEUM_GALLERY:(galleryRule?.photos||a.photos||hit?.[3]||null));
  return {src:a.photo||photos?.[0]?.src||hit?.[1]||'',photos,alt:a.photoAlt||name,intro:a.photoIntro||galleryRule?.intro||hit?.[2]||String(a.desc||'')};
 };
 // 收合卡片時間：以編輯內容的明確車程為優先，否則從原行程時段取得預留值。
@@ -1682,7 +1723,7 @@ app.addEventListener('click',e=>{const dot=e.target.closest?.('[data-carousel-do
 
 function plan(){const d=days[st.day],snowBooked=String(d.d)==='25'&&todos.some(t=>taskKeys(t).includes('snow')&&t.done);const sub=snowBooked?d.sub.replace('雪地摩托車（未訂）','雪地摩托車（已訂）'):d.sub;let note=snowBooked?d.note.replace('雪地摩托車尚未預約，','雪地摩托車已在待辦標記預約完成，'):d.note;
 if(String(d.d)==='22'&&todos.some(t=>t.done&&taskKeys(t).includes('jr22')))note=note.replace('JR 車票還沒買。','JR 車票已在待辦標記訂妥。');
-if(String(d.d)==='24'&&todos.some(t=>t.done&&taskKeys(t).includes('jr24')))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 已在待辦標記訂妥。');return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(note)+'</p></details><div class="tlw">'+d.items.map((a,i)=>row(a,i,d)).join('')+'</div><button class="add" data-a="add" data-l="d">＋ 新增行程</button><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
+if(String(d.d)==='24'&&todos.some(t=>t.done&&taskKeys(t).includes('jr24')))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 已在待辦標記訂妥。');return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(note)+'</p></details><div class="tlw">'+d.items.map((a,i)=>row(a,i,d)).join('')+'</div><div class="itinerary-add-area"><button type="button" class="itinerary-add-trigger" data-a="add-choose">＋ 添加</button></div><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
 
 // 購物清單以相同的 hk26v2_ 儲存空間保存。圖像會縮小為 JPEG，僅儲存在目前瀏覽器。
 let shopping=LS('shopping',[]);
@@ -1768,7 +1809,7 @@ dlg.addEventListener('animationend',e=>{
  if(e.target===dlg&&e.animationName==='shopPopupSpring')dlg.classList.remove('shop-pop-opening');
 });
 dlg.addEventListener('close',()=>{
- dlg.classList.remove('sh-dialog','shop-pop-opening');
+ dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-chooser','itinerary-editor');
  dlg.style.removeProperty('--shop-pop-dx');dlg.style.removeProperty('--shop-pop-dy');
  shopRevealOrigin=null;
 });
@@ -1825,7 +1866,7 @@ async function shopReadPhoto(file){
 }
 
 function todo(){const cats=['全部','預約','訂位','票券','其他'];const L=todos.map((t,i)=>({t:t,i:i})).filter(x=>st.cat==='全部'||x.t.c===st.cat);const s=L.filter(x=>!x.t.done).concat(L.filter(x=>x.t.done));
-return '<div class="ph"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct">'+esc(x.t.c)+'</i>'+todoLinks(x.t)+'</div><div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div><button class="add" data-a="add" data-l="t">＋ 新增待辦</button>'}
+return '<div class="ph sh-heading todo-heading"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p><button type="button" class="shop-glass-add" data-a="add" data-l="t" aria-label="新增待辦" title="新增待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct">'+esc(x.t.c)+'</i>'+todoLinks(x.t)+'</div><div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div>'}
 const fl=(lb,a,at,b,bt,duration)=>{
  const parts=lb.split('｜'),date=parts[0]||'',rawAirline=parts.slice(1).join('｜')||'';
  const direction=date.includes('去程')?'去程':'回程';
@@ -1965,8 +2006,83 @@ function render(){
   getWxForecast(false);
 }
 function form(title,fs,v,cb){dlg.innerHTML='<form><h3>'+title+'</h3>'+fs.map(f=>'<label>'+f[1]+(f[2]==='area'?'<textarea name="'+f[0]+'" rows="3">'+esc(v[f[0]])+'</textarea>':f[2]==='sel'?'<select name="'+f[0]+'">'+f[3].map(o=>'<option'+(o===v[f[0]]?' selected':'')+'>'+o+'</option>').join('')+'</select>':'<input name="'+f[0]+'" value="'+esc(v[f[0]])+'">')+'</label>').join('')+'<div class="fb"><button type="button" data-a="cx">取消</button><button class="pri">儲存</button></div></form>';dlg.querySelector('form').onsubmit=e=>{e.preventDefault();const o={};new FormData(e.target).forEach((x,k)=>o[k]=String(x).trim());dlg.close();cb(o)};dlg.showModal()}
+
+// 新增行程先選擇交通或景點；既有項目保持原分類及資料不變。
+function chooseItineraryKind(){
+ dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-editor');
+ dlg.classList.add('itinerary-chooser');
+ dlg.innerHTML='<h3>＋ 添加</h3><p class="itinerary-choice-sub">選擇要新增到 12/'+esc(days[st.day].d)+' 的項目類型</p>'+
+ '<div class="itinerary-type-list">'+
+ '<button type="button" class="itinerary-type-option" data-a="add-kind" data-kind="交通"><span class="itinerary-type-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v13H4zM4 12h16M7.5 16h.01M16.5 16h.01M7 18l-1 3m11-3 1 3"/></svg></span><span><strong>添加交通</strong><small>交通方式、預估費用、時間與路線名稱</small></span></button>'+
+ '<button type="button" class="itinerary-type-option" data-a="add-kind" data-kind="觀光"><span class="itinerary-type-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="9" r="1.5"/><path d="m4 17 5-5 4 3 3-3 4 5"/></svg></span><span><strong>添加行程</strong><small>景點、照片、景點介紹與停留時間</small></span></button></div>'+
+ '<button type="button" class="itinerary-choice-cancel" data-a="cx">取消</button>';
+ dlg.showModal();
+}
+let itineraryPhotoTemp=[];
+let itineraryPhotoChanged=false;
+function updateItineraryPhotoPreview(){
+ const holder=dlg.querySelector('#itinerary-photo-grid');if(!holder)return;
+ holder.innerHTML=itineraryPhotoTemp.map((ph,i)=>'<div class="itinerary-photo-thumb"><img src="'+esc(ph.src)+'" alt="第 '+(i+1)+' 張景點照片"><button type="button" data-a="itinerary-photo-remove" data-i="'+i+'" aria-label="移除第 '+(i+1)+' 張照片">×</button></div>').join('');
+ const label=dlg.querySelector('#itinerary-photo-count');
+ if(label)label.textContent=itineraryPhotoTemp.length+' / 4 張';
+}
+async function readItineraryPhotos(files){
+ const list=[...(files||[])];if(!list.length)return;
+ if(itineraryPhotoTemp.length+list.length>4){alert('每個景點最多可上傳 4 張照片');return}
+ for(const file of list){
+   if(!file.type.startsWith('image/')&&!/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name)){alert('請選擇圖片檔案');continue}
+   if(file.size>25*1024*1024){alert('單張照片須小於 25 MB');continue}
+   const objectUrl=URL.createObjectURL(file);
+   try{
+     const img=new Image();
+     await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=objectUrl});
+     const ratio=Math.min(1,1000/Math.max(img.naturalWidth,img.naturalHeight));
+     const canvas=document.createElement('canvas');canvas.width=Math.round(img.naturalWidth*ratio);canvas.height=Math.round(img.naturalHeight*ratio);
+     const ctx=canvas.getContext('2d');if(!ctx)throw Error('無法處理圖片');
+     ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
+     let url=canvas.toDataURL('image/jpeg',.73);
+     if(url.length>400000)url=canvas.toDataURL('image/jpeg',.57);
+     itineraryPhotoTemp.push({src:url,alt:'景點照片',mode:'blur'});itineraryPhotoChanged=true;
+   }catch(err){alert('照片讀取失敗，請嘗試 JPG 或 PNG 格式。')}
+   finally{URL.revokeObjectURL(objectUrl)}
+ }
+ updateItineraryPhotoPreview();
+ const input=dlg.querySelector('#itinerary-photo-file');if(input)input.value='';
+}
+function editDayItem(n,selectedKind){
+ const adding=n<0,L=days[st.day].items;
+ const old=adding?null:L[n];
+ const kind=adding?(selectedKind==='交通'?'交通':'觀光'):(old.kind||'觀光');
+ const transport=kind==='交通';
+ const a=old||{id:uid(),time:'',title:'',desc:'',cost:'',hours:'',kind,places:[]};
+ itineraryPhotoTemp=Array.isArray(a.photos)&&a.userPhotos?a.photos.map(ph=>({...ph})):[];
+ itineraryPhotoChanged=false;
+ dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-chooser');dlg.classList.add('itinerary-editor');
+ const f=(key,label,area=false,placeholder='')=>'<label>'+label+(area?'<textarea name="'+key+'" rows="3" placeholder="'+esc(placeholder)+'">'+esc(a[key]||'')+'</textarea>':'<input name="'+key+'" placeholder="'+esc(placeholder)+'" value="'+esc(a[key]||'')+'">')+'</label>';
+ dlg.innerHTML='<form class="itinerary-edit-form" id="itinerary-edit-form"><h3>'+(adding?(transport?'添加交通':'添加行程'):(transport?'編輯交通':'編輯行程'))+'</h3><p class="form-sub">12/'+esc(days[st.day].d)+' · '+(transport?'交通資訊':'景點與活動資訊')+'</p>'+
+ '<div class="edit-two-fields">'+f('time',transport?'開始時間':'時間（可填時段）','', transport?'例：09:30':'例：09:30–11:00')+f('hours',transport?'時刻／備註（選填）':'營業時間（選填）')+'</div>'+
+ f('title',transport?'交通名稱 *':'行程名稱 *','',transport?'例如：JR 札幌 → 小樽':'例如：小樽運河散步')+
+ f('desc',transport?'交通方式／行程細節':'行程細節',true,transport?'例如：搭 JR 快速列車約 35 分鐘':'當日安排與注意事項')+
+ f('cost','預估費用（選填）')+
+ (transport?'':'<div class="itinerary-photo-section"><b>景點圖片 <span id="itinerary-photo-count" style="float:right;color:#9aacc0;font-weight:500">0 / 4 張</span></b><div id="itinerary-photo-grid" class="itinerary-photo-grid"></div><label class="itinerary-photo-upload" for="itinerary-photo-file">＋ 上傳景點圖片<input id="itinerary-photo-file" type="file" accept="image/*" multiple data-a="itinerary-photo"></label><p class="itinerary-photo-help">最多 4 張，保留完整構圖並以模糊背景填滿；照片只儲存在目前裝置。</p></div>'+f('photoIntro','景點介紹',true,'介紹景點特色、推薦看點或體驗'))+
+ '<div class="fb"><button type="button" data-a="cx">取消</button><button type="submit" class="pri">'+(adding?'新增':'儲存')+'</button></div></form>';
+ if(!transport)updateItineraryPhotoPreview();
+ dlg.querySelector('form').onsubmit=e=>{
+   e.preventDefault();const fd=new FormData(e.currentTarget);
+   const title=String(fd.get('title')||'').trim();if(!title){dlg.querySelector('[name="title"]')?.focus();return}
+   const candidate={...a,title,time:String(fd.get('time')||'').trim(),desc:String(fd.get('desc')||'').trim(),cost:String(fd.get('cost')||'').trim(),hours:String(fd.get('hours')||'').trim(),kind};
+   if(!transport){candidate.photoIntro=String(fd.get('photoIntro')||'').trim();candidate.photoAlt=title;
+     if(itineraryPhotoChanged){candidate.photos=itineraryPhotoTemp.map(ph=>({...ph,alt:title}));candidate.userPhotos=itineraryPhotoTemp.length>0;if(!itineraryPhotoTemp.length)delete candidate.photos;}
+   }
+   if(adding){candidate.bookingKey=matchBookingKey(days[st.day],candidate);L.push(candidate)}else L[n]=candidate;
+   try{localStorage.setItem('hk26v2_days',JSON.stringify(days))}
+   catch(error){if(adding)L.pop();else L[n]=old;alert('儲存失敗：瀏覽器儲存空間不足。請減少照片數量再試一次。');return}
+   dlg.close();ov.add(candidate.id);save();render();showSavedToast();
+ };
+ dlg.showModal();
+}
 function edit(l,n){const add=n<0;
-if(l==='d'){const L=days[st.day].items,a=add?{id:uid(),time:'',title:'',desc:'',cost:'',hours:'',kind:'觀光',places:[]}:L[n];form(add?'新增行程':'編輯行程',[['time','開始時間（例 09:30）'],['title','行程名稱'],['desc','行程細節','area'],['cost','費用說明'],['hours','營業時間']],a,o=>{if(!o.title)return;Object.assign(a,o);if(add){a.bookingKey=matchBookingKey(days[st.day],a);L.push(a)};ov.add(a.id);save();render();showSavedToast()})}
+if(l==='d'){return editDayItem(n)}
 else if(l==='t'){const a=add?{t:'',c:'預約',done:false,url:''}:todos[n];form(add?'新增待辦':'編輯待辦',[['t','待辦事項'],['c','類別','sel',['預約','訂位','票券','其他']],['url','相關網址（選填，https://）']],a,o=>{if(!o.t)return;if(o.url&&!safeLink(o.url)){alert('網址必須以 https:// 或 http:// 開頭');return}Object.assign(a,o);if(add)todos.unshift(a);save();render();showSavedToast()})}
 else{const a=add?{t:'',done:false}:packs[n];form(add?'新增物品':'編輯物品',[['t','物品名稱']],a,o=>{if(!o.t)return;a.t=o.t;if(add)packs.push(a);ov.add('p');save();render();showSavedToast()})}}
 function move(L,i,d,l){const same=l==='t'?x=>x.done===L[i].done:()=>true;let j=i+d;while(L[j]&&!same(L[j]))j+=d;if(L[j]){const t=L[i];L[i]=L[j];L[j]=t}}
@@ -2200,6 +2316,9 @@ if(a==='drag'||a==='pack-drag'){e.preventDefault();e.stopPropagation();return;}
 if(a==='tab'){st.tab=D.v;if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
 else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
+else if(a==='add-choose')chooseItineraryKind()
+else if(a==='add-kind'){const kind=D.kind;dlg.close();dlg.classList.remove('itinerary-chooser');editDayItem(-1,kind)}
+else if(a==='itinerary-photo-remove'){itineraryPhotoTemp.splice(n,1);itineraryPhotoChanged=true;updateItineraryPhotoPreview()}
 else if(a==='shop-add'){const rect=b.getBoundingClientRect();shopRevealOrigin={x:rect.left+rect.width/2,y:rect.top+rect.height/2};shopEditor(null)}
 else if(a==='shop-edit')shopEditor(D.id)
 else if(a==='shop-zoom'){const p=shopping.find(x=>x.id===D.id);if(p)shopShowImage(p.image,p.name)}
@@ -2217,6 +2336,7 @@ else if(a==='rs'){if(confirm('還原為預設內容？自訂的行程與待辦�
 document.addEventListener('change',e=>{
  const t=e.target;
  if(t.dataset?.a==='shop-photo'&&t.files?.[0])shopReadPhoto(t.files[0]);
+ if(t.dataset?.a==='itinerary-photo'&&t.files?.length)readItineraryPhotos(t.files);
 });
 document.addEventListener('toggle',e=>{
  const k=e.target.dataset&&e.target.dataset.k;
