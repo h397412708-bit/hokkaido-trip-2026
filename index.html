@@ -1752,6 +1752,49 @@ dialog#dlg.home-list-editor .home-date-time-row .home-meal-picker input[type="da
 dialog#dlg.home-list-editor .home-meal-picker:focus-within{outline:2px solid #99adcb;outline-offset:2px}
 @media(max-width:375px){dialog#dlg.home-list-editor .home-date-time-row{gap:8px}dialog#dlg.home-list-editor .home-date-time-row .home-meal-picker{padding:9px 8px}dialog#dlg.home-list-editor .home-meal-picker strong{font-size:12px}}
 
+
+/* 2026-11-20｜行程時間線：時間固定於時間軸左側，整張卡仍可左滑及拖曳。 */
+.tlw{padding-left:78px!important;min-width:0!important;max-width:100%!important}
+.tlw:before{left:65px!important;top:12px!important;bottom:18px!important;background:#cad6e6!important;width:2px!important}
+.tlw>details.row{min-width:0;position:relative!important;margin-bottom:11px}
+.tlw>details.row::before{content:attr(data-clock)!important;position:absolute!important;left:-76px!important;top:15px!important;width:55px!important;height:auto!important;display:block!important;white-space:nowrap!important;text-align:right!important;border:0!important;box-shadow:none!important;background:none!important;border-radius:0!important;color:#58769d!important;font-size:12px!important;font-weight:800!important;line-height:1.4!important;font-variant-numeric:tabular-nums;pointer-events:none}
+.tlw>details.row.mv::before{top:10px!important;color:#8194b0!important;font-size:11px!important;font-weight:700!important;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;width:55px!important;height:auto!important;white-space:nowrap!important}
+.tlw>details.row::after{content:'';position:absolute;left:-18px;top:20px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #8da4c0;box-shadow:0 0 0 3px #edf1f7;pointer-events:none;z-index:2}
+.tlw>details.row.mv::after{width:8px;height:8px;left:-17px;top:15px;border:0;background:#9eb2c9}
+.tlw>details.row.row-drag-before:after,.tlw>details.row.row-drag-after:after{content:'';left:0;right:0;width:auto;height:3px;border:0;border-radius:3px;background:#6185a8;box-shadow:0 0 0 3px rgba(97,133,168,.15);z-index:6}
+.tlw>details.row.row-drag-before:after{top:-7px}.tlw>details.row.row-drag-after:after{top:auto;bottom:-7px}
+.tlw>details.row>summary.swipe-host>.swipe-face{gap:6px!important;align-items:center!important;box-sizing:border-box;min-width:0!important;padding:10px 8px!important}
+.tlw>details.row.mv>summary.swipe-host>.swipe-face{padding:6px 2px!important;min-height:52px!important;gap:5px!important}
+.tlw .row-summary-main{flex:1 1 0!important;min-width:0!important;overflow-wrap:anywhere;gap:5px!important}
+.tlw .row-summary-heading{display:flex;gap:6px;align-items:center;min-width:0;max-width:100%;flex-wrap:wrap}
+.tlw .row-summary-title{font-size:12px;min-width:0;line-height:1.55;overflow-wrap:anywhere}
+.tlw .row.mv .row-summary-title{font-size:11px}
+.tlw .row-summary-duration{line-height:1.45;font-size:10px}
+.tlw .row>summary .bk,.tlw .row>summary .pd{font-size:9px!important;padding:2px 4px!important;min-width:0}
+.tlw .row-summary-main~.bk,.tlw .row-summary-main~.pd{flex-shrink:0!important}
+.tlw .row-spot-thumb{display:block!important;flex:0 0 45px!important;width:45px;height:45px;border-radius:9px;overflow:hidden;background:#e5ecf5;border:1px solid #dce5f0;align-self:center}
+.tlw .row-spot-thumb>img{display:block;width:100%;height:100%;object-fit:cover}
+.tlw .itinerary-web-pin{display:inline-flex;align-items:center;justify-content:center;flex:0 0 23px;min-width:23px;width:23px;height:30px;font-size:16px;line-height:1;text-decoration:none;z-index:3}
+.tlw .itinerary-web-expanded{display:inline-flex;align-items:center;justify-content:center;width:36px;height:34px;margin:6px 0 2px;border:1px solid #d7e3f0;border-radius:9px;background:#eef4fa;text-decoration:none;font-size:16px;line-height:1}
+.tlw .row-summary-main~.row-drag-handle,.tlw .swipe-face .row-drag-handle{width:25px!important;min-width:25px!important;flex:0 0 25px!important;margin:0 -5px 0 -3px!important;padding:3px!important}
+.tlw .row.mv .row-spot-thumb{display:none!important}
+/* 舊規則依 .row time 定位；新行程的時間直接顯示於卡片外，且不受左滑剪裁。 */
+/* iPhone 日期／時間選擇器使用真正原生 input，外框採與餐廳一樣的完整圓框。 */
+dialog#dlg.itinerary-editor{box-sizing:border-box!important;max-width:calc(100vw - 20px)!important;overflow-x:hidden!important}
+dialog#dlg.itinerary-editor .itinerary-edit-v2{box-sizing:border-box;max-width:100%;min-width:0;width:100%;overflow-x:hidden;padding-left:17px;padding-right:17px}
+dialog#dlg.itinerary-editor .itinerary-edit-v2 *,dialog#dlg.itinerary-editor .itinerary-edit-v2 *:before,dialog#dlg.itinerary-editor .itinerary-edit-v2 *:after{box-sizing:border-box}
+.itinerary-edit-v2 .itinerary-form-row{display:grid;grid-template-columns:minmax(0,.41fr) minmax(0,.59fr);gap:9px;min-width:0;max-width:100%;width:100%;align-items:end}
+.itinerary-edit-v2 .itinerary-mode-duration{grid-template-columns:minmax(0,.50fr) minmax(0,.50fr)}
+.itinerary-edit-v2 label{min-width:0!important;width:100%!important;max-width:100%!important;margin-top:11px;display:block!important;overflow:visible}
+.itinerary-edit-v2 input:not([type=file]),.itinerary-edit-v2 select,.itinerary-edit-v2 textarea{box-sizing:border-box!important;min-width:0!important;max-width:100%!important;width:100%!important;margin-top:6px;outline-offset:1px}
+.itinerary-edit-v2 select{display:block;min-height:45px;padding:9px 24px 9px 9px;border:1px solid #dce4ef;border-radius:12px;background:#f7f9fd;color:#354962;font-size:13px;appearance:auto}
+.itinerary-edit-v2 .itinerary-clock-picker{display:flex!important;position:relative;align-items:center;width:100%;max-width:100%;min-width:0;min-height:45px;margin-top:6px;padding:0 8px;border:1px solid #dce4ef;border-radius:12px;background:#f7f9fd;overflow:hidden}
+.itinerary-edit-v2 .itinerary-clock-value{display:block;flex:1;min-width:0;font-size:13px;color:#354962;white-space:nowrap;overflow:hidden;pointer-events:none}
+.itinerary-edit-v2 .itinerary-clock-picker input[type=time]{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;max-width:100%!important;margin:0!important;padding:0!important;opacity:0!important;cursor:pointer!important;z-index:2}
+.itinerary-edit-v2 .itinerary-clock-picker:focus-within{outline:2px solid #a2b8d1;outline-offset:1px}
+.itinerary-edit-v2 textarea[name="cost"]{margin-bottom:0!important;max-width:100%!important;min-height:72px}
+.itinerary-edit-v2 .fb{position:sticky!important;z-index:16;margin-top:12px}
+@media(max-width:360px){.tlw{padding-left:72px!important}.tlw:before{left:59px!important}.tlw>details.row::before{left:-70px!important;width:51px!important;font-size:11px!important}.tlw .row-spot-thumb{flex-basis:38px!important;width:38px;height:38px}.itinerary-edit-v2 .itinerary-form-row{gap:7px;grid-template-columns:minmax(0,.43fr) minmax(0,.57fr)}.itinerary-edit-v2 .itinerary-mode-duration{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -2270,15 +2313,20 @@ const minutesFromPeriod=value=>{
 };
 const originalActivity=(a,d)=>DAYS.find(x=>String(x.d)===String(d.d))?.items.find(x=>x.title===a.title);
 const formatMinutes=n=>n>=60?`${Math.floor(n/60)} 小時${n%60?' '+n%60+' 分鐘':''}`:`${n} 分鐘`;
+const displayStartTime=value=>{
+ const m=String(value||'').match(/(\d{1,2}):(\d{2})/);
+ return m?String(m[1]).padStart(2,'0')+':'+m[2]:'—';
+};
 const durationFor=(a,d)=>{
  const travel=a.kind==='交通';
  const spot=a.kind==='觀光'||a.kind==='購物'||(a.kind==='待確認'&&/參觀|體驗|觀景|展望/.test(a.title));
  if(!travel&&!spot)return '';
+ const explicit=String((travel?a.transportDuration:a.spotDuration)||'').trim();
  const period=minutesFromPeriod(a.time)??minutesFromPeriod(originalActivity(a,d)?.time);
  const found=String(a.desc||'').match(/(?:約\s*)?(\d+(?:\s*[–—~～-]\s*\d+)?\s*(?:小時(?:\s*\d+\s*分(?:鐘)?)?|分鐘|分))(?!\d)/);
- const label=travel?(found?'交通約 '+found[1].replace(/\s+/g,' ').trim():(period?'交通預留 '+formatMinutes(period):'交通時間待確認')):(period?'預計停留 '+formatMinutes(period):'停留時間待確認');
- const icon='';
- return '<small class="row-summary-duration'+(travel?' is-transport':' is-spot')+'">'+icon+'<span class="row-duration-text">'+esc(label)+'</span></small>';
+ const label=travel?(explicit?'交通約 '+explicit:found?'交通約 '+found[1].replace(/\s+/g,' ').trim():period?'交通預留 '+formatMinutes(period):'交通時間待確認'):
+  (explicit?'預留 '+explicit:period?'預計停留 '+formatMinutes(period):'停留時間待確認');
+ return '<small class="row-summary-duration'+(travel?' is-transport':' is-spot')+'"><span class="row-duration-text">'+esc(label)+'</span></small>';
 };
 // 交通工具分類：既有行程依標題及描述推測，新增／編輯則以使用者選擇為準。
 const TRANSPORT_MODE_CLASSES={'步行':'walk','JR':'jr','地鐵':'subway','巴士':'bus','計程車':'taxi','飛機':'flight','其他':'other'};
@@ -2309,11 +2357,31 @@ const transportDetails=(a,cost)=>{
  const price=String(cost||'').trim()||'費用待確認';
  return '<section class="transport-details"><b>交通方式</b><p>'+esc(method)+'</p>'+(String(a.hours||'').trim()?'<b>時刻／備註</b><p>'+esc(String(a.hours).trim())+'</p>':'')+'<b>預估費用</b><p>'+esc(price)+'</p></section>';
 };
-const row=(a,i,d)=>{const mv=a.kind==='交通',status=bookingStatus(a),desc=bookedText(a,status);
-const title=status.booked&&a.bookingKey==='snow'?a.title.replace('（待訂）',''):a.title;
-const cost=status.booked&&a.bookingKey==='snow'?String(a.cost||'').replace('尚未預訂','依已訂方案'):a.cost;
-const media=spotMedia(a);const bd=[!mv&&desc&&'<p>'+esc(desc)+'</p>',!mv&&cost&&'<p class="c">💴 '+esc(cost)+'</p>',!mv&&a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',mv?transportDetails(a,cost):a.kind==='觀光'&&timeSpan(a)?'<div class="stay-duration">'+esc(timeSpan(a))+'</div>':'',media?'<section class="spot-card">'+((media.photos&&media.photos.length)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide'+(ph.mode==='blur'?' blur-bg':ph.mode==='composed'?' composed-photo':'')+'">'+(ph.mode==='blur'&&ph.src?'<span class="spot-carousel-blur" style="background-image:url('+esc(ph.src)+')"></span>':'')+'<img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div>'+(media.photos.length>1?'<span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div>':'')+'</div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p></div></section>':'',links(a.places)].filter(Boolean).join('');
-return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
+const row=(a,i,d)=>{
+ const mv=a.kind==='交通',status=bookingStatus(a),desc=bookedText(a,status);
+ const title=status.booked&&a.bookingKey==='snow'?a.title.replace('（待訂）',''):a.title;
+ const cost=status.booked&&a.bookingKey==='snow'?String(a.cost||'').replace('尚未預訂','依已訂方案'):a.cost;
+ const media=spotMedia(a),webUrl=safeLink(String(a.webUrl||'')),clock=displayStartTime(a.time);
+ const photoFirst=!mv&&media?(media.photos?.[0]?.src||media.src||''):'';
+ const summaryPhoto=photoFirst?'<span class="row-spot-thumb" aria-hidden="true"><img src="'+esc(photoFirst)+'" alt="" loading="lazy"></span>':'';
+ const summaryWeb=webUrl?'<a class="itinerary-web-pin" data-itinerary-web href="'+esc(webUrl)+'" target="_blank" rel="noopener noreferrer" title="開啟景點連結" aria-label="開啟景點連結">📍</a>':'';
+ const expandedWeb=webUrl?'<a class="itinerary-web-expanded" data-itinerary-web href="'+esc(webUrl)+'" target="_blank" rel="noopener noreferrer" aria-label="開啟景點連結">📍</a>':'';
+ const durationDetail=!mv?(a.spotDuration?'預留停留約 '+String(a.spotDuration).trim():a.kind==='觀光'?timeSpan(a):''):'';
+ const bd=[
+  !mv&&desc&&'<p>'+esc(desc)+'</p>',
+  !mv&&cost&&'<p class="c">💴 '+esc(cost)+'</p>',
+  !mv&&a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',
+  mv?transportDetails(a,cost):durationDetail?'<div class="stay-duration">'+esc(durationDetail)+'</div>':'',
+  media?'<section class="spot-card">'+((media.photos&&media.photos.length)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide'+(ph.mode==='blur'?' blur-bg':ph.mode==='composed'?' composed-photo':'')+'">'+(ph.mode==='blur'&&ph.src?'<span class="spot-carousel-blur" style="background-image:url('+esc(ph.src)+')"></span>':'')+'<img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div>'+(media.photos.length>1?'<span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div>':'')+'</div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p></div></section>':'',
+  expandedWeb,
+  links(a.places)
+ ].filter(Boolean).join('');
+ return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'" data-clock="'+esc(clock)+'"'+(ov.has(a.id)?' open':'')+'><summary aria-label="'+esc(clock+' '+title)+'"><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+summaryPhoto+summaryWeb+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>';
+};
+// Clicking the 📍 link never expands/collapses the itinerary summary.
+app.addEventListener('click',e=>{if(e.target.closest?.('[data-itinerary-web]'))e.stopPropagation();},true);
+// 遠端照片無法載入時隱藏縮圖，避免折疊卡片出現沒有內容的色塊。
+app.addEventListener('error',e=>{const img=e.target;if(img?.matches?.('.row-spot-thumb img'))img.parentElement?.style.setProperty('display','none','important');},true);
 
 
 app.addEventListener('scroll',e=>{const track=e.target.closest?.('.spot-carousel-track');if(!track)return;const box=track.closest('.spot-carousel');const slides=[...track.children];const i=Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/(track.clientWidth||1))));const count=box.querySelector('.spot-carousel-count');if(count)count.textContent=(i+1)+'/'+slides.length;box.querySelectorAll('.spot-carousel-dot').forEach((d,j)=>d.classList.toggle('active',j===i));},{capture:true,passive:true});
@@ -3140,31 +3208,41 @@ function editDayItem(n,selectedKind){
  itineraryPhotoTemp=Array.isArray(a.photos)&&a.userPhotos?a.photos.map(ph=>({...ph})):[];
  itineraryPhotoChanged=false;
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-chooser');dlg.classList.add('itinerary-editor');
- const f=(key,label,area=false,placeholder='')=>'<label>'+label+(area?'<textarea name="'+key+'" rows="3" placeholder="'+esc(placeholder)+'">'+esc(a[key]||'')+'</textarea>':'<input name="'+key+'" placeholder="'+esc(placeholder)+'" value="'+esc(a[key]||'')+'">')+'</label>';
- dlg.innerHTML='<form class="itinerary-edit-form'+(transport?' transport-form':'')+'" id="itinerary-edit-form"><h3>'+(adding?(transport?'添加交通':'添加行程'):(transport?'編輯交通':'編輯行程'))+'</h3><p class="form-sub">12/'+esc(days[st.day].d)+' · '+(transport?'交通資訊':'景點與活動資訊')+'</p>'+
- '<div class="edit-fields-stacked">'+f('time',transport?'開始時間':'時間（可填時段）','', transport?'例：09:30':'例：09:30–11:00')+f('hours',transport?'時刻／備註（選填）':'營業時間（選填）')+'</div>'+
- (transport?'<label class="transport-mode-field">交通工具<select name="transportMode" required>'+
- '<option value="" disabled'+(adding?' selected':'')+'>請選擇交通工具</option>'+
- TRANSPORT_MODE_NAMES.map(mode=>'<option value="'+mode+'"'+(!adding&&transportModeFor(a)===mode?' selected':'')+'>'+mode+'</option>').join('')+
- '</select></label><p class="transport-mode-hint">選擇後會在交通卡片上顯示對應的彩色分類。</p>':'')+
- f('title',transport?'交通名稱 *':'行程名稱 *','',transport?'例如：JR 札幌 → 小樽':'例如：小樽運河散步')+
- '<label class="booking-status-label">訂位狀態（選填）<select name="bookingStatus" aria-label="訂位狀態（選填）">'+
- '<option value=""'+(!a.booked&&!a.pending?' selected':'')+'>不設定（不顯示）</option>'+
- '<option value="pending"'+(!a.booked&&a.pending?' selected':'')+'>待確認</option>'+
- '<option value="booked"'+(a.booked?' selected':'')+'>已訂</option></select></label>'+
- '<p class="booking-status-help">不選擇就不會在行程卡片上顯示狀態；和待辦勾選互不影響。</p>'+
- f('desc',transport?'交通方式／行程細節':'行程細節',true,transport?'例如：搭 JR 快速列車約 35 分鐘':'當日安排與注意事項')+
- f('cost','預估費用（選填）',true,'例：約 ¥1,200／人；計程車按車資計算')+
- (transport?'':'<div class="itinerary-photo-section"><b>景點圖片 <span id="itinerary-photo-count" style="float:right;color:#9aacc0;font-weight:500">0 / 4 張</span></b><div id="itinerary-photo-grid" class="itinerary-photo-grid"></div><label class="itinerary-photo-upload" for="itinerary-photo-file">＋ 上傳景點圖片<input id="itinerary-photo-file" type="file" accept="image/*" multiple data-a="itinerary-photo"></label><p class="itinerary-photo-help">最多 4 張，保留完整構圖並以模糊背景填滿；照片只儲存在目前裝置。</p></div>'+f('photoIntro','景點介紹',true,'介紹景點特色、推薦看點或體驗'))+
+ const f=(key,label,area=false,placeholder='')=>'<label class="itinerary-edit-field">'+label+(area?'<textarea name="'+key+'" rows="3" placeholder="'+esc(placeholder)+'">'+esc(a[key]||'')+'</textarea>':'<input name="'+key+'" placeholder="'+esc(placeholder)+'" value="'+esc(a[key]||'')+'">')+'</label>';
+ const booking='<label class="booking-status-label">訂位狀態（選填）<select name="bookingStatus" aria-label="訂位狀態（選填)">'+
+  '<option value=""'+(!a.booked&&!a.pending?' selected':'')+'>不設定</option>'+
+  '<option value="pending"'+(!a.booked&&a.pending?' selected':'')+'>待確認</option>'+
+  '<option value="booked"'+(a.booked?' selected':'')+'>已訂</option></select></label>';
+ // Use the same native time picker behavior as the dining form, with an unclipped full-width rounded container.
+ const timeValue=displayStartTime(a.time)==='—'?'':displayStartTime(a.time);
+ const clockField='<label class="itinerary-edit-field itinerary-clock-field">'+(transport?'開始時間':'時間')+'<span class="itinerary-clock-picker"><span class="itinerary-clock-value">'+esc(timeValue||'選擇時間')+'</span><input name="time" type="time" aria-label="'+(transport?'開始時間':'時間')+'" value="'+esc(timeValue)+'"></span></label>';
+ const titleField=f('title',transport?'交通名稱 *':'行程名稱 *',false,transport?'例如：JR 札幌 → 小樽':'例如：小樽運河散步');
+ const firstRow='<div class="itinerary-form-row itinerary-time-title">'+clockField+titleField+'</div>';
+ const modeField='<label class="itinerary-edit-field">交通工具<select name="transportMode" required>'+TRANSPORT_MODE_NAMES.map(mode=>'<option value="'+mode+'"'+(!adding&&transportModeFor(a)===mode?' selected':'')+'>'+mode+'</option>').join('')+'</select></label>';
+ const transportLength=f('transportDuration','交通時間（選填）',false,'例如：35 分鐘');
+ const spotLength=f('spotDuration','預留時間（選填）',false,'例如：90 分鐘');
+ const secondRow='<div class="itinerary-form-row itinerary-mode-duration">'+(transport?modeField+transportLength:spotLength+booking)+'</div>';
+ const topFields=transport?
+    firstRow+secondRow+f('hours','時刻／備註（選填）')+booking+f('desc','行程細節',true,'例如：乘車地點、轉車及搭乘資訊')+f('cost','預估費用（選填）',true,'例：約 ¥1,200／人'):
+    firstRow+secondRow+f('desc','行程細節',true,'當日安排與注意事項')+f('hours','營業時間（選填）')+f('cost','預估費用（選填）',true,'例如：纜車票 ¥1,800');
+ dlg.innerHTML='<form class="itinerary-edit-form itinerary-edit-v2'+(transport?' transport-form':' scenic-form')+'" id="itinerary-edit-form"><h3>'+(adding?(transport?'添加交通':'添加行程'):(transport?'編輯交通':'編輯行程'))+'</h3><p class="form-sub">12/'+esc(days[st.day].d)+' · '+(transport?'交通資訊':'景點與活動資訊')+'</p>'+topFields+
+ (transport?'':'<div class="itinerary-photo-section"><b>景點照片 <span id="itinerary-photo-count" style="float:right;color:#9aacc0;font-weight:500">0 / 4 張</span></b><div id="itinerary-photo-grid" class="itinerary-photo-grid"></div><label class="itinerary-photo-upload" for="itinerary-photo-file">＋ 上傳景點照片<input id="itinerary-photo-file" type="file" accept="image/*" multiple data-a="itinerary-photo"></label><p class="itinerary-photo-help">最多 4 張，上傳的照片僅儲存在目前裝置。</p></div>'+f('photoIntro','景點介紹',true,'介紹景點特色、推薦看點或體驗')+f('webUrl','網頁連結（選填）',false,'https://...'))+
  '<div class="fb"><button type="button" data-a="cx">取消</button><button type="submit" class="pri">'+(adding?'新增':'儲存')+'</button></div></form>';
  if(!transport)updateItineraryPhotoPreview();
+ const clockInput=dlg.querySelector('input[name="time"]');
+ const syncClock=()=>{const node=dlg.querySelector('.itinerary-clock-value');if(node)node.textContent=clockInput.value||'選擇時間';};
+ clockInput?.addEventListener('input',syncClock);clockInput?.addEventListener('change',syncClock);
  dlg.querySelector('form').onsubmit=e=>{
    e.preventDefault();const fd=new FormData(e.currentTarget);
    const title=String(fd.get('title')||'').trim();if(!title){dlg.querySelector('[name="title"]')?.focus();return}
    const choice=String(fd.get('bookingStatus')||'');
-   const candidate={...a,title,time:String(fd.get('time')||'').trim(),desc:String(fd.get('desc')||'').trim(),cost:String(fd.get('cost')||'').trim(),hours:String(fd.get('hours')||'').trim(),kind,booked:choice==='booked',pending:choice==='pending'};
-   if(transport)candidate.transportMode=TRANSPORT_MODE_NAMES.includes(String(fd.get('transportMode')||''))?String(fd.get('transportMode')):'其他';
-   if(!transport){candidate.photoIntro=String(fd.get('photoIntro')||'').trim();candidate.photoAlt=title;
+   const newTime=String(fd.get('time')||'').trim();
+   // Preserve an old '09:30–11:00' range unless the user actually changes its starting clock.
+   const storedTime=!adding&&newTime===displayStartTime(a.time)?a.time:newTime;
+   const candidate={...a,title,time:storedTime,desc:String(fd.get('desc')||'').trim(),cost:String(fd.get('cost')||'').trim(),hours:String(fd.get('hours')||'').trim(),kind,booked:choice==='booked',pending:choice==='pending'};
+   if(transport){candidate.transportMode=TRANSPORT_MODE_NAMES.includes(String(fd.get('transportMode')||''))?String(fd.get('transportMode')):'其他';candidate.transportDuration=String(fd.get('transportDuration')||'').trim();}
+   if(!transport){candidate.spotDuration=String(fd.get('spotDuration')||'').trim();candidate.photoIntro=String(fd.get('photoIntro')||'').trim();candidate.photoAlt=title;
+     const url=String(fd.get('webUrl')||'').trim();if(url&&!safeLink(url)){alert('網頁連結請輸入 http:// 或 https:// 網址');return;}candidate.webUrl=url;
      if(itineraryPhotoChanged){candidate.photos=itineraryPhotoTemp.map(ph=>({...ph,alt:title}));candidate.userPhotos=itineraryPhotoTemp.length>0;if(!itineraryPhotoTemp.length)delete candidate.photos;}
    }
    if(adding){candidate.bookingKey=matchBookingKey(days[st.day],candidate);L.push(candidate)}else L[n]=candidate;
