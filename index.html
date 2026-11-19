@@ -1885,6 +1885,51 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 *,dialog#dlg.itinerary-editor .it
  .tlw>details.row>summary .row-inline-clock{padding-top:3px!important}
  .tlw>details.row.mv>summary .row-inline-clock{padding-top:4px!important}
 }
+
+/* 2026-11-20｜時間位置優化：景點／交通時間與名稱共用首行基線，左側增加留白。 */
+.tlw>details.row>summary.swipe-host>.swipe-face,
+.tlw>details.row.mv>summary.swipe-host>.swipe-face{
+  box-sizing:border-box!important;min-width:0!important;
+  align-items:flex-start!important;
+  padding:11px 11px 11px 13px!important;
+  gap:7px!important;
+}
+.tlw>details.row.mv>summary.swipe-host>.swipe-face{
+  padding-top:9px!important;padding-bottom:9px!important;
+}
+.tlw>details.row>summary .row-inline-clock{
+  flex:0 0 43px!important;min-width:43px!important;
+  align-self:flex-start!important;margin:0!important;padding:0!important;
+  font-size:12px!important;line-height:1.55!important;
+  font-weight:800!important;white-space:nowrap!important;
+  font-variant-numeric:tabular-nums;
+}
+.tlw>details.row.mv>summary .row-inline-clock{
+  font-size:11px!important;line-height:1.55!important;font-weight:700!important;
+}
+.tlw>details.row>summary .row-summary-main{align-self:flex-start!important;min-width:0!important}
+.tlw>details.row>summary .row-summary-title{line-height:1.55!important}
+/* 交通時間線的小圓點再縮小；維持與線條同軸心。 */
+.tlw>details.row.mv::before{
+  width:6px!important;height:6px!important;left:-21px!important;top:18px!important;
+  border:0!important;box-shadow:0 0 0 2px #edf1f7!important;
+  background:#9eb2c9!important;
+}
+@media(max-width:360px){
+  .tlw>details.row>summary.swipe-host>.swipe-face,
+  .tlw>details.row.mv>summary.swipe-host>.swipe-face{
+    padding-left:10px!important;padding-right:7px!important;gap:5px!important;
+  }
+  .tlw>details.row>summary .row-inline-clock{flex-basis:40px!important;min-width:40px!important;font-size:11px!important}
+  .tlw>details.row.mv>summary .row-inline-clock{font-size:10.5px!important}
+  .tlw>details.row.mv::before{left:-19px!important;top:17px!important}
+}
+/* 交通內容框與景點框相差 1px 邊界：補齊時間欄左右對齊，時間文字與名稱基線齊平。 */
+.tlw>details.row.mv>summary.swipe-host>.swipe-face{padding-left:14px!important}
+.tlw>details.row.mv>summary .row-inline-clock{padding-top:2px!important}
+@media(max-width:360px){
+ .tlw>details.row.mv>summary.swipe-host>.swipe-face{padding-left:11px!important}
+}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -2459,16 +2504,42 @@ const itinerarySpotHref=a=>{
  const raw=candidate.url||(candidate.q?(OVR[candidate.q]||(candidate.search?SEARCH(candidate.q):MAP(candidate.q,candidate.mode))):'');
  return safeLink(String(raw||''))||'';
 };
+// iPhone / iPad 安裝至主畫面的旅誌：讓地標直接交由 Google Maps App 處理。
+// 不建立 window.open / _blank / _top 的內建網頁，避免返回旅誌時出現白色分頁。
+const itineraryMapsDirectHref=(url,item)=>{
+ const source=safeLink(url||'');
+ if(!source)return '';
+ const ios=/iPad|iPhone|iPod/i.test(navigator.userAgent)||
+   (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ if(!ios)return source; // 非 iOS 保留原網址，在同一視窗導覽。
+ try{
+  const u=new URL(source);
+  const host=u.hostname.toLowerCase();
+  // Google 官方支援將 maps.google.com 或 google.com/maps 的原網址
+  // 以 comgooglemapsurl:// 開啟，保留原位置座標與地點資訊。
+  if((/^(?:www\.)?google\.[a-z.]+$/.test(host)&&u.pathname.startsWith('/maps/'))||
+      /^maps\.google\.[a-z.]+$/.test(host)||
+      (host==='goo.gl'&&u.pathname.startsWith('/maps/'))){
+   return 'comgooglemapsurl://'+u.host+u.pathname+u.search+u.hash;
+  }
+  // maps.app.goo.gl 短網址無法直接轉換成官方 URL scheme，改用景點名稱搜尋。
+  // 若已有精確搜尋名稱，優先使用原景點的 place query。
+  const place=Array.isArray(item.places)?item.places.find(p=>p?.q):null;
+  const q=(u.searchParams.get('query')||u.searchParams.get('q')||
+   place?.q||item.title||'').trim();
+  return 'comgooglemaps://?q='+encodeURIComponent(q+' 北海道 日本');
+ }catch{return 'comgooglemaps://?q='+encodeURIComponent((item.title||'')+' 北海道 日本');}
+};
 const row=(a,i,d)=>{
  const mv=a.kind==='交通',status=bookingStatus(a),desc=bookedText(a,status);
  const title=status.booked&&a.bookingKey==='snow'?a.title.replace('（待訂）',''):a.title;
  const cost=status.booked&&a.bookingKey==='snow'?String(a.cost||'').replace('尚未預訂','依已訂方案'):a.cost;
- const media=!mv?spotMedia(a):null,webUrl=!mv?itinerarySpotHref(a):'',clock=displayStartTime(a.time);
+ const media=!mv?spotMedia(a):null,webUrl=!mv?itinerarySpotHref(a):'',mapOpenUrl=webUrl?itineraryMapsDirectHref(webUrl,a):'',clock=displayStartTime(a.time);
  const photoFirst=!mv&&media?(media.photos?.[0]?.src||media.src||''):'';
  const summaryPhoto=photoFirst?'<span class="row-spot-thumb" aria-hidden="true"><img src="'+esc(photoFirst)+'" alt="" loading="lazy"></span>':'';
  const pinIcon=iconSvg('pin');
- const summaryWeb=webUrl?'<a class="itinerary-web-pin" data-itinerary-web href="'+esc(webUrl)+'" target="_top" title="在 Google Maps 開啟" aria-label="在 Google Maps 開啟">'+pinIcon+'</a>':'';
- const expandedWeb=webUrl?'<a class="itinerary-web-expanded" data-itinerary-web href="'+esc(webUrl)+'" target="_top" aria-label="在 Google Maps 開啟">'+pinIcon+'<span>Google Maps</span></a>':'';
+ const summaryWeb=mapOpenUrl?'<a class="itinerary-web-pin" data-itinerary-web href="'+esc(mapOpenUrl)+'" title="在 Google Maps 開啟" aria-label="在 Google Maps 開啟">'+pinIcon+'</a>':'';
+ const expandedWeb=mapOpenUrl?'<a class="itinerary-web-expanded" data-itinerary-web href="'+esc(mapOpenUrl)+'" aria-label="在 Google Maps 開啟">'+pinIcon+'<span>Google Maps</span></a>':'';
  
  const durationDetail=!mv?(a.spotDuration?'預留停留約 '+String(a.spotDuration).trim():a.kind==='觀光'?timeSpan(a):''):'';
  const bd=[
@@ -2483,15 +2554,12 @@ const row=(a,i,d)=>{
  ].filter(Boolean).join('');
  return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'" data-clock="'+esc(clock)+'"'+(ov.has(a.id)?' open':'')+'><summary aria-label="'+esc(clock+' '+title)+'"><time class="row-inline-clock">'+esc(clock)+'</time><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+summaryPhoto+summaryWeb+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>';
 };
-// 景點地標統一使用頂層 Google Maps Universal Link，避免 iOS 主畫面 PWA
-// 先開一個空白內建網頁、跳到地圖 App 後又留下白頁，返回旅誌時還要手動關閉。
-// 兩種顯示位置（收合摘要、展開介紹）都不建立新分頁，並且不觸發 details 收合。
+// 地標使用真正的 <a href="comgooglemaps://…"> 原生導覽，不阻止連結預設動作。
+// 收合 summary 仍攔截事件向上傳遞，避免點擊地標把卡片打開。
 app.addEventListener('click',e=>{
  const link=e.target.closest?.('[data-itinerary-web]');
  if(!link)return;
- e.preventDefault();
  e.stopPropagation();
- window.open(link.href,'_top');
 },true);
 // 遠端照片無法載入時隱藏縮圖，避免折疊卡片出現沒有內容的色塊。
 app.addEventListener('error',e=>{const img=e.target;if(img?.matches?.('.row-spot-thumb img'))img.parentElement?.style.setProperty('display','none','important');},true);
