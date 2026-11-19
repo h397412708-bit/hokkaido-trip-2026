@@ -1678,6 +1678,54 @@ dialog#dlg.home-list-editor .home-edit-field input[type="date"],dialog#dlg.home-
 dialog#dlg.home-list-editor .home-edit-field textarea{resize:vertical;min-height:83px}
 dialog#dlg.home-list-editor .home-nights-result{margin:8px 0 12px;padding:11px 12px;border-radius:12px;background:#edf3fa;color:#617992;font-size:12px}
 dialog#dlg.home-list-editor .home-nights-result strong{color:#334e71}
+
+/* 住宿日期範圍與餐廳日期／時間｜固定在面板寬度內，不造成水平捲動。 */
+dialog#dlg.home-list-editor{max-width:min(100vw,640px)!important;width:min(100vw,640px)!important;box-sizing:border-box;overflow-x:hidden!important;}
+dialog#dlg.home-list-editor form.home-edit-form{box-sizing:border-box;max-width:100%;width:100%;min-width:0;overflow-x:clip;padding:6px 20px 15px;}
+dialog#dlg.home-list-editor form.home-edit-form > *{max-width:100%;min-width:0;}
+dialog#dlg.home-list-editor .home-edit-field{box-sizing:border-box;min-width:0;max-width:100%;}
+dialog#dlg.home-list-editor .home-edit-field input,dialog#dlg.home-list-editor .home-edit-field textarea{min-width:0;max-width:100%;box-sizing:border-box;}
+dialog#dlg.home-list-editor .home-date-time-row{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);column-gap:10px;max-width:100%;min-width:0;width:100%;box-sizing:border-box;}
+dialog#dlg.home-list-editor .home-date-time-row .home-edit-field{margin:0 0 12px;min-width:0;width:100%;overflow:hidden;}
+dialog#dlg.home-list-editor .home-date-time-row input[type="date"],dialog#dlg.home-list-editor .home-date-time-row input[type="time"]{display:block;width:100%;min-width:0;max-width:100%;padding:10px 6px!important;font-size:14px!important;white-space:nowrap;text-overflow:clip;border-radius:12px;}
+dialog#dlg.home-list-editor .home-date-time-row input::-webkit-date-and-time-value{text-align:left;min-width:0;}
+dialog#dlg.home-list-editor .home-stay-date-field{margin-bottom:12px;}
+dialog#dlg.home-list-editor .home-date-label{display:block;line-height:1.5;margin-bottom:6px;}
+dialog#dlg.home-list-editor .home-range-trigger{appearance:none;-webkit-appearance:none;display:flex;align-items:center;gap:6px;box-sizing:border-box;min-width:0;max-width:100%;width:100%;padding:8px 10px;min-height:58px;border:1px solid #dce4f0;border-radius:12px;background:#f9fbff;color:#334962;text-align:left;box-shadow:none;}
+dialog#dlg.home-list-editor .home-range-trigger:focus-visible{outline:2px solid #93adcf;outline-offset:2px;}
+dialog#dlg.home-list-editor .home-range-half{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:2px;}
+dialog#dlg.home-list-editor .home-range-half small{font-weight:650;font-size:10px;line-height:1.45;color:#8293ac;}
+dialog#dlg.home-list-editor .home-range-half strong{font-size:clamp(10px,3.15vw,13px);font-weight:750;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+dialog#dlg.home-list-editor .home-range-arrow{color:#94a5bc;flex:0 0 14px;text-align:center;}
+dialog#dlg.home-list-editor .home-range-icon{width:18px;height:18px;flex:0 0 18px;fill:none;stroke:#7890b0;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+dialog#dlg.home-list-editor .home-calendar-overlay[hidden]{display:none!important;}
+dialog#dlg.home-list-editor .home-calendar-overlay{position:fixed;inset:0;z-index:130;display:flex;align-items:center;justify-content:center;padding:9px;background:rgba(23,36,56,.32);box-sizing:border-box;}
+dialog#dlg.home-list-editor .home-calendar-popup{box-sizing:border-box;display:flex;flex-direction:column;gap:10px;width:min(100%,410px);max-width:100%;max-height:min(78svh,610px);overflow-y:auto;overflow-x:hidden;border:1px solid #e4eaf3;border-radius:22px;background:#fff;box-shadow:0 16px 50px rgba(38,53,77,.18);padding:18px 14px 14px;}
+dialog#dlg.home-list-editor .home-calendar-header{display:flex;align-items:start;justify-content:space-between;gap:10px;}
+dialog#dlg.home-list-editor .home-calendar-header b{display:block;font-size:16px;color:#25364e;}
+dialog#dlg.home-list-editor .home-calendar-subtitle{display:block;font-size:11px;color:#7e90ac;font-weight:500;}
+dialog#dlg.home-list-editor .home-calendar-dismiss{display:grid;place-items:center;width:31px;height:31px;border:0;border-radius:50%;background:#f0f3f8;color:#77849b;flex:0 0 31px;font-size:15px;}
+dialog#dlg.home-list-editor .home-calendar-month{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:1px;}
+dialog#dlg.home-list-editor .home-calendar-month strong{font-size:18px;letter-spacing:.04em;color:#27374f;font-weight:780;}
+dialog#dlg.home-list-editor .home-calendar-month button{width:36px;height:36px;min-width:36px;display:grid;place-items:center;border:0;border-radius:11px;background:#f0f4fa;color:#4d6994;font-size:29px;line-height:1;}
+dialog#dlg.home-list-editor .home-calendar-weekdays,dialog#dlg.home-list-editor .home-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));width:100%;min-width:0;}
+dialog#dlg.home-list-editor .home-calendar-weekdays span{text-align:center;padding:4px 0;color:#9aabc1;font-size:11px;}
+dialog#dlg.home-list-editor .home-calendar-grid{row-gap:5px;}
+dialog#dlg.home-list-editor .home-calendar-day,dialog#dlg.home-list-editor .home-calendar-empty{display:grid;place-items:center;width:100%;min-width:0;height:41px;box-sizing:border-box;}
+dialog#dlg.home-list-editor .home-calendar-day{border:0;border-radius:10px;background:transparent;color:#273a52;font-size:15px;font-weight:650;padding:0;}
+dialog#dlg.home-list-editor .home-calendar-day:nth-child(7n),dialog#dlg.home-list-editor .home-calendar-day:nth-child(7n+1){color:#4165af;}
+dialog#dlg.home-list-editor .home-calendar-day.is-middle{border-radius:0;background:#e7efff;color:#273a52;}
+dialog#dlg.home-list-editor .home-calendar-day.is-start,dialog#dlg.home-list-editor .home-calendar-day.is-end{border-radius:10px;background:#3564ee;color:#fff!important;}
+dialog#dlg.home-list-editor .home-calendar-day:focus-visible{outline:2px solid #7297f2;outline-offset:1px;}
+dialog#dlg.home-list-editor .home-calendar-selection{min-height:34px;padding:9px 10px;border-radius:11px;background:#eff4fc;color:#537195;font-size:11px;line-height:1.6;text-align:center;}
+dialog#dlg.home-list-editor .home-calendar-footer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px;padding-top:2px;}
+dialog#dlg.home-list-editor .home-calendar-footer button{min-height:43px;border-radius:12px;border:1px solid #dce4ef;background:#f5f7fb;color:#5d708d;font-size:13px;font-weight:750;}
+dialog#dlg.home-list-editor .home-calendar-footer .home-calendar-confirm{background:#547bab;border-color:#547bab;color:white;}
+dialog#dlg.home-list-editor .home-calendar-footer .home-calendar-confirm:disabled{opacity:.45;cursor:not-allowed;}
+/* 左滑按鈕顏色與行李清單完全一致。 */
+.overview-h .swipe-actions>button[data-a="home-edit"],.overview-r .swipe-actions>button[data-a="home-edit"]{background:#8396af!important;color:#fff!important;}
+.overview-h .swipe-actions>button[data-a="home-remove"],.overview-r .swipe-actions>button[data-a="home-remove"]{background:#ce6975!important;color:#fff!important;}
+@media(max-width:350px){dialog#dlg.home-list-editor form.home-edit-form{padding-left:13px;padding-right:13px;}dialog#dlg.home-list-editor .home-date-time-row{gap:7px;}dialog#dlg.home-list-editor .home-date-time-row input{font-size:13px!important;}}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -2873,41 +2921,119 @@ function form(title,fs,v,cb){dlg.innerHTML='<form><h3>'+title+'</h3>'+fs.map(f=>
 
 
 // 住宿與已訂餐廳：共用行李清單相同的底部新增／編輯面板與取消動畫。
+// 住宿日期範圍採單一日曆：選入住日，再選退房日，醒目顯示日期區間。
 function editHomeList(kind,index){
  const list=kind==='stays'?stays:dining,adding=index<0;
  const current=adding?(kind==='stays'?{name:'',checkin:'',checkout:'',address:'',note:'',mapUrl:''}:{name:'',date:'',time:'',note:'',mapUrl:''}):list[index];
  if(!current)return;
- const inputs=kind==='stays'?[['name','飯店名稱','text',true],['checkin','入住日期','date',true],['checkout','退房日期','date',true],['address','飯店地址','text',false],['note','備註','textarea',false],['mapUrl','地址連結（Google Maps）','url',false]]:
- [['name','餐廳名稱','text',true],['date','訂位日期','date',true],['time','訂位時間','time',true],['note','備註','textarea',false],['mapUrl','地址連結（Google Maps）','url',false]];
+ const isStay=kind==='stays';
+ const baseFields=isStay?[['name','飯店名稱','text',true],['address','飯店地址','text',false],['note','備註','textarea',false],['mapUrl','地址連結（Google Maps）','url',false]]:
+  [['name','餐廳名稱','text',true],['note','備註','textarea',false],['mapUrl','地址連結（Google Maps）','url',false]];
  const inputRow=([field,label,type,required])=>'<label class="home-edit-field">'+esc(label)+(type==='textarea'
   ?'<textarea name="'+field+'" rows="3" placeholder="可填寫補充資訊">'+esc(current[field]||'')+'</textarea>'
   :'<input name="'+field+'" type="'+type+'" value="'+esc(current[field]||'')+'" '+(required?'required ':'')+(type==='url'?'placeholder="https://maps.app.goo.gl/…"':'')+'>')+'</label>';
+ const stayRange='<div class="home-edit-field home-stay-date-field"><span class="home-date-label">入住日期・退房日期</span>'+
+  '<button type="button" class="home-range-trigger" id="home-range-trigger" aria-haspopup="dialog" aria-controls="home-range-calendar" aria-label="選擇入住與退房日期範圍">'+
+  '<span class="home-range-half"><small>入住日期</small><strong id="home-start-label">選擇日期</strong></span><span class="home-range-arrow" aria-hidden="true">→</span>'+
+  '<span class="home-range-half"><small>退房日期</small><strong id="home-end-label">選擇日期</strong></span><svg class="home-range-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M7.5 3v4M16.5 3v4M3 10h18"/></svg></button>'+
+  '<input type="hidden" name="checkin" value="'+esc(current.checkin||'')+'"><input type="hidden" name="checkout" value="'+esc(current.checkout||'')+'"></div>';
+ const mealDateRow='<div class="home-date-time-row">'+
+  '<label class="home-edit-field home-meal-date">訂位日期<input name="date" type="date" required value="'+esc(current.date||'')+'"></label>'+
+  '<label class="home-edit-field home-meal-time">訂位時間<input name="time" type="time" required value="'+esc(current.time||'')+'"></label></div>';
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-editor','itinerary-chooser');
  dlg.classList.add('home-list-editor');
- dlg.innerHTML='<form class="home-edit-form"><h3>'+(adding?'新增':'編輯')+(kind==='stays'?'住宿':'餐廳')+'</h3>'+
- '<p class="home-edit-hint">'+(kind==='stays'?'點選日期會開啟日曆，入住與退房日期會自動計算住宿晚數。':'點選日期選擇訂位日，再設定用餐時間。')+'</p>'+
- inputs.map(inputRow).join('')+
- (kind==='stays'?'<div class="home-nights-result" aria-live="polite">住宿晚數：<strong id="home-nights">—</strong></div>':'')+
- '<div class="fb"><button type="button" data-a="cx">取消</button><button type="submit" class="pri">儲存</button></div></form>';
+ dlg.innerHTML='<form class="home-edit-form"><h3>'+(adding?'新增':'編輯')+(isStay?'住宿':'餐廳')+'</h3>'+
+ '<p class="home-edit-hint">'+(isStay?'點選下方日期區間，在同一個月曆中選擇入住及退房日期。':'請選擇訂位日期、時間，並填寫餐廳資料。')+'</p>'+
+ inputRow(baseFields[0])+(isStay?stayRange:mealDateRow)+baseFields.slice(1).map(inputRow).join('')+
+ (isStay?'<div class="home-nights-result" aria-live="polite">住宿晚數：<strong id="home-nights">—</strong></div>':'')+
+ '<div class="fb"><button type="button" data-a="cx">取消</button><button type="submit" class="pri">儲存</button></div></form>'+
+ (isStay?'<div id="home-range-calendar" class="home-calendar-overlay" hidden><div class="home-calendar-popup" role="dialog" aria-modal="true" aria-labelledby="home-calendar-heading">'+
+ '<div class="home-calendar-header"><div><b id="home-calendar-heading">選擇住宿日期</b><span class="home-calendar-subtitle">選擇入住及退房日期</span></div><button type="button" class="home-calendar-dismiss" aria-label="關閉日曆">✕</button></div>'+
+ '<div class="home-calendar-month"><button type="button" class="home-calendar-prev" aria-label="上一個月">‹</button><strong id="home-calendar-month-title"></strong><button type="button" class="home-calendar-next" aria-label="下一個月">›</button></div>'+
+ '<div class="home-calendar-weekdays" aria-hidden="true"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>'+
+ '<div class="home-calendar-grid" id="home-calendar-grid" role="group" aria-label="選擇入住與退房日期"></div>'+
+ '<div class="home-calendar-selection" id="home-calendar-selection" aria-live="polite"></div>'+
+ '<div class="home-calendar-footer"><button type="button" class="home-calendar-cancel">取消</button><button type="button" class="home-calendar-confirm" disabled>套用日期</button></div></div></div>':'');
  const formElement=dlg.querySelector('form');
- const displayNights=()=>{const el=dlg.querySelector('#home-nights');if(!el)return;const start=formElement.elements.checkin.value,end=formElement.elements.checkout.value,n=nightsBetween(start,end);el.textContent=n?n+' 晚':(start&&end?'退房日期須晚於入住日期':'請選擇入住與退房日期');};
- if(kind==='stays'){
-  formElement.elements.checkin.addEventListener('change',displayNights);
-  formElement.elements.checkout.addEventListener('change',displayNights);
+ function displayNights(){
+  if(!isStay)return;
+  const start=formElement.elements.checkin.value,end=formElement.elements.checkout.value,n=nightsBetween(start,end);
+  dlg.querySelector('#home-nights').textContent=n?n+' 晚':(start&&end?'退房日期須晚於入住日期':'請選擇入住與退房日期');
+  dlg.querySelector('#home-start-label').textContent=start?shortTripDate(start):'選擇日期';
+  dlg.querySelector('#home-end-label').textContent=end?shortTripDate(end):'選擇日期';
+ }
+ if(isStay){
+  const overlay=dlg.querySelector('#home-range-calendar');
+  const calendarGrid=dlg.querySelector('#home-calendar-grid');
+  let startPick='',endPick='',monthYear,monthNum;
+  function setMonth(iso){
+   const y=Number(iso.slice(0,4)),m=Number(iso.slice(5,7));
+   monthYear=y;monthNum=m-1;
+  }
+  const isoDay=(year,month,day)=>year+'-'+String(month+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+  function drawCalendar(){
+   const month=new Date(Date.UTC(monthYear,monthNum,1));
+   monthYear=month.getUTCFullYear();monthNum=month.getUTCMonth();
+   dlg.querySelector('#home-calendar-month-title').textContent=monthYear+' 年 '+(monthNum+1)+' 月';
+   const offset=month.getUTCDay(),daysInMonth=new Date(Date.UTC(monthYear,monthNum+1,0)).getUTCDate();
+   let html='';
+   for(let i=0;i<offset;i++)html+='<span class="home-calendar-empty" aria-hidden="true"></span>';
+   for(let d=1;d<=daysInMonth;d++){
+    const iso=isoDay(monthYear,monthNum,d);
+    const first=iso===startPick,last=iso===endPick,middle=startPick&&endPick&&iso>startPick&&iso<endPick;
+    html+='<button type="button" class="home-calendar-day'+(first?' is-start':'')+(last?' is-end':'')+(middle?' is-middle':'')+'" data-date="'+iso+'" aria-pressed="'+(first||last?'true':'false')+'" aria-label="'+monthYear+' 年 '+(monthNum+1)+' 月 '+d+' 日"'+(first?' data-range-start="true"':'')+(last?' data-range-end="true"':'')+'>'+d+'</button>';
+   }
+   calendarGrid.innerHTML=html;
+   const nights=nightsBetween(startPick,endPick);
+   dlg.querySelector('#home-calendar-selection').textContent=nights
+    ?shortTripDate(startPick)+' → '+shortTripDate(endPick)+'，共 '+nights+' 晚'
+    :startPick?'入住：'+shortTripDate(startPick)+'　·　請選擇退房日期':'請先點選入住日期，再選擇退房日期';
+   dlg.querySelector('.home-calendar-confirm').disabled=!nights;
+  }
+  function closeCalendar(){overlay.hidden=true;dlg.classList.remove('calendar-is-open');}
+  function openCalendar(){
+   startPick=formElement.elements.checkin.value;
+   endPick=formElement.elements.checkout.value;
+   setMonth(startPick||DEFAULT_STAYS[0].checkin||new Date().toISOString().slice(0,10));
+   drawCalendar();overlay.hidden=false;dlg.classList.add('calendar-is-open');
+   dlg.querySelector('.home-calendar-dismiss').focus({preventScroll:true});
+  }
+  dlg.querySelector('#home-range-trigger').addEventListener('click',openCalendar);
+  dlg.querySelector('.home-calendar-dismiss').addEventListener('click',closeCalendar);
+  dlg.querySelector('.home-calendar-cancel').addEventListener('click',closeCalendar);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeCalendar();});
+  overlay.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeCalendar();}});
+  dlg.querySelector('.home-calendar-prev').addEventListener('click',()=>{monthNum--;drawCalendar();});
+  dlg.querySelector('.home-calendar-next').addEventListener('click',()=>{monthNum++;drawCalendar();});
+  calendarGrid.addEventListener('click',e=>{
+   const day=e.target.closest('.home-calendar-day');if(!day)return;
+   const date=day.dataset.date;
+   if(!startPick||endPick||date<=startPick){startPick=date;endPick='';}
+   else endPick=date;
+   drawCalendar();
+  });
+  dlg.querySelector('.home-calendar-confirm').addEventListener('click',()=>{
+   if(!nightsBetween(startPick,endPick))return;
+   formElement.elements.checkin.value=startPick;
+   formElement.elements.checkout.value=endPick;
+   displayNights();closeCalendar();
+   dlg.querySelector('#home-range-trigger').focus({preventScroll:true});
+  });
   displayNights();
  }
  formElement.onsubmit=e=>{
   e.preventDefault();
   const values=Object.fromEntries([...new FormData(formElement)].map(([k,v])=>[k,String(v).trim()]));
   if(!values.name){alert('請填寫名稱');return;}
-  if(kind==='stays'&&!nightsBetween(values.checkin,values.checkout)){alert('退房日期必須晚於入住日期');return;}
+  if(isStay&&!nightsBetween(values.checkin,values.checkout)){alert('請從日曆選擇有效的入住與退房日期');return;}
   if(values.mapUrl&&!safeLink(values.mapUrl)){alert('地址連結請輸入 http:// 或 https:// 網址');return;}
   if(adding)list.push({id:uid(),...values});else Object.assign(current,values);
-  persistHomeList(kind);ov.add(kind==='stays'?'h':'r');
+  persistHomeList(kind);ov.add(isStay?'h':'r');
   dlg.close();dlg.classList.remove('home-list-editor');render();showSavedToast();
  };
  useAddBottomSheet();openEditorDialogNoKeyboard();
 }
+
 // 新增行程先選擇交通或景點；既有項目保持原分類及資料不變。
 function chooseItineraryKind(){
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-editor');
