@@ -1646,10 +1646,10 @@ dialog#dlg.bottom-sheet form .fb > button{
 </nav><dialog id="dlg"></dialog>
 <div id="journal-save-toast" role="status" aria-live="polite" aria-atomic="true" aria-hidden="true">✓ 已儲存</div>
 
-<button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程同步" data-state="loading"><span class="cloud-led"></span><span id="hk-cloud-label">雲端連線中</span></button>
+<button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程與訂位狀態同步" data-state="loading"><span class="cloud-led"></span><span id="hk-cloud-label">雲端連線中</span></button>
 <dialog id="hk-cloud-dialog" aria-label="北海道行程雲端同步設定">
   <div class="hk-cloud-title"><h3 tabindex="-1">共用行程同步</h3><button id="hk-cloud-close" type="button" class="hk-cloud-x" aria-label="關閉">×</button></div>
-  <p class="hk-cloud-sub">每日行程和待辦同步給旅伴；行李、購物清單仍各自在手機儲存。</p>
+  <p class="hk-cloud-sub">每日行程（包含待確認／已訂的訂位狀態）同步給旅伴；待辦、行李、購物清單各自在自己的手機儲存。</p>
   <div id="hk-cloud-signedout">
     <form id="hk-cloud-login-form">
       <label>電子郵件<input name="email" type="email" autocomplete="username" required placeholder="旅行成員的 Email"></label>
@@ -1665,7 +1665,7 @@ dialog#dlg.bottom-sheet form .fb > button{
   </div>
   <p id="hk-cloud-status" class="hk-cloud-status" role="status" aria-live="polite"></p>
   <button id="hk-cloud-backup" type="button" class="hk-cloud-secondary">下載這台手機的資料備份（JSON）</button>
-  <p class="hk-cloud-small">登入後以雲端共用行程為準。登入前若有手機上的自訂資料，請先備份。新增上傳的景點照片只會存在本機，尚未同步至其他手機。</p>
+  <p class="hk-cloud-small">登入後只有每日行程（包含訂位狀態）以雲端為準；待辦、行李、購物不會上傳或下載雲端資料。登入前建議先備份。新增上傳的景點照片只存在本機，尚未同步至其他手機。</p>
 </dialog>
 <dialog id="sh-lightbox" class="sh-lightbox" aria-label="商品圖片放大檢視">
   <button type="button" class="sh-lightbox-close" data-a="shop-zoom-close" aria-label="關閉放大圖片">✕</button>
@@ -3107,10 +3107,10 @@ document.addEventListener('toggle',e=>{
  if(k){e.target.open?ov.add(k):ov.delete(k)}
 },true);
 
-/* ============== Firebase 共用行程 / 待辦 ==============
- * 跟目前發佈的 Firestore 規則相容：
- * trip_members/{登入 UID} 僅讀取本人；shared_trip_data/itinerary、todos 讀寫。
- * 不會將 packs/shopping 送往 Firebase。
+/* ============== Firebase 僅共用每日行程（含訂位狀態） ==============
+ * trip_members/{登入 UID} 僅讀取本人；shared_trip_data/itinerary 讀寫。
+ * 不再訂閱或寫入 shared_trip_data/todos，舊雲端待辦文件保持原狀。
+ * todos/packs/shopping 均只保存在每台手機的 localStorage。
  * 行程照片保留在 HTML 或個別手機；1 MiB 文件限制，禁止上傳 data URL。
  */
 function makeCloudSync(){
@@ -3133,8 +3133,8 @@ function makeCloudSync(){
   const seedBtn=document.getElementById('hk-cloud-seed');
   const loginBtn=document.getElementById('hk-cloud-login-button');
   let api=null,auth=null,db=null,user=null,verified=false,connected=false,busy=false;
-  let unsub=[],initial={itinerary:false,todos:false},exists={itinerary:false,todos:false};
-  let itineraryBaseline={},todosBaseline=null,localPendingDays=new Set(),localPendingTodos=false;
+  let unsub=[],initial={itinerary:false},exists={itinerary:false};
+  let itineraryBaseline={},localPendingDays=new Set();
   let flushTimer=0,liveEpoch=0,autoLoginPrompt=false,cloudError='';
   const dayKey=d=>'day_'+String(d.d);
   const shareDay=d=>{
@@ -3159,7 +3159,7 @@ function makeCloudSync(){
   };
   function setStatus(textValue,error=false){status.textContent=textValue||'';status.style.color=error?'#b45f68':'#6a809a';}
   function paint(){
-    const needSeed=verified&&initial.itinerary&&initial.todos&&(!exists.itinerary||!exists.todos);
+    const needSeed=verified&&initial.itinerary&&!exists.itinerary;
     const phase=cloudError?'error':!api?'loading':!user?'signedout':!verified?'unauthorized':needSeed?'needseed':connected?'ready':'loading';
     pill.dataset.state=phase;
     label.textContent={loading:'連線中',signedout:'雲端登入',unauthorized:'未授權',needseed:'待同步',ready:'已連線',error:'同步異常'}[phase];
@@ -3177,8 +3177,8 @@ function makeCloudSync(){
   }
   function clearSubscriptions(){
     window.clearTimeout(flushTimer);flushTimer=0;unsub.forEach(f=>{try{f()}catch(e){}});unsub=[];
-    initial={itinerary:false,todos:false};exists={itinerary:false,todos:false};
-    itineraryBaseline={};todosBaseline=null;localPendingDays.clear();localPendingTodos=false;
+    initial={itinerary:false};exists={itinerary:false};
+    itineraryBaseline={};localPendingDays.clear();
     connected=false;verified=false;cloudError='';liveEpoch++;
   }
   // 同步文件的文字資料，但保留同一台手機上使用者自行上傳的照片。
@@ -3233,38 +3233,23 @@ function makeCloudSync(){
     }
     if(changed){SV('days',days);if(!dlg.open)render();else dlg.addEventListener('close',()=>render(),{once:true});}
   }
-  function applyTodoSnapshot(snap){
-    if(dlg.open){
-      const snapshotData=snap.data(),snapshotExists=snap.exists();
-      dlg.addEventListener('close',()=>applyTodoSnapshot({data:()=>snapshotData,exists:()=>snapshotExists}),{once:true});
-      return;
-    }
-    if(!snap.exists())return;
-    const arr=snap.data()?.items;
-    if(!Array.isArray(arr))return;
-    todosBaseline=json(arr);
-    if(localPendingTodos){
-      if(json(todos)===todosBaseline)localPendingTodos=false;
-      else return;
-    }
-    if(json(todos)!==todosBaseline){preserveLocalBackup();todos=migrateTodos(arr);SV('todos',todos);if(!dlg.open)render();else dlg.addEventListener('close',()=>render(),{once:true});}
-  }
   function watchDocs(epoch){
-    const docs={itinerary:api.doc(db,'shared_trip_data','itinerary'),todos:api.doc(db,'shared_trip_data','todos')};
-    for(const id of ['itinerary','todos']){
-      const unsubOne=api.onSnapshot(docs[id],snap=>{
-        if(epoch!==liveEpoch)return;
-        initial[id]=true;exists[id]=snap.exists();
-        if(id==='itinerary')applyItinerarySnapshot(snap);else applyTodoSnapshot(snap);
-        connected=initial.itinerary&&initial.todos;
-        if(connected){setStatus(!exists.itinerary||!exists.todos?'雲端還沒建立共用行程，請由主要使用者上傳這台手機的資料。':'每日行程和待辦已連接 Firebase，即時同步中。');}
-        paint();
-      },err=>{
-        if(epoch!==liveEpoch)return;
-        cloudError=makeReadableError(err);setStatus(cloudError,true);paint();
-      });
-      unsub.push(unsubOne);
-    }
+    const ref=api.doc(db,'shared_trip_data','itinerary');
+    const stop=api.onSnapshot(ref,snap=>{
+      if(epoch!==liveEpoch)return;
+      initial.itinerary=true;
+      exists.itinerary=snap.exists();
+      applyItinerarySnapshot(snap);
+      connected=true;
+      setStatus(exists.itinerary
+        ?'每日行程與訂位狀態已連接 Firebase，即時同步中；待辦只儲存於這台手機。'
+        :'雲端還沒有建立共用行程，請由主要使用者首次上傳；待辦不會同步。');
+      paint();
+    },err=>{
+      if(epoch!==liveEpoch)return;
+      cloudError=makeReadableError(err);setStatus(cloudError,true);paint();
+    });
+    unsub.push(stop);
   }
   function collectChanges(){
     const current=shareDays();
@@ -3272,22 +3257,17 @@ function makeCloudSync(){
     for(const [key,value] of Object.entries(current)){
       if(json(value)!==itineraryBaseline[key])dirty[key]=value;
     }
-    const todoDirty=json(todos)!==todosBaseline;
-    return {dirty,todoDirty};
+    return {dirty};
   }
   async function flush(){
-    if(!verified||!connected||!exists.itinerary||!exists.todos||!api||!user)return;
-    const epoch=liveEpoch,{dirty,todoDirty}=collectChanges();
-    if(!Object.keys(dirty).length&&!todoDirty)return;
+    if(!verified||!connected||!exists.itinerary||!api||!user)return;
+    const epoch=liveEpoch,{dirty}=collectChanges();
+    if(!Object.keys(dirty).length)return;
     try{
       if(Object.keys(dirty).length){
         localPendingDays=new Set([...localPendingDays,...Object.keys(dirty)]);
         // 每次僅更新被修改的「日期欄位」，不同天的修改不會相互整份覆寫。
         await api.setDoc(api.doc(db,'shared_trip_data','itinerary'),dirty,{merge:true});
-      }
-      if(todoDirty){
-        localPendingTodos=true;
-        await api.setDoc(api.doc(db,'shared_trip_data','todos'),{items:todos},{merge:true});
       }
       if(epoch===liveEpoch){cloudError='';setStatus('已將最新修改送往共用雲端。');paint();}
     }catch(err){
@@ -3295,33 +3275,26 @@ function makeCloudSync(){
     }
   }
   function onLocalChange(){
-    if(!verified||!connected||!exists.itinerary||!exists.todos)return;
-    const {dirty,todoDirty}=collectChanges();
-    if(!Object.keys(dirty).length&&!todoDirty)return;
+    if(!verified||!connected||!exists.itinerary)return;
+    const {dirty}=collectChanges();
+    if(!Object.keys(dirty).length)return;
     for(const k of Object.keys(dirty))localPendingDays.add(k);
-    if(todoDirty)localPendingTodos=true;
     window.clearTimeout(flushTimer);flushTimer=window.setTimeout(flush,440);
   }
   async function seedShared(){
-    if(!verified||!user||busy||!initial.itinerary||!initial.todos)return;
-    const which=[];if(!exists.itinerary)which.push('每日行程');if(!exists.todos)which.push('待辦清單');
-    if(!which.length)return;
-    if(!confirm('要以「這台手機」的'+which.join('和')+'建立共用資料嗎？\n只有第一次上傳需要此步驟，其他朋友請勿重複建立。'))return;
-    busy=true;paint();setStatus('正在建立共用資料，請勿關閉頁面…');
+    if(!verified||!user||busy||!initial.itinerary||exists.itinerary)return;
+    if(!confirm('要以「這台手機」的每日行程建立共用資料嗎？\n只需首次上傳，其他旅伴請勿重複建立。待辦清單不會上傳。'))return;
+    busy=true;paint();setStatus('正在建立共用行程資料，請勿關閉頁面…');
     try{
-      // 使用交易避免兩位旅伴同時第一次上傳，互相覆蓋已建立的文件。
-      for(const id of ['itinerary','todos']){
-        if(exists[id])continue;
-        const ref=api.doc(db,'shared_trip_data',id);
-        await api.runTransaction(db,async tx=>{
-          const existing=await tx.get(ref);
-          if(existing.exists())return;
-          const body=id==='itinerary'?shareDays():{items:todos};
-          if(json(body).length>850000)throw new Error('行程資料超過同步大小上限，請先移除太大的內嵌資料。');
-          tx.set(ref,body);
-        });
-      }
-      setStatus('首次共用資料已建立，正在確認雲端同步…');
+      const ref=api.doc(db,'shared_trip_data','itinerary');
+      await api.runTransaction(db,async tx=>{
+        const existing=await tx.get(ref);
+        if(existing.exists())return;
+        const body=shareDays();
+        if(json(body).length>850000)throw new Error('行程資料超過同步大小上限，請先移除太大的內嵌資料。');
+        tx.set(ref,body);
+      });
+      setStatus('首次共用行程已建立，正在確認雲端同步；待辦清單保留在本機。');
     }catch(err){cloudError=makeReadableError(err);setStatus(cloudError,true);}
     finally{busy=false;paint();}
   }
@@ -3336,7 +3309,7 @@ function makeCloudSync(){
   }
   async function memberLoginState(nextUser){
     clearSubscriptions();user=nextUser;paint();
-    if(!user){setStatus('登入後共用行程與待辦將自動同步；購物和行李保持本機獨立。');
+    if(!user){setStatus('登入後只有每日行程及訂位狀態同步；待辦、購物、行李都只儲存在這台手機。');
       if(!autoLoginPrompt){autoLoginPrompt=true;window.setTimeout(()=>{if(!user&&!dialog.open)showDialog()},720);}return;
     }
     setStatus('正在確認旅伴存取權限…');
