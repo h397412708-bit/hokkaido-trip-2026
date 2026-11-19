@@ -1305,6 +1305,99 @@ dialog h3[tabindex='-1']:focus{outline:none}
 #hk-cloud-dialog .hk-cloud-identity{padding:10px 12px;border-radius:12px;background:#edf3fa;overflow-wrap:anywhere;font-size:12px;color:#506787}
 #hk-cloud-dialog .hk-cloud-setup{margin-top:12px;border-radius:13px;padding:10px 12px;background:#fdf4e7;color:#947445;font-size:12px;line-height:1.7}
 @media(max-width:420px){#hk-cloud-dialog{padding:22px 19px}#hk-cloud-toggle{right:9px;top:calc(env(safe-area-inset-top) + 8px)}}
+
+/* 2026.11.19｜影片 1：往左滑行程／待辦／行李／購物清單，才顯示編輯與刪除 */
+.swipe-host{position:relative!important;isolation:isolate;overflow:hidden!important;--swipe-size:136px;touch-action:pan-y}
+.swipe-host>.swipe-actions{position:absolute;right:0;top:0;bottom:0;width:var(--swipe-size);z-index:0;display:flex;align-items:stretch;justify-content:flex-end;background:#ebf1f8;overflow:hidden}
+.swipe-actions>button{flex:1 1 50%;display:flex;align-items:center;justify-content:center;margin:0;padding:5px 2px;min-width:0;border:0!important;border-radius:0!important;color:#fff!important;font-size:12px!important;line-height:1.25;font-weight:800;box-shadow:none!important}
+.swipe-actions>button[data-a="ed"],.swipe-actions>button[data-a="shop-edit"]{background:#7e9bb7!important}
+.swipe-actions>button[data-a="rm"],.swipe-actions>button[data-a="shop-delete"]{background:#29394f!important}
+.swipe-host>.swipe-face{position:relative;z-index:1;background:#fff;min-width:0;width:100%;transform:translate3d(0,0,0);transition:transform .24s cubic-bezier(.2,.78,.23,1);will-change:transform;touch-action:pan-y}
+.swipe-host.swipe-actively>.swipe-face{transition:none!important}
+.swipe-host.is-swiped>.swipe-face{transform:translate3d(calc(-1 * var(--swipe-size)),0,0)}
+.swipe-host:focus-visible{outline:2px solid #86a4c5;outline-offset:-3px}
+/* 原本行程 details 的 summary 仍是第一層子元素，保留展開／收合語意 */
+.tlw>details.row>summary.swipe-host{display:block;padding:0!important;border-radius:inherit;overflow:hidden!important}
+.tlw>details.row>summary.swipe-host>.swipe-face{display:flex;align-items:baseline;gap:9px;padding:11px 13px;min-height:43px}
+.tlw>details.row.mv>summary.swipe-host>.swipe-face{padding:5px 2px;min-height:42px;background:#edf0f7}
+.tlw>details.row.mv>summary.swipe-host>.swipe-actions{border-radius:11px}
+.tlw>details.row.mv>summary.swipe-host{border-radius:11px}
+.tlw>details.row>.bd>.tl:empty{display:none}
+/* 待辦、行李保持清單尺寸；額外的操作按鈕只出現在滑動後 */
+.card .td.swipe-host{display:block;padding:0!important;flex-wrap:initial;border-top:1px solid var(--line)}
+.td.swipe-host>.swipe-face{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;padding:10px 0;min-height:57px}
+.td.swipe-host .todo-body{flex:1 1 0;min-width:0;font-size:13px}
+.td.swipe-host .swipe-face>.tl{flex-basis:100%;padding-left:28px;margin:0}
+.td.swipe-host .swipe-face>.tl:empty{display:none}
+.overview-p .pk.swipe-host{display:block;min-height:0;overflow:hidden!important}
+.overview-p .pk.swipe-host>.swipe-face{display:flex;align-items:center;gap:9px;min-height:48px;padding:7px 2px}
+.overview-p .pk.swipe-host>.swipe-face>span{flex:1;min-width:0;overflow-wrap:anywhere;font-size:13px}
+.overview-p .pk.swipe-host>.swipe-face>.tl:empty{display:none}
+.overview-p .pk.swipe-host.dn>.swipe-face>span{text-decoration:line-through;color:#8089a3}
+/* 購物內容仍使用原本的 3 欄佈局 */
+.sh-flat .sh-product.swipe-host{display:block;grid-template-columns:none;padding:0;min-height:0;overflow:hidden!important}
+.sh-flat .sh-product.swipe-host>.swipe-face{display:grid;grid-template-columns:23px 70px minmax(0,1fr);gap:10px;align-items:start;padding:13px 0 14px;min-height:101px}
+.sh-flat .sh-product.swipe-host .sh-mini-actions:empty{display:none}
+.sh-flat .sh-product.swipe-host .sh-product-footer{justify-content:flex-start}
+/* 2026.11.19｜影片 2：所有新增表單由底部升起，編輯仍維持原視窗 */
+@keyframes hkSheetRise{0%{transform:translate3d(0,105%,0);opacity:.98}100%{transform:translate3d(0,0,0);opacity:1}}
+@keyframes hkSheetShade{from{background:rgba(27,39,56,0)}to{background:rgba(27,39,56,.42)}}
+dialog#dlg.bottom-sheet{position:fixed!important;inset:auto 0 0 0!important;box-sizing:border-box!important;display:block;width:min(100vw,640px)!important;max-width:640px!important;max-height:min(86dvh,850px)!important;min-height:0!important;margin:0 auto!important;padding:0 0 max(13px,env(safe-area-inset-bottom,0px))!important;border-radius:25px 25px 0 0!important;border:1px solid rgba(214,228,242,.95);border-bottom:none!important;background:#fbfcff;overflow-y:auto;overscroll-behavior:contain;box-shadow:0 -16px 46px rgba(30,52,85,.15);animation:hkSheetRise .42s cubic-bezier(.18,.82,.22,1) both}
+dialog#dlg.bottom-sheet:not([open]){display:none!important}
+dialog#dlg.bottom-sheet::backdrop{animation:hkSheetShade .32s ease both;background:rgba(27,39,56,.42);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+dialog#dlg.bottom-sheet .sheet-grabber{position:sticky;top:0;z-index:9;display:flex;align-items:center;justify-content:center;height:28px;background:linear-gradient(#fbfcff 0%,rgba(251,252,255,.96) 95%);touch-action:none;cursor:grab}
+.sheet-grabber span{display:block;width:38px;height:4px;border-radius:999px;background:#c4cedd}
+dialog#dlg.bottom-sheet.itinerary-chooser{padding:0 20px max(21px,env(safe-area-inset-bottom,0px))!important}
+dialog#dlg.bottom-sheet.itinerary-editor form{padding-top:4px}
+dialog#dlg.bottom-sheet.sh-dialog .sh-form{padding-top:4px}
+dialog#dlg.bottom-sheet form:not(.sh-form):not(.itinerary-edit-form){padding:4px 20px 16px}
+dialog#dlg.bottom-sheet>.sheet-grabber+form:not(.sh-form):not(.itinerary-edit-form) h3{margin-top:8px}
+dialog#dlg.bottom-sheet .fb{padding-bottom:max(8px,env(safe-area-inset-bottom,0px))}
+@media (max-width:360px){.sh-flat .sh-product.swipe-host>.swipe-face{grid-template-columns:20px 70px minmax(0,1fr);gap:8px}}
+@media(prefers-reduced-motion:reduce){dialog#dlg.bottom-sheet,dialog#dlg.bottom-sheet::backdrop{animation:none!important}.swipe-host>.swipe-face{transition:none!important}}
+
+
+/* 2026-11-19｜影片參考：左滑後露出小型圓角操作鈕，淡入並由小放大 */
+.swipe-host>.swipe-actions{box-sizing:border-box;align-items:center!important;justify-content:flex-end!important;gap:7px!important;padding:4px 8px!important;background:transparent!important;overflow:visible!important}
+.swipe-actions>button{box-sizing:border-box;flex:0 0 56px!important;width:56px!important;height:min(52px,calc(100% - 10px))!important;min-height:32px!important;max-height:56px!important;padding:4px 2px!important;border-radius:13px!important;font-size:11px!important;box-shadow:0 2px 9px rgba(34,53,83,.1)!important;opacity:0;transform:scale(.60);transform-origin:center;transition:opacity .24s ease,transform .34s cubic-bezier(.2,.86,.24,1)!important;pointer-events:none}
+.swipe-host.is-swiped>.swipe-actions>button{opacity:1;transform:scale(1);pointer-events:auto}
+.swipe-host.is-swiped>.swipe-actions>button:nth-child(2){transition-delay:45ms!important}
+.swipe-actions>button[data-a="ed"],.swipe-actions>button[data-a="shop-edit"]{background:#8396af!important}
+.swipe-actions>button[data-a="rm"],.swipe-actions>button[data-a="shop-delete"]{background:#ce6975!important}
+.tlw>details.row.mv>summary.swipe-host>.swipe-actions{border-radius:0!important;background:transparent!important}
+/* 待辦、購物與行程使用同一套六點握把，長按可拖曳排序 */
+.todo-drag-handle,.shop-drag-handle{appearance:none;display:inline-grid;place-items:center;flex:none;width:29px;height:34px;min-width:29px;padding:5px;margin:0 -3px 0 0;border:0;border-radius:9px;background:transparent;color:#879ab4;cursor:grab;touch-action:none;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
+.todo-drag-handle svg,.shop-drag-handle svg{width:18px;height:18px;fill:currentColor;pointer-events:none}
+.todo-drag-handle:active,.todo-drag-handle:focus-visible,.shop-drag-handle:active,.shop-drag-handle:focus-visible{outline:none;background:#e9f0f8;color:#536e91}
+.td.swipe-host>.swipe-face>.todo-drag-handle{align-self:center;margin-left:auto}
+.sh-flat .sh-product.swipe-host .shop-drag-handle{margin-left:auto;align-self:center;}
+.sh-flat .sh-product.swipe-host .sh-product-footer{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.td.drag-order-source,.sh-product.drag-order-source{opacity:.34}
+.td.drag-order-before:before,.td.drag-order-after:after,.sh-product.drag-order-before:before,.sh-product.drag-order-after:after{content:'';position:absolute;left:0;right:0;height:3px;border-radius:4px;background:#6a91b8;z-index:7;box-shadow:0 0 0 2px rgba(106,145,184,.14);pointer-events:none}
+.td.drag-order-before:before,.sh-product.drag-order-before:before{top:0}
+.td.drag-order-after:after,.sh-product.drag-order-after:after{bottom:0}
+.drag-order-ghost{position:fixed;top:0;left:0;z-index:10051;display:flex;align-items:center;gap:10px;width:min(calc(100vw - 40px),330px);min-height:48px;box-sizing:border-box;padding:10px 14px;border:1px solid #b7cadf;border-radius:14px;background:rgba(255,255,255,.96);color:#354c69;box-shadow:0 12px 28px rgba(34,51,74,.22);pointer-events:none;transform:translate3d(-999px,-999px,0);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.drag-order-ghost svg{height:17px;width:17px;fill:#91a0b8;flex:none}.drag-order-ghost b{font-size:12px;overflow-wrap:anywhere}
+body.drag-order-active{user-select:none!important;-webkit-user-select:none!important;cursor:grabbing}
+/* 雲端狀態縮成精簡浮動膠囊，留出右側 ＋ 的完整觸控區域 */
+#hk-cloud-toggle{top:calc(env(safe-area-inset-top,0px) + 3px)!important;right:10px!important;gap:5px!important;width:auto!important;max-width:108px!important;min-height:25px!important;max-height:29px!important;padding:4px 8px!important;border-radius:999px!important;font-size:10px!important;line-height:1.2!important;box-shadow:0 2px 9px rgba(63,84,124,.07)!important;white-space:nowrap;z-index:2100!important}
+#hk-cloud-toggle .cloud-led{width:6px!important;height:6px!important;flex:0 0 6px!important}
+#hk-cloud-label{font-size:10px;white-space:nowrap}
+@media(prefers-reduced-motion:reduce){.swipe-actions>button{transition:none!important;transform:scale(1)!important}}
+
+/* 連結層級調整：資訊連結比清單的主要標題更輕、更小 */
+.todo-sites{gap:5px;margin-top:6px}
+.todo-sites a{
+  display:inline-flex;align-items:center;gap:3px;
+  box-sizing:border-box;min-height:25px;max-width:100%;
+  padding:4px 7px;border-radius:7px;
+  font-size:9px;font-weight:650;line-height:1.32;
+  color:#587094;background:#f0f5fb;border:1px solid #d7e2f2;
+  overflow-wrap:anywhere;
+}
+/* 購物項目的開啟連結亦比商品名稱小，保留可點擊範圍 */
+.sh-flat .sh-link,.sh-product .sh-link{font-size:9.5px;font-weight:650;line-height:1.35}
+.sh-flat .sh-link svg,.sh-product .sh-link svg{width:11px;height:11px}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1722,7 +1815,7 @@ const ov=new Set(['useful']),app=document.getElementById('app'),dlg=document.get
 let cloudSync=null;
 const save=()=>{SV('days',days);SV('todos',todos);SV('packs',packs);if(cloudSync)cloudSync.onLocalChange()};
 const links=pl=>{const u=[...new Map((pl||[]).map(p=>[p.q,p])).values()];return u.length?'<div class="lk">'+u.map(p=>'<a href="'+esc(OVR[p.q]||(p.search?SEARCH(p.q):MAP(p.q,p.mode)))+'" target="_blank" rel="noopener noreferrer">📍 '+esc(p.name)+'</a>').join('')+'</div>':''};
-const tool=(l,i)=>(l==='d'?['編輯|0|ed','刪除|0|rm']:['↑|-1|mv','↓|1|mv','編輯|0|ed','刪除|0|rm']).map(s=>{const x=s.split('|');return '<button data-a="'+x[2]+'" data-l="'+l+'" data-i="'+i+'" data-d="'+x[1]+'">'+x[0]+'</button>'}).join('');
+const tool=(l,i)=>['編輯|0|ed','刪除|0|rm'].map(s=>{const x=s.split('|');return '<button data-a="'+x[2]+'" data-l="'+l+'" data-i="'+i+'" data-d="'+x[1]+'">'+x[0]+'</button>'}).join('');
 const dragGrip=i=>'<button type="button" class="row-drag-handle" data-a="drag" data-i="'+i+'" aria-label="長按拖曳排序；鍵盤按 Alt 加上下方向鍵調整順序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>';
 const timeSpan=a=>{const m=String(a.time||'').match(/(\d{1,2}):(\d{2})[–-](\d{1,2}):(\d{2})/);if(!m)return '';const n=(+m[3]*60 + +m[4])-(+m[1]*60 + +m[2]);return n>0?(n>=60?`預留停留約 ${Math.floor(n/60)} 小時${n%60?` ${n%60} 分鐘`:''}`:`預留停留約 ${n} 分鐘`):''};
 const transportInfo=a=>{const t=String(a.desc||'')+' '+String(a.meta||'');const m=t.match(/(?:約\s*)?(?:\d+\s*[–—-]\s*\d+|\d+)\s*(?:分鐘|分|小時(?:\s*\d+\s*分)?)/);if(!m)return '';const title=String(a.title||'')+' '+t;let type='walk';if(/JR|列車|電車|鐵路/.test(title))type='train';else if(/巴士|公車/.test(title))type='bus';else if(/計程車|出租車|開車|車程/.test(title))type='car';const paths={walk:'<path d="M7.6 3.5c1.8-.4 2.8 1.1 3.2 3.6l.6 3.6c.2 1.5-.6 2.5-1.9 2.8-1.6.4-2.8-.5-3.2-2.1L5.2 7.2C4.7 5.2 5.6 3.9 7.6 3.5Z"/><path d="M16.7 10.4c1.7-.2 2.6 1.2 2.8 3.4l.3 3.1c.1 1.4-.7 2.3-2 2.5-1.5.2-2.5-.6-2.8-2.1l-.6-4c-.3-1.6.6-2.7 2.3-2.9Z"/><path d="M6.3 7.6 8.9 7m-1.9 3.4 3-.7m5.2 3.9 2.5-.4"/>',train:'<rect x="5" y="3" width="14" height="15" rx="4"/><path d="M8 7h8M8 11h8M8 15h.01M16 15h.01M8 18l-2 3m10-3 2 3M9 21l3-3 3 3"/>',bus:'<path d="M5 18V7a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v11"/><path d="M5 11h14M8 7h.01M12 7h.01M16 7h.01M8 15h.01M16 15h.01M8 18l-1 3m9-3 1 3"/>',car:'<path d="m5 12 1.6-5.5A2 2 0 0 1 8.5 5h7a2 2 0 0 1 1.9 1.5L19 12l2 2v4h-3m-12 0H3v-4l2-2Z"/><path d="M5 12h14M7 16h.01M17 16h.01"/>'};return '<div class="travel-duration"><svg viewBox="0 0 24 24" aria-hidden="true">'+paths[type]+'</svg><span>'+esc(m[0].replace(/\s+/g,' '))+'</span></div>'};
@@ -1878,7 +1971,7 @@ function shopPage(){
        '<div class="sh-tags">'+(p.store?'<span class="sh-tag">'+esc(p.store)+'</span>':'')+'<span class="sh-tag">'+(p.done?'已購買':'待購買')+'</span></div>'+
        (p.note?'<p class="sh-note">'+esc(p.note)+'</p>':'')+
        (url?'<a class="sh-link" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">開啟連結 '+shopExternalArt+'</a>':'')+
-       '<div class="sh-product-footer"><span class="sh-qty-label">數量 × '+qty+'</span><div class="sh-mini-actions"><button type="button" data-a="shop-edit" data-id="'+id+'">編輯</button><button type="button" data-a="shop-delete" data-id="'+id+'">刪除</button></div></div></div></article>';
+       '<div class="sh-product-footer"><span class="sh-qty-label">數量 × '+qty+'</span>'+'<button type="button" class="shop-drag-handle" data-a="shop-drag" data-id="'+id+'" aria-label="長按拖曳「'+esc(p.name)+'」排序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>'+'<div class="sh-mini-actions"><button type="button" data-a="shop-edit" data-id="'+id+'">編輯</button><button type="button" data-a="shop-delete" data-id="'+id+'">刪除</button></div></div></div></article>';
    }).join('')+'</div>';
  }
  return '<div class="ph sh-heading todo-heading"><div class="kicker">Shopping list</div><h2>購物清單</h2><p>還有 '+pending+' 項待購買・已購買的會自動移到最下方</p>'+
@@ -1894,7 +1987,7 @@ function shopPreviewUpdate(){
  const remove=dlg.querySelector('#sh-remove-photo');if(remove)remove.hidden=!shopPhotoTemp;
 }
 // 購物新增採用和待辦相同的一般彈窗，不作從 + 放大動畫。
-dlg.addEventListener('close',()=>dlg.classList.remove('sh-dialog','itinerary-chooser','itinerary-editor'));
+dlg.addEventListener('close',()=>{if(!dlg.open)dlg.classList.remove('sh-dialog','itinerary-chooser','itinerary-editor','bottom-sheet');});
 function shopEditor(id){
  const item=shopping.find(x=>x.id===id),adding=!item;
  const o=item||{name:'',store:'',qty:1,url:'',note:'',image:'',done:false};
@@ -1947,7 +2040,7 @@ async function shopReadPhoto(file){
 }
 
 function todo(){const cats=['全部','預約','訂位','票券','其他'];const L=todos.map((t,i)=>({t:t,i:i})).filter(x=>st.cat==='全部'||x.t.c===st.cat);const s=L.filter(x=>!x.t.done).concat(L.filter(x=>x.t.done));
-return '<div class="ph sh-heading todo-heading"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p><button type="button" class="shop-glass-add" data-a="add" data-l="t" aria-label="新增待辦" title="新增待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct">'+esc(x.t.c)+'</i>'+todoLinks(x.t)+'</div><div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div>'}
+return '<div class="ph sh-heading todo-heading"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p><button type="button" class="shop-glass-add" data-a="add" data-l="t" aria-label="新增待辦" title="新增待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct">'+esc(x.t.c)+'</i>'+todoLinks(x.t)+'</div>'+'<button type="button" class="todo-drag-handle" data-a="todo-drag" data-i="'+x.i+'" aria-label="長按拖曳「'+esc(x.t.t)+'」排序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>'+'<div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div>'}
 const fl=(lb,a,at,b,bt,duration)=>{
  const parts=lb.split('｜'),date=parts[0]||'',rawAirline=parts.slice(1).join('｜')||'';
  const direction=date.includes('去程')?'去程':'回程';
@@ -2059,6 +2152,243 @@ function syncNavGlass(force=false){
   if(instant)window.requestAnimationFrame(()=>window.requestAnimationFrame(()=>lens.classList.remove('nav-no-motion')));
 }
 window.addEventListener('resize',()=>syncNavGlass(true));
+
+
+// 待辦和購物拖曳排序：按住六點把手，依現有可見順序插入。
+// 待辦保留待辦類別篩選和已完成分組，購物保留待購買／已購買分組。
+let collectionDrag=null;
+const collectionGripSVG='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg>';
+function collectionPointerMarker(state){
+ if(!state.active)return;
+ state.rows.forEach(row=>row.classList.remove('drag-order-before','drag-order-after'));
+ const others=state.rows.filter(row=>row!==state.row);
+ if(!others.length){state.to=state.from;return;}
+ let target=others.find(row=>{const b=row.getBoundingClientRect();return state.y>=b.top&&state.y<=b.bottom;});
+ if(!target){target=others.reduce((best,row)=>{const r=row.getBoundingClientRect(),distance=Math.abs(state.y-(r.top+r.bottom)/2);return !best||distance<best.distance?{row,distance}:best;},null)?.row;}
+ if(!target){state.to=state.from;return;}
+ const b=target.getBoundingClientRect(),before=state.y<(b.top+b.bottom)/2;
+ const i=state.rows.indexOf(target);state.to=before?i:i+1;
+ target.classList.add(before?'drag-order-before':'drag-order-after');
+}
+function paintCollectionDrag(state){
+ if(!state.ghost)return;
+ const x=Math.max(12,Math.min(innerWidth-state.ghost.offsetWidth-12,state.x-state.ghost.offsetWidth/2));
+ const y=Math.max(12,Math.min(innerHeight-66,state.y-25));
+ state.ghost.style.transform='translate3d('+x+'px,'+y+'px,0)';
+}
+function collectionDragScroll(){
+ const drag=collectionDrag;if(!drag||!drag.active)return;
+ if(drag.y>innerHeight-125)scrollBy(0,Math.min(16,Math.max(2,(drag.y-innerHeight+125)/3)));
+ else if(drag.y<96)scrollBy(0,-Math.min(16,Math.max(2,(96-drag.y)/3)));
+ collectionPointerMarker(drag);drag.raf=requestAnimationFrame(collectionDragScroll);
+}
+function activateCollectionDrag(state){
+ if(collectionDrag!==state||state.active||!state.handle.isConnected)return;
+ state.active=true;state.row.classList.add('drag-order-source');document.body.classList.add('drag-order-active');
+ const ghost=document.createElement('div');ghost.className='drag-order-ghost';
+ ghost.innerHTML=collectionGripSVG+'<b>'+esc(state.title)+'</b>';document.body.appendChild(ghost);state.ghost=ghost;
+ paintCollectionDrag(state);collectionPointerMarker(state);state.raf=requestAnimationFrame(collectionDragScroll);
+}
+function reorderCollectionEntries(kind,visibleIds,from,to){
+ const next=Math.min(visibleIds.length-1,Math.max(0,to>from?to-1:to));
+ if(next===from)return false;
+ if(kind==='todo'){
+   const current=visibleIds.map(i=>todos[i]);
+   const [moving]=current.splice(from,1);current.splice(next,0,moving);
+   visibleIds.forEach((idx,i)=>{todos[idx]=current[i]});
+   save();
+ }else{
+   const original=shopping.slice(),slots=visibleIds.map(id=>shopping.findIndex(p=>p.id===id));
+   if(slots.some(i=>i<0))return false;
+   const current=slots.map(i=>shopping[i]);const [moving]=current.splice(from,1);current.splice(next,0,moving);
+   slots.forEach((slot,i)=>{shopping[slot]=current[i]});
+   if(!shopPersist(original))return false;
+ }
+ render();showSavedToast();return true;
+}
+function finishCollectionDrag(commit){
+ const state=collectionDrag;if(!state)return;
+ collectionDrag=null;clearTimeout(state.timer);cancelAnimationFrame(state.raf||0);state.ghost?.remove();
+ state.rows.forEach(row=>row.classList.remove('drag-order-source','drag-order-before','drag-order-after'));
+ document.body.classList.remove('drag-order-active');
+ try{if(state.handle.hasPointerCapture?.(state.pointerId))state.handle.releasePointerCapture(state.pointerId)}catch(_){}
+ if(!commit||!state.active||!state.list.isConnected)return;
+ reorderCollectionEntries(state.kind,state.visibleIds,state.from,state.to);
+}
+document.addEventListener('pointerdown',e=>{
+ const handle=e.target.closest?.('.todo-drag-handle,.shop-drag-handle');
+ if(!handle||(e.pointerType==='mouse'&&e.button!==0))return;
+ finishCollectionDrag(false);
+ const kind=handle.classList.contains('todo-drag-handle')?'todo':'shop';
+ const row=handle.closest(kind==='todo'?'.td.swipe-host':'.sh-product.swipe-host');
+ const list=row?.parentElement;if(!row||!list)return;
+ const groupDone=!!row.querySelector('input[type=checkbox]')?.checked;
+ const rows=[...list.children].filter(el=>el.classList?.contains(kind==='todo'?'td':'sh-product')&&!!el.querySelector('input[type=checkbox]')?.checked===groupDone);
+ const from=rows.indexOf(row);if(from<0)return;
+ const visibleIds=rows.map(r=>kind==='todo'?Number(r.querySelector('input[data-i]')?.dataset.i):r.dataset.shopId);
+ const state={kind,row,list,rows,visibleIds,from,to:from,handle,pointerId:e.pointerId,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,title:kind==='todo'?(row.querySelector('.todo-body span')?.textContent||'待辦項目'):(row.querySelector('.sh-product-name')?.textContent||'購物商品'),active:false,timer:0,raf:0,ghost:null};
+ collectionDrag=state;
+ try{handle.setPointerCapture(e.pointerId)}catch(_){}
+ state.timer=setTimeout(()=>activateCollectionDrag(state),310);
+},{passive:false});
+document.addEventListener('pointermove',e=>{
+ const state=collectionDrag;if(!state||state.pointerId!==e.pointerId)return;
+ state.x=e.clientX;state.y=e.clientY;
+ if(!state.active){if(Math.hypot(state.x-state.startX,state.y-state.startY)>12)finishCollectionDrag(false);return;}
+ if(e.cancelable)e.preventDefault();paintCollectionDrag(state);collectionPointerMarker(state);
+},{passive:false});
+document.addEventListener('pointerup',e=>{if(collectionDrag&&collectionDrag.pointerId===e.pointerId)finishCollectionDrag(true)},{passive:true});
+document.addEventListener('pointercancel',e=>{if(collectionDrag&&collectionDrag.pointerId===e.pointerId)finishCollectionDrag(false)},{passive:true});
+document.addEventListener('keydown',e=>{
+ const handle=e.target.closest?.('.todo-drag-handle,.shop-drag-handle');
+ if(!handle||!e.altKey||!['ArrowUp','ArrowDown'].includes(e.key))return;
+ e.preventDefault();e.stopPropagation();
+ const kind=handle.classList.contains('todo-drag-handle')?'todo':'shop',row=handle.closest(kind==='todo'?'.td.swipe-host':'.sh-product.swipe-host'),list=row?.parentElement;
+ if(!row||!list)return;
+ const done=!!row.querySelector('input[type=checkbox]')?.checked;
+ const rows=[...list.children].filter(el=>el.classList?.contains(kind==='todo'?'td':'sh-product')&&!!el.querySelector('input[type=checkbox]')?.checked===done);
+ const from=rows.indexOf(row),to=from+(e.key==='ArrowUp'?-1:1);
+ if(from<0||to<0||to>=rows.length)return;
+ const ids=rows.map(r=>kind==='todo'?Number(r.querySelector('input[data-i]')?.dataset.i):r.dataset.shopId);
+ if(reorderCollectionEntries(kind,ids,from,to>from?to+1:to)){
+   requestAnimationFrame(()=>app.querySelector((kind==='todo'?'.todo-drag-handle[data-i="'+ids[to]+'"]':'.shop-drag-handle[data-id="'+ids[to]+'"]'))?.focus({preventScroll:true}));
+ }
+});
+
+// 將現有清單的編輯／刪除按鈕放進滑動後才露出的區域；
+// 不改動原先的 data-a、資料索引、儲存或 Firebase 同步邏輯。
+let currentlyOpenSwipe=null;
+let swipePointer=null;
+let suppressSwipeClickUntil=0;
+function setSwipeOpen(host,show){
+ if(!host||!host.isConnected)return;
+ if(show&&currentlyOpenSwipe&&currentlyOpenSwipe!==host)setSwipeOpen(currentlyOpenSwipe,false);
+ host.classList.toggle('is-swiped',!!show);
+ const face=host.querySelector(':scope > .swipe-face');
+ if(face)face.style.transform='';
+ if(show)currentlyOpenSwipe=host;else if(currentlyOpenSwipe===host)currentlyOpenSwipe=null;
+}
+function makeSwipeActions(host,buttonContainer,buttons){
+ if(!host||!buttons.length||host.classList.contains('swipe-host'))return;
+ const actions=document.createElement('div');actions.className='swipe-actions';
+ for(const btn of buttons){
+   btn.setAttribute('aria-label',btn.textContent.trim());
+   actions.appendChild(btn);
+ }
+ const content=document.createElement('div');content.className='swipe-face';
+ while(host.firstChild)content.appendChild(host.firstChild);
+ host.append(actions,content);
+ host.classList.add('swipe-host');
+ if(buttonContainer&&buttonContainer.isConnected&&!buttonContainer.children.length)buttonContainer.remove();
+ if(host.tagName!=='SUMMARY')host.setAttribute('tabindex','0');
+ host.setAttribute('aria-description','向左滑顯示編輯與刪除；鍵盤可使用方向鍵操作');
+}
+function applySwipeRows(){
+ currentlyOpenSwipe=null;
+ swipePointer=null;
+ // 行程：只滑 summary，保留 <details> 原有展開內容、影像與拖曳把手。
+ document.querySelectorAll('.tlw > details.row').forEach(row=>{
+   const summary=row.querySelector(':scope > summary');
+   const bar=row.querySelector(':scope > .bd > .tl');
+   const buttons=bar?[...bar.querySelectorAll(':scope > button[data-a="ed"],:scope > button[data-a="rm"]')]:[];
+   makeSwipeActions(summary,bar,buttons);
+ });
+ // 待辦：原有勾選、網址、類別、上下排序都留在可滑動的正面。
+ document.querySelectorAll('.td').forEach(row=>{
+   const bar=row.querySelector(':scope > .tl');
+   const buttons=bar?[...bar.querySelectorAll(':scope > button[data-a="ed"],:scope > button[data-a="rm"]')]:[];
+   makeSwipeActions(row,bar,buttons);
+ });
+ // 行李：原來的長按六點把手照常可用。
+ document.querySelectorAll('.overview-p .pk').forEach(row=>{
+   const bar=row.querySelector(':scope > .tl');
+   const buttons=bar?[...bar.querySelectorAll(':scope > button[data-a="ed"],:scope > button[data-a="rm"]')]:[];
+   makeSwipeActions(row,bar,buttons);
+ });
+ // 購物：商品照片、勾選與連結都保留。
+ document.querySelectorAll('.sh-flat .sh-product').forEach(row=>{
+   const bar=row.querySelector('.sh-mini-actions');
+   const buttons=bar?[...bar.querySelectorAll(':scope > button[data-a="shop-edit"],:scope > button[data-a="shop-delete"]')]:[];
+   makeSwipeActions(row,bar,buttons);
+ });
+}
+function isSwipeExcluded(target){return !!target.closest?.('.row-drag-handle,.pack-drag-handle,.todo-drag-handle,.shop-drag-handle,.spot-carousel,.sh-link,input,textarea,select');}
+document.addEventListener('pointerdown',e=>{
+ const face=e.target.closest?.('.swipe-face');
+ if(!face||isSwipeExcluded(e.target)||(e.pointerType==='mouse'&&e.button!==0))return;
+ const host=face.parentElement;
+ if(!host?.classList.contains('swipe-host'))return;
+ swipePointer={host,face,id:e.pointerId,x:e.clientX,y:e.clientY,originX:e.clientX,originY:e.clientY,start:host.classList.contains('is-swiped')?-136:0,dragging:false,scrolling:false};
+},{passive:true});
+document.addEventListener('pointermove',e=>{
+ const drag=swipePointer;
+ if(!drag||e.pointerId!==drag.id||!drag.host.isConnected)return;
+ const dx=e.clientX-drag.originX,dy=e.clientY-drag.originY;
+ if(!drag.dragging){
+   if(Math.abs(dy)>Math.abs(dx)*1.15&&Math.abs(dy)>9){drag.scrolling=true;return;}
+   if(drag.scrolling||Math.abs(dx)<10||Math.abs(dx)<Math.abs(dy)*1.25)return;
+   drag.dragging=true;
+   drag.host.classList.add('swipe-actively');
+   if(currentlyOpenSwipe&&currentlyOpenSwipe!==drag.host)setSwipeOpen(currentlyOpenSwipe,false);
+ }
+ if(e.cancelable)e.preventDefault();
+ const x=Math.max(-136,Math.min(0,drag.start+dx));
+ drag.face.style.transform='translate3d('+x+'px,0,0)';
+},{passive:false});
+function finishSwipePointer(e){
+ const drag=swipePointer;
+ if(!drag||e.pointerId!==drag.id)return;
+ swipePointer=null;
+ drag.host.classList.remove('swipe-actively');
+ if(!drag.dragging){drag.face.style.transform='';return;}
+ const delta=e.clientX-drag.originX;
+ const total=Math.max(-136,Math.min(0,drag.start+delta));
+ setSwipeOpen(drag.host,total < -64);
+ suppressSwipeClickUntil=Date.now()+440;
+}
+document.addEventListener('pointerup',finishSwipePointer,{passive:true});
+document.addEventListener('pointercancel',e=>{
+ if(swipePointer&&e.pointerId===swipePointer.id){swipePointer.host.classList.remove('swipe-actively');swipePointer.face.style.transform='';swipePointer=null;}
+},{passive:true});
+// 滑動後的合成 click 不應造成原生 <summary> 突然展開，也不能誤觸商品照片。
+document.addEventListener('click',e=>{
+ const action=e.target.closest?.('.swipe-actions button');
+ if(action){if(action.closest('summary'))e.preventDefault();return;}
+ if(Date.now()<suppressSwipeClickUntil&&e.target.closest?.('.swipe-host')){
+   e.preventDefault();e.stopImmediatePropagation();return;
+ }
+ if(currentlyOpenSwipe){
+   const host=e.target.closest?.('.swipe-host');
+   if(host===currentlyOpenSwipe){e.preventDefault();e.stopImmediatePropagation();setSwipeOpen(currentlyOpenSwipe,false);return;}
+   setSwipeOpen(currentlyOpenSwipe,false);
+ }
+},true);
+document.addEventListener('keydown',e=>{
+ const host=e.target.closest?.('.swipe-host');
+ if(!host||!['ArrowLeft','ArrowRight'].includes(e.key))return;
+ if(e.target.matches('button,input,a,select,textarea'))return;
+ e.preventDefault();setSwipeOpen(host,e.key==='ArrowLeft');
+});
+// 只從把手往下拖可收回新增面板；不干擾圖片上傳與表單捲動。
+let sheetPull=null;
+document.addEventListener('pointerdown',e=>{
+ if(!e.target.closest?.('#dlg.bottom-sheet .sheet-grabber'))return;
+ sheetPull={id:e.pointerId,y:e.clientY,offset:0};
+},{passive:true});
+document.addEventListener('pointermove',e=>{
+ if(!sheetPull||sheetPull.id!==e.pointerId)return;
+ const delta=Math.max(0,e.clientY-sheetPull.y);
+ sheetPull.offset=delta;
+ if(e.cancelable)e.preventDefault();
+ dlg.style.transform='translate3d(0,'+delta+'px,0)';
+},{passive:false});
+document.addEventListener('pointerup',e=>{
+ if(!sheetPull||sheetPull.id!==e.pointerId)return;
+ const delta=sheetPull.offset;sheetPull=null;dlg.style.transform='';
+ if(delta>96&&dlg.open)dlg.close();
+},{passive:true});
+document.addEventListener('pointercancel',e=>{if(sheetPull&&sheetPull.id===e.pointerId){sheetPull=null;dlg.style.transform='';}},{passive:true});
+
 function render(){
   const existingStrip=app.querySelector('main .days:not(.cats)');
   if(existingStrip) planDayScrollLeft=existingStrip.scrollLeft;
@@ -2082,13 +2412,21 @@ function render(){
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
   document.querySelectorAll('.bottom-nav button').forEach(b=>{const active=b.dataset.v===st.tab;b.classList.toggle('on',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  applySwipeRows();
   syncNavGlass();
   runItineraryEntrance();
   getWxForecast(false);
 }
 // 所有新增／編輯視窗先將焦點放在標題，而不是輸入框，避免 iOS 開啟表單時自動彈出鍵盤。
 // 使用可程式聚焦的標題 (autofocus) 確保 showModal() 自己的焦點流程也不會選中第一個 input。
+let nextDialogIsSheet=false;
+function useAddBottomSheet(){nextDialogIsSheet=true;}
 function openEditorDialogNoKeyboard(){
+  const sheet=nextDialogIsSheet;
+  nextDialogIsSheet=false;
+  dlg.classList.toggle('bottom-sheet',sheet);
+  dlg.querySelector('.sheet-grabber')?.remove();
+  if(sheet)dlg.insertAdjacentHTML('afterbegin','<div class="sheet-grabber" aria-hidden="true"><span></span></div>');
   const heading=dlg.querySelector('h3');
   if(heading){
     heading.tabIndex=-1;
@@ -2410,14 +2748,14 @@ document.addEventListener('keydown',e=>{
 });
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const D=b.dataset,a=D.a,n=+D.i,L=D.l==='d'?days[st.day].items:D.l==='t'?todos:packs;
-if(a==='drag'||a==='pack-drag'){e.preventDefault();e.stopPropagation();return;}
+if(a==='drag'||a==='pack-drag'||a==='todo-drag'||a==='shop-drag'){e.preventDefault();e.stopPropagation();return;}
 if(a==='tab'){st.tab=D.v;if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
 else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
-else if(a==='add-choose')chooseItineraryKind()
-else if(a==='add-kind'){const kind=D.kind;dlg.close();dlg.classList.remove('itinerary-chooser');editDayItem(-1,kind)}
+else if(a==='add-choose'){useAddBottomSheet();chooseItineraryKind()}
+else if(a==='add-kind'){const kind=D.kind;dlg.close();dlg.classList.remove('itinerary-chooser');useAddBottomSheet();editDayItem(-1,kind)}
 else if(a==='itinerary-photo-remove'){itineraryPhotoTemp.splice(n,1);itineraryPhotoChanged=true;updateItineraryPhotoPreview()}
-else if(a==='shop-add'){shopEditor(null)}
+else if(a==='shop-add'){useAddBottomSheet();shopEditor(null)}
 else if(a==='shop-edit')shopEditor(D.id)
 else if(a==='shop-zoom'){const p=shopping.find(x=>x.id===D.id);if(p)shopShowImage(p.image,p.name)}
 else if(a==='shop-zoom-preview'){if(shopPhotoTemp)shopShowImage(shopPhotoTemp,dlg.querySelector('[name="name"]')?.value||'商品')}
@@ -2429,7 +2767,7 @@ else if(a==='shop-mode'){shopMode=D.v;render()}
 else if(a==='shop-hint'){if(D.field==='store'){const f=dlg.querySelector('[name="store"]');if(f){f.value=D.value;f.focus()}}}
 else if(a==='shop-photo-remove'){shopPhotoTemp='';const f=dlg.querySelector('#sh-photo-file');if(f)f.value='';shopPreviewUpdate()}
 else if(a==='shop-cancel'){dlg.close();dlg.classList.remove('sh-dialog');shopPhotoTemp=''}
-else if(a==='tg'){L[n].done=!L[n].done;save();render()}else if(a==='ed')edit(D.l,n);else if(a==='add')edit(D.l,-1);else if(a==='cx')dlg.close();
+else if(a==='tg'){L[n].done=!L[n].done;save();render()}else if(a==='ed')edit(D.l,n);else if(a==='add'){useAddBottomSheet();edit(D.l,-1);}else if(a==='cx')dlg.close();
 else if(a==='rs'){if(confirm('還原為預設內容？自訂的行程與待辦會被清除。')){days=prep();todos=T0();packs=P0();st.day=0;save();render()}}});
 document.addEventListener('change',e=>{
  const t=e.target;
@@ -2496,7 +2834,8 @@ function makeCloudSync(){
     const needSeed=verified&&initial.itinerary&&initial.todos&&(!exists.itinerary||!exists.todos);
     const phase=cloudError?'error':!api?'loading':!user?'signedout':!verified?'unauthorized':needSeed?'needseed':connected?'ready':'loading';
     pill.dataset.state=phase;
-    label.textContent={loading:'雲端連線中',signedout:'雲端登入',unauthorized:'尚未授權',needseed:'待初次同步',ready:'✓ 已連接雲端',error:'同步異常'}[phase];
+    label.textContent={loading:'連線中',signedout:'雲端登入',unauthorized:'未授權',needseed:'待同步',ready:'已連線',error:'同步異常'}[phase];
+    pill.setAttribute('aria-label', '雲端同步狀態：'+({loading:'連線中',signedout:'尚未登入',unauthorized:'尚未授權',needseed:'等待初次同步',ready:'已連接雲端',error:'同步異常'}[phase])+ '，點擊開啟設定');
     out.hidden=!!user;inside.hidden=!user;
     identity.textContent=user?'登入帳號：'+(user.email||'已登入')+(verified?' · 已授權':' · 驗證中'):'';
     setup.hidden=!needSeed;
