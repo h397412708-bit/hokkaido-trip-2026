@@ -2465,29 +2465,17 @@ const spotMedia=a=>{
  const photos=(a.userPhotos&&Array.isArray(a.photos)&&a.photos.length)?a.photos:(isMuseum?MUSEUM_GALLERY:(galleryRule?.photos||a.photos||hit?.[3]||null));
  return {src:a.photo||photos?.[0]?.src||hit?.[1]||'',photos,alt:a.photoAlt||name,intro:a.photoIntro||galleryRule?.intro||hit?.[2]||String(a.desc||'')};
 };
-// 收合卡片時間：以編輯內容的明確車程為優先，否則從原行程時段取得預留值。
-const minutesFromPeriod=value=>{
- const m=String(value||'').match(/(\d{1,2}):(\d{2})\s*[–—-]\s*(\d{1,2}):(\d{2})/);
- if(!m)return null;
- let n=(+m[3]*60 + +m[4])-(+m[1]*60 + +m[2]);
- if(n<=0)n+=1440;
- return n>0&&n<=720?n:null;
-};
-const originalActivity=(a,d)=>DAYS.find(x=>String(x.d)===String(d.d))?.items.find(x=>x.title===a.title);
-const formatMinutes=n=>n>=60?`${Math.floor(n/60)} 小時${n%60?' '+n%60+' 分鐘':''}`:`${n} 分鐘`;
+// 卡片副標僅顯示使用者在新增／編輯表單明確填寫的時間，絕不根據行程時段或描述自動推算。
+// 交通時間與景點預留時間均顯示在名稱正下方；欄位未填寫則不產生副標元素。
 const displayStartTime=value=>{
  const m=String(value||'').match(/(\d{1,2}):(\d{2})/);
  return m?String(m[1]).padStart(2,'0')+':'+m[2]:'—';
 };
-const durationFor=(a,d)=>{
+const durationFor=a=>{
  const travel=a.kind==='交通';
- const spot=a.kind==='觀光'||a.kind==='購物'||(a.kind==='待確認'&&/參觀|體驗|觀景|展望/.test(a.title));
- if(!travel&&!spot)return '';
- const explicit=String((travel?a.transportDuration:a.spotDuration)||'').trim();
- const period=minutesFromPeriod(a.time)??minutesFromPeriod(originalActivity(a,d)?.time);
- const found=String(a.desc||'').match(/(?:約\s*)?(\d+(?:\s*[–—~～-]\s*\d+)?\s*(?:小時(?:\s*\d+\s*分(?:鐘)?)?|分鐘|分))(?!\d)/);
- const label=travel?(explicit?'交通約 '+explicit:found?'交通約 '+found[1].replace(/\s+/g,' ').trim():period?'交通預留 '+formatMinutes(period):'交通時間待確認'):
-  (explicit?'預留 '+explicit:period?'預計停留 '+formatMinutes(period):'停留時間待確認');
+ const explicit=String(travel?a.transportDuration||'':a.spotDuration||'').trim();
+ if(!explicit)return '';
+ const label=travel?'交通約 '+explicit:'預計停留 '+explicit;
  return '<small class="row-summary-duration'+(travel?' is-transport':' is-spot')+'"><span class="row-duration-text">'+esc(label)+'</span></small>';
 };
 // 交通工具分類：既有行程依標題及描述推測，新增／編輯則以使用者選擇為準。
@@ -2568,18 +2556,17 @@ const row=(a,i,d)=>{
  const summaryWeb=mapOpenUrl?'<a class="itinerary-web-pin" data-itinerary-web href="'+esc(mapOpenUrl)+'" title="在 Google Maps 開啟" aria-label="在 Google Maps 開啟">'+pinIcon+'</a>':'';
  const expandedWeb=mapOpenUrl?'<a class="itinerary-web-expanded" data-itinerary-web href="'+esc(mapOpenUrl)+'" aria-label="在 Google Maps 開啟">'+pinIcon+'<span>Google Maps</span></a>':'';
  
- const durationDetail=!mv?(a.spotDuration?'預留停留約 '+String(a.spotDuration).trim():a.kind==='觀光'?timeSpan(a):''):'';
  const bd=[
   !mv&&desc&&'<p>'+esc(desc)+'</p>',
   !mv&&cost&&'<p class="c">💴 '+esc(cost)+'</p>',
   !mv&&a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',
-  mv?transportDetails(a,cost):durationDetail?'<div class="stay-duration">'+esc(durationDetail)+'</div>':'',
+  mv?transportDetails(a,cost):'',
   media?'<section class="spot-card">'+((media.photos&&media.photos.length)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide'+(ph.mode==='blur'?' blur-bg':ph.mode==='composed'?' composed-photo':'')+'">'+(ph.mode==='blur'&&ph.src?'<span class="spot-carousel-blur" style="background-image:url('+esc(ph.src)+')"></span>':'')+'<img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div>'+(media.photos.length>1?'<span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div>':'')+'</div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p>'+expandedWeb+'</div></section>':'',
   // 只有展開後有完整景點介紹時，地圖連結放在景點介紹下方。
   // 未附相簿的景點仍在展開後保有可點擊的 Google Maps 連結。
   !mv&&!media&&expandedWeb,
  ].filter(Boolean).join('');
- return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'" data-clock="'+esc(clock)+'"'+(ov.has(a.id)?' open':'')+'><summary aria-label="'+esc(clock+' '+title)+'"><time class="row-inline-clock">'+esc(clock)+'</time><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+summaryPhoto+summaryWeb+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>';
+ return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'" data-clock="'+esc(clock)+'"'+(ov.has(a.id)?' open':'')+'><summary aria-label="'+esc(clock+' '+title)+'"><time class="row-inline-clock">'+esc(clock)+'</time><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+summaryPhoto+summaryWeb+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>';
 };
 // 地標使用真正的 <a href="comgooglemaps://…"> 原生導覽，不阻止連結預設動作。
 // 收合 summary 仍攔截事件向上傳遞，避免點擊地標把卡片打開。
