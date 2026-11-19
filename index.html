@@ -1795,6 +1795,50 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 *,dialog#dlg.itinerary-editor .it
 .itinerary-edit-v2 textarea[name="cost"]{margin-bottom:0!important;max-width:100%!important;min-height:72px}
 .itinerary-edit-v2 .fb{position:sticky!important;z-index:16;margin-top:12px}
 @media(max-width:360px){.tlw{padding-left:72px!important}.tlw:before{left:59px!important}.tlw>details.row::before{left:-70px!important;width:51px!important;font-size:11px!important}.tlw .row-spot-thumb{flex-basis:38px!important;width:38px;height:38px}.itinerary-edit-v2 .itinerary-form-row{gap:7px;grid-template-columns:minmax(0,.43fr) minmax(0,.57fr)}.itinerary-edit-v2 .itinerary-mode-duration{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+
+/* 2026-11-20 修正：每日行程時間放回景點／交通卡內，時間線只保留圓點。 */
+.tlw{padding-left:26px!important;max-width:100%!important;min-width:0!important}
+.tlw::before{left:7px!important;top:20px!important;bottom:18px!important;width:2px!important;background:#ccd7e7!important}
+.tlw>details.row{position:relative!important;min-width:0!important}
+.tlw>details.row::before{
+  content:''!important;position:absolute!important;left:-23px!important;top:17px!important;
+  width:10px!important;height:10px!important;border-radius:50%!important;
+  background:#fff!important;border:2px solid #8da4c0!important;
+  box-shadow:0 0 0 3px #edf1f7!important;display:block!important;pointer-events:none
+}
+.tlw>details.row.mv::before{
+  content:''!important;left:-22px!important;top:16px!important;
+  width:8px!important;height:8px!important;border:0!important;
+  border-radius:50%!important;background:#9eb2c9!important;
+  box-shadow:0 0 0 3px #edf1f7!important
+}
+.tlw>details.row::after{content:none!important;display:none!important}
+.tlw>details.row>summary.swipe-host>.swipe-face{display:flex;align-items:center!important;min-width:0;gap:6px!important;padding:10px 7px!important}
+.tlw>details.row.mv>summary.swipe-host>.swipe-face{align-items:center!important;gap:6px!important;padding:7px 3px!important}
+.tlw>details.row>summary .row-inline-clock{
+  flex:0 0 42px!important;display:block;min-width:0!important;margin:0!important;padding:0!important;
+  color:#5c789c;font-size:11px!important;font-weight:800;line-height:1.4!important;
+  font-variant-numeric:tabular-nums;text-align:left;white-space:nowrap
+}
+.tlw>details.row.mv>summary .row-inline-clock{color:#7f92ac;font-size:10px!important;font-weight:700}
+.tlw>details.row>summary .row-summary-main{flex:1 1 0!important;min-width:0!important}
+/* 展開時不重複顯示摘要的小圖及 📍；完整相簿和景點介紹保留。 */
+.tlw>details.row[open] .row-spot-thumb,
+.tlw>details.row[open] .itinerary-web-pin{display:none!important}
+.tlw>details.row:not([open]) .itinerary-web-pin{display:inline-flex!important}
+/* 交通完全不顯示跳轉連結；舊程式資料仍不受影響。 */
+.tlw>details.row.mv .itinerary-web-pin,
+.tlw>details.row.mv .itinerary-web-expanded,
+.tlw>details.row.mv .lk{display:none!important}
+@media(max-width:360px){
+  .tlw{padding-left:23px!important}
+  .tlw::before{left:6px!important}
+  .tlw>details.row::before{left:-21px!important}
+  .tlw>details.row.mv::before{left:-20px!important}
+  .tlw>details.row>summary .row-inline-clock{flex-basis:39px!important;font-size:10px!important}
+  .tlw>details.row>summary.swipe-host>.swipe-face{gap:5px!important;padding-inline:5px!important}
+  .tlw .row-spot-thumb{flex-basis:34px!important;width:34px;height:34px}
+}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -2357,15 +2401,27 @@ const transportDetails=(a,cost)=>{
  const price=String(cost||'').trim()||'費用待確認';
  return '<section class="transport-details"><b>交通方式</b><p>'+esc(method)+'</p>'+(String(a.hours||'').trim()?'<b>時刻／備註</b><p>'+esc(String(a.hours).trim())+'</p>':'')+'<b>預估費用</b><p>'+esc(price)+'</p></section>';
 };
+// 景點連結來源：新增的 webUrl 優先，既有景點原有的 places / OVR 連結次之。
+// 交通不產生任何跳轉連結，並保留原本的 a.places 資料供日後編輯使用。
+const itinerarySpotHref=a=>{
+ if(a.kind==='交通')return '';
+ const custom=safeLink(String(a.webUrl||''));
+ if(custom)return custom;
+ const places=Array.isArray(a.places)?a.places:[];
+ const candidate=places.find(p=>p&&typeof p==='object'&&(p.q||p.url));
+ if(!candidate)return '';
+ const raw=candidate.url||(candidate.q?(OVR[candidate.q]||(candidate.search?SEARCH(candidate.q):MAP(candidate.q,candidate.mode))):'');
+ return safeLink(String(raw||''))||'';
+};
 const row=(a,i,d)=>{
  const mv=a.kind==='交通',status=bookingStatus(a),desc=bookedText(a,status);
  const title=status.booked&&a.bookingKey==='snow'?a.title.replace('（待訂）',''):a.title;
  const cost=status.booked&&a.bookingKey==='snow'?String(a.cost||'').replace('尚未預訂','依已訂方案'):a.cost;
- const media=spotMedia(a),webUrl=safeLink(String(a.webUrl||'')),clock=displayStartTime(a.time);
+ const media=!mv?spotMedia(a):null,webUrl=!mv?itinerarySpotHref(a):'',clock=displayStartTime(a.time);
  const photoFirst=!mv&&media?(media.photos?.[0]?.src||media.src||''):'';
  const summaryPhoto=photoFirst?'<span class="row-spot-thumb" aria-hidden="true"><img src="'+esc(photoFirst)+'" alt="" loading="lazy"></span>':'';
  const summaryWeb=webUrl?'<a class="itinerary-web-pin" data-itinerary-web href="'+esc(webUrl)+'" target="_blank" rel="noopener noreferrer" title="開啟景點連結" aria-label="開啟景點連結">📍</a>':'';
- const expandedWeb=webUrl?'<a class="itinerary-web-expanded" data-itinerary-web href="'+esc(webUrl)+'" target="_blank" rel="noopener noreferrer" aria-label="開啟景點連結">📍</a>':'';
+ 
  const durationDetail=!mv?(a.spotDuration?'預留停留約 '+String(a.spotDuration).trim():a.kind==='觀光'?timeSpan(a):''):'';
  const bd=[
   !mv&&desc&&'<p>'+esc(desc)+'</p>',
@@ -2373,10 +2429,9 @@ const row=(a,i,d)=>{
   !mv&&a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',
   mv?transportDetails(a,cost):durationDetail?'<div class="stay-duration">'+esc(durationDetail)+'</div>':'',
   media?'<section class="spot-card">'+((media.photos&&media.photos.length)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide'+(ph.mode==='blur'?' blur-bg':ph.mode==='composed'?' composed-photo':'')+'">'+(ph.mode==='blur'&&ph.src?'<span class="spot-carousel-blur" style="background-image:url('+esc(ph.src)+')"></span>':'')+'<img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div>'+(media.photos.length>1?'<span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div>':'')+'</div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p></div></section>':'',
-  expandedWeb,
-  links(a.places)
+  // 舊的 places 地圖連結統一移至收合摘要 📍，展開後不重複顯示。
  ].filter(Boolean).join('');
- return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'" data-clock="'+esc(clock)+'"'+(ov.has(a.id)?' open':'')+'><summary aria-label="'+esc(clock+' '+title)+'"><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+summaryPhoto+summaryWeb+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>';
+ return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'" data-clock="'+esc(clock)+'"'+(ov.has(a.id)?' open':'')+'><summary aria-label="'+esc(clock+' '+title)+'"><time class="row-inline-clock">'+esc(clock)+'</time><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+summaryPhoto+summaryWeb+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>';
 };
 // Clicking the 📍 link never expands/collapses the itinerary summary.
 app.addEventListener('click',e=>{if(e.target.closest?.('[data-itinerary-web]'))e.stopPropagation();},true);
