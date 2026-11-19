@@ -1650,6 +1650,34 @@ dialog#dlg.bottom-sheet form .fb > button{
 .td .ct[data-todo-category="票券"]{background:#fff1df;border-color:#f4dfbc;color:#92682e}
 .td .ct[data-todo-category="其他"]{background:#e9edf3;border-color:#dce3eb;color:#657488}
 
+
+/* 住宿／餐廳清單：同行李的左滑操作與長按六點拖曳。 */
+.overview-h .home-entry,.overview-r .home-entry{position:relative;margin:0;border-top:1px solid rgba(132,153,185,.18);padding:0;min-height:78px;overflow:hidden;background:transparent}
+.overview-h .home-entry:first-child,.overview-r .home-entry:first-child{border-top:0}
+.overview-h .home-entry.swipe-host>.swipe-face,.overview-r .home-entry.swipe-host>.swipe-face{display:flex;align-items:center;gap:8px;min-width:0;padding:13px 3px 13px 0;background:transparent!important;box-sizing:border-box}
+.home-entry-info{min-width:0;flex:1;overflow-wrap:anywhere}
+.home-entry-info small{display:block;font-weight:700;letter-spacing:.01em;color:#788cab;font-size:11px;line-height:1.5;margin-bottom:4px}
+.home-entry-info b{display:block;font-size:14px;line-height:1.5;color:#29364d;font-weight:750}
+.home-entry-note{color:#687a94;font-size:12px;line-height:1.65;margin:5px 0 0;white-space:pre-line}
+.home-entry-info .overview-address{font-size:11px;color:#7787a1;line-height:1.6;margin:6px 0 0}
+.home-map-link{display:inline-flex;align-items:center;gap:4px;max-width:100%;border:1px solid rgba(150,169,199,.24);border-radius:10px;background:rgba(231,239,250,.55);font-weight:700;font-size:10px;color:#587091;text-decoration:none;margin-top:8px;padding:5px 8px;line-height:1.45}
+.home-drag-handle{display:inline-grid;place-items:center;flex:0 0 28px;width:28px;height:36px;margin-left:auto;padding:3px;border:0;border-radius:9px;background:transparent;color:#8c9bb1;touch-action:none;-webkit-touch-callout:none;cursor:grab}
+.home-drag-handle svg{width:19px;height:19px;fill:currentColor;pointer-events:none}
+.home-drag-handle:focus-visible{outline:2px solid #a7bad4;outline-offset:1px}
+.home-entry.pack-dragging{opacity:.33}
+.home-entry.pack-drag-before:before,.home-entry.pack-drag-after:after{content:'';position:absolute;left:3px;right:3px;height:3px;z-index:6;border-radius:3px;background:#6487ab;box-shadow:0 0 0 3px rgba(100,135,171,.12)}
+.home-entry.pack-drag-before:before{top:0}.home-entry.pack-drag-after:after{bottom:0}
+.home-add{margin-top:10px!important;min-height:45px}
+.home-list-empty{font-size:12px;color:#8c9bb2;text-align:center;padding:13px 0}
+/* 底部新增與編輯同一套面板：全寬欄位與日期選擇器。 */
+dialog#dlg.home-list-editor form{padding:6px 20px 15px}
+dialog#dlg.home-list-editor .home-edit-hint{font-size:12px;line-height:1.65;color:#7b8ba2;margin:1px 0 12px}
+dialog#dlg.home-list-editor .home-edit-field{display:block;width:100%;min-width:0;margin:0 0 12px;color:#526780;font-size:12px;font-weight:700}
+dialog#dlg.home-list-editor .home-edit-field input,dialog#dlg.home-list-editor .home-edit-field textarea{display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;margin-top:6px;font-size:16px!important;line-height:1.4;border-radius:12px;border:1px solid #dce4f0;background:#f9fbff;padding:12px;color:#293a52;outline-offset:2px}
+dialog#dlg.home-list-editor .home-edit-field input[type="date"],dialog#dlg.home-list-editor .home-edit-field input[type="time"]{min-height:46px;appearance:auto;-webkit-appearance:auto;color-scheme:light}
+dialog#dlg.home-list-editor .home-edit-field textarea{resize:vertical;min-height:83px}
+dialog#dlg.home-list-editor .home-nights-result{margin:8px 0 12px;padding:11px 12px;border-radius:12px;background:#edf3fa;color:#617992;font-size:12px}
+dialog#dlg.home-list-editor .home-nights-result strong{color:#334e71}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1660,10 +1688,10 @@ dialog#dlg.bottom-sheet form .fb > button{
 </nav><dialog id="dlg"></dialog>
 <div id="journal-save-toast" role="status" aria-live="polite" aria-atomic="true" aria-hidden="true">✓ 已儲存</div>
 
-<button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程與訂位狀態同步" data-state="loading"><span class="cloud-led"></span><span id="hk-cloud-label">雲端連線中</span></button>
+<button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led"></span><span id="hk-cloud-label">雲端連線中</span></button>
 <dialog id="hk-cloud-dialog" aria-label="北海道行程雲端同步設定">
   <div class="hk-cloud-title"><h3 tabindex="-1">共用行程同步</h3><button id="hk-cloud-close" type="button" class="hk-cloud-x" aria-label="關閉">×</button></div>
-  <p class="hk-cloud-sub">每日行程（包含待確認／已訂的訂位狀態）同步給旅伴；待辦、行李、購物清單各自在自己的手機儲存。</p>
+  <p class="hk-cloud-sub">每日行程（包含待確認／已訂）、住宿一覽與已訂餐廳同步給旅伴；待辦、行李、購物清單各自在自己的手機儲存。</p>
   <div id="hk-cloud-signedout">
     <form id="hk-cloud-login-form">
       <label>電子郵件<input name="email" type="email" autocomplete="username" required placeholder="旅行成員的 Email"></label>
@@ -1675,11 +1703,13 @@ dialog#dlg.bottom-sheet form .fb > button{
     <div id="hk-cloud-identity" class="hk-cloud-identity"></div>
     <div id="hk-cloud-setup" class="hk-cloud-setup" hidden>目前雲端還沒有共用行程。請由持有最新行程的主要使用者，確認後將這台手機的行程上傳。其他旅伴不要按這個按鈕。</div>
     <button id="hk-cloud-seed" type="button" class="hk-cloud-primary" hidden>首次上傳這台手機的共用行程</button>
+    <div id="hk-cloud-home-setup" class="hk-cloud-setup" hidden>目前雲端已有每日行程，但尚未建立共用的住宿／餐廳清單。請由資料最完整的主要手機先點下方按鈕。建立後所有旅伴會自動接收同一份清單，且可共同新增、編輯與刪除。</div>
+    <button id="hk-cloud-home-seed" type="button" class="hk-cloud-primary" hidden>首次上傳住宿與餐廳清單</button>
     <button id="hk-cloud-signout" type="button" class="hk-cloud-secondary">登出</button>
   </div>
   <p id="hk-cloud-status" class="hk-cloud-status" role="status" aria-live="polite"></p>
   <button id="hk-cloud-backup" type="button" class="hk-cloud-secondary">下載這台手機的資料備份（JSON）</button>
-  <p class="hk-cloud-small">登入後只有每日行程（包含訂位狀態）以雲端為準；待辦、行李、購物不會上傳或下載雲端資料。登入前建議先備份。新增上傳的景點照片只存在本機，尚未同步至其他手機。</p>
+  <p class="hk-cloud-small">登入後每日行程、訂位狀態、住宿及餐廳清單都以雲端為準；待辦、行李與購物清單仍只儲存在各自手機。首次同步住宿與餐廳請由主要使用者上傳，其他旅伴勿重複初始化。登入前建議先備份。新增上傳的景點照片只存在本機，尚未同步至其他手機。</p>
 </dialog>
 <dialog id="sh-lightbox" class="sh-lightbox" aria-label="商品圖片放大檢視">
   <button type="button" class="sh-lightbox-close" data-a="shop-zoom-close" aria-label="關閉放大圖片">✕</button>
@@ -2064,6 +2094,57 @@ function bookedText(a,status){
 const ov=new Set(['useful']),app=document.getElementById('app'),dlg=document.getElementById('dlg');
 let cloudSync=null;
 const save=()=>{SV('days',days);SV('todos',todos);SV('packs',packs);if(cloudSync)cloudSync.onLocalChange()};
+
+// 住宿與已訂餐廳同每日行程共用 Firebase itinerary 文件中的 stays / dining 欄位。
+// 同時保留本機快取供離線查看；待辦、行李和購物清單維持各自獨立。
+const DEFAULT_STAYS=hotels.map((h,i)=>({
+ id:'stay_2026_'+i,name:h.name,
+ checkin:['2026-12-18','2026-12-22','2026-12-24','2026-12-26'][i],
+ checkout:['2026-12-22','2026-12-24','2026-12-26','2026-12-27'][i],
+ address:i===3?'':h.addr,note:h.detail||'',
+ mapUrl:h.q?SEARCH(h.q):''
+}));
+const DEFAULT_DINING=[
+ {id:'meal_2026_0',name:'小樽倉庫 No.1 啤酒釀造所',date:'2026-12-19',time:'17:30',note:'4 位成人。晚餐後搭 JR 返回札幌。',mapUrl:SEARCH('Otaru Soko No.1 Otaru')},
+ {id:'meal_2026_1',name:'寺田壽司 Sushi Terada',date:'2026-12-21',time:'20:30',note:'4 位成人；Terada 季節全套餐：¥18,000／人（含稅），約 2 小時；前菜五道、壽司十三貫、湯品、甜點。',mapUrl:SEARCH('寺田 寿司 狸小路 札幌')}
+];
+let stays=LS('stays',null),dining=LS('dining',null);
+if(!Array.isArray(stays))stays=DEFAULT_STAYS.map(x=>({...x}));
+if(!Array.isArray(dining))dining=DEFAULT_DINING.map(x=>({...x}));
+function nightsBetween(start,end){
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(start||'')||!/^\d{4}-\d{2}-\d{2}$/.test(end||''))return 0;
+ const a=Date.parse(start+'T00:00:00Z'),b=Date.parse(end+'T00:00:00Z');
+ const n=Math.round((b-a)/86400000);return Number.isFinite(n)&&n>0?n:0;
+}
+function shortTripDate(value){
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(value||''))return '未設定日期';
+ const d=new Date(value+'T00:00:00Z');
+ return Number.isNaN(d.getTime())?'未設定日期':(d.getUTCMonth()+1)+'/'+d.getUTCDate()+'（'+'日一二三四五六'[d.getUTCDay()]+'）';
+}
+const homeMapAnchor=url=>{
+ const valid=safeLink(url||'');
+ return valid?'<a class="home-map-link" href="'+esc(valid)+'" target="_blank" rel="noopener noreferrer">📍在Google Maps 開啟</a>':'';
+};
+const homeDragGrip=(kind,i,name)=>'<button type="button" class="home-drag-handle" data-a="home-drag" data-kind="'+kind+'" data-i="'+i+'" title="長按拖曳排序" aria-label="長按拖曳「'+esc(name)+'」排序；鍵盤 Alt 加上下鍵調整"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>';
+function homeListItem(kind,item,i){
+ const isStay=kind==='stays';
+ const dateLine=isStay
+  ?(shortTripDate(item.checkin)+' 入住 → '+shortTripDate(item.checkout)+' 退房'+(nightsBetween(item.checkin,item.checkout)?'・'+nightsBetween(item.checkin,item.checkout)+' 晚':''))
+  :(shortTripDate(item.date)+(item.time?' '+item.time:''));
+ return '<div class="home-entry '+(isStay?'ht':'rs')+'" data-home-kind="'+kind+'" data-home-index="'+i+'">'+
+   '<div class="home-entry-info"><small>'+esc(dateLine)+'</small><b class="home-entry-title">'+esc(item.name)+'</b>'+
+   (isStay&&item.address?'<p class="overview-address">'+iconSvg('pin')+esc(item.address)+'</p>':'')+
+   (item.note?'<p class="home-entry-note">'+esc(item.note)+'</p>':'')+
+   homeMapAnchor(item.mapUrl)+'</div>'+homeDragGrip(kind,i,item.name)+
+   '<div class="tl"><button type="button" data-a="home-edit" data-kind="'+kind+'" data-i="'+i+'">編輯</button><button type="button" data-a="home-remove" data-kind="'+kind+'" data-i="'+i+'">刪除</button></div></div>';
+}
+function homeListBody(kind){
+ const list=kind==='stays'?stays:dining;
+ return list.map((item,i)=>homeListItem(kind,item,i)).join('')+
+ (list.length?'':'<p class="home-list-empty">還沒有資料，點擊下方新增。</p>')+
+ '<button type="button" class="add home-add" data-a="home-add" data-kind="'+kind+'">＋ '+(kind==='stays'?'新增住宿':'新增餐廳')+'</button>';
+}
+function persistHomeList(kind){SV(kind,kind==='stays'?stays:dining);if(cloudSync)cloudSync.onHomeChange(kind);}
 const links=pl=>{const u=[...new Map((pl||[]).map(p=>[p.q,p])).values()];return u.length?'<div class="lk">'+u.map(p=>'<a href="'+esc(OVR[p.q]||(p.search?SEARCH(p.q):MAP(p.q,p.mode)))+'" target="_blank" rel="noopener noreferrer">📍 '+esc(p.name)+'</a>').join('')+'</div>':''};
 const tool=(l,i)=>['編輯|0|ed','刪除|0|rm'].map(s=>{const x=s.split('|');return '<button data-a="'+x[2]+'" data-l="'+l+'" data-i="'+i+'" data-d="'+x[1]+'">'+x[0]+'</button>'}).join('');
 const dragGrip=i=>'<button type="button" class="row-drag-handle" data-a="drag" data-i="'+i+'" aria-label="長按拖曳排序；鍵盤按 Alt 加上下方向鍵調整順序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>';
@@ -2344,11 +2425,12 @@ const travelLinksPanel=()=>{
 };
 
 function home(){const n=packs.filter(p=>p.done).length;
-return wxOverview()+travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程','<div class="flight-board">'+fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分')+'<p class="flight-board-note">起飛及抵達時間均為當地時間。</p></div>')
-+sec('h',iconSvg('hotel'),'住宿一覽','4 間・共 9 晚',hotels.map(h=>'<div class="ht"><small>'+esc(h.date)+'・'+esc(h.nights)+'</small><b>'+esc(h.name)+'</b><p class="overview-address">'+iconSvg('pin')+esc(h.addr)+'</p><p>'+esc(h.detail)+'</p>'+(h.q?links([place('在 Google Maps 開啟',h.q)]):'')+'</div>').join(''))
-+sec('r',iconSvg('utensils'),'已訂餐廳','2 間・各 4 人','<div class="rs"><small>12/19（六）17:30</small><b>小樽倉庫 No.1 啤酒釀造所</b><p>晚餐後搭 JR 返回札幌。</p>'+links([place('小樽倉庫 No.1','Otaru Soko No.1 Otaru')])+'</div><div class="rs"><small>12/21（一）20:30</small><b>寺田壽司 Sushi Terada</b><div class="meal-info"><p class="meal-heading">Terada 的季節全套餐 <span>4 道</span></p><div class="meal-meta"><span>¥18,000／人（含稅）</span><span>用餐約 2 小時</span></div><ul class="meal-courses"><li>前菜五道</li><li>壽司十三貫</li><li>湯品</li><li>甜點</li></ul></div>'+links([place('Sushi Terada てら田','寺田 寿司 狸小路 札幌')])+'</div>')
-+sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'" data-pack-index="'+i+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><button type="button" class="pack-drag-handle" data-a="pack-drag" data-i="'+i+'" aria-label="長按拖曳「'+esc(p.t)+'」排序；鍵盤 Alt 加上下鍵調整" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join('')+'<button class="add" data-a="add" data-l="p">＋ 新增物品</button>')
-+'<button class="add ghost" data-a="rs">還原預設內容</button>'}
+ const totalNights=stays.reduce((sum,item)=>sum+nightsBetween(item.checkin,item.checkout),0);
+ return wxOverview()+travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程','<div class="flight-board">'+fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分')+'<p class="flight-board-note">起飛及抵達時間均為當地時間。</p></div>')
+ +sec('h',iconSvg('hotel'),'住宿一覽',stays.length+' 間・共 '+totalNights+' 晚',homeListBody('stays'))
+ +sec('r',iconSvg('utensils'),'已訂餐廳',dining.length+' 間・訂位資料',homeListBody('dining'))
+ +sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'" data-pack-index="'+i+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><button type="button" class="pack-drag-handle" data-a="pack-drag" data-i="'+i+'" aria-label="長按拖曳「'+esc(p.t)+'」排序；鍵盤 Alt 加上下鍵調整" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join('')+'<button class="add" data-a="add" data-l="p">＋ 新增物品</button>')
+ +'<button class="add ghost" data-a="rs">還原預設內容</button>'}
 const hero=()=>'<header class="hero"><div class="topline"><div class="brand">'+iconSvg('snowflake')+' HOKKAIDO / 2026</div><div class="pill">WINTER JOURNAL</div></div><div class="hc"><div class="eb">WINTER TRAVEL NOTES • JAPAN</div><h1 class="ht1">A winter<br>to remember.</h1><div class="hs">北海道冬日旅誌</div><div class="hm">12.18 — 12.27 ✦ 札幌 · 小樽 · 登別 · 洞爺湖</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><div class="summary"><div><strong>10 天 9 夜</strong><span>旅程天數</span></div><div><strong>4 位旅伴</strong><span>一同出發</span></div><div><strong>12/18–27</strong><span>2026・北海道</span></div></div>';
 // Never replace the date-strip element when switching days: keeping the same
 // element also preserves touch momentum, horizontal scroll, and keyboard focus.
@@ -2561,6 +2643,12 @@ function applySwipeRows(){
    const buttons=bar?[...bar.querySelectorAll(':scope > button[data-a="ed"],:scope > button[data-a="rm"]')]:[];
    makeSwipeActions(row,bar,buttons);
  });
+ // 住宿與餐廳：與行李使用一致的左滑編輯／刪除。
+ document.querySelectorAll('.overview-h .home-entry,.overview-r .home-entry').forEach(row=>{
+   const bar=row.querySelector(':scope > .tl');
+   const buttons=bar?[...bar.querySelectorAll(':scope > button[data-a="home-edit"],:scope > button[data-a="home-remove"]')]:[];
+   makeSwipeActions(row,bar,buttons);
+ });
  // 購物：商品照片、勾選與連結都保留。
  document.querySelectorAll('.sh-flat .sh-product').forEach(row=>{
    const bar=row.querySelector('.sh-mini-actions');
@@ -2568,7 +2656,7 @@ function applySwipeRows(){
    makeSwipeActions(row,bar,buttons);
  });
 }
-function isSwipeExcluded(target){return !!target.closest?.('.row-drag-handle,.pack-drag-handle,.todo-drag-handle,.shop-drag-handle,.spot-carousel,.sh-link,input,textarea,select');}
+function isSwipeExcluded(target){return !!target.closest?.('.row-drag-handle,.pack-drag-handle,.home-drag-handle,.todo-drag-handle,.shop-drag-handle,.spot-carousel,.sh-link,input,textarea,select');}
 document.addEventListener('pointerdown',e=>{
  const face=e.target.closest?.('.swipe-face');
  if(!face||isSwipeExcluded(e.target)||(e.pointerType==='mouse'&&e.button!==0))return;
@@ -2783,6 +2871,43 @@ function openEditorDialogNoKeyboard(){
 }
 function form(title,fs,v,cb){dlg.innerHTML='<form><h3>'+title+'</h3>'+fs.map(f=>'<label>'+f[1]+(f[2]==='area'?'<textarea name="'+f[0]+'" rows="3">'+esc(v[f[0]])+'</textarea>':f[2]==='sel'?'<select name="'+f[0]+'">'+f[3].map(o=>'<option'+(o===v[f[0]]?' selected':'')+'>'+o+'</option>').join('')+'</select>':'<input name="'+f[0]+'" value="'+esc(v[f[0]])+'">')+'</label>').join('')+'<div class="fb"><button type="button" data-a="cx">取消</button><button class="pri">儲存</button></div></form>';dlg.querySelector('form').onsubmit=e=>{e.preventDefault();const o={};new FormData(e.target).forEach((x,k)=>o[k]=String(x).trim());dlg.close();cb(o)};openEditorDialogNoKeyboard()}
 
+
+// 住宿與已訂餐廳：共用行李清單相同的底部新增／編輯面板與取消動畫。
+function editHomeList(kind,index){
+ const list=kind==='stays'?stays:dining,adding=index<0;
+ const current=adding?(kind==='stays'?{name:'',checkin:'',checkout:'',address:'',note:'',mapUrl:''}:{name:'',date:'',time:'',note:'',mapUrl:''}):list[index];
+ if(!current)return;
+ const inputs=kind==='stays'?[['name','飯店名稱','text',true],['checkin','入住日期','date',true],['checkout','退房日期','date',true],['address','飯店地址','text',false],['note','備註','textarea',false],['mapUrl','地址連結（Google Maps）','url',false]]:
+ [['name','餐廳名稱','text',true],['date','訂位日期','date',true],['time','訂位時間','time',true],['note','備註','textarea',false],['mapUrl','地址連結（Google Maps）','url',false]];
+ const inputRow=([field,label,type,required])=>'<label class="home-edit-field">'+esc(label)+(type==='textarea'
+  ?'<textarea name="'+field+'" rows="3" placeholder="可填寫補充資訊">'+esc(current[field]||'')+'</textarea>'
+  :'<input name="'+field+'" type="'+type+'" value="'+esc(current[field]||'')+'" '+(required?'required ':'')+(type==='url'?'placeholder="https://maps.app.goo.gl/…"':'')+'>')+'</label>';
+ dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-editor','itinerary-chooser');
+ dlg.classList.add('home-list-editor');
+ dlg.innerHTML='<form class="home-edit-form"><h3>'+(adding?'新增':'編輯')+(kind==='stays'?'住宿':'餐廳')+'</h3>'+
+ '<p class="home-edit-hint">'+(kind==='stays'?'點選日期會開啟日曆，入住與退房日期會自動計算住宿晚數。':'點選日期選擇訂位日，再設定用餐時間。')+'</p>'+
+ inputs.map(inputRow).join('')+
+ (kind==='stays'?'<div class="home-nights-result" aria-live="polite">住宿晚數：<strong id="home-nights">—</strong></div>':'')+
+ '<div class="fb"><button type="button" data-a="cx">取消</button><button type="submit" class="pri">儲存</button></div></form>';
+ const formElement=dlg.querySelector('form');
+ const displayNights=()=>{const el=dlg.querySelector('#home-nights');if(!el)return;const start=formElement.elements.checkin.value,end=formElement.elements.checkout.value,n=nightsBetween(start,end);el.textContent=n?n+' 晚':(start&&end?'退房日期須晚於入住日期':'請選擇入住與退房日期');};
+ if(kind==='stays'){
+  formElement.elements.checkin.addEventListener('change',displayNights);
+  formElement.elements.checkout.addEventListener('change',displayNights);
+  displayNights();
+ }
+ formElement.onsubmit=e=>{
+  e.preventDefault();
+  const values=Object.fromEntries([...new FormData(formElement)].map(([k,v])=>[k,String(v).trim()]));
+  if(!values.name){alert('請填寫名稱');return;}
+  if(kind==='stays'&&!nightsBetween(values.checkin,values.checkout)){alert('退房日期必須晚於入住日期');return;}
+  if(values.mapUrl&&!safeLink(values.mapUrl)){alert('地址連結請輸入 http:// 或 https:// 網址');return;}
+  if(adding)list.push({id:uid(),...values});else Object.assign(current,values);
+  persistHomeList(kind);ov.add(kind==='stays'?'h':'r');
+  dlg.close();dlg.classList.remove('home-list-editor');render();showSavedToast();
+ };
+ useAddBottomSheet();openEditorDialogNoKeyboard();
+}
 // 新增行程先選擇交通或景點；既有項目保持原分類及資料不變。
 function chooseItineraryKind(){
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-editor');
@@ -3034,7 +3159,7 @@ function activatePackDrag(drag){
  if(packDrag!==drag||drag.active||!drag.handle.isConnected)return;
  drag.active=true;drag.row.classList.add('pack-dragging');document.body.classList.add('pack-drag-active');
  const ghost=document.createElement('div');ghost.className='pack-drag-floating';
- ghost.innerHTML=packDragIcon+'<b>'+esc(drag.row.querySelector(':scope > span')?.textContent||'行李物品')+'</b>';
+ ghost.innerHTML=packDragIcon+'<b>'+esc(drag.row.querySelector('.home-entry-title')?.textContent||drag.row.querySelector(':scope > span')?.textContent||'行李物品')+'</b>';
  document.body.appendChild(ghost);drag.ghost=ghost;
  packDragFloat(drag);packDragMarker(drag);
  drag.raf=requestAnimationFrame(packDragScroll);
@@ -3048,21 +3173,26 @@ function finishPackDrag(commit){
  document.body.classList.remove('pack-drag-active');
  try{if(drag.handle.hasPointerCapture?.(drag.pointerId))drag.handle.releasePointerCapture(drag.pointerId);}catch(_){ }
  if(!commit||!drag.active||!drag.list.isConnected)return;
- const to=Math.min(packs.length-1,Math.max(0,drag.to>drag.from?drag.to-1:drag.to));
+ const list=drag.kind==='stays'?stays:drag.kind==='dining'?dining:packs;
+ const to=Math.min(list.length-1,Math.max(0,drag.to>drag.from?drag.to-1:drag.to));
  if(to===drag.from)return;
- const [moved]=packs.splice(drag.from,1);packs.splice(to,0,moved);
- save();render();showSavedToast();
- requestAnimationFrame(()=>app.querySelector('.pack-drag-handle[data-i="'+to+'"]')?.focus({preventScroll:true}));
+ const [moved]=list.splice(drag.from,1);list.splice(to,0,moved);
+ if(drag.kind==='packs')save();else persistHomeList(drag.kind);
+ render();showSavedToast();
+ const selector=drag.kind==='packs'?'.pack-drag-handle':'.home-drag-handle';
+ requestAnimationFrame(()=>app.querySelector(selector+'[data-i="'+to+'"]')?.focus({preventScroll:true}));
 }
 document.addEventListener('pointerdown',e=>{
- const handle=e.target.closest?.('.pack-drag-handle');
+ const handle=e.target.closest?.('.pack-drag-handle,.home-drag-handle');
  if(!handle||(e.pointerType==='mouse'&&e.button!==0))return;
  finishPackDrag(false);
- const row=handle.closest('.overview-p .pk'),list=row?.closest('.overview-p');
+ const row=handle.closest('.overview-p .pk,.overview-h .home-entry,.overview-r .home-entry');
+ const list=row?.closest('.overview-p,.overview-h,.overview-r');
  if(!row||!list||st.tab!=='home')return;
- const rows=[...list.querySelectorAll(':scope > .bd > .pk')];
+ const kind=list.classList.contains('overview-h')?'stays':list.classList.contains('overview-r')?'dining':'packs';
+ const rows=[...list.querySelectorAll(':scope > .bd > .pk,:scope > .bd > .home-entry')];
  const from=rows.indexOf(row);if(from<0)return;
- const drag={pointerId:e.pointerId,handle,row,list,rows,from,to:from,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,active:false,timer:0,raf:0,ghost:null};
+ const drag={pointerId:e.pointerId,handle,row,list,rows,kind,from,to:from,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,active:false,timer:0,raf:0,ghost:null};
  packDrag=drag;
  try{handle.setPointerCapture(e.pointerId);}catch(_){ }
  drag.timer=setTimeout(()=>activatePackDrag(drag),310);
@@ -3077,14 +3207,18 @@ document.addEventListener('pointermove',e=>{
 document.addEventListener('pointerup',e=>{if(packDrag&&e.pointerId===packDrag.pointerId)finishPackDrag(true);});
 document.addEventListener('pointercancel',e=>{if(packDrag&&e.pointerId===packDrag.pointerId)finishPackDrag(false);});
 document.addEventListener('keydown',e=>{
- const handle=e.target.closest?.('.pack-drag-handle');
+ const handle=e.target.closest?.('.pack-drag-handle,.home-drag-handle');
  if(!handle||!e.altKey||!['ArrowUp','ArrowDown'].includes(e.key))return;
  e.preventDefault();e.stopPropagation();
+ const kind=handle.classList.contains('home-drag-handle')?handle.dataset.kind:'packs';
+ const list=kind==='stays'?stays:kind==='dining'?dining:packs;
  const i=Number(handle.dataset.i),j=i+(e.key==='ArrowUp'?-1:1);
- if(j<0||j>=packs.length)return;
- [packs[i],packs[j]]=[packs[j],packs[i]];
- save();render();showSavedToast();
- requestAnimationFrame(()=>app.querySelector('.pack-drag-handle[data-i="'+j+'"]')?.focus({preventScroll:true}));
+ if(j<0||j>=list.length)return;
+ [list[i],list[j]]=[list[j],list[i]];
+ if(kind==='packs')save();else persistHomeList(kind);
+ render();showSavedToast();
+ const selector=kind==='packs'?'.pack-drag-handle':'.home-drag-handle';
+ requestAnimationFrame(()=>app.querySelector(selector+'[data-i="'+j+'"]')?.focus({preventScroll:true}));
 });
 
 document.addEventListener('pointerdown',e=>{
@@ -3099,13 +3233,16 @@ document.addEventListener('keydown',e=>{
 });
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const D=b.dataset,a=D.a,n=+D.i,L=D.l==='d'?days[st.day].items:D.l==='t'?todos:packs;
-if(a==='drag'||a==='pack-drag'||a==='todo-drag'||a==='shop-drag'){e.preventDefault();e.stopPropagation();return;}
+if(a==='drag'||a==='pack-drag'||a==='todo-drag'||a==='shop-drag'||a==='home-drag'){e.preventDefault();e.stopPropagation();return;}
 if(a==='tab'){st.tab=D.v;if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
 else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
 else if(a==='add-choose'){useAddBottomSheet();chooseItineraryKind()}
 else if(a==='add-kind'){const kind=D.kind;dlg.close();dlg.classList.remove('itinerary-chooser');useAddBottomSheet();editDayItem(-1,kind)}
 else if(a==='itinerary-photo-remove'){itineraryPhotoTemp.splice(n,1);itineraryPhotoChanged=true;updateItineraryPhotoPreview()}
+else if(a==='home-add'){editHomeList(D.kind,-1)}
+else if(a==='home-edit'){editHomeList(D.kind,n)}
+else if(a==='home-remove'){const list=D.kind==='stays'?stays:dining;const item=list[n];if(item&&confirm('確定刪除「'+item.name+'」嗎？')){list.splice(n,1);persistHomeList(D.kind);render();showSavedToast()}}
 else if(a==='shop-add'){useAddBottomSheet();shopEditor(null)}
 else if(a==='shop-edit'){useAddBottomSheet();shopEditor(D.id)}
 else if(a==='shop-zoom'){const p=shopping.find(x=>x.id===D.id);if(p)shopShowImage(p.image,p.name)}
@@ -3130,10 +3267,11 @@ document.addEventListener('toggle',e=>{
  if(k){e.target.open?ov.add(k):ov.delete(k)}
 },true);
 
-/* ============== Firebase 僅共用每日行程（含訂位狀態） ==============
- * trip_members/{登入 UID} 僅讀取本人；shared_trip_data/itinerary 讀寫。
+/* ============== Firebase 共用每日行程、訂位、住宿與餐廳 ==============
+ * trip_members/{登入 UID} 僅讀取本人；沿用 shared_trip_data/itinerary 讀寫權限。
+ * 住宿及餐廳分別放在 itinerary 文件的 stays 與 dining 欄位；不新增文件。
  * 不再訂閱或寫入 shared_trip_data/todos，舊雲端待辦文件保持原狀。
- * todos/packs/shopping 均只保存在每台手機的 localStorage。
+ * todos/packs/shopping 仍只保存在各自手機的 localStorage。
  * 行程照片保留在 HTML 或個別手機；1 MiB 文件限制，禁止上傳 data URL。
  */
 function makeCloudSync(){
@@ -3154,10 +3292,15 @@ function makeCloudSync(){
   const identity=document.getElementById('hk-cloud-identity');
   const setup=document.getElementById('hk-cloud-setup');
   const seedBtn=document.getElementById('hk-cloud-seed');
+  const homeSetup=document.getElementById('hk-cloud-home-setup');
+  const homeSeedBtn=document.getElementById('hk-cloud-home-seed');
   const loginBtn=document.getElementById('hk-cloud-login-button');
   let api=null,auth=null,db=null,user=null,verified=false,connected=false,busy=false;
   let unsub=[],initial={itinerary:false},exists={itinerary:false};
   let itineraryBaseline={},localPendingDays=new Set();
+  let homeBaseline={stays:null,dining:null};
+  let homeReady={stays:false,dining:false};
+  const localPendingHome=new Set();
   let flushTimer=0,liveEpoch=0,autoLoginPrompt=false,cloudError='';
   const dayKey=d=>'day_'+String(d.d);
   const shareDay=d=>{
@@ -3171,6 +3314,10 @@ function makeCloudSync(){
     delete copy.photos;delete copy.coverImage;return copy;
   };
   const shareDays=()=>Object.fromEntries(days.map(d=>[dayKey(d),shareDay(d)]));
+  // 住宿／餐廳沿用各項目穩定的 id；同步日期、備註、順序及地圖連結。
+  const homeValue=key=>key==='stays'?stays:dining;
+  const shareHome=key=>homeValue(key).map(item=>({...item}));
+  const homeNames=['stays','dining'];
   const json=x=>JSON.stringify(x);
   const makeReadableError=err=>{
     const code=String(err?.code||'');
@@ -3183,7 +3330,8 @@ function makeCloudSync(){
   function setStatus(textValue,error=false){status.textContent=textValue||'';status.style.color=error?'#b45f68':'#6a809a';}
   function paint(){
     const needSeed=verified&&initial.itinerary&&!exists.itinerary;
-    const phase=cloudError?'error':!api?'loading':!user?'signedout':!verified?'unauthorized':needSeed?'needseed':connected?'ready':'loading';
+    const needHomeSeed=verified&&initial.itinerary&&exists.itinerary&&homeNames.some(key=>!homeReady[key]);
+    const phase=cloudError?'error':!api?'loading':!user?'signedout':!verified?'unauthorized':needSeed||needHomeSeed?'needseed':connected?'ready':'loading';
     pill.dataset.state=phase;
     label.textContent={loading:'連線中',signedout:'雲端登入',unauthorized:'未授權',needseed:'待同步',ready:'已連線',error:'同步異常'}[phase];
     pill.setAttribute('aria-label', '雲端同步狀態：'+({loading:'連線中',signedout:'尚未登入',unauthorized:'尚未授權',needseed:'等待初次同步',ready:'已連接雲端',error:'同步異常'}[phase])+ '，點擊開啟設定');
@@ -3192,6 +3340,9 @@ function makeCloudSync(){
     setup.hidden=!needSeed;
     seedBtn.hidden=!needSeed;
     seedBtn.disabled=busy;
+    homeSetup.hidden=!needHomeSeed;
+    homeSeedBtn.hidden=!needHomeSeed;
+    homeSeedBtn.disabled=busy;
     loginBtn.disabled=busy;
   }
   function showDialog(){
@@ -3202,6 +3353,7 @@ function makeCloudSync(){
     window.clearTimeout(flushTimer);flushTimer=0;unsub.forEach(f=>{try{f()}catch(e){}});unsub=[];
     initial={itinerary:false};exists={itinerary:false};
     itineraryBaseline={};localPendingDays.clear();
+    homeBaseline={stays:null,dining:null};homeReady={stays:false,dining:false};localPendingHome.clear();
     connected=false;verified=false;cloudError='';liveEpoch++;
   }
   // 同步文件的文字資料，但保留同一台手機上使用者自行上傳的照片。
@@ -3224,7 +3376,7 @@ function makeCloudSync(){
   function preserveLocalBackup(){
     try{
       if(localStorage.getItem('hk26v2_cloud_backup_created'))return;
-      const content=json({days,todos,packs,shopping,backedUpAt:new Date().toISOString()});
+      const content=json({days,todos,packs,shopping,stays,dining,backedUpAt:new Date().toISOString()});
       if(content.length<1300000){
         localStorage.setItem('hk26v2_precloud_backup',content);
         localStorage.setItem('hk26v2_cloud_backup_created',new Date().toISOString());
@@ -3254,6 +3406,22 @@ function makeCloudSync(){
         preserveLocalBackup();applyIncomingDay(key,day);changed=true;
       }
     }
+    // 空陣列也是合法的遠端清單：使用者刪掉全部住宿／餐廳不會自動恢復預設值。
+    for(const key of homeNames){
+      if(!Array.isArray(remote[key])){homeReady[key]=false;homeBaseline[key]=null;continue;}
+      homeReady[key]=true;
+      const serialized=json(remote[key]);homeBaseline[key]=serialized;
+      if(localPendingHome.has(key)){
+        if(json(shareHome(key))===serialized)localPendingHome.delete(key);
+        else continue; // 防止尚在傳送的本機修改被遠端舊值覆蓋
+      }
+      if(json(shareHome(key))!==serialized){
+        preserveLocalBackup();
+        if(key==='stays')stays=remote[key].map(item=>({...item}));
+        else dining=remote[key].map(item=>({...item}));
+        SV(key,homeValue(key));changed=true;
+      }
+    }
     if(changed){SV('days',days);if(!dlg.open)render();else dlg.addEventListener('close',()=>render(),{once:true});}
   }
   function watchDocs(epoch){
@@ -3265,8 +3433,10 @@ function makeCloudSync(){
       applyItinerarySnapshot(snap);
       connected=true;
       setStatus(exists.itinerary
-        ?'每日行程與訂位狀態已連接 Firebase，即時同步中；待辦只儲存於這台手機。'
-        :'雲端還沒有建立共用行程，請由主要使用者首次上傳；待辦不會同步。');
+        ?(homeNames.every(key=>homeReady[key])
+          ?'每日行程、訂位狀態、住宿及餐廳已連接 Firebase，即時同步中；待辦仍只在本機。'
+          :'每日行程與訂位狀態已連線，但住宿／餐廳尚未初始化；請由主要使用者點「首次上傳住宿與餐廳清單」。')
+        :'雲端尚無共用行程；請由主要使用者首次上傳行程，並同時建立住宿與餐廳清單。');
       paint();
     },err=>{
       if(epoch!==liveEpoch)return;
@@ -3280,6 +3450,9 @@ function makeCloudSync(){
     for(const [key,value] of Object.entries(current)){
       if(json(value)!==itineraryBaseline[key])dirty[key]=value;
     }
+    for(const key of homeNames){
+      if(homeReady[key]&&json(shareHome(key))!==homeBaseline[key])dirty[key]=shareHome(key);
+    }
     return {dirty};
   }
   async function flush(){
@@ -3288,8 +3461,11 @@ function makeCloudSync(){
     if(!Object.keys(dirty).length)return;
     try{
       if(Object.keys(dirty).length){
-        localPendingDays=new Set([...localPendingDays,...Object.keys(dirty)]);
-        // 每次僅更新被修改的「日期欄位」，不同天的修改不會相互整份覆寫。
+        for(const key of Object.keys(dirty)){
+          if(homeNames.includes(key))localPendingHome.add(key);
+          else localPendingDays.add(key);
+        }
+        // 分別 merge 修改過的日期、住宿或餐廳欄位，避免覆寫其他未修改的資料。
         await api.setDoc(api.doc(db,'shared_trip_data','itinerary'),dirty,{merge:true});
       }
       if(epoch===liveEpoch){cloudError='';setStatus('已將最新修改送往共用雲端。');paint();}
@@ -3301,28 +3477,67 @@ function makeCloudSync(){
     if(!verified||!connected||!exists.itinerary)return;
     const {dirty}=collectChanges();
     if(!Object.keys(dirty).length)return;
-    for(const k of Object.keys(dirty))localPendingDays.add(k);
+    for(const k of Object.keys(dirty)){
+      if(homeNames.includes(k))localPendingHome.add(k);
+      else localPendingDays.add(k);
+    }
     window.clearTimeout(flushTimer);flushTimer=window.setTimeout(flush,440);
+  }
+  // 住宿與餐廳沿用與每日行程相同的 debounce，同步仍採用原有成員授權。
+  function onHomeChange(key){
+    if(!homeNames.includes(key))return;
+    if(!verified||!connected||!exists.itinerary||!homeReady[key]){
+      if(verified&&connected&&!homeReady[key]){
+        setStatus('住宿／餐廳尚未完成共用初始化。請先由主要使用者上傳正確清單；本次修改暫存於這台手機。',true);
+        paint();
+      }
+      return;
+    }
+    onLocalChange();
   }
   async function seedShared(){
     if(!verified||!user||busy||!initial.itinerary||exists.itinerary)return;
-    if(!confirm('要以「這台手機」的每日行程建立共用資料嗎？\n只需首次上傳，其他旅伴請勿重複建立。待辦清單不會上傳。'))return;
+    if(!confirm('要以「這台手機」的每日行程、住宿與餐廳建立共用資料嗎？\n只需首次上傳，其他旅伴請勿重複建立。待辦清單不會上傳。'))return;
     busy=true;paint();setStatus('正在建立共用行程資料，請勿關閉頁面…');
     try{
       const ref=api.doc(db,'shared_trip_data','itinerary');
       await api.runTransaction(db,async tx=>{
         const existing=await tx.get(ref);
         if(existing.exists())return;
-        const body=shareDays();
-        if(json(body).length>850000)throw new Error('行程資料超過同步大小上限，請先移除太大的內嵌資料。');
+        const body={...shareDays(),stays:shareHome('stays'),dining:shareHome('dining')};
+        if(json(body).length>850000)throw new Error('共用資料超過同步大小上限，請先縮減資料。');
         tx.set(ref,body);
       });
-      setStatus('首次共用行程已建立，正在確認雲端同步；待辦清單保留在本機。');
+      setStatus('首次共用行程、住宿與餐廳已建立，正在確認雲端同步；待辦仍保留在本機。');
+    }catch(err){cloudError=makeReadableError(err);setStatus(cloudError,true);}
+    finally{busy=false;paint();}
+  }
+  // 舊版 Firestore 只有 day_*：需由主要手機明確確認，首次上傳原本住宿／餐廳。
+  // Transaction 僅填入「缺少」的欄位，不會覆寫已存在的共用清單。
+  async function seedHomeLists(){
+    if(!verified||!user||busy||!connected||!exists.itinerary||!initial.itinerary)return;
+    const missing=homeNames.filter(key=>!homeReady[key]);
+    if(!missing.length)return;
+    if(!confirm('要將這台手機的'+missing.map(key=>key==='stays'?'住宿':'餐廳').join('、')+'清單首次上傳給所有旅伴嗎？\n請只在資料最完整的主要手機進行，避免其他手機的舊資料變成共用版本。'))return;
+    busy=true;paint();setStatus('正在建立住宿／餐廳共用資料…');
+    try{
+      const ref=api.doc(db,'shared_trip_data','itinerary');
+      await api.runTransaction(db,async tx=>{
+        const record=await tx.get(ref);
+        if(!record.exists())throw new Error('共用行程文件不存在，請先建立每日行程。');
+        const remote=record.data()||{};
+        const patch={};
+        for(const key of homeNames)if(!Array.isArray(remote[key]))patch[key]=shareHome(key);
+        if(!Object.keys(patch).length)return;
+        if(json(patch).length>250000)throw new Error('住宿／餐廳資料太大，請精簡備註後再試。');
+        tx.set(ref,patch,{merge:true});
+      });
+      cloudError='';setStatus('首次上傳完成，正在取得所有旅伴共用的住宿與餐廳資料。');
     }catch(err){cloudError=makeReadableError(err);setStatus(cloudError,true);}
     finally{busy=false;paint();}
   }
   function downloadBackup(){
-    const backup={format:'Hokkaido Winter Journal Backup',createdAt:new Date().toISOString(),days,todos,packs,shopping};
+    const backup={format:'Hokkaido Winter Journal Backup',createdAt:new Date().toISOString(),days,todos,packs,shopping,stays,dining};
     const blob=new Blob([json(backup)],{type:'application/json;charset=utf-8'});
     const url=URL.createObjectURL(blob),a=document.createElement('a');
     a.href=url;a.download='北海道旅誌_手機資料備份_'+new Date().toISOString().slice(0,10)+'.json';
@@ -3332,7 +3547,7 @@ function makeCloudSync(){
   }
   async function memberLoginState(nextUser){
     clearSubscriptions();user=nextUser;paint();
-    if(!user){setStatus('登入後只有每日行程及訂位狀態同步；待辦、購物、行李都只儲存在這台手機。');
+    if(!user){setStatus('登入後每日行程、訂位狀態、住宿及餐廳同步；待辦、購物、行李仍只在這台手機。');
       if(!autoLoginPrompt){autoLoginPrompt=true;window.setTimeout(()=>{if(!user&&!dialog.open)showDialog()},720);}return;
     }
     setStatus('正在確認旅伴存取權限…');
@@ -3369,6 +3584,7 @@ function makeCloudSync(){
   document.getElementById('hk-cloud-close').addEventListener('click',()=>dialog.close());
   document.getElementById('hk-cloud-backup').addEventListener('click',downloadBackup);
   seedBtn.addEventListener('click',seedShared);
+  homeSeedBtn.addEventListener('click',seedHomeLists);
   document.getElementById('hk-cloud-signout').addEventListener('click',async()=>{
     if(!api||!auth)return;
     try{await api.signOut(auth);setStatus('已登出 Firebase，這台手機的私人清單不受影響。');}
@@ -3386,7 +3602,7 @@ function makeCloudSync(){
     finally{busy=false;paint();}
   });
   paint();
-  return {start,onLocalChange,showDialog,debug:()=>({verified,connected,exists,initial,cloudError})};
+  return {start,onLocalChange,onHomeChange,showDialog,debug:()=>({verified,connected,exists,initial,homeReady,cloudError})};
 }
 
 save();render();
