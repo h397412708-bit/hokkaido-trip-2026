@@ -1827,7 +1827,16 @@ const HOURS=[[/天狗山纜車與/,'冬季 9:00–20:00（上行最晚 19:48；�
 const find=(L,t)=>{const m=L.find(x=>x[0].test(t));return m?m[1]:''};
 const uid=()=>Math.random().toString(36).slice(2,9);
 const prep=()=>DAYS.map(d=>({d:d.d,week:d.week,city:d.city,tone:d.tone,title:d.title,sub:d.sub,sleep:d.sleep,note:d.note,items:d.items.map(a=>({id:uid(),time:String(a.time).split(/[–\- ]/)[0],title:a.title,desc:a.desc||'',kind:a.kind,booked:!!a.booked,pending:!!a.pending,cost:find(COST,a.title)||a.meta||'',hours:find(HOURS,a.title),places:a.places||[]}))}));
-const T0=()=>[['JR 特急北斗 12/22 札幌 → 登別（指定席）','票券'],['JR 12/24 登別 → 洞爺 車票','票券'],['JR 12/26 洞爺 → 南千歲 車票','票券'],['札幌啤酒博物館票券（12/21）','票券'],['AOAO SAPPORO 水族館票券（12/21）','票券'],['天狗山纜車票券（12/19）','票券'],['雪地摩托車預約（12/25，需確認開放）','預約'],['確認 12/22 飯店晚餐安排與飯店用餐時段','預約'],['補上 12/26 機場附近飯店名稱','預約'],['奧芝商店 12/20 訂位確認','訂位'],['Visit Japan Web 入境資料','其他'],['eSIM／網路與海外旅遊保險','其他']].map(x=>({t:x[0],c:x[1],done:false})).concat([{t:'小樽倉庫 No.1｜12/19 17:30｜4 人',c:'訂位',done:true},{t:'寺田壽司｜12/21 20:30｜4 人',c:'訂位',done:true},{t:'機票：酷航 TR892／亞航 FD243',c:'票券',done:true},{t:'四段住宿（已訂）',c:'預約',done:true}]);
+// 新裝置首次使用的個人待辦範本：只有 eSIM 與原本已完成的共用準備項目。
+// 已存在 hk26v2_todos 的使用者繼續使用各自的本機清單，不會被範本覆蓋。
+// 待辦新增、編輯、勾選及刪除均不透過 Firebase 同步。
+const T0=()=>[
+ {t:'eSIM／網路與海外旅遊保險',c:'其他',done:false},
+ {t:'小樽倉庫 No.1｜12/19 17:30｜4 人',c:'訂位',done:true},
+ {t:'寺田壽司｜12/21 20:30｜4 人',c:'訂位',done:true},
+ {t:'機票：酷航 TR892／亞航 FD243',c:'票券',done:true},
+ {t:'四段住宿（已訂）',c:'預約',done:true}
+];
 const P0=()=>['護照（檢查效期）','機票與住宿確認資料','信用卡、日圓現金、交通卡','海外旅遊保險資料','保暖防風羽絨外套','防滑防水雪靴','發熱衣與保暖褲','保暖襪與備用襪','毛帽、圍巾、防水手套','暖暖包','eSIM／SIM 卡','手機、充電線與行動電源','常備藥品、護唇膏、乳液','隱形眼鏡與個人用品'].map(t=>({t:t,done:false}));
 
 // 每天依實際旅遊城市配對座標；預報只呈現 Open-Meteo 已可提供的日期。
