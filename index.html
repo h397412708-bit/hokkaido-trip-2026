@@ -1241,6 +1241,46 @@ dialog.itinerary-editor{box-sizing:border-box;width:min(92vw,440px);max-height:8
 
 figure.itinerary-photo:empty{display:none}
 dialog h3[tabindex='-1']:focus{outline:none}
+
+/* 交通分類標籤：文字標示，收合與展開時固定顯示 */
+.row.mv .row-summary-main{gap:4px}
+.row.mv .transport-mode-badge{
+  display:inline-flex!important;align-items:center;justify-content:center;
+  flex:0 0 auto!important;align-self:flex-start;
+  width:max-content;max-width:100%;box-sizing:border-box;
+  padding:3px 9px;margin:0 0 1px;border:1px solid transparent;
+  border-radius:7px;font-size:10px;font-weight:800;line-height:1.35;
+  white-space:nowrap;letter-spacing:.045em;
+}
+.transport-mode-badge.mode-walk{color:#577d4d;background:#edf6e7;border-color:#dcebcf}
+.transport-mode-badge.mode-jr{color:#a7536b;background:#f9e9ef;border-color:#efd7e0}
+.transport-mode-badge.mode-subway{color:#417a9f;background:#e6f1f9;border-color:#d2e5f1}
+.transport-mode-badge.mode-bus{color:#9c7138;background:#fbf0de;border-color:#f1e3ca}
+.transport-mode-badge.mode-taxi{color:#6d6298;background:#f0ebf8;border-color:#e2d9f1}
+.transport-mode-badge.mode-flight{color:#477a90;background:#e7f3f6;border-color:#d4e9ed}
+.transport-mode-badge.mode-other{color:#65748a;background:#edf1f7;border-color:#dfe5ee}
+.itinerary-edit-form .transport-mode-field{display:block;margin-top:13px;color:#607590}
+.itinerary-edit-form .transport-mode-field select{
+  box-sizing:border-box;display:block;width:100%;min-height:44px;margin-top:5px;
+  border:1px solid #dce4ef;border-radius:12px;padding:10px 32px 10px 12px;
+  background:#f7f9fd;color:#344760;font-size:13px;outline-color:#8ca6c7;
+}
+.itinerary-edit-form .transport-mode-hint{margin:5px 0 0;color:#8798ad;font-size:10px;line-height:1.5}
+
+
+/* 交通分類與名稱同列顯示；時長另起一列，展開或收合都維持此排列 */
+.row.mv .row-summary-main{width:100%;min-width:0}
+.row.mv .row-summary-heading{
+  display:flex;align-items:center;gap:7px;width:100%;min-width:0;
+}
+.row.mv .row-summary-heading>.transport-mode-badge{
+  flex:0 0 auto!important;align-self:center;margin:0;
+}
+.row.mv .row-summary-heading>.row-summary-title{
+  display:block!important;flex:1 1 auto!important;min-width:0;
+  line-height:1.45;overflow-wrap:anywhere;
+}
+.row.mv .row-summary-duration{margin-top:0}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1694,6 +1734,29 @@ const durationFor=(a,d)=>{
  const icon='';
  return '<small class="row-summary-duration'+(travel?' is-transport':' is-spot')+'">'+icon+'<span class="row-duration-text">'+esc(label)+'</span></small>';
 };
+// 交通工具分類：既有行程依標題及描述推測，新增／編輯則以使用者選擇為準。
+const TRANSPORT_MODE_CLASSES={'步行':'walk','JR':'jr','地鐵':'subway','巴士':'bus','計程車':'taxi','飛機':'flight','其他':'other'};
+const TRANSPORT_MODE_NAMES=Object.keys(TRANSPORT_MODE_CLASSES);
+const guessTransportMode=text=>{
+ const t=String(text||'');
+ if(/(?:\bJR\b|ＪＲ|特急北斗|函館本線|快速[\s・]*Airport|列車|鐵道)/i.test(t))return 'JR';
+ if(/地鐵|地下鐵|南北線|東西線|東豐線|東豊線/.test(t))return '地鐵';
+ if(/步行|徒步|走路|散步/.test(t))return '步行';
+ if(/巴士|公車|接駁車|接駁巴士|シャトルバス|Shuttle Bus/i.test(t))return '巴士';
+ if(/計程車|出租車|包車|自駕|租車|開車/.test(t))return '計程車';
+ if(/航空|飛機|機場報到|航班/.test(t))return '飛機';
+ return '';
+};
+const transportModeFor=a=>{
+ const selected=String(a.transportMode||'').trim();
+ if(TRANSPORT_MODE_NAMES.includes(selected))return selected;
+ return guessTransportMode(a.title)||guessTransportMode(a.desc)||guessTransportMode(a.meta)||'其他';
+};
+const transportBadge=a=>{
+ const name=transportModeFor(a);
+ return '<span class="transport-mode-badge mode-'+TRANSPORT_MODE_CLASSES[name]+'" aria-label="交通工具：'+name+'">'+name+'</span>';
+};
+
 // 直接使用「編輯行程」的完整行程細節與費用說明，絕不以正則式截取替代。
 const transportDetails=(a,cost)=>{
  const method=String(a.desc||'').trim()||'交通方式待確認';
@@ -1704,7 +1767,7 @@ const row=(a,i,d)=>{const mv=a.kind==='交通',status=bookingStatus(a),desc=book
 const title=status.booked&&a.bookingKey==='snow'?a.title.replace('（待訂）',''):a.title;
 const cost=status.booked&&a.bookingKey==='snow'?String(a.cost||'').replace('尚未預訂','依已訂方案'):a.cost;
 const media=spotMedia(a);const bd=[!mv&&desc&&'<p>'+esc(desc)+'</p>',!mv&&cost&&'<p class="c">💴 '+esc(cost)+'</p>',!mv&&a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',mv?transportDetails(a,cost):a.kind==='觀光'&&timeSpan(a)?'<div class="stay-duration">'+esc(timeSpan(a))+'</div>':'',media?'<section class="spot-card">'+((media.photos&&media.photos.length)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide'+(ph.mode==='blur'?' blur-bg':ph.mode==='composed'?' composed-photo':'')+'">'+(ph.mode==='blur'&&ph.src?'<span class="spot-carousel-blur" style="background-image:url('+esc(ph.src)+')"></span>':'')+'<img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div>'+(media.photos.length>1?'<span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div>':'')+'</div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p></div></section>':'',links(a.places)].filter(Boolean).join('');
-return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span class="row-summary-main"><span class="row-summary-title">'+esc(title)+'</span>'+durationFor(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
+return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?' open':'')+'><summary><time>'+esc(a.time)+'</time><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>'};
 
 
 app.addEventListener('scroll',e=>{const track=e.target.closest?.('.spot-carousel-track');if(!track)return;const box=track.closest('.spot-carousel');const slides=[...track.children];const i=Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/(track.clientWidth||1))));const count=box.querySelector('.spot-carousel-count');if(count)count.textContent=(i+1)+'/'+slides.length;box.querySelectorAll('.spot-carousel-dot').forEach((d,j)=>d.classList.toggle('active',j===i));},{capture:true,passive:true});
@@ -1771,7 +1834,7 @@ function shopPage(){
        '<div class="sh-product-footer"><span class="sh-qty-label">數量 × '+qty+'</span><div class="sh-mini-actions"><button type="button" data-a="shop-edit" data-id="'+id+'">編輯</button><button type="button" data-a="shop-delete" data-id="'+id+'">刪除</button></div></div></div></article>';
    }).join('')+'</div>';
  }
- return '<div class="ph sh-heading"><div class="kicker">Shopping list</div><h2>購物清單</h2><p>還有 '+pending+' 項待購買・已購買的會自動移到最下方</p>'+
+ return '<div class="ph sh-heading todo-heading"><div class="kicker">Shopping list</div><h2>購物清單</h2><p>還有 '+pending+' 項待購買・已購買的會自動移到最下方</p>'+
  '<button type="button" class="shop-glass-add" data-a="shop-add" aria-label="新增商品" title="新增商品"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
  '<div class="days cats sh-filters">'+tab('all','全部',total)+tab('pending','待購買',pending)+tab('bought','已購買',bought)+'</div>'+
  body+
@@ -2044,6 +2107,10 @@ function editDayItem(n,selectedKind){
  const f=(key,label,area=false,placeholder='')=>'<label>'+label+(area?'<textarea name="'+key+'" rows="3" placeholder="'+esc(placeholder)+'">'+esc(a[key]||'')+'</textarea>':'<input name="'+key+'" placeholder="'+esc(placeholder)+'" value="'+esc(a[key]||'')+'">')+'</label>';
  dlg.innerHTML='<form class="itinerary-edit-form" id="itinerary-edit-form"><h3>'+(adding?(transport?'添加交通':'添加行程'):(transport?'編輯交通':'編輯行程'))+'</h3><p class="form-sub">12/'+esc(days[st.day].d)+' · '+(transport?'交通資訊':'景點與活動資訊')+'</p>'+
  '<div class="edit-two-fields">'+f('time',transport?'開始時間':'時間（可填時段）','', transport?'例：09:30':'例：09:30–11:00')+f('hours',transport?'時刻／備註（選填）':'營業時間（選填）')+'</div>'+
+ (transport?'<label class="transport-mode-field">交通工具<select name="transportMode" required>'+
+ '<option value="" disabled'+(adding?' selected':'')+'>請選擇交通工具</option>'+
+ TRANSPORT_MODE_NAMES.map(mode=>'<option value="'+mode+'"'+(!adding&&transportModeFor(a)===mode?' selected':'')+'>'+mode+'</option>').join('')+
+ '</select></label><p class="transport-mode-hint">選擇後會在交通卡片上顯示對應的彩色分類。</p>':'')+
  f('title',transport?'交通名稱 *':'行程名稱 *','',transport?'例如：JR 札幌 → 小樽':'例如：小樽運河散步')+
  f('desc',transport?'交通方式／行程細節':'行程細節',true,transport?'例如：搭 JR 快速列車約 35 分鐘':'當日安排與注意事項')+
  f('cost','預估費用（選填）')+
@@ -2054,6 +2121,7 @@ function editDayItem(n,selectedKind){
    e.preventDefault();const fd=new FormData(e.currentTarget);
    const title=String(fd.get('title')||'').trim();if(!title){dlg.querySelector('[name="title"]')?.focus();return}
    const candidate={...a,title,time:String(fd.get('time')||'').trim(),desc:String(fd.get('desc')||'').trim(),cost:String(fd.get('cost')||'').trim(),hours:String(fd.get('hours')||'').trim(),kind};
+   if(transport)candidate.transportMode=TRANSPORT_MODE_NAMES.includes(String(fd.get('transportMode')||''))?String(fd.get('transportMode')):'其他';
    if(!transport){candidate.photoIntro=String(fd.get('photoIntro')||'').trim();candidate.photoAlt=title;
      if(itineraryPhotoChanged){candidate.photos=itineraryPhotoTemp.map(ph=>({...ph,alt:title}));candidate.userPhotos=itineraryPhotoTemp.length>0;if(!itineraryPhotoTemp.length)delete candidate.photos;}
    }
