@@ -1623,6 +1623,19 @@ dialog#dlg.bottom-sheet form .fb > button{
   dialog#dlg.bottom-sheet.sheet-dismissing{transition:none!important}
   dialog#dlg.bottom-sheet::backdrop{transition:none!important}
 }
+
+/* 2026-11-19: 行程訂位狀態獨立設定，表單改為完整單欄 */
+.itinerary-edit-form label{display:block;box-sizing:border-box;width:100%;min-width:0}
+.itinerary-edit-form .edit-fields-stacked{display:flex;flex-direction:column;gap:0;width:100%;min-width:0}
+.itinerary-edit-form .edit-fields-stacked>label{width:100%;min-width:0}
+.itinerary-edit-form .booking-status-label{display:block;margin-top:13px;color:#607590;font-size:11px;font-weight:750}
+.itinerary-edit-form .booking-status-label select{display:block;box-sizing:border-box;width:100%;min-height:44px;margin-top:6px;padding:10px 34px 10px 12px;border:1px solid #dce4ef;border-radius:12px;background:#f7f9fd;color:#354962;font-size:13px;outline-color:#8ca6c7}
+.itinerary-edit-form .booking-status-help{margin:5px 0 4px;color:#8799ae;font-size:10px;line-height:1.6}
+.itinerary-edit-form textarea[name="cost"]{display:block;box-sizing:border-box;width:100%;min-width:0;min-height:72px;max-width:100%;padding:12px 13px;overflow-wrap:anywhere;white-space:pre-wrap;resize:vertical;line-height:1.6}
+.transport-details p{white-space:pre-wrap!important;overflow-wrap:anywhere!important}
+/* 交通最後一欄預留底部面板操作列的安全空間，避免費用長文字被取消／儲存遮住。 */
+.itinerary-editor .itinerary-edit-form.transport-form textarea[name="cost"]{margin-bottom:92px;scroll-margin-bottom:160px}
+.itinerary-editor{scroll-padding-bottom:125px}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1985,7 +1998,8 @@ function migrateDays(source){
    if(['23','24','25'].includes(String(d.d))&&/^(飯店內晚餐|飯店晚餐|晚餐)$/.test(String(a.title||''))){
     a.title='飯店內晚餐';
     a.desc=String(d.d)==='23'?'已確認在第一瀧本館用晚餐，實際用餐時段依飯店安排。':'已確認在洞爺湖景乃之風度假酒店內用晚餐，實際用餐時段依飯店安排。';
-    a.booked=true;a.pending=false;a.kind='已預訂';
+    // 僅為尚無狀態欄位的舊資料補上預設；保留使用者後續手動清空／變更的狀態。
+    if(typeof a.booked!=='boolean'&&typeof a.pending!=='boolean'){a.booked=true;a.pending=false;}a.kind='已預訂';
     a.cost='飯店內晚餐；費用依已訂的用餐方案';
    }
    // 寺田壽司套餐已由使用者確認：只更新舊版預設說明，不覆蓋自訂內容。
@@ -2009,31 +2023,19 @@ function migrateDays(source){
     if(!Array.isArray(a.places)||!a.places.length)a.places=[place('大通公園','Odori Park Sapporo')];
    }
    const refreshedHours=find(HOURS,String(a.title||''));
-   if(refreshedHours)a.hours=refreshedHours;
+   if(refreshedHours&&!String(a.hours||'').trim())a.hours=refreshedHours;
   }
  }
  return list;
 }
 let days=migrateDays(LS('days',null)),todos=migrateTodos(LS('todos',null)),packs=LS('packs',null)||P0(),st={tab:'home',day:Math.min(Math.max(+LS('day',0)||0,0),days.length-1),cat:'全部'};
-// 用待辦勾選狀態決定行程標籤，不破壞行程手動修改與既有資料。
+// 行程訂位狀態獨立於待辦。只有行程項目自身 booked / pending 欄位控制標籤。
 function bookingStatus(a){
- if(a.bookingKey){
-  const matching=todos.filter(t=>taskKeys(t).includes(a.bookingKey));
-  if(matching.length){const done=matching.some(t=>t.done);return {booked:done,pending:!done};}
- }
- return {booked:!!a.booked,pending:!!a.pending};
+ return {booked:!!a.booked,pending:!a.booked&&!!a.pending};
 }
 function bookedText(a,status){
- let desc=String(a.desc||'');
- if(!status.booked)return desc;
- if(a.bookingKey==='beer')desc=desc.replace('門票尚未買。','已在待辦標記訂票完成。');
- if(a.bookingKey==='aoao')desc=desc.replace('門票尚未購買。','已在待辦標記訂票完成。');
- if(a.bookingKey==='soup')desc=desc.replace('尚非已訂位。','已在待辦標記訂位完成。');
- if(a.bookingKey==='snow')desc=desc.replace('尚未預約','已完成預約');
- if(['jr22','jr24','jr26'].includes(a.bookingKey)){
-  desc=desc.replace('實際列車與座位未確認','車票已在待辦標記訂妥，請以票券資訊為準').replace('車次與票價待訂','已在待辦標記訂票完成，請以車票資訊為準').replace('列車尚未訂','已在待辦標記訂票完成');
- }
- return desc;
+ // 保留行程編輯過的完整文字，不再根據待辦勾選自動改寫描述。
+ return String(a.desc||'');
 }
 
 const ov=new Set(['useful']),app=document.getElementById('app'),dlg=document.getElementById('dlg');
@@ -2126,7 +2128,7 @@ const transportBadge=a=>{
 const transportDetails=(a,cost)=>{
  const method=String(a.desc||'').trim()||'交通方式待確認';
  const price=String(cost||'').trim()||'費用待確認';
- return '<section class="transport-details"><b>交通方式</b><p>'+esc(method)+'</p><b>預估費用</b><p>'+esc(price)+'</p></section>';
+ return '<section class="transport-details"><b>交通方式</b><p>'+esc(method)+'</p>'+(String(a.hours||'').trim()?'<b>時刻／備註</b><p>'+esc(String(a.hours).trim())+'</p>':'')+'<b>預估費用</b><p>'+esc(price)+'</p></section>';
 };
 const row=(a,i,d)=>{const mv=a.kind==='交通',status=bookingStatus(a),desc=bookedText(a,status);
 const title=status.booked&&a.bookingKey==='snow'?a.title.replace('（待訂）',''):a.title;
@@ -2138,9 +2140,15 @@ return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'"'+(ov.has(a.id)?'
 app.addEventListener('scroll',e=>{const track=e.target.closest?.('.spot-carousel-track');if(!track)return;const box=track.closest('.spot-carousel');const slides=[...track.children];const i=Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/(track.clientWidth||1))));const count=box.querySelector('.spot-carousel-count');if(count)count.textContent=(i+1)+'/'+slides.length;box.querySelectorAll('.spot-carousel-dot').forEach((d,j)=>d.classList.toggle('active',j===i));},{capture:true,passive:true});
 app.addEventListener('click',e=>{const dot=e.target.closest?.('[data-carousel-dot]');if(!dot)return;const box=dot.closest('.spot-carousel');const track=box?.querySelector('.spot-carousel-track');const i=Number(dot.dataset.carouselDot);if(track&&track.children[i])track.scrollTo({left:track.children[i].offsetLeft,behavior:'smooth'});});
 
-function plan(){const d=days[st.day],snowBooked=String(d.d)==='25'&&todos.some(t=>taskKeys(t).includes('snow')&&t.done);const sub=snowBooked?d.sub.replace('雪地摩托車（未訂）','雪地摩托車（已訂）'):d.sub;let note=snowBooked?d.note.replace('雪地摩托車尚未預約，','雪地摩托車已在待辦標記預約完成，'):d.note;
-if(String(d.d)==='22'&&todos.some(t=>t.done&&taskKeys(t).includes('jr22')))note=note.replace('JR 車票還沒買。','JR 車票已在待辦標記訂妥。');
-if(String(d.d)==='24'&&todos.some(t=>t.done&&taskKeys(t).includes('jr24')))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 已在待辦標記訂妥。');return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(note)+'</p></details><div class="tlw">'+d.items.map((a,i)=>row(a,i,d)).join('')+'</div><div class="itinerary-add-area"><button type="button" class="itinerary-add-trigger" data-a="add-choose">＋ 添加</button></div><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
+function plan(){const d=days[st.day];
+// 僅依行程的手動狀態調整提醒（待辦清單不影響行程顯示）。
+const itemBooked=key=>(d.items||[]).some(a=>a.bookingKey===key&&bookingStatus(a).booked);
+const snowBooked=String(d.d)==='25'&&itemBooked('snow');
+const sub=snowBooked?d.sub.replace('雪地摩托車（未訂）','雪地摩托車（已訂）'):d.sub;
+let note=snowBooked?d.note.replace('雪地摩托車尚未預約，','雪地摩托車行程已標記為已訂，'):d.note;
+if(String(d.d)==='22'&&itemBooked('jr22'))note=note.replace('JR 車票還沒買。','JR 行程已標記為已訂，請確認實際車票。');
+if(String(d.d)==='24'&&itemBooked('jr24'))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 行程已標記為已訂。');
+return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<details class="soft" data-k="n'+st.day+'"'+(ov.has('n'+st.day)?' open':'')+'><summary>當日提醒</summary><p>'+esc(note)+'</p></details><div class="tlw">'+d.items.map((a,i)=>row(a,i,d)).join('')+'</div><div class="itinerary-add-area"><button type="button" class="itinerary-add-trigger" data-a="add-choose">＋ 添加</button></div><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
 
 // 購物清單以相同的 hk26v2_ 儲存空間保存。圖像會縮小為 JPEG，僅儲存在目前瀏覽器。
 let shopping=LS('shopping',[]);
@@ -2804,22 +2812,28 @@ function editDayItem(n,selectedKind){
  itineraryPhotoChanged=false;
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-chooser');dlg.classList.add('itinerary-editor');
  const f=(key,label,area=false,placeholder='')=>'<label>'+label+(area?'<textarea name="'+key+'" rows="3" placeholder="'+esc(placeholder)+'">'+esc(a[key]||'')+'</textarea>':'<input name="'+key+'" placeholder="'+esc(placeholder)+'" value="'+esc(a[key]||'')+'">')+'</label>';
- dlg.innerHTML='<form class="itinerary-edit-form" id="itinerary-edit-form"><h3>'+(adding?(transport?'添加交通':'添加行程'):(transport?'編輯交通':'編輯行程'))+'</h3><p class="form-sub">12/'+esc(days[st.day].d)+' · '+(transport?'交通資訊':'景點與活動資訊')+'</p>'+
- '<div class="edit-two-fields">'+f('time',transport?'開始時間':'時間（可填時段）','', transport?'例：09:30':'例：09:30–11:00')+f('hours',transport?'時刻／備註（選填）':'營業時間（選填）')+'</div>'+
+ dlg.innerHTML='<form class="itinerary-edit-form'+(transport?' transport-form':'')+'" id="itinerary-edit-form"><h3>'+(adding?(transport?'添加交通':'添加行程'):(transport?'編輯交通':'編輯行程'))+'</h3><p class="form-sub">12/'+esc(days[st.day].d)+' · '+(transport?'交通資訊':'景點與活動資訊')+'</p>'+
+ '<div class="edit-fields-stacked">'+f('time',transport?'開始時間':'時間（可填時段）','', transport?'例：09:30':'例：09:30–11:00')+f('hours',transport?'時刻／備註（選填）':'營業時間（選填）')+'</div>'+
  (transport?'<label class="transport-mode-field">交通工具<select name="transportMode" required>'+
  '<option value="" disabled'+(adding?' selected':'')+'>請選擇交通工具</option>'+
  TRANSPORT_MODE_NAMES.map(mode=>'<option value="'+mode+'"'+(!adding&&transportModeFor(a)===mode?' selected':'')+'>'+mode+'</option>').join('')+
  '</select></label><p class="transport-mode-hint">選擇後會在交通卡片上顯示對應的彩色分類。</p>':'')+
  f('title',transport?'交通名稱 *':'行程名稱 *','',transport?'例如：JR 札幌 → 小樽':'例如：小樽運河散步')+
+ '<label class="booking-status-label">訂位狀態（選填）<select name="bookingStatus" aria-label="訂位狀態（選填）">'+
+ '<option value=""'+(!a.booked&&!a.pending?' selected':'')+'>不設定（不顯示）</option>'+
+ '<option value="pending"'+(!a.booked&&a.pending?' selected':'')+'>待確認</option>'+
+ '<option value="booked"'+(a.booked?' selected':'')+'>已訂</option></select></label>'+
+ '<p class="booking-status-help">不選擇就不會在行程卡片上顯示狀態；和待辦勾選互不影響。</p>'+
  f('desc',transport?'交通方式／行程細節':'行程細節',true,transport?'例如：搭 JR 快速列車約 35 分鐘':'當日安排與注意事項')+
- f('cost','預估費用（選填）')+
+ f('cost','預估費用（選填）',true,'例：約 ¥1,200／人；計程車按車資計算')+
  (transport?'':'<div class="itinerary-photo-section"><b>景點圖片 <span id="itinerary-photo-count" style="float:right;color:#9aacc0;font-weight:500">0 / 4 張</span></b><div id="itinerary-photo-grid" class="itinerary-photo-grid"></div><label class="itinerary-photo-upload" for="itinerary-photo-file">＋ 上傳景點圖片<input id="itinerary-photo-file" type="file" accept="image/*" multiple data-a="itinerary-photo"></label><p class="itinerary-photo-help">最多 4 張，保留完整構圖並以模糊背景填滿；照片只儲存在目前裝置。</p></div>'+f('photoIntro','景點介紹',true,'介紹景點特色、推薦看點或體驗'))+
  '<div class="fb"><button type="button" data-a="cx">取消</button><button type="submit" class="pri">'+(adding?'新增':'儲存')+'</button></div></form>';
  if(!transport)updateItineraryPhotoPreview();
  dlg.querySelector('form').onsubmit=e=>{
    e.preventDefault();const fd=new FormData(e.currentTarget);
    const title=String(fd.get('title')||'').trim();if(!title){dlg.querySelector('[name="title"]')?.focus();return}
-   const candidate={...a,title,time:String(fd.get('time')||'').trim(),desc:String(fd.get('desc')||'').trim(),cost:String(fd.get('cost')||'').trim(),hours:String(fd.get('hours')||'').trim(),kind};
+   const choice=String(fd.get('bookingStatus')||'');
+   const candidate={...a,title,time:String(fd.get('time')||'').trim(),desc:String(fd.get('desc')||'').trim(),cost:String(fd.get('cost')||'').trim(),hours:String(fd.get('hours')||'').trim(),kind,booked:choice==='booked',pending:choice==='pending'};
    if(transport)candidate.transportMode=TRANSPORT_MODE_NAMES.includes(String(fd.get('transportMode')||''))?String(fd.get('transportMode')):'其他';
    if(!transport){candidate.photoIntro=String(fd.get('photoIntro')||'').trim();candidate.photoAlt=title;
      if(itineraryPhotoChanged){candidate.photos=itineraryPhotoTemp.map(ph=>({...ph,alt:title}));candidate.userPhotos=itineraryPhotoTemp.length>0;if(!itineraryPhotoTemp.length)delete candidate.photos;}
