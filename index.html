@@ -1398,6 +1398,129 @@ body.drag-order-active{user-select:none!important;-webkit-user-select:none!impor
 /* 購物項目的開啟連結亦比商品名稱小，保留可點擊範圍 */
 .sh-flat .sh-link,.sh-product .sh-link{font-size:9.5px;font-weight:650;line-height:1.35}
 .sh-flat .sh-link svg,.sh-product .sh-link svg{width:11px;height:11px}
+
+/* 11/19 更新：所有每日行程卡片一致採圓角外框，交通項目也不例外。 */
+.tlw > details.row,
+.tlw > details.row.mv{
+  border:1px solid #d9e1ee!important;
+  border-radius:18px!important;
+  background:rgba(255,255,255,.96)!important;
+  box-shadow:0 3px 12px rgba(42,71,108,.055)!important;
+  margin-bottom:11px!important;
+  overflow:visible;
+}
+.tlw > details.row > summary.swipe-host,
+.tlw > details.row.mv > summary.swipe-host{
+  border-radius:17px!important;
+  overflow:hidden!important;
+}
+.tlw > details.row.mv > summary.swipe-host > .swipe-face{
+  background:#fafcff!important;
+  padding:10px 12px!important;
+  border-radius:17px!important;
+  min-height:49px;
+}
+.tlw > details.row > summary.swipe-host > .swipe-face{
+  border-radius:17px!important;
+}
+.tlw > details.row.mv > .bd{
+  padding:4px 13px 12px!important;
+}
+.tlw > details.row[open]{border-color:#cfdced!important}
+/* 打勾待辦：只劃掉項目名稱，保留分類、連結可閱讀。 */
+.card.pad > .td.swipe-host.dn > .swipe-face .todo-body > span:first-child{
+  text-decoration:line-through!important;
+  text-decoration-thickness:1.25px!important;
+  text-decoration-color:#8291a8!important;
+  color:#8b97aa!important;
+}
+/* 第一個待辦上方不顯示分隔線；同時消除子層與偽元素的線。 */
+.card.pad > .td.swipe-host:first-child{
+  border-top:0!important;
+}
+.card.pad > .td.swipe-host:first-child::before{border-top:0!important}
+/* 拖曳後維持靜止，避免復位完成時再播放入場動畫。 */
+dialog#dlg.bottom-sheet.sheet-rested{animation:none!important}
+/* 底部面板橫條實際拖曳時，取消初始入場動畫的 transform 優先權。 */
+dialog#dlg.bottom-sheet.sheet-pulling{
+  animation:none!important;
+  transition:none!important;
+  transform:translate3d(0,var(--sheet-pull-y,0px),0)!important;
+  opacity:1;
+}
+dialog#dlg.bottom-sheet.sheet-returning{
+  animation:none!important;
+  transition:transform .25s cubic-bezier(.2,.75,.24,1)!important;
+  transform:translate3d(0,0,0)!important;
+}
+dialog#dlg.bottom-sheet.sheet-dismissing{
+  animation:none!important;
+  transition:transform .28s cubic-bezier(.3,.1,.6,1),opacity .28s ease!important;
+  transform:translate3d(0,110%,0)!important;
+  opacity:.90!important;
+  pointer-events:none;
+}
+dialog#dlg.bottom-sheet .sheet-grabber{height:35px;min-height:35px;touch-action:none;cursor:grab}
+dialog#dlg.bottom-sheet .sheet-grabber:active{cursor:grabbing}
+dialog#dlg.bottom-sheet .sheet-grabber span{width:42px;height:5px;background:#b5c1d3}
+@media(prefers-reduced-motion:reduce){
+  dialog#dlg.bottom-sheet.sheet-returning,dialog#dlg.bottom-sheet.sheet-dismissing{transition:none!important}
+}
+
+
+/* 12/18 行程視覺層級：交通是簡約時間軸文字；景點／餐廳／其他行程是白色圓角卡片。
+   不更動展開內容、左滑操作或六點長按排序。 */
+.tlw > details.row:not(.mv){
+  background:#ffffff!important;
+  border:1px solid #dce4f0!important;
+  border-radius:21px!important;
+  box-shadow:0 4px 13px rgba(47,71,107,.065)!important;
+  margin-bottom:12px!important;
+}
+.tlw > details.row:not(.mv) > summary.swipe-host{
+  border-radius:20px!important;
+  overflow:hidden!important;
+}
+.tlw > details.row:not(.mv) > summary.swipe-host > .swipe-face{
+  background:#ffffff!important;
+  border-radius:20px!important;
+}
+/* 交通不放進白色框：文字直接浮在時間軸的霧藍底色上。 */
+.tlw > details.row.mv,
+.tlw > details.row.mv[open]{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  margin-bottom:10px!important;
+}
+.tlw > details.row.mv > summary.swipe-host{
+  background:transparent!important;
+  border-radius:10px!important;
+  overflow:hidden!important; /* 保留左滑揭露的編輯／刪除按鈕 */
+}
+.tlw > details.row.mv > summary.swipe-host > .swipe-face{
+  background:transparent!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  padding:7px 4px!important;
+  min-height:52px;
+}
+.tlw > details.row.mv .row-summary-heading > .row-summary-title{
+  color:#65748d;
+  font-weight:650;
+}
+.tlw > details.row.mv .row-summary-duration{color:#8a9ab1}
+.tlw > details.row.mv > .bd{
+  padding:2px 4px 9px!important;
+  background:transparent!important;
+}
+.tlw > details.row.mv:before{
+  background:#a7b4cb!important;
+  border:0!important;
+  box-shadow:0 0 0 3px var(--pale)!important;
+}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -2369,25 +2492,68 @@ document.addEventListener('keydown',e=>{
  if(e.target.matches('button,input,a,select,textarea'))return;
  e.preventDefault();setSwipeOpen(host,e.key==='ArrowLeft');
 });
-// 只從把手往下拖可收回新增面板；不干擾圖片上傳與表單捲動。
+// 從橫條按住往下拉：面板跟著手指向下，鬆開後滑出螢幕並關閉。
+// 短距離移動則彈回原位；不影響表單的正常捲動或圖片上傳。
 let sheetPull=null;
+let sheetCloseTimer=0;
+function resetBottomSheetGesture(){
+  window.clearTimeout(sheetCloseTimer);sheetCloseTimer=0;
+  sheetPull=null;
+  dlg.classList.remove('sheet-rested','sheet-pulling','sheet-returning','sheet-dismissing');
+  dlg.style.removeProperty('--sheet-pull-y');
+}
+function finishBottomSheetDrag(commit){
+  const drag=sheetPull;
+  if(!drag)return;
+  sheetPull=null;
+  const delta=drag.offset||0;
+  const age=Math.max(1,performance.now()-drag.started);
+  const velocity=delta/age;
+  if(drag.grip?.hasPointerCapture?.(drag.id)){
+    try{drag.grip.releasePointerCapture(drag.id)}catch(_){}
+  }
+  dlg.classList.remove('sheet-pulling');
+  dlg.style.removeProperty('--sheet-pull-y');
+  if(commit&&dlg.open&&(delta>100||(delta>55&&velocity>.6))){
+    dlg.classList.add('sheet-dismissing');
+    sheetCloseTimer=window.setTimeout(()=>{
+      if(dlg.open)dlg.close();
+      resetBottomSheetGesture();
+    },290);
+  }else{
+    dlg.classList.add('sheet-returning');
+    sheetCloseTimer=window.setTimeout(()=>{
+      dlg.classList.remove('sheet-returning');
+    },260);
+  }
+}
 document.addEventListener('pointerdown',e=>{
- if(!e.target.closest?.('#dlg.bottom-sheet .sheet-grabber'))return;
- sheetPull={id:e.pointerId,y:e.clientY,offset:0};
+  const grip=e.target.closest?.('#dlg.bottom-sheet .sheet-grabber');
+  if(!grip||!dlg.open||(e.pointerType==='mouse'&&e.button!==0))return;
+  window.clearTimeout(sheetCloseTimer);
+  dlg.classList.remove('sheet-dismissing','sheet-returning');
+  dlg.classList.add('sheet-rested');
+  // Prevent hkSheetRise keyframes from overriding the pointer-driven offset.
+  dlg.classList.add('sheet-pulling');
+  dlg.style.setProperty('--sheet-pull-y','0px');
+  sheetPull={id:e.pointerId,grip,startY:e.clientY,offset:0,started:performance.now()};
+  try{grip.setPointerCapture(e.pointerId)}catch(_){}
 },{passive:true});
 document.addEventListener('pointermove',e=>{
- if(!sheetPull||sheetPull.id!==e.pointerId)return;
- const delta=Math.max(0,e.clientY-sheetPull.y);
- sheetPull.offset=delta;
- if(e.cancelable)e.preventDefault();
- dlg.style.transform='translate3d(0,'+delta+'px,0)';
+  const drag=sheetPull;
+  if(!drag||drag.id!==e.pointerId)return;
+  const delta=Math.max(0,e.clientY-drag.startY);
+  drag.offset=delta;
+  dlg.style.setProperty('--sheet-pull-y',delta+'px');
+  if(e.cancelable)e.preventDefault();
 },{passive:false});
 document.addEventListener('pointerup',e=>{
- if(!sheetPull||sheetPull.id!==e.pointerId)return;
- const delta=sheetPull.offset;sheetPull=null;dlg.style.transform='';
- if(delta>96&&dlg.open)dlg.close();
+  if(sheetPull&&sheetPull.id===e.pointerId)finishBottomSheetDrag(true);
 },{passive:true});
-document.addEventListener('pointercancel',e=>{if(sheetPull&&sheetPull.id===e.pointerId){sheetPull=null;dlg.style.transform='';}},{passive:true});
+document.addEventListener('pointercancel',e=>{
+  if(sheetPull&&sheetPull.id===e.pointerId)finishBottomSheetDrag(false);
+},{passive:true});
+dlg.addEventListener('close',resetBottomSheetGesture);
 
 function render(){
   const existingStrip=app.querySelector('main .days:not(.cats)');
