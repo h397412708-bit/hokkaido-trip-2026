@@ -1160,18 +1160,6 @@ body.row-drag-active{cursor:grabbing;user-select:none!important;-webkit-user-sel
   pointer-events:none;
 }
 #journal-save-toast.is-visible{opacity:1;transform:translate3d(-50%,0,0) scale(1)}
-/* 購物新增視窗從 + 按鈕中心由小到大彈出，不裁切表單 */
-@keyframes shopPopupSpring{
-  0%{transform:translate3d(var(--shop-pop-dx,0px),var(--shop-pop-dy,0px),0) scale(.08);opacity:.25;filter:blur(1px)}
-  75%{transform:translate3d(0,0,0) scale(1.025);opacity:1;filter:blur(0)}
-  100%{transform:translate3d(0,0,0) scale(1);opacity:1;filter:blur(0)}
-}
-@keyframes shopBackdropAppear{from{background:rgba(23,37,62,0)}to{background:rgba(26,34,54,.4)}}
-dialog.sh-dialog.shop-pop-opening{
-  transform-origin:center center;
-  animation:shopPopupSpring .56s cubic-bezier(.27,.43,.32,1) both;
-}
-dialog.sh-dialog.shop-pop-opening::backdrop{animation:shopBackdropAppear .3s ease both}
 /* 行李清單長按抓取、插入位置提示，延續行程六點把手 */
 .overview-p .pk{position:relative;align-items:center;gap:9px;min-height:46px}
 .overview-p .pk>span{min-width:0;overflow-wrap:anywhere}
@@ -1252,6 +1240,7 @@ dialog.itinerary-editor{box-sizing:border-box;width:min(92vw,440px);max-height:8
 @media(prefers-reduced-motion:reduce){.itinerary-type-option,.itinerary-add-trigger{transition:none}}
 
 figure.itinerary-photo:empty{display:none}
+dialog h3[tabindex='-1']:focus{outline:none}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1794,25 +1783,8 @@ function shopPreviewUpdate(){
  holder.disabled=!shopPhotoTemp;
  const remove=dlg.querySelector('#sh-remove-photo');if(remove)remove.hidden=!shopPhotoTemp;
 }
-let shopRevealOrigin=null;
-function openShopPopReveal(origin){
- if(!origin||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
- const box=dlg.getBoundingClientRect();
- const centerX=box.left+box.width/2,centerY=box.top+box.height/2;
- dlg.style.setProperty('--shop-pop-dx',(origin.x-centerX)+'px');
- dlg.style.setProperty('--shop-pop-dy',(origin.y-centerY)+'px');
- dlg.classList.remove('shop-pop-opening');
- void dlg.offsetWidth;
- dlg.classList.add('shop-pop-opening');
-}
-dlg.addEventListener('animationend',e=>{
- if(e.target===dlg&&e.animationName==='shopPopupSpring')dlg.classList.remove('shop-pop-opening');
-});
-dlg.addEventListener('close',()=>{
- dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-chooser','itinerary-editor');
- dlg.style.removeProperty('--shop-pop-dx');dlg.style.removeProperty('--shop-pop-dy');
- shopRevealOrigin=null;
-});
+// 購物新增採用和待辦相同的一般彈窗，不作從 + 放大動畫。
+dlg.addEventListener('close',()=>dlg.classList.remove('sh-dialog','itinerary-chooser','itinerary-editor'));
 function shopEditor(id){
  const item=shopping.find(x=>x.id===id),adding=!item;
  const o=item||{name:'',store:'',qty:1,url:'',note:'',image:'',done:false};
@@ -1844,8 +1816,7 @@ function shopEditor(id){
    shopAddHint('stores',store);
    dlg.close();dlg.classList.remove('sh-dialog');shopPhotoTemp='';render();showSavedToast();
  };
- dlg.showModal();
- if(adding&&shopRevealOrigin)openShopPopReveal(shopRevealOrigin);
+ openEditorDialogNoKeyboard();
 }
 async function shopReadPhoto(file){
  if(!file)return;
@@ -2005,7 +1976,19 @@ function render(){
   runItineraryEntrance();
   getWxForecast(false);
 }
-function form(title,fs,v,cb){dlg.innerHTML='<form><h3>'+title+'</h3>'+fs.map(f=>'<label>'+f[1]+(f[2]==='area'?'<textarea name="'+f[0]+'" rows="3">'+esc(v[f[0]])+'</textarea>':f[2]==='sel'?'<select name="'+f[0]+'">'+f[3].map(o=>'<option'+(o===v[f[0]]?' selected':'')+'>'+o+'</option>').join('')+'</select>':'<input name="'+f[0]+'" value="'+esc(v[f[0]])+'">')+'</label>').join('')+'<div class="fb"><button type="button" data-a="cx">取消</button><button class="pri">儲存</button></div></form>';dlg.querySelector('form').onsubmit=e=>{e.preventDefault();const o={};new FormData(e.target).forEach((x,k)=>o[k]=String(x).trim());dlg.close();cb(o)};dlg.showModal()}
+// 所有新增／編輯視窗先將焦點放在標題，而不是輸入框，避免 iOS 開啟表單時自動彈出鍵盤。
+// 使用可程式聚焦的標題 (autofocus) 確保 showModal() 自己的焦點流程也不會選中第一個 input。
+function openEditorDialogNoKeyboard(){
+  const heading=dlg.querySelector('h3');
+  if(heading){
+    heading.tabIndex=-1;
+    heading.setAttribute('autofocus','');
+  }
+  dlg.showModal();
+  if(heading)heading.focus({preventScroll:true});
+  else dlg.focus({preventScroll:true});
+}
+function form(title,fs,v,cb){dlg.innerHTML='<form><h3>'+title+'</h3>'+fs.map(f=>'<label>'+f[1]+(f[2]==='area'?'<textarea name="'+f[0]+'" rows="3">'+esc(v[f[0]])+'</textarea>':f[2]==='sel'?'<select name="'+f[0]+'">'+f[3].map(o=>'<option'+(o===v[f[0]]?' selected':'')+'>'+o+'</option>').join('')+'</select>':'<input name="'+f[0]+'" value="'+esc(v[f[0]])+'">')+'</label>').join('')+'<div class="fb"><button type="button" data-a="cx">取消</button><button class="pri">儲存</button></div></form>';dlg.querySelector('form').onsubmit=e=>{e.preventDefault();const o={};new FormData(e.target).forEach((x,k)=>o[k]=String(x).trim());dlg.close();cb(o)};openEditorDialogNoKeyboard()}
 
 // 新增行程先選擇交通或景點；既有項目保持原分類及資料不變。
 function chooseItineraryKind(){
@@ -2016,7 +1999,7 @@ function chooseItineraryKind(){
  '<button type="button" class="itinerary-type-option" data-a="add-kind" data-kind="交通"><span class="itinerary-type-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v13H4zM4 12h16M7.5 16h.01M16.5 16h.01M7 18l-1 3m11-3 1 3"/></svg></span><span><strong>添加交通</strong><small>交通方式、預估費用、時間與路線名稱</small></span></button>'+
  '<button type="button" class="itinerary-type-option" data-a="add-kind" data-kind="觀光"><span class="itinerary-type-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="9" r="1.5"/><path d="m4 17 5-5 4 3 3-3 4 5"/></svg></span><span><strong>添加行程</strong><small>景點、照片、景點介紹與停留時間</small></span></button></div>'+
  '<button type="button" class="itinerary-choice-cancel" data-a="cx">取消</button>';
- dlg.showModal();
+ openEditorDialogNoKeyboard();
 }
 let itineraryPhotoTemp=[];
 let itineraryPhotoChanged=false;
@@ -2079,7 +2062,7 @@ function editDayItem(n,selectedKind){
    catch(error){if(adding)L.pop();else L[n]=old;alert('儲存失敗：瀏覽器儲存空間不足。請減少照片數量再試一次。');return}
    dlg.close();ov.add(candidate.id);save();render();showSavedToast();
  };
- dlg.showModal();
+ openEditorDialogNoKeyboard();
 }
 function edit(l,n){const add=n<0;
 if(l==='d'){return editDayItem(n)}
@@ -2319,7 +2302,7 @@ else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingIti
 else if(a==='add-choose')chooseItineraryKind()
 else if(a==='add-kind'){const kind=D.kind;dlg.close();dlg.classList.remove('itinerary-chooser');editDayItem(-1,kind)}
 else if(a==='itinerary-photo-remove'){itineraryPhotoTemp.splice(n,1);itineraryPhotoChanged=true;updateItineraryPhotoPreview()}
-else if(a==='shop-add'){const rect=b.getBoundingClientRect();shopRevealOrigin={x:rect.left+rect.width/2,y:rect.top+rect.height/2};shopEditor(null)}
+else if(a==='shop-add'){shopEditor(null)}
 else if(a==='shop-edit')shopEditor(D.id)
 else if(a==='shop-zoom'){const p=shopping.find(x=>x.id===D.id);if(p)shopShowImage(p.image,p.name)}
 else if(a==='shop-zoom-preview'){if(shopPhotoTemp)shopShowImage(shopPhotoTemp,dlg.querySelector('[name="name"]')?.value||'商品')}
