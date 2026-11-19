@@ -1940,7 +1940,7 @@ function todoLinks(t){
  if(/奧芝商店|おくしば/.test(title))put('奧芝商店訂位資訊',BOOKING_URLS.soup);
  if(/溫泉飯店含餐|飯店晚餐安排|飯店用餐時段/.test(title)){put('第一瀧本館官網',BOOKING_URLS.takimoto);put('乃之風官網',BOOKING_URLS.nonokaze)}
  if(/Visit Japan Web/i.test(title))put('Visit Japan Web',BOOKING_URLS.vjw);
- if(t.url&&safeLink(t.url))put('自訂網址',t.url);
+ if(t.url&&safeLink(t.url))put(String(t.urlLabel||'').trim()||'開啟網頁',t.url);
  return list.length?'<div class="todo-sites">'+[...new Map(list.map(x=>[x.url,x])).values()].map(x=>'<a href="'+esc(safeLink(x.url))+'" target="_blank" rel="noopener noreferrer">🔗 '+esc(x.name)+' ↗</a>').join('')+'</div>':'';
 }
 
@@ -2847,7 +2847,7 @@ function editDayItem(n,selectedKind){
 }
 function edit(l,n){const add=n<0;
 if(l==='d'){return editDayItem(n)}
-else if(l==='t'){const a=add?{t:'',c:'預約',done:false,url:''}:todos[n];form(add?'新增待辦':'編輯待辦',[['t','待辦事項'],['c','類別','sel',['預約','訂位','票券','其他']],['url','相關網址（選填，https://）']],a,o=>{if(!o.t)return;if(o.url&&!safeLink(o.url)){alert('網址必須以 https:// 或 http:// 開頭');return}Object.assign(a,o);if(add)todos.unshift(a);save();render();showSavedToast()})}
+else if(l==='t'){const a=add?{t:'',c:'預約',done:false,url:'',urlLabel:''}:todos[n];form(add?'新增待辦':'編輯待辦',[['t','待辦事項'],['c','類別','sel',['預約','訂位','票券','其他']],['url','相關網址（選填，https://）'],['urlLabel','網址顯示名稱（選填）']],a,o=>{if(!o.t)return;if(o.url&&!safeLink(o.url)){alert('網址必須以 https:// 或 http:// 開頭');return}Object.assign(a,o);if(add)todos.unshift(a);save();render();showSavedToast()})}
 else{const a=add?{t:'',done:false}:packs[n];form(add?'新增物品':'編輯物品',[['t','物品名稱']],a,o=>{if(!o.t)return;a.t=o.t;if(add)packs.push(a);ov.add('p');save();render();showSavedToast()})}}
 function move(L,i,d,l){const same=l==='t'?x=>x.done===L[i].done:()=>true;let j=i+d;while(L[j]&&!same(L[j]))j+=d;if(L[j]){const t=L[i];L[i]=L[j];L[j]=t}}
 // 按鈕觸感以獨立暫時圖層呈現：點擊若立即開啟編輯視窗或移動項目，回饋也不會消失。
