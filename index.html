@@ -2467,8 +2467,8 @@ const row=(a,i,d)=>{
  const photoFirst=!mv&&media?(media.photos?.[0]?.src||media.src||''):'';
  const summaryPhoto=photoFirst?'<span class="row-spot-thumb" aria-hidden="true"><img src="'+esc(photoFirst)+'" alt="" loading="lazy"></span>':'';
  const pinIcon=iconSvg('pin');
- const summaryWeb=webUrl?'<a class="itinerary-web-pin" data-itinerary-web href="'+esc(webUrl)+'" target="_blank" rel="noopener noreferrer" title="在 Google Maps 開啟" aria-label="在 Google Maps 開啟">'+pinIcon+'</a>':'';
- const expandedWeb=webUrl?'<a class="itinerary-web-expanded" data-itinerary-web href="'+esc(webUrl)+'" target="_blank" rel="noopener noreferrer" aria-label="在 Google Maps 開啟">'+pinIcon+'<span>Google Maps</span></a>':'';
+ const summaryWeb=webUrl?'<a class="itinerary-web-pin" data-itinerary-web href="'+esc(webUrl)+'" target="_top" title="在 Google Maps 開啟" aria-label="在 Google Maps 開啟">'+pinIcon+'</a>':'';
+ const expandedWeb=webUrl?'<a class="itinerary-web-expanded" data-itinerary-web href="'+esc(webUrl)+'" target="_top" aria-label="在 Google Maps 開啟">'+pinIcon+'<span>Google Maps</span></a>':'';
  
  const durationDetail=!mv?(a.spotDuration?'預留停留約 '+String(a.spotDuration).trim():a.kind==='觀光'?timeSpan(a):''):'';
  const bd=[
@@ -2483,17 +2483,15 @@ const row=(a,i,d)=>{
  ].filter(Boolean).join('');
  return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'" data-clock="'+esc(clock)+'"'+(ov.has(a.id)?' open':'')+'><summary aria-label="'+esc(clock+' '+title)+'"><time class="row-inline-clock">'+esc(clock)+'</time><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+summaryPhoto+summaryWeb+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>';
 };
-// 景點摘要內的連結放在 <summary> 中；必須主動開啟新分頁，避免原生 details 阻擋導覽或誤觸收合。
+// 景點地標統一使用頂層 Google Maps Universal Link，避免 iOS 主畫面 PWA
+// 先開一個空白內建網頁、跳到地圖 App 後又留下白頁，返回旅誌時還要手動關閉。
+// 兩種顯示位置（收合摘要、展開介紹）都不建立新分頁，並且不觸發 details 收合。
 app.addEventListener('click',e=>{
  const link=e.target.closest?.('[data-itinerary-web]');
  if(!link)return;
- if(link.closest('summary')){
-  e.preventDefault();
-  e.stopPropagation();
-  window.open(link.href,'_blank','noopener,noreferrer');
- }else{
-  e.stopPropagation();
- }
+ e.preventDefault();
+ e.stopPropagation();
+ window.open(link.href,'_top');
 },true);
 // 遠端照片無法載入時隱藏縮圖，避免折疊卡片出現沒有內容的色塊。
 app.addEventListener('error',e=>{const img=e.target;if(img?.matches?.('.row-spot-thumb img'))img.parentElement?.style.setProperty('display','none','important');},true);
