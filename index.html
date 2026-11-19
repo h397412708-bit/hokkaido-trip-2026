@@ -1930,6 +1930,33 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 *,dialog#dlg.itinerary-editor .it
 @media(max-width:360px){
  .tlw>details.row.mv>summary.swipe-host>.swipe-face{padding-left:11px!important}
 }
+
+/* 2026-11-20：景點摘要內容與卡片垂直置中。無預留時間時單行置中；
+   有預留時間時把名稱＋時長當成一個整體置中，地標也位於同一水平中心。
+   僅限景點，避免改動已確認的交通時間線排版。 */
+.tlw > details.row:not(.mv) > summary.swipe-host > .swipe-face{
+  align-items:center!important;
+}
+.tlw > details.row:not(.mv) > summary .row-inline-clock,
+.tlw > details.row:not(.mv) > summary .row-summary-main,
+.tlw > details.row:not(.mv) > summary .itinerary-web-pin{
+  align-self:center!important;
+}
+.tlw > details.row:not(.mv) > summary .row-inline-clock{
+  padding-top:0!important;
+  padding-bottom:0!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.tlw > details.row:not(.mv) > summary .row-summary-main{
+  justify-content:center!important;
+}
+.tlw > details.row:not(.mv) > summary .itinerary-web-pin{
+  align-items:center!important;
+  justify-content:center!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
