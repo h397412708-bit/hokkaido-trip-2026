@@ -1135,19 +1135,17 @@ input::selection,textarea::selection{background:#dbe4ee;color:#29384d}
 body.row-drag-active{cursor:grabbing;user-select:none!important;-webkit-user-select:none!important}
 @media(prefers-reduced-motion:reduce){.row-drag-floating{transition:none!important}}
 
-/* 2026.11.19 | 每日行程的依序交錯出場：只在切換進行程／日期時播放 */
+/* 2026.11.19 | 影片參考：由上至下逐項淡入上浮，不再左右交錯 */
 @keyframes journalRowArrive{
-  from{opacity:0;transform:translate3d(var(--entry-x,6px),14px,0) scale(.992)}
-  to{opacity:1;transform:translate3d(0,0,0) scale(1)}
+  0%{opacity:0;transform:translate3d(0,12px,0);filter:blur(1.2px)}
+  100%{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}
 }
 .tlw.rows-entrance > details.row{
-  animation:journalRowArrive .48s cubic-bezier(.2,.8,.2,1) both;
+  animation:journalRowArrive .42s cubic-bezier(.2,.82,.24,1) both;
   animation-delay:var(--row-stagger-delay,0ms);
   will-change:transform,opacity;
 }
-/* 在偏好減少動畫的裝置上直接顯示行程 */
-@media(prefers-reduced-motion:reduce){.tlw.rows-entrance > details.row{animation:none!important;opacity:1;transform:none}}
-/* 儲存通知：底部選單上方的細緻霧面吐司，不阻擋其他操作 */
+/* 儲存成功才顯示的小通知：縮短停留及退場 */
 #journal-save-toast{
   position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));
   z-index:1200;max-width:calc(100vw - 48px);white-space:nowrap;
@@ -1157,25 +1155,60 @@ body.row-drag-active{cursor:grabbing;user-select:none!important;-webkit-user-sel
   box-shadow:0 8px 26px rgba(24,42,70,.18);
   -webkit-backdrop-filter:blur(15px);backdrop-filter:blur(15px);
   font-size:13px;line-height:1.45;font-weight:750;letter-spacing:.035em;
-  opacity:0;transform:translate3d(-50%,18px,0) scale(.96);
-  transition:opacity .3s ease,transform .4s cubic-bezier(.18,.75,.25,1);
+  opacity:0;transform:translate3d(-50%,12px,0) scale(.97);
+  transition:opacity .2s ease,transform .25s cubic-bezier(.2,.8,.3,1);
   pointer-events:none;
 }
 #journal-save-toast.is-visible{opacity:1;transform:translate3d(-50%,0,0) scale(1)}
-/* 新增購物：由右上角＋的點擊位置以圓形揭露新增表單 */
-@keyframes shopCircleReveal{
-  0%{clip-path:circle(0px at var(--reveal-x,50%) var(--reveal-y,0%));opacity:.9}
-  100%{clip-path:circle(var(--reveal-r,100vmax) at var(--reveal-x,50%) var(--reveal-y,0%));opacity:1}
+/* 購物新增視窗從 + 按鈕中心由小到大彈出，不裁切表單 */
+@keyframes shopPopupSpring{
+  0%{transform:translate3d(var(--shop-pop-dx,0px),var(--shop-pop-dy,0px),0) scale(.08);opacity:.25;filter:blur(1px)}
+  75%{transform:translate3d(0,0,0) scale(1.025);opacity:1;filter:blur(0)}
+  100%{transform:translate3d(0,0,0) scale(1);opacity:1;filter:blur(0)}
 }
 @keyframes shopBackdropAppear{from{background:rgba(23,37,62,0)}to{background:rgba(26,34,54,.4)}}
-dialog.sh-dialog.shop-circle-opening{
-  clip-path:circle(var(--reveal-r,100vmax) at var(--reveal-x,50%) var(--reveal-y,0%));
-  animation:shopCircleReveal .68s cubic-bezier(.27,.58,.30,1) both;
+dialog.sh-dialog.shop-pop-opening{
+  transform-origin:center center;
+  animation:shopPopupSpring .56s cubic-bezier(.27,.43,.32,1) both;
 }
-dialog.sh-dialog.shop-circle-opening::backdrop{animation:shopBackdropAppear .54s ease both}
+dialog.sh-dialog.shop-pop-opening::backdrop{animation:shopBackdropAppear .3s ease both}
+/* 行李清單長按抓取、插入位置提示，延續行程六點把手 */
+.overview-p .pk{position:relative;align-items:center;gap:9px;min-height:46px}
+.overview-p .pk>span{min-width:0;overflow-wrap:anywhere}
+.overview-p .pk .tl{margin-left:auto;flex-shrink:0;gap:4px}
+.overview-p .pk .tl button{padding:4px 7px;font-size:10px}
+.pack-drag-handle{
+  -webkit-appearance:none;appearance:none;display:inline-grid;place-items:center;
+  width:28px;height:34px;min-width:28px;flex:none;
+  margin:0 -3px 0 -2px;padding:4px;border:0;border-radius:9px;
+  background:transparent;color:#8495ad;cursor:grab;touch-action:none;
+  -webkit-touch-callout:none;-webkit-user-select:none;user-select:none;
+}
+.pack-drag-handle svg{height:18px;width:18px;fill:currentColor;pointer-events:none}
+.pack-drag-handle:focus-visible,.pack-drag-handle:active{outline:none;background:#eaf0f7;color:#506b8c}
+.pk.pack-dragging{opacity:.35;background:#f0f5fb;border-radius:9px}
+.pk.pack-drag-before:before,.pk.pack-drag-after:after{
+  content:'';position:absolute;left:2px;right:2px;height:3px;z-index:5;
+  border-radius:4px;background:#6487ab;box-shadow:0 0 0 3px rgba(100,135,171,.13);
+}
+.pk.pack-drag-before:before{top:-2px}.pk.pack-drag-after:after{bottom:-2px}
+.pack-drag-floating{position:fixed;z-index:10050;left:0;top:0;
+  display:flex;align-items:center;gap:10px;width:min(calc(100vw - 36px),340px);
+  box-sizing:border-box;min-height:48px;padding:10px 13px;
+  border:1px solid #b6c8dc;border-radius:13px;background:rgba(255,255,255,.97);
+  box-shadow:0 12px 28px rgba(31,57,89,.2);color:#3c526e;
+  pointer-events:none;transform:translate3d(-999px,-999px,0);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.pack-drag-floating svg{width:17px;height:17px;fill:#8197b0;flex:none}
+.pack-drag-floating b{font-size:12px;overflow-wrap:anywhere}
+body.pack-drag-active{cursor:grabbing;user-select:none!important;-webkit-user-select:none!important}
+@media(max-width:360px){.overview-p .pk{gap:6px}.overview-p .pk .tl button{padding:4px 6px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){
-  #journal-save-toast{transition:none}
-  dialog.sh-dialog.shop-circle-opening,dialog.sh-dialog.shop-circle-opening::backdrop{animation:none!important;clip-path:none!important}
+  .tlw.rows-entrance > details.row{animation:none!important;opacity:1;transform:none;filter:none}
+  #journal-save-toast{transition:none!important}
+  dialog.sh-dialog.shop-pop-opening,dialog.sh-dialog.shop-pop-opening::backdrop{animation:none!important}
+  .pack-drag-floating{transition:none!important}
 }
 
 </style></head><body><div id="app"></div>
@@ -1721,21 +1754,22 @@ function shopPreviewUpdate(){
  const remove=dlg.querySelector('#sh-remove-photo');if(remove)remove.hidden=!shopPhotoTemp;
 }
 let shopRevealOrigin=null;
-function openShopCircleReveal(origin){
+function openShopPopReveal(origin){
  if(!origin||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
  const box=dlg.getBoundingClientRect();
- const x=origin.x-box.left,y=origin.y-box.top;
- const radius=Math.max(Math.hypot(x,y),Math.hypot(x-box.width,y),Math.hypot(x,y-box.height),Math.hypot(x-box.width,y-box.height))+12;
- dlg.style.setProperty('--reveal-x',x+'px');
- dlg.style.setProperty('--reveal-y',y+'px');
- dlg.style.setProperty('--reveal-r',radius+'px');
- dlg.classList.remove('shop-circle-opening');
+ const centerX=box.left+box.width/2,centerY=box.top+box.height/2;
+ dlg.style.setProperty('--shop-pop-dx',(origin.x-centerX)+'px');
+ dlg.style.setProperty('--shop-pop-dy',(origin.y-centerY)+'px');
+ dlg.classList.remove('shop-pop-opening');
  void dlg.offsetWidth;
- dlg.classList.add('shop-circle-opening');
+ dlg.classList.add('shop-pop-opening');
 }
+dlg.addEventListener('animationend',e=>{
+ if(e.target===dlg&&e.animationName==='shopPopupSpring')dlg.classList.remove('shop-pop-opening');
+});
 dlg.addEventListener('close',()=>{
- dlg.classList.remove('sh-dialog','shop-circle-opening');
- dlg.style.removeProperty('--reveal-x');dlg.style.removeProperty('--reveal-y');dlg.style.removeProperty('--reveal-r');
+ dlg.classList.remove('sh-dialog','shop-pop-opening');
+ dlg.style.removeProperty('--shop-pop-dx');dlg.style.removeProperty('--shop-pop-dy');
  shopRevealOrigin=null;
 });
 function shopEditor(id){
@@ -1770,7 +1804,7 @@ function shopEditor(id){
    dlg.close();dlg.classList.remove('sh-dialog');shopPhotoTemp='';render();showSavedToast();
  };
  dlg.showModal();
- if(adding&&shopRevealOrigin)openShopCircleReveal(shopRevealOrigin);
+ if(adding&&shopRevealOrigin)openShopPopReveal(shopRevealOrigin);
 }
 async function shopReadPhoto(file){
  if(!file)return;
@@ -1842,7 +1876,7 @@ function home(){const n=packs.filter(p=>p.done).length;
 return wxOverview()+travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程','<div class="flight-board">'+fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分')+'<p class="flight-board-note">起飛及抵達時間均為當地時間。</p></div>')
 +sec('h',iconSvg('hotel'),'住宿一覽','4 間・共 9 晚',hotels.map(h=>'<div class="ht"><small>'+esc(h.date)+'・'+esc(h.nights)+'</small><b>'+esc(h.name)+'</b><p class="overview-address">'+iconSvg('pin')+esc(h.addr)+'</p><p>'+esc(h.detail)+'</p>'+(h.q?links([place('在 Google Maps 開啟',h.q)]):'')+'</div>').join(''))
 +sec('r',iconSvg('utensils'),'已訂餐廳','2 間・各 4 人','<div class="rs"><small>12/19（六）17:30</small><b>小樽倉庫 No.1 啤酒釀造所</b><p>晚餐後搭 JR 返回札幌。</p>'+links([place('小樽倉庫 No.1','Otaru Soko No.1 Otaru')])+'</div><div class="rs"><small>12/21（一）20:30</small><b>寺田壽司 Sushi Terada</b><div class="meal-info"><p class="meal-heading">Terada 的季節全套餐 <span>4 道</span></p><div class="meal-meta"><span>¥18,000／人（含稅）</span><span>用餐約 2 小時</span></div><ul class="meal-courses"><li>前菜五道</li><li>壽司十三貫</li><li>湯品</li><li>甜點</li></ul></div>'+links([place('Sushi Terada てら田','寺田 寿司 狸小路 札幌')])+'</div>')
-+sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join('')+'<button class="add" data-a="add" data-l="p">＋ 新增物品</button>')
++sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'" data-pack-index="'+i+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><button type="button" class="pack-drag-handle" data-a="pack-drag" data-i="'+i+'" aria-label="長按拖曳「'+esc(p.t)+'」排序；鍵盤 Alt 加上下鍵調整" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join('')+'<button class="add" data-a="add" data-l="p">＋ 新增物品</button>')
 +'<button class="add ghost" data-a="rs">還原預設內容</button>'}
 const hero=()=>'<header class="hero"><div class="topline"><div class="brand">'+iconSvg('snowflake')+' HOKKAIDO / 2026</div><div class="pill">WINTER JOURNAL</div></div><div class="hc"><div class="eb">WINTER TRAVEL NOTES • JAPAN</div><h1 class="ht1">A winter<br>to remember.</h1><div class="hs">北海道冬日旅誌</div><div class="hm">12.18 — 12.27 ✦ 札幌 · 小樽 · 登別 · 洞爺湖</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><div class="summary"><div><strong>10 天 9 夜</strong><span>旅程天數</span></div><div><strong>4 位旅伴</strong><span>一同出發</span></div><div><strong>12/18–27</strong><span>2026・北海道</span></div></div>';
 // Never replace the date-strip element when switching days: keeping the same
@@ -1856,12 +1890,11 @@ function runItineraryEntrance(){
   if(!list||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
   const entries=[...list.querySelectorAll(':scope > details.row')];
   entries.forEach((item,i)=>{
-    item.style.setProperty('--row-stagger-delay',Math.min(60*i,660)+'ms');
-    item.style.setProperty('--entry-x',i%2?'7px':'-7px');
+    item.style.setProperty('--row-stagger-delay',Math.min(115*i,1380)+'ms');
   });
   list.classList.add('rows-entrance');
   // Clear animation styling after the last entry has settled.
-  window.setTimeout(()=>{if(list.isConnected)list.classList.remove('rows-entrance');},1500);
+  window.setTimeout(()=>{if(list.isConnected)list.classList.remove('rows-entrance');},1950);
 }
 let saveToastTimer=0;
 function showSavedToast(){
@@ -1874,8 +1907,8 @@ function showSavedToast(){
   requestAnimationFrame(()=>toast.classList.add('is-visible'));
   saveToastTimer=window.setTimeout(()=>{
     toast.classList.remove('is-visible');
-    window.setTimeout(()=>{if(!toast.classList.contains('is-visible'))toast.setAttribute('aria-hidden','true');},360);
-  },2450);
+    window.setTimeout(()=>{if(!toast.classList.contains('is-visible'))toast.setAttribute('aria-hidden','true');},240);
+  },1160);
 }
 
 let navGlassLastTab=null,navGlassTimer=0;
@@ -2063,6 +2096,94 @@ document.addEventListener('keydown',e=>{
   requestAnimationFrame(()=>app.querySelector('.tlw .row-drag-handle[data-i="'+j+'"]')?.focus({preventScroll:true}));
 });
 
+// 行李清單長按拖曳排序：觸控與滑鼠均可；操作後存入原本的 packs 清單。
+let packDrag=null;
+const packDragIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg>';
+function packDragMarker(drag){
+ if(!drag.active)return;
+ drag.rows.forEach(r=>r.classList.remove('pack-drag-before','pack-drag-after'));
+ const others=drag.rows.filter(r=>r!==drag.row);
+ if(!others.length){drag.to=drag.from;return;}
+ const y=drag.y;
+ let target=others.find(r=>{const b=r.getBoundingClientRect();return y>=b.top&&y<=b.bottom;});
+ if(!target)target=others.reduce((best,r)=>{const b=r.getBoundingClientRect(),distance=Math.abs(y-(b.top+b.bottom)/2);return !best||distance<best.distance?{r,distance}:best;},null)?.r;
+ if(!target){drag.to=drag.from;return;}
+ const rect=target.getBoundingClientRect(),before=y<(rect.top+rect.bottom)/2;
+ const index=drag.rows.indexOf(target);
+ drag.to=before?index:index+1;
+ target.classList.add(before?'pack-drag-before':'pack-drag-after');
+}
+function packDragFloat(drag){
+ if(!drag.ghost)return;
+ const x=Math.max(12,Math.min(innerWidth-drag.ghost.offsetWidth-12,drag.x-drag.ghost.offsetWidth/2));
+ const y=Math.max(10,Math.min(innerHeight-64,drag.y-26));
+ drag.ghost.style.transform='translate3d('+x+'px,'+y+'px,0)';
+}
+function packDragScroll(){
+ const drag=packDrag;
+ if(!drag||!drag.active)return;
+ if(drag.y>innerHeight-148)scrollBy(0,Math.min(15,Math.max(2,(drag.y-innerHeight+148)/3)));
+ else if(drag.y<95)scrollBy(0,-Math.min(15,Math.max(2,(95-drag.y)/3)));
+ packDragMarker(drag);
+ drag.raf=requestAnimationFrame(packDragScroll);
+}
+function activatePackDrag(drag){
+ if(packDrag!==drag||drag.active||!drag.handle.isConnected)return;
+ drag.active=true;drag.row.classList.add('pack-dragging');document.body.classList.add('pack-drag-active');
+ const ghost=document.createElement('div');ghost.className='pack-drag-floating';
+ ghost.innerHTML=packDragIcon+'<b>'+esc(drag.row.querySelector(':scope > span')?.textContent||'行李物品')+'</b>';
+ document.body.appendChild(ghost);drag.ghost=ghost;
+ packDragFloat(drag);packDragMarker(drag);
+ drag.raf=requestAnimationFrame(packDragScroll);
+}
+function finishPackDrag(commit){
+ const drag=packDrag;
+ if(!drag)return;
+ packDrag=null;clearTimeout(drag.timer);cancelAnimationFrame(drag.raf||0);
+ drag.ghost?.remove();
+ drag.rows.forEach(r=>r.classList.remove('pack-dragging','pack-drag-before','pack-drag-after'));
+ document.body.classList.remove('pack-drag-active');
+ try{if(drag.handle.hasPointerCapture?.(drag.pointerId))drag.handle.releasePointerCapture(drag.pointerId);}catch(_){ }
+ if(!commit||!drag.active||!drag.list.isConnected)return;
+ const to=Math.min(packs.length-1,Math.max(0,drag.to>drag.from?drag.to-1:drag.to));
+ if(to===drag.from)return;
+ const [moved]=packs.splice(drag.from,1);packs.splice(to,0,moved);
+ save();render();showSavedToast();
+ requestAnimationFrame(()=>app.querySelector('.pack-drag-handle[data-i="'+to+'"]')?.focus({preventScroll:true}));
+}
+document.addEventListener('pointerdown',e=>{
+ const handle=e.target.closest?.('.pack-drag-handle');
+ if(!handle||(e.pointerType==='mouse'&&e.button!==0))return;
+ finishPackDrag(false);
+ const row=handle.closest('.overview-p .pk'),list=row?.closest('.overview-p');
+ if(!row||!list||st.tab!=='home')return;
+ const rows=[...list.querySelectorAll(':scope > .bd > .pk')];
+ const from=rows.indexOf(row);if(from<0)return;
+ const drag={pointerId:e.pointerId,handle,row,list,rows,from,to:from,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,active:false,timer:0,raf:0,ghost:null};
+ packDrag=drag;
+ try{handle.setPointerCapture(e.pointerId);}catch(_){ }
+ drag.timer=setTimeout(()=>activatePackDrag(drag),310);
+},{passive:false});
+document.addEventListener('pointermove',e=>{
+ const drag=packDrag;
+ if(!drag||drag.pointerId!==e.pointerId)return;
+ drag.x=e.clientX;drag.y=e.clientY;
+ if(!drag.active){if(Math.hypot(drag.x-drag.startX,drag.y-drag.startY)>12)finishPackDrag(false);return;}
+ e.preventDefault();packDragFloat(drag);packDragMarker(drag);
+},{passive:false});
+document.addEventListener('pointerup',e=>{if(packDrag&&e.pointerId===packDrag.pointerId)finishPackDrag(true);});
+document.addEventListener('pointercancel',e=>{if(packDrag&&e.pointerId===packDrag.pointerId)finishPackDrag(false);});
+document.addEventListener('keydown',e=>{
+ const handle=e.target.closest?.('.pack-drag-handle');
+ if(!handle||!e.altKey||!['ArrowUp','ArrowDown'].includes(e.key))return;
+ e.preventDefault();e.stopPropagation();
+ const i=Number(handle.dataset.i),j=i+(e.key==='ArrowUp'?-1:1);
+ if(j<0||j>=packs.length)return;
+ [packs[i],packs[j]]=[packs[j],packs[i]];
+ save();render();showSavedToast();
+ requestAnimationFrame(()=>app.querySelector('.pack-drag-handle[data-i="'+j+'"]')?.focus({preventScroll:true}));
+});
+
 document.addEventListener('pointerdown',e=>{
  if(e.button!==0&&e.pointerType==='mouse')return;
  tapToolFlash(e.target.closest('button[data-a]'));
@@ -2075,7 +2196,7 @@ document.addEventListener('keydown',e=>{
 });
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const D=b.dataset,a=D.a,n=+D.i,L=D.l==='d'?days[st.day].items:D.l==='t'?todos:packs;
-if(a==='drag'){e.preventDefault();e.stopPropagation();return;}
+if(a==='drag'||a==='pack-drag'){e.preventDefault();e.stopPropagation();return;}
 if(a==='tab'){st.tab=D.v;if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
 else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
