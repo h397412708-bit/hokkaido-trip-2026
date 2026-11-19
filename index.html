@@ -1726,6 +1726,34 @@ dialog#dlg.home-list-editor .home-calendar-footer .home-calendar-confirm:disable
 .overview-h .swipe-actions>button[data-a="home-edit"],.overview-r .swipe-actions>button[data-a="home-edit"]{background:#8396af!important;color:#fff!important;}
 .overview-h .swipe-actions>button[data-a="home-remove"],.overview-r .swipe-actions>button[data-a="home-remove"]{background:#ce6975!important;color:#fff!important;}
 @media(max-width:350px){dialog#dlg.home-list-editor form.home-edit-form{padding-left:13px;padding-right:13px;}dialog#dlg.home-list-editor .home-date-time-row{gap:7px;}dialog#dlg.home-list-editor .home-date-time-row input{font-size:13px!important;}}
+
+/* 兩組旅伴的航班分組：直飛與成田轉機各自清楚呈現。 */
+.flight-traveler-title{display:flex;justify-content:space-between;align-items:center;gap:9px;margin:16px 2px 8px;color:#405671;font-size:12px;font-weight:800}
+.flight-traveler-title:first-child{margin-top:7px}
+.flight-traveler-title small{font-size:10px;font-weight:700;color:#8799ae}
+.flight-board-transfer .flight-leg+.flight-leg{border-top:0}
+.flight-trip-direction{display:flex;flex-direction:column;gap:2px;padding:12px 16px 10px;background:linear-gradient(100deg,rgba(223,234,248,.75),rgba(245,248,253,.5));border-bottom:1px solid rgba(206,219,236,.8)}
+.flight-trip-direction strong{font-size:12px;font-weight:800;color:#3e577b}
+.flight-trip-direction span{font-size:10.5px;line-height:1.5;color:#7689a3;overflow-wrap:anywhere}
+.flight-trip-return{border-top:1px solid #dde5f1}
+.flight-connection{display:flex;flex-direction:column;gap:3px;margin:0 14px;border-radius:12px;padding:10px 12px;background:#eff3fa;color:#627898;font-size:11px;font-weight:750}
+.flight-connection small{font-size:10px;color:#ad7654;font-weight:750}
+.flight-board-transfer .flight-leg{padding:16px 14px 18px}
+.flight-board-transfer .flight-leg-top{margin-bottom:14px}
+.flight-board-transfer .flight-clock{font-size:22px}
+@media(max-width:375px){.flight-board-transfer .flight-leg{padding:15px 11px 17px}.flight-board-transfer .flight-clock{font-size:20px}}
+/* 待辦分類：顯示該分類未勾選數量，完成後數字即時更新。 */
+.todo-heading+.days.cats button .todo-cat-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;line-height:18px;margin-left:6px;padding:0 4px;border-radius:9px;background:rgba(120,143,177,.12);font-size:10px;font-weight:800;vertical-align:middle;color:inherit}
+.todo-heading+.days.cats button.on .todo-cat-count{background:rgba(255,255,255,.21)}
+/* 訂位日期和時間：可點選的原生系統選擇器覆蓋整個欄位，但畫面只顯示不會被裁切的短日期／24小時時間。 */
+dialog#dlg.home-list-editor .home-date-time-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+dialog#dlg.home-list-editor .home-date-time-row .home-edit-field{min-width:0;overflow:visible;width:auto}
+dialog#dlg.home-list-editor .home-date-time-row .home-meal-picker{display:flex;align-items:center;position:relative;justify-content:space-between;gap:3px;min-height:48px;width:100%;max-width:100%;min-width:0;margin-top:6px;padding:10px 10px 10px 11px;box-sizing:border-box;background:#f9fbff;border:1px solid #dce4f0;border-radius:12px;color:#2f435d}
+dialog#dlg.home-list-editor .home-meal-picker strong{display:block;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;line-height:1.4;font-weight:750;font-variant-numeric:tabular-nums}
+dialog#dlg.home-list-editor .home-meal-picker svg{display:block;width:16px;height:16px;flex:0 0 16px;fill:none;stroke:currentColor;stroke-width:1.7;color:#7186a4}
+dialog#dlg.home-list-editor .home-date-time-row .home-meal-picker input[type="date"],dialog#dlg.home-list-editor .home-date-time-row .home-meal-picker input[type="time"]{position:absolute!important;inset:0!important;display:block!important;opacity:0!important;z-index:2!important;width:100%!important;height:100%!important;min-height:0!important;margin:0!important;padding:0!important;box-sizing:border-box!important;border:0!important;cursor:pointer!important;touch-action:manipulation}
+dialog#dlg.home-list-editor .home-meal-picker:focus-within{outline:2px solid #99adcb;outline-offset:2px}
+@media(max-width:375px){dialog#dlg.home-list-editor .home-date-time-row{gap:8px}dialog#dlg.home-list-editor .home-date-time-row .home-meal-picker{padding:9px 8px}dialog#dlg.home-list-editor .home-meal-picker strong{font-size:12px}}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1942,6 +1970,7 @@ function iconSvg(name){
     route:'<circle cx="6" cy="5" r="2"/><path d="M6 7v3c0 2 3 2 6 2h1c3 0 5 1 5 4v2"/><path d="m15 16 3 3 3-3"/><path d="M10 17h-2M6 17H4"/>',
     suitcase:'<rect x="4" y="7" width="16" height="14" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M8 7v14M16 7v14M7 21v1M17 21v1"/>',
     partlyCloudy:'<circle cx="8" cy="7.5" r="3"/><path d="M8 1.5v1M2 7.5h1M3.7 3.2l.9.9M11.5 3.2l.9-.9"/><path d="M8 19a4 4 0 1 1 1.2-7.8A5.1 5.1 0 0 1 19 13a3 3 0 0 1-.2 6H8z"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
     calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18M8 14h2M14 14h2M8 18h2"/>',
     people:'<circle cx="9" cy="8" r="3"/><path d="M3.5 20v-2a5.5 5.5 0 0 1 11 0v2M17 5.5a3 3 0 0 1 0 5.5M17 14c3 0 4.5 2 4.5 5v1"/>',
     date:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18M8 15h8M8 18h5"/>',
@@ -2425,7 +2454,7 @@ async function shopReadPhoto(file){
 }
 
 function todo(){const cats=['全部','預約','訂位','票券','其他'];const L=todos.map((t,i)=>({t:t,i:i})).filter(x=>st.cat==='全部'||x.t.c===st.cat);const s=L.filter(x=>!x.t.done).concat(L.filter(x=>x.t.done));
-return '<div class="ph sh-heading todo-heading"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p><button type="button" class="shop-glass-add" data-a="add" data-l="t" aria-label="新增待辦" title="新增待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="days cats">'+cats.map(c=>'<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'">'+c+'</button>').join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct" data-todo-category="'+esc(x.t.c||'其他')+'">'+esc(x.t.c||'其他')+'</i>'+todoLinks(x.t)+'</div>'+'<button type="button" class="todo-drag-handle" data-a="todo-drag" data-i="'+x.i+'" aria-label="長按拖曳「'+esc(x.t.t)+'」排序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>'+'<div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div>'}
+return '<div class="ph sh-heading todo-heading"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p><button type="button" class="shop-glass-add" data-a="add" data-l="t" aria-label="新增待辦" title="新增待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="days cats">'+cats.map(c=>{const pending=todos.filter(t=>!t.done&&(c==='全部'||(t.c||'其他')===c)).length;return '<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'" aria-label="'+c+'，'+pending+' 項未完成">'+c+'<small class="todo-cat-count">'+pending+'</small></button>'}).join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct" data-todo-category="'+esc(x.t.c||'其他')+'">'+esc(x.t.c||'其他')+'</i>'+todoLinks(x.t)+'</div>'+'<button type="button" class="todo-drag-handle" data-a="todo-drag" data-i="'+x.i+'" aria-label="長按拖曳「'+esc(x.t.t)+'」排序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>'+'<div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div>'}
 const fl=(lb,a,at,b,bt,duration)=>{
  const parts=lb.split('｜'),date=parts[0]||'',rawAirline=parts.slice(1).join('｜')||'';
  const direction=date.includes('去程')?'去程':'回程';
@@ -2435,7 +2464,9 @@ const fl=(lb,a,at,b,bt,duration)=>{
  const airlineShort=airline.replace(/\s+(Scoot|AirAsia)$/i,'');
  const airport=label=>{
    if(label.includes('桃園'))return {code:'TPE',name:'桃園機場 T1'};
-   if(label.includes('新千歲'))return {code:'CTS',name:'新千歲機場'};
+   if(label.includes('廈門')||label.includes('高崎'))return {code:'XMN',name:'廈門高崎機場 T3'};
+   if(label.includes('成田'))return {code:'NRT',name:'成田機場 T1'};
+   if(label.includes('新千歲'))return {code:'CTS',name:label.includes(' D')?'新千歲機場 D':'新千歲機場'};
    return {code:'',name:label};
  };
  const dep=airport(a),arr=airport(b);
@@ -2472,9 +2503,20 @@ const travelLinksPanel=()=>{
  return sec('useful',iconSvg('externalLink'),'旅途中常用網站','交通・景點・入境',body);
 };
 
+const alternateFlightBoard=()=>'<div class="flight-traveler-title"><span>廈門出發・廈門返程</span><small>東京成田轉機</small></div>'+ 
+ '<div class="flight-board flight-board-transfer">'+
+ '<div class="flight-trip-direction"><strong>去程｜12/18（五）</strong><span>廈門 XMN → 東京成田 NRT → 札幌 CTS</span></div>'+ 
+ fl('12/18（五）去程｜廈門航空 MF815','廈門高崎 T3','09:20','成田 T1','13:45','3 小時 25 分')+
+ '<div class="flight-connection"><span>成田機場 T1 轉機｜3 小時 5 分</span><small>請注意：需重新托運行李</small></div>'+ 
+ fl('12/18（五）去程｜樂桃航空 MM575','成田 T1','16:50','新千歲 D','18:40','1 小時 50 分')+
+ '<div class="flight-trip-direction flight-trip-return"><strong>回程｜12/27（日）</strong><span>札幌 CTS → 東京成田 NRT → 廈門 XMN</span></div>'+ 
+ fl('12/27（日）回程｜樂桃航空 MM570','新千歲 D','10:05','成田 T1','11:55','1 小時 50 分')+
+ '<div class="flight-connection"><span>成田機場 T1 轉機｜3 小時</span><small>請注意：需重新托運行李</small></div>'+ 
+ fl('12/27（日）回程｜廈門航空 MF816','成田 T1','14:55','廈門高崎 T3','18:25','4 小時 30 分')+
+ '<p class="flight-board-note">航班時間皆以當地時間為準；轉機及行李安排請以航空公司與實際訂單為準。</p></div>';
 function home(){const n=packs.filter(p=>p.done).length;
  const totalNights=stays.reduce((sum,item)=>sum+nightsBetween(item.checkin,item.checkout),0);
- return wxOverview()+travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程','<div class="flight-board">'+fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分')+'<p class="flight-board-note">起飛及抵達時間均為當地時間。</p></div>')
+ return wxOverview()+travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程','<div class="flight-traveler-title"><span>台北出發・台北返程</span><small>直飛</small></div><div class="flight-board">'+fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分')+'<p class="flight-board-note">起飛及抵達時間均為當地時間。</p></div>'+alternateFlightBoard())
  +sec('h',iconSvg('hotel'),'住宿一覽',stays.length+' 間・共 '+totalNights+' 晚',homeListBody('stays'))
  +sec('r',iconSvg('utensils'),'已訂餐廳',dining.length+' 間・訂位資料',homeListBody('dining'))
  +sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'" data-pack-index="'+i+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><button type="button" class="pack-drag-handle" data-a="pack-drag" data-i="'+i+'" aria-label="長按拖曳「'+esc(p.t)+'」排序；鍵盤 Alt 加上下鍵調整" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join('')+'<button class="add" data-a="add" data-l="p">＋ 新增物品</button>')
@@ -2938,8 +2980,12 @@ function editHomeList(kind,index){
   '<span class="home-range-half"><small>退房日期</small><strong id="home-end-label">選擇日期</strong></span><svg class="home-range-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M7.5 3v4M16.5 3v4M3 10h18"/></svg></button>'+
   '<input type="hidden" name="checkin" value="'+esc(current.checkin||'')+'"><input type="hidden" name="checkout" value="'+esc(current.checkout||'')+'"></div>';
  const mealDateRow='<div class="home-date-time-row">'+
-  '<label class="home-edit-field home-meal-date">訂位日期<input name="date" type="date" required value="'+esc(current.date||'')+'"></label>'+
-  '<label class="home-edit-field home-meal-time">訂位時間<input name="time" type="time" required value="'+esc(current.time||'')+'"></label></div>';
+  '<label class="home-edit-field home-meal-date">訂位日期<span class="home-meal-picker">'+
+  '<strong class="home-meal-value" data-meal-value="date">'+esc(current.date?current.date.replace(/-/g,'/'):'選擇日期')+'</strong>'+iconSvg('calendar')+
+  '<input name="date" type="date" required value="'+esc(current.date||'')+'" aria-label="訂位日期"></span></label>'+
+  '<label class="home-edit-field home-meal-time">訂位時間<span class="home-meal-picker">'+
+  '<strong class="home-meal-value" data-meal-value="time">'+esc(current.time||'選擇時間')+'</strong>'+iconSvg('clock')+
+  '<input name="time" type="time" required value="'+esc(current.time||'')+'" aria-label="訂位時間"></span></label></div>';
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-editor','itinerary-chooser');
  dlg.classList.add('home-list-editor');
  dlg.innerHTML='<form class="home-edit-form"><h3>'+(adding?'新增':'編輯')+(isStay?'住宿':'餐廳')+'</h3>'+
@@ -2955,6 +3001,13 @@ function editHomeList(kind,index){
  '<div class="home-calendar-selection" id="home-calendar-selection" aria-live="polite"></div>'+
  '<div class="home-calendar-footer"><button type="button" class="home-calendar-cancel">取消</button><button type="button" class="home-calendar-confirm" disabled>套用日期</button></div></div></div>':'');
  const formElement=dlg.querySelector('form');
+ if(!isStay){
+  for(const field of ['date','time']){
+   const input=formElement.elements[field],display=dlg.querySelector('[data-meal-value="'+field+'"]');
+   const update=()=>{display.textContent=input.value?(field==='date'?input.value.replace(/-/g,'/'):input.value):(field==='date'?'選擇日期':'選擇時間')};
+   input.addEventListener('input',update);input.addEventListener('change',update);
+  }
+ }
  function displayNights(){
   if(!isStay)return;
   const start=formElement.elements.checkin.value,end=formElement.elements.checkout.value,n=nightsBetween(start,end);
