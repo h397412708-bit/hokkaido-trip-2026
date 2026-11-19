@@ -2321,6 +2321,63 @@ function matchBookingKey(d,a){
  const rule=BOOKING_RULES.find(r=>r.day===String(d.d) && r.activity.test(String(a.title||'')));
  return rule?rule.key:'';
 }
+// 既有行程的交通時間初始值。只補「沒有 transportDuration 欄位」的項目；
+// 使用者自行修改或清空後都保留，不會再次覆蓋。各項為預估，非已確認列車／巴士時刻。
+const PLANNED_TRANSPORT_DURATIONS={
+ '18':{
+  '桃園機場報到':'60 分鐘（報到／託運）',
+  'JR 前往札幌':'40 分鐘'
+ },
+ '19':{
+  '前往小樽站':'35–50 分鐘',
+  '前往天狗山':'20–30 分鐘',
+  '回到小樽市區':'20–30 分鐘',
+  '步行前往小樽倉庫 No.1':'10–15 分鐘',
+  '搭 JR 返回札幌':'35–50 分鐘'
+ },
+ '20':{
+  '搭地鐵往圓山公園':'20–30 分鐘（含步行）',
+  '前往奧芝商店':'15–25 分鐘',
+  '前往北海道立近代美術館':'15–25 分鐘（計程車估）'
+ },
+ '21':{
+  '前往札幌啤酒博物館':'20–30 分鐘',
+  '前往寺田壽司':'10–20 分鐘（步行）'
+ },
+ '22':{
+  '前往 JR 札幌站・候車':'15–25 分鐘（步行／候車）',
+  'JR 特急北斗｜札幌 → 登別':'1 小時 15–30 分鐘',
+  '登別站 → 登別溫泉':'20–30 分鐘'
+ },
+ '24':{
+  '前往登別 JR 站':'20–30 分鐘',
+  'JR 北斗｜登別 → 洞爺':'40–50 分鐘',
+  '洞爺站 → 乃之風':'20–30 分鐘'
+ },
+ '25':{
+  '前往雪地活動場地':'30–45 分鐘（車程估）'
+ },
+ '26':{
+  '乃之風退房 → 洞爺站':'20–30 分鐘',
+  'JR 往南千歲／新千歲方向':'1 小時 20–40 分鐘（不含轉乘）',
+  '前往最後一晚飯店':'15–30 分鐘（依飯店位置）'
+ },
+ '27':{
+  '前往新千歲機場':'15–30 分鐘（依飯店位置）',
+  '航空公司報到・託運':'60 分鐘（報到／託運）'
+ }
+};
+function seedMissingTransportDurations(day){
+ let added=0;
+ const defaults=PLANNED_TRANSPORT_DURATIONS[String(day?.d)]||{};
+ for(const item of day?.items||[]){
+  if(item?.kind!=='交通'||Object.prototype.hasOwnProperty.call(item,'transportDuration'))continue;
+  const estimated=defaults[String(item.title||'')];
+  if(!estimated)continue; // 新增或修改過名稱的項目不擅自猜測
+  item.transportDuration=estimated;added++;
+ }
+ return added;
+}
 function migrateDays(source){
  const list=Array.isArray(source)?source:prep();
  for(const d of list){
@@ -2358,6 +2415,7 @@ function migrateDays(source){
    const refreshedHours=find(HOURS,String(a.title||''));
    if(refreshedHours&&!String(a.hours||'').trim())a.hours=refreshedHours;
   }
+  seedMissingTransportDurations(d);
  }
  return list;
 }
@@ -2561,7 +2619,7 @@ const row=(a,i,d)=>{
   !mv&&cost&&'<p class="c">💴 '+esc(cost)+'</p>',
   !mv&&a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',
   mv?transportDetails(a,cost):'',
-  media?'<section class="spot-card">'+((media.photos&&media.photos.length)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide'+(ph.mode==='blur'?' blur-bg':ph.mode==='composed'?' composed-photo':'')+'">'+(ph.mode==='blur'&&ph.src?'<span class="spot-carousel-blur" style="background-image:url('+esc(ph.src)+')"></span>':'')+'<img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div>'+(media.photos.length>1?'<span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div>':'')+'</div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p>'+expandedWeb+'</div></section>':'',
+  media?'<section class="spot-card">'+((media.photos&&media.photos.length)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide'+(ph.mode==='blur'?' blur-bg':ph.mode==='composed'?' composed-photo':'')+'">'+(ph.mode==='blur'&&ph.src?'<span class="spot-carousel-blur" style="background-image:url('+esc(ph.src)+')"></span>':'')+'<img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div>'+(media.photos.length>1?'<span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div>':'')+'</div>':(media.src?'<figure class="itinerary-photo"><img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy"></figure>':''))+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p>'+expandedWeb+'</div></section>':'',
   // 只有展開後有完整景點介紹時，地圖連結放在景點介紹下方。
   // 未附相簿的景點仍在展開後保有可點擊的 Google Maps 連結。
   !mv&&!media&&expandedWeb,
@@ -3825,7 +3883,9 @@ function makeCloudSync(){
       }
       return fresh;
     })};
+    const seeded=seedMissingTransportDurations(copied);
     days[currentIndex]=copied;
+    if(seeded)itineraryBaseline[key]=json(shareDay(copied));
   }
   function preserveLocalBackup(){
     try{
@@ -3878,6 +3938,36 @@ function makeCloudSync(){
     }
     if(changed){SV('days',days);if(!dlg.open)render();else dlg.addEventListener('close',()=>render(),{once:true});}
   }
+  let durationBackfillInFlight=false;
+  async function backfillSharedTravelDurations(){
+    if(durationBackfillInFlight||!verified||!connected||!exists.itinerary||!api)return;
+    durationBackfillInFlight=true;
+    try{
+      const ref=api.doc(db,'shared_trip_data','itinerary');
+      await api.runTransaction(db,async tx=>{
+        const snap=await tx.get(ref);
+        if(!snap.exists())return;
+        const remote=snap.data()||{},patch={};
+        for(const [key,day] of Object.entries(remote)){
+          if(!/^day_\d{1,2}$/.test(key)||!day||!Array.isArray(day.items))continue;
+          const clone={...day,items:day.items.map(item=>({...item}))};
+          if(seedMissingTransportDurations(clone))patch[key]=clone;
+        }
+        if(Object.keys(patch).length)tx.set(ref,patch,{merge:true});
+      });
+    }catch(err){
+      console.warn('交通時間僅於此裝置補齊，待雲端連線穩定後會再嘗試同步：',err);
+    }finally{durationBackfillInFlight=false;}
+  }
+  function hasSharedTravelDurationsToBackfill(remote){
+    return Object.entries(remote||{}).some(([key,day])=>{
+      if(!/^day_\d{1,2}$/.test(key)||!day||!Array.isArray(day.items))return false;
+      const defaults=PLANNED_TRANSPORT_DURATIONS[String(day.d)]||{};
+      return day.items.some(item=>item?.kind==='交通'&&
+        !Object.prototype.hasOwnProperty.call(item,'transportDuration')&&
+        Object.prototype.hasOwnProperty.call(defaults,String(item.title||'')));
+    });
+  }
   function watchDocs(epoch){
     const ref=api.doc(db,'shared_trip_data','itinerary');
     const stop=api.onSnapshot(ref,snap=>{
@@ -3886,6 +3976,11 @@ function makeCloudSync(){
       exists.itinerary=snap.exists();
       applyItinerarySnapshot(snap);
       connected=true;
+      if(snap.exists()&&hasSharedTravelDurationsToBackfill(snap.data())){
+        // 先接收使用者最新資料，再以交易補上真正缺少的交通時間。
+        // 任何已自行填寫或刻意清空的 transportDuration 都不會被補回。
+        backfillSharedTravelDurations();
+      }
       setStatus(exists.itinerary
         ?(homeNames.every(key=>homeReady[key])
           ?'每日行程、訂位狀態、住宿及餐廳已連接 Firebase，即時同步中；待辦仍只在本機。'
