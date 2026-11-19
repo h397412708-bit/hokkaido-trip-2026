@@ -1742,9 +1742,6 @@ dialog#dlg.home-list-editor .home-calendar-footer .home-calendar-confirm:disable
 .flight-board-transfer .flight-leg-top{margin-bottom:14px}
 .flight-board-transfer .flight-clock{font-size:22px}
 @media(max-width:375px){.flight-board-transfer .flight-leg{padding:15px 11px 17px}.flight-board-transfer .flight-clock{font-size:20px}}
-/* 待辦分類：顯示該分類未勾選數量，完成後數字即時更新。 */
-.todo-heading+.days.cats button .todo-cat-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;line-height:18px;margin-left:6px;padding:0 4px;border-radius:9px;background:rgba(120,143,177,.12);font-size:10px;font-weight:800;vertical-align:middle;color:inherit}
-.todo-heading+.days.cats button.on .todo-cat-count{background:rgba(255,255,255,.21)}
 /* 訂位日期和時間：可點選的原生系統選擇器覆蓋整個欄位，但畫面只顯示不會被裁切的短日期／24小時時間。 */
 dialog#dlg.home-list-editor .home-date-time-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;width:100%;max-width:100%;min-width:0;box-sizing:border-box}
 dialog#dlg.home-list-editor .home-date-time-row .home-edit-field{min-width:0;overflow:visible;width:auto}
@@ -1754,6 +1751,7 @@ dialog#dlg.home-list-editor .home-meal-picker svg{display:block;width:16px;heigh
 dialog#dlg.home-list-editor .home-date-time-row .home-meal-picker input[type="date"],dialog#dlg.home-list-editor .home-date-time-row .home-meal-picker input[type="time"]{position:absolute!important;inset:0!important;display:block!important;opacity:0!important;z-index:2!important;width:100%!important;height:100%!important;min-height:0!important;margin:0!important;padding:0!important;box-sizing:border-box!important;border:0!important;cursor:pointer!important;touch-action:manipulation}
 dialog#dlg.home-list-editor .home-meal-picker:focus-within{outline:2px solid #99adcb;outline-offset:2px}
 @media(max-width:375px){dialog#dlg.home-list-editor .home-date-time-row{gap:8px}dialog#dlg.home-list-editor .home-date-time-row .home-meal-picker{padding:9px 8px}dialog#dlg.home-list-editor .home-meal-picker strong{font-size:12px}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -2368,10 +2366,14 @@ function shopShowImage(src,label){
 const shopLightboxElement=document.getElementById('sh-lightbox');
 shopLightboxElement.addEventListener('click',e=>{if(e.target===shopLightboxElement)shopLightboxElement.close()});
 shopLightboxElement.addEventListener('close',()=>{document.getElementById('sh-lightbox-image').removeAttribute('src')});
+// 購物、待辦共用分類數量按鈕：文字＋右側 small 數字，沒有獨立數量圓標。
+function filterCountButton(action,value,label,count,selected,ariaLabel=''){
+ return '<button type="button" data-a="'+esc(action)+'" data-v="'+esc(value)+'" class="'+(selected?'on':'')+'"'+(ariaLabel?' aria-label="'+esc(ariaLabel)+'"':'')+'>'+esc(label)+' <small>'+Number(count)+'</small></button>';
+}
 function shopPage(){
  const total=shopping.length,pending=shopping.filter(p=>!p.done).length,bought=total-pending;
  const selected=shopping.filter(p=>shopMode==='all'||(shopMode==='pending'?!p.done:p.done)).sort((a,b)=>Number(a.done)-Number(b.done));
- const tab=(code,label,count)=>'<button type="button" data-a="shop-mode" data-v="'+code+'" class="'+(shopMode===code?'on':'')+'">'+label+' <small>'+count+'</small></button>';
+ const tab=(code,label,count)=>filterCountButton('shop-mode',code,label,count,shopMode===code);
  let body='';
  if(!selected.length){
    body='<div class="sh-empty">'+shopBagArt+'<b>'+(total===0?'還沒有購物項目':'這裡還沒有商品')+'</b><p>'+(total===0?'新增想買的商品、圖片和店家，開始整理北海道購物清單。':'可以切換「全部」、「待購買」或「已購買」查看商品。')+'</p>'+'</div>';
@@ -2454,7 +2456,7 @@ async function shopReadPhoto(file){
 }
 
 function todo(){const cats=['全部','預約','訂位','票券','其他'];const L=todos.map((t,i)=>({t:t,i:i})).filter(x=>st.cat==='全部'||x.t.c===st.cat);const s=L.filter(x=>!x.t.done).concat(L.filter(x=>x.t.done));
-return '<div class="ph sh-heading todo-heading"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p><button type="button" class="shop-glass-add" data-a="add" data-l="t" aria-label="新增待辦" title="新增待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="days cats">'+cats.map(c=>{const pending=todos.filter(t=>!t.done&&(c==='全部'||(t.c||'其他')===c)).length;return '<button data-a="cat" data-v="'+c+'" class="'+(c===st.cat?'on':'')+'" aria-label="'+c+'，'+pending+' 項未完成">'+c+'<small class="todo-cat-count">'+pending+'</small></button>'}).join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct" data-todo-category="'+esc(x.t.c||'其他')+'">'+esc(x.t.c||'其他')+'</i>'+todoLinks(x.t)+'</div>'+'<button type="button" class="todo-drag-handle" data-a="todo-drag" data-i="'+x.i+'" aria-label="長按拖曳「'+esc(x.t.t)+'」排序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>'+'<div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div>'}
+return '<div class="ph sh-heading todo-heading"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p><button type="button" class="shop-glass-add" data-a="add" data-l="t" aria-label="新增待辦" title="新增待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="days cats sh-filters">'+cats.map(c=>{const pending=todos.filter(t=>!t.done&&(c==='全部'||(t.c||'其他')===c)).length;return filterCountButton('cat',c,c,pending,c===st.cat,c+'，'+pending+' 項未完成')}).join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct" data-todo-category="'+esc(x.t.c||'其他')+'">'+esc(x.t.c||'其他')+'</i>'+todoLinks(x.t)+'</div>'+'<button type="button" class="todo-drag-handle" data-a="todo-drag" data-i="'+x.i+'" aria-label="長按拖曳「'+esc(x.t.t)+'」排序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>'+'<div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div>'}
 const fl=(lb,a,at,b,bt,duration)=>{
  const parts=lb.split('｜'),date=parts[0]||'',rawAirline=parts.slice(1).join('｜')||'';
  const direction=date.includes('去程')?'去程':'回程';
