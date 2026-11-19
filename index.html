@@ -1281,6 +1281,30 @@ dialog h3[tabindex='-1']:focus{outline:none}
   line-height:1.45;overflow-wrap:anywhere;
 }
 .row.mv .row-summary-duration{margin-top:0}
+
+/* 旅行共用 Firebase：低調的雲端狀態，維持既有霧藍玻璃風格 */
+#hk-cloud-toggle{position:fixed;z-index:3100;top:calc(env(safe-area-inset-top) + 11px);right:12px;display:flex;align-items:center;gap:6px;max-width:145px;min-height:31px;padding:6px 10px;border:1px solid rgba(160,183,218,.60);border-radius:999px;background:rgba(247,250,255,.84);color:#4d678c;font:700 11px/1.3 inherit;box-shadow:0 2px 12px rgba(63,84,124,.09);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);cursor:pointer}
+#hk-cloud-toggle .cloud-led{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#b3bccc}
+#hk-cloud-toggle[data-state="ready"] .cloud-led{background:#72a590}
+#hk-cloud-toggle[data-state="needseed"] .cloud-led{background:#e2ac70}
+#hk-cloud-toggle[data-state="error"] .cloud-led,#hk-cloud-toggle[data-state="unauthorized"] .cloud-led{background:#d78f91}
+#hk-cloud-toggle:focus-visible{outline:2px solid #6d8fc4;outline-offset:3px}
+#hk-cloud-dialog{width:min(calc(100vw - 28px),410px);max-width:410px;box-sizing:border-box;margin:auto;padding:25px 22px 21px;border:1px solid #dbe5f2;border-radius:23px;background:#fbfcff;color:#364963;box-shadow:0 14px 60px #2f425330}
+#hk-cloud-dialog::backdrop{background:rgba(30,44,62,.40);backdrop-filter:blur(3px)}
+#hk-cloud-dialog h3{margin:0;color:#304865;font-size:21px;letter-spacing:.02em}
+#hk-cloud-dialog .hk-cloud-sub{margin:8px 0 18px;color:#71849e;font-size:12px;line-height:1.75}
+#hk-cloud-dialog .hk-cloud-title{display:flex;justify-content:space-between;align-items:center;gap:9px}
+#hk-cloud-dialog .hk-cloud-x{flex:none;border:0;background:#edf3f9;border-radius:50%;height:30px;width:30px;font-size:18px;color:#8090a8;cursor:pointer}
+#hk-cloud-dialog label{display:block;margin:11px 0 0;font-size:12px;font-weight:750;color:#617894}
+#hk-cloud-dialog input{box-sizing:border-box;width:100%;margin-top:5px;min-height:43px;padding:10px 12px;border:1px solid #d4e0ed;border-radius:12px;background:white;color:#344761;font-size:14px;outline-color:#7396c5}
+#hk-cloud-dialog .hk-cloud-primary{width:100%;min-height:43px;margin-top:15px;border:0;border-radius:13px;background:#7794bd;color:white;font-size:13px;font-weight:750;cursor:pointer}
+#hk-cloud-dialog .hk-cloud-primary:disabled{opacity:.55;cursor:default}
+#hk-cloud-dialog .hk-cloud-secondary{width:100%;min-height:38px;border:1px solid #d6e3f1;border-radius:12px;background:#f0f5fb;color:#557396;font-size:12px;font-weight:750;cursor:pointer;margin-top:8px}
+#hk-cloud-dialog .hk-cloud-status{margin:11px 0 3px;font-size:12px;line-height:1.7;color:#6a809a;white-space:pre-wrap}
+#hk-cloud-dialog .hk-cloud-small{margin:10px 0 0;font-size:11px;line-height:1.7;color:#899bb0}
+#hk-cloud-dialog .hk-cloud-identity{padding:10px 12px;border-radius:12px;background:#edf3fa;overflow-wrap:anywhere;font-size:12px;color:#506787}
+#hk-cloud-dialog .hk-cloud-setup{margin-top:12px;border-radius:13px;padding:10px 12px;background:#fdf4e7;color:#947445;font-size:12px;line-height:1.7}
+@media(max-width:420px){#hk-cloud-dialog{padding:22px 19px}#hk-cloud-toggle{right:9px;top:calc(env(safe-area-inset-top) + 8px)}}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -1290,6 +1314,28 @@ dialog h3[tabindex='-1']:focus{outline:none}
   <button type="button" data-a="tab" data-v="shop" aria-label="購物"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.4 8h15.2l-1 12.1H5.4L4.4 8Z"/><path d="M8.5 9V6.8a3.5 3.5 0 0 1 7 0V9"/></svg><span>購物</span></button>
 </nav><dialog id="dlg"></dialog>
 <div id="journal-save-toast" role="status" aria-live="polite" aria-atomic="true" aria-hidden="true">✓ 已儲存</div>
+
+<button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程同步" data-state="loading"><span class="cloud-led"></span><span id="hk-cloud-label">雲端連線中</span></button>
+<dialog id="hk-cloud-dialog" aria-label="北海道行程雲端同步設定">
+  <div class="hk-cloud-title"><h3 tabindex="-1">共用行程同步</h3><button id="hk-cloud-close" type="button" class="hk-cloud-x" aria-label="關閉">×</button></div>
+  <p class="hk-cloud-sub">每日行程和待辦同步給旅伴；行李、購物清單仍各自在手機儲存。</p>
+  <div id="hk-cloud-signedout">
+    <form id="hk-cloud-login-form">
+      <label>電子郵件<input name="email" type="email" autocomplete="username" required placeholder="旅行成員的 Email"></label>
+      <label>密碼<input name="password" type="password" autocomplete="current-password" required placeholder="Firebase 專用登入密碼"></label>
+      <button class="hk-cloud-primary" id="hk-cloud-login-button" type="submit">登入共用行程</button>
+    </form>
+  </div>
+  <div id="hk-cloud-signedin" hidden>
+    <div id="hk-cloud-identity" class="hk-cloud-identity"></div>
+    <div id="hk-cloud-setup" class="hk-cloud-setup" hidden>目前雲端還沒有共用行程。請由持有最新行程的主要使用者，確認後將這台手機的行程上傳。其他旅伴不要按這個按鈕。</div>
+    <button id="hk-cloud-seed" type="button" class="hk-cloud-primary" hidden>首次上傳這台手機的共用行程</button>
+    <button id="hk-cloud-signout" type="button" class="hk-cloud-secondary">登出</button>
+  </div>
+  <p id="hk-cloud-status" class="hk-cloud-status" role="status" aria-live="polite"></p>
+  <button id="hk-cloud-backup" type="button" class="hk-cloud-secondary">下載這台手機的資料備份（JSON）</button>
+  <p class="hk-cloud-small">登入後以雲端共用行程為準。登入前若有手機上的自訂資料，請先備份。新增上傳的景點照片只會存在本機，尚未同步至其他手機。</p>
+</dialog>
 <dialog id="sh-lightbox" class="sh-lightbox" aria-label="商品圖片放大檢視">
   <button type="button" class="sh-lightbox-close" data-a="shop-zoom-close" aria-label="關閉放大圖片">✕</button>
   <img id="sh-lightbox-image" src="" alt="商品圖片放大檢視">
@@ -1673,7 +1719,8 @@ function bookedText(a,status){
 }
 
 const ov=new Set(['useful']),app=document.getElementById('app'),dlg=document.getElementById('dlg');
-const save=()=>{SV('days',days);SV('todos',todos);SV('packs',packs)};
+let cloudSync=null;
+const save=()=>{SV('days',days);SV('todos',todos);SV('packs',packs);if(cloudSync)cloudSync.onLocalChange()};
 const links=pl=>{const u=[...new Map((pl||[]).map(p=>[p.q,p])).values()];return u.length?'<div class="lk">'+u.map(p=>'<a href="'+esc(OVR[p.q]||(p.search?SEARCH(p.q):MAP(p.q,p.mode)))+'" target="_blank" rel="noopener noreferrer">📍 '+esc(p.name)+'</a>').join('')+'</div>':''};
 const tool=(l,i)=>(l==='d'?['編輯|0|ed','刪除|0|rm']:['↑|-1|mv','↓|1|mv','編輯|0|ed','刪除|0|rm']).map(s=>{const x=s.split('|');return '<button data-a="'+x[2]+'" data-l="'+l+'" data-i="'+i+'" data-d="'+x[1]+'">'+x[0]+'</button>'}).join('');
 const dragGrip=i=>'<button type="button" class="row-drag-handle" data-a="drag" data-i="'+i+'" aria-label="長按拖曳排序；鍵盤按 Alt 加上下方向鍵調整順序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>';
@@ -2393,6 +2440,294 @@ document.addEventListener('toggle',e=>{
  const k=e.target.dataset&&e.target.dataset.k;
  if(k){e.target.open?ov.add(k):ov.delete(k)}
 },true);
+
+/* ============== Firebase 共用行程 / 待辦 ==============
+ * 跟目前發佈的 Firestore 規則相容：
+ * trip_members/{登入 UID} 僅讀取本人；shared_trip_data/itinerary、todos 讀寫。
+ * 不會將 packs/shopping 送往 Firebase。
+ * 行程照片保留在 HTML 或個別手機；1 MiB 文件限制，禁止上傳 data URL。
+ */
+function makeCloudSync(){
+  const config={
+    apiKey:'AIzaSyCqfssdzzN_sFtaotZ73ZlSSm7F3AEbuE8',
+    authDomain:'hokkaido-travel-2026-9dd47.firebaseapp.com',
+    projectId:'hokkaido-travel-2026-9dd47',
+    storageBucket:'hokkaido-travel-2026-9dd47.firebasestorage.app',
+    messagingSenderId:'121189817913',
+    appId:'1:121189817913:web:23df7b4dff6e9632f0f7e8'
+  };
+  const pill=document.getElementById('hk-cloud-toggle');
+  const label=document.getElementById('hk-cloud-label');
+  const dialog=document.getElementById('hk-cloud-dialog');
+  const status=document.getElementById('hk-cloud-status');
+  const out=document.getElementById('hk-cloud-signedout');
+  const inside=document.getElementById('hk-cloud-signedin');
+  const identity=document.getElementById('hk-cloud-identity');
+  const setup=document.getElementById('hk-cloud-setup');
+  const seedBtn=document.getElementById('hk-cloud-seed');
+  const loginBtn=document.getElementById('hk-cloud-login-button');
+  let api=null,auth=null,db=null,user=null,verified=false,connected=false,busy=false;
+  let unsub=[],initial={itinerary:false,todos:false},exists={itinerary:false,todos:false};
+  let itineraryBaseline={},todosBaseline=null,localPendingDays=new Set(),localPendingTodos=false;
+  let flushTimer=0,liveEpoch=0,autoLoginPrompt=false,cloudError='';
+  const dayKey=d=>'day_'+String(d.d);
+  const shareDay=d=>{
+    const copy={...d};
+    copy.items=(d.items||[]).map(a=>{
+      const result={...a};
+      // 保留行程文字、交通、地點、順序與景點介紹；不送內嵌或新上傳的圖片。
+      ['photos','photo','userPhotos','image','imageData','base64'].forEach(k=>delete result[k]);
+      return result;
+    });
+    delete copy.photos;delete copy.coverImage;return copy;
+  };
+  const shareDays=()=>Object.fromEntries(days.map(d=>[dayKey(d),shareDay(d)]));
+  const json=x=>JSON.stringify(x);
+  const makeReadableError=err=>{
+    const code=String(err?.code||'');
+    if(code.includes('wrong-password')||code.includes('invalid-credential')||code.includes('invalid-login-credentials'))return 'Email 或密碼不正確，請再試一次。';
+    if(code.includes('too-many-requests'))return '登入嘗試過多，請稍後重試。';
+    if(code.includes('network-request-failed')||code.includes('unavailable'))return '目前網路無法連線，請確認 Wi-Fi 或行動網路。';
+    if(code.includes('permission-denied'))return '存取被拒絕：請確認 Firestore 規則、成員 UID 及登入帳號。';
+    return '連線失敗：'+(code||err?.message||'未知錯誤');
+  };
+  function setStatus(textValue,error=false){status.textContent=textValue||'';status.style.color=error?'#b45f68':'#6a809a';}
+  function paint(){
+    const needSeed=verified&&initial.itinerary&&initial.todos&&(!exists.itinerary||!exists.todos);
+    const phase=cloudError?'error':!api?'loading':!user?'signedout':!verified?'unauthorized':needSeed?'needseed':connected?'ready':'loading';
+    pill.dataset.state=phase;
+    label.textContent={loading:'雲端連線中',signedout:'雲端登入',unauthorized:'尚未授權',needseed:'待初次同步',ready:'✓ 已連接雲端',error:'同步異常'}[phase];
+    out.hidden=!!user;inside.hidden=!user;
+    identity.textContent=user?'登入帳號：'+(user.email||'已登入')+(verified?' · 已授權':' · 驗證中'):'';
+    setup.hidden=!needSeed;
+    seedBtn.hidden=!needSeed;
+    seedBtn.disabled=busy;
+    loginBtn.disabled=busy;
+  }
+  function showDialog(){
+    paint();if(dialog.open)return;
+    dialog.showModal();dialog.querySelector('h3')?.focus({preventScroll:true});
+  }
+  function clearSubscriptions(){
+    window.clearTimeout(flushTimer);flushTimer=0;unsub.forEach(f=>{try{f()}catch(e){}});unsub=[];
+    initial={itinerary:false,todos:false};exists={itinerary:false,todos:false};
+    itineraryBaseline={};todosBaseline=null;localPendingDays.clear();localPendingTodos=false;
+    connected=false;verified=false;cloudError='';liveEpoch++;
+  }
+  // 同步文件的文字資料，但保留同一台手機上使用者自行上傳的照片。
+  function applyIncomingDay(key,remoteDay){
+    if(!remoteDay||typeof remoteDay!=='object'||!Array.isArray(remoteDay.items))return;
+    const currentIndex=days.findIndex(x=>dayKey(x)===key);
+    if(currentIndex<0)return;
+    const prior=days[currentIndex];
+    const copied={...remoteDay,items:remoteDay.items.map(item=>{
+      const fresh={...item};
+      const existing=(prior.items||[]).find(a=>a.id===item.id)
+        ||(prior.items||[]).find(a=>a.title===item.title&&a.time===item.time);
+      if(existing?.userPhotos&&Array.isArray(existing.photos)&&existing.photos.length){
+        fresh.photos=existing.photos;fresh.userPhotos=true;
+      }
+      return fresh;
+    })};
+    days[currentIndex]=copied;
+  }
+  function preserveLocalBackup(){
+    try{
+      if(localStorage.getItem('hk26v2_cloud_backup_created'))return;
+      const content=json({days,todos,packs,shopping,backedUpAt:new Date().toISOString()});
+      if(content.length<1300000){
+        localStorage.setItem('hk26v2_precloud_backup',content);
+        localStorage.setItem('hk26v2_cloud_backup_created',new Date().toISOString());
+      }
+    }catch(e){/* 容量不足時仍可按「下載備份」手動備份 */}
+  }
+  function applyItinerarySnapshot(snap){
+    // 別在編輯視窗開啟時替換行程物件，否則使用者按儲存可能寫入舊陣列。
+    if(dlg.open){
+      const snapshotData=snap.data(),snapshotExists=snap.exists();
+      dlg.addEventListener('close',()=>applyItinerarySnapshot({data:()=>snapshotData,exists:()=>snapshotExists}),{once:true});
+      return;
+    }
+    const remote=snap.data()||{};
+    if(!snap.exists())return;
+    let changed=false;
+    for(const [key,day] of Object.entries(remote)){
+      if(!/^day_\d{1,2}$/.test(key)||!day||!Array.isArray(day.items))continue;
+      const serialized=json(day);
+      itineraryBaseline[key]=serialized;
+      const local=days.find(d=>dayKey(d)===key);
+      if(localPendingDays.has(key)){
+        if(local&&json(shareDay(local))===serialized)localPendingDays.delete(key);
+        else continue; // 本機尚未寫入的修改暫時不能被遠端覆蓋
+      }
+      if(local&&json(shareDay(local))!==serialized){
+        preserveLocalBackup();applyIncomingDay(key,day);changed=true;
+      }
+    }
+    if(changed){SV('days',days);if(!dlg.open)render();else dlg.addEventListener('close',()=>render(),{once:true});}
+  }
+  function applyTodoSnapshot(snap){
+    if(dlg.open){
+      const snapshotData=snap.data(),snapshotExists=snap.exists();
+      dlg.addEventListener('close',()=>applyTodoSnapshot({data:()=>snapshotData,exists:()=>snapshotExists}),{once:true});
+      return;
+    }
+    if(!snap.exists())return;
+    const arr=snap.data()?.items;
+    if(!Array.isArray(arr))return;
+    todosBaseline=json(arr);
+    if(localPendingTodos){
+      if(json(todos)===todosBaseline)localPendingTodos=false;
+      else return;
+    }
+    if(json(todos)!==todosBaseline){preserveLocalBackup();todos=migrateTodos(arr);SV('todos',todos);if(!dlg.open)render();else dlg.addEventListener('close',()=>render(),{once:true});}
+  }
+  function watchDocs(epoch){
+    const docs={itinerary:api.doc(db,'shared_trip_data','itinerary'),todos:api.doc(db,'shared_trip_data','todos')};
+    for(const id of ['itinerary','todos']){
+      const unsubOne=api.onSnapshot(docs[id],snap=>{
+        if(epoch!==liveEpoch)return;
+        initial[id]=true;exists[id]=snap.exists();
+        if(id==='itinerary')applyItinerarySnapshot(snap);else applyTodoSnapshot(snap);
+        connected=initial.itinerary&&initial.todos;
+        if(connected){setStatus(!exists.itinerary||!exists.todos?'雲端還沒建立共用行程，請由主要使用者上傳這台手機的資料。':'每日行程和待辦已連接 Firebase，即時同步中。');}
+        paint();
+      },err=>{
+        if(epoch!==liveEpoch)return;
+        cloudError=makeReadableError(err);setStatus(cloudError,true);paint();
+      });
+      unsub.push(unsubOne);
+    }
+  }
+  function collectChanges(){
+    const current=shareDays();
+    const dirty={};
+    for(const [key,value] of Object.entries(current)){
+      if(json(value)!==itineraryBaseline[key])dirty[key]=value;
+    }
+    const todoDirty=json(todos)!==todosBaseline;
+    return {dirty,todoDirty};
+  }
+  async function flush(){
+    if(!verified||!connected||!exists.itinerary||!exists.todos||!api||!user)return;
+    const epoch=liveEpoch,{dirty,todoDirty}=collectChanges();
+    if(!Object.keys(dirty).length&&!todoDirty)return;
+    try{
+      if(Object.keys(dirty).length){
+        localPendingDays=new Set([...localPendingDays,...Object.keys(dirty)]);
+        // 每次僅更新被修改的「日期欄位」，不同天的修改不會相互整份覆寫。
+        await api.setDoc(api.doc(db,'shared_trip_data','itinerary'),dirty,{merge:true});
+      }
+      if(todoDirty){
+        localPendingTodos=true;
+        await api.setDoc(api.doc(db,'shared_trip_data','todos'),{items:todos},{merge:true});
+      }
+      if(epoch===liveEpoch){cloudError='';setStatus('已將最新修改送往共用雲端。');paint();}
+    }catch(err){
+      if(epoch===liveEpoch){cloudError=makeReadableError(err);setStatus(cloudError,true);paint();}
+    }
+  }
+  function onLocalChange(){
+    if(!verified||!connected||!exists.itinerary||!exists.todos)return;
+    const {dirty,todoDirty}=collectChanges();
+    if(!Object.keys(dirty).length&&!todoDirty)return;
+    for(const k of Object.keys(dirty))localPendingDays.add(k);
+    if(todoDirty)localPendingTodos=true;
+    window.clearTimeout(flushTimer);flushTimer=window.setTimeout(flush,440);
+  }
+  async function seedShared(){
+    if(!verified||!user||busy||!initial.itinerary||!initial.todos)return;
+    const which=[];if(!exists.itinerary)which.push('每日行程');if(!exists.todos)which.push('待辦清單');
+    if(!which.length)return;
+    if(!confirm('要以「這台手機」的'+which.join('和')+'建立共用資料嗎？\n只有第一次上傳需要此步驟，其他朋友請勿重複建立。'))return;
+    busy=true;paint();setStatus('正在建立共用資料，請勿關閉頁面…');
+    try{
+      // 使用交易避免兩位旅伴同時第一次上傳，互相覆蓋已建立的文件。
+      for(const id of ['itinerary','todos']){
+        if(exists[id])continue;
+        const ref=api.doc(db,'shared_trip_data',id);
+        await api.runTransaction(db,async tx=>{
+          const existing=await tx.get(ref);
+          if(existing.exists())return;
+          const body=id==='itinerary'?shareDays():{items:todos};
+          if(json(body).length>850000)throw new Error('行程資料超過同步大小上限，請先移除太大的內嵌資料。');
+          tx.set(ref,body);
+        });
+      }
+      setStatus('首次共用資料已建立，正在確認雲端同步…');
+    }catch(err){cloudError=makeReadableError(err);setStatus(cloudError,true);}
+    finally{busy=false;paint();}
+  }
+  function downloadBackup(){
+    const backup={format:'Hokkaido Winter Journal Backup',createdAt:new Date().toISOString(),days,todos,packs,shopping};
+    const blob=new Blob([json(backup)],{type:'application/json;charset=utf-8'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download='北海道旅誌_手機資料備份_'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a);a.click();a.remove();
+    window.setTimeout(()=>URL.revokeObjectURL(url),15000);
+    setStatus('已產生這台手機的 JSON 資料備份；請妥善保存。');
+  }
+  async function memberLoginState(nextUser){
+    clearSubscriptions();user=nextUser;paint();
+    if(!user){setStatus('登入後共用行程與待辦將自動同步；購物和行李保持本機獨立。');
+      if(!autoLoginPrompt){autoLoginPrompt=true;window.setTimeout(()=>{if(!user&&!dialog.open)showDialog()},720);}return;
+    }
+    setStatus('正在確認旅伴存取權限…');
+    const epoch=liveEpoch;
+    try{
+      // 根據目前已發布的規則，成員只能讀取自己的文件。
+      const record=await api.getDoc(api.doc(db,'trip_members',user.uid));
+      if(epoch!==liveEpoch)return;
+      if(!record.exists()){
+        verified=false;cloudError='';setStatus('這個帳號不在 trip_members 成員名單中。請先由管理員加入 UID，才能共用行程。',true);paint();showDialog();return;
+      }
+      verified=true;setStatus('已驗證成員，正在下載共用行程…');paint();watchDocs(epoch);
+    }catch(err){if(epoch!==liveEpoch)return;cloudError=makeReadableError(err);setStatus(cloudError,true);paint();showDialog();}
+  }
+  async function start(){
+    paint();setStatus('正在載入 Firebase 登入及資料庫服務…');
+    try{
+      // 單一 HTML 適用的 Firebase 官方模組 CDN，無需 npm/Hosting。
+      const [core,authentication,firestore]=await Promise.all([
+        import('https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js'),
+        import('https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js')
+      ]);
+      const appInstance=core.initializeApp(config);
+      auth=authentication.getAuth(appInstance);
+      db=firestore.getFirestore(appInstance);
+      api={...authentication,...firestore};
+      paint();api.onAuthStateChanged(auth,memberLoginState,err=>{
+        cloudError=makeReadableError(err);setStatus(cloudError,true);paint();
+      });
+    }catch(err){cloudError='Firebase SDK 無法載入，請確認網路。離線時行程可先在此機查看；連線恢復後請重新開啟 App。';setStatus(cloudError,true);paint();}
+  }
+  pill.addEventListener('click',showDialog);
+  document.getElementById('hk-cloud-close').addEventListener('click',()=>dialog.close());
+  document.getElementById('hk-cloud-backup').addEventListener('click',downloadBackup);
+  seedBtn.addEventListener('click',seedShared);
+  document.getElementById('hk-cloud-signout').addEventListener('click',async()=>{
+    if(!api||!auth)return;
+    try{await api.signOut(auth);setStatus('已登出 Firebase，這台手機的私人清單不受影響。');}
+    catch(err){setStatus(makeReadableError(err),true);}
+  });
+  document.getElementById('hk-cloud-login-form').addEventListener('submit',async e=>{
+    e.preventDefault();if(!api||!auth){setStatus('Firebase 還沒載入，請確認網路。',true);return;}
+    if(busy)return;
+    const fd=new FormData(e.currentTarget);busy=true;paint();setStatus('正在登入…');
+    try{
+      await api.signInWithEmailAndPassword(auth,String(fd.get('email')||'').trim(),String(fd.get('password')||''));
+      e.currentTarget.querySelector('[name="password"]').value='';
+      dialog.close();
+    }catch(err){setStatus(makeReadableError(err),true);}
+    finally{busy=false;paint();}
+  });
+  paint();
+  return {start,onLocalChange,showDialog,debug:()=>({verified,connected,exists,initial,cloudError})};
+}
+
 save();render();
+ cloudSync=makeCloudSync();
+ cloudSync.start();
 })();
 </script></body></html>
