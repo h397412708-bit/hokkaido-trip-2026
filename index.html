@@ -1839,6 +1839,52 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 *,dialog#dlg.itinerary-editor .it
   .tlw>details.row>summary.swipe-host>.swipe-face{gap:5px!important;padding-inline:5px!important}
   .tlw .row-spot-thumb{flex-basis:34px!important;width:34px;height:34px}
 }
+
+/* 2026-11-20：時間與景點／交通名稱首行對齊；第二行保留時間長度。 */
+.tlw>details.row>summary.swipe-host>.swipe-face,
+.tlw>details.row.mv>summary.swipe-host>.swipe-face{
+  align-items:flex-start!important;
+}
+.tlw>details.row>summary .row-inline-clock{
+  align-self:flex-start!important;
+  padding-top:3px!important;
+}
+.tlw>details.row.mv>summary .row-inline-clock{padding-top:4px!important}
+.tlw>details.row>summary .row-summary-main{align-self:flex-start!important}
+.tlw>details.row>summary .row-summary-title{min-width:0;overflow-wrap:anywhere}
+/* 收合摘要只顯示線條地標，展開後將 Google Maps 移到景點介紹底部。 */
+.tlw .itinerary-web-pin,
+.tlw .itinerary-web-expanded{
+  color:#7387a3!important;text-decoration:none;
+}
+.tlw .itinerary-web-pin svg,
+.tlw .itinerary-web-expanded svg{
+  width:17px;height:17px;flex:0 0 17px;
+  fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.tlw .itinerary-web-pin{flex:0 0 23px;align-self:flex-start;height:29px;min-width:23px}
+.tlw>details.row[open] .itinerary-web-pin{display:none!important}
+.tlw>details.row:not([open]) .itinerary-web-pin{display:inline-flex!important}
+.tlw .itinerary-web-expanded{
+  display:inline-flex!important;align-items:center;gap:7px;
+  min-height:34px;width:auto;max-width:100%;
+  padding:6px 10px;margin:11px 0 0;
+  border:1px solid #d8e4f0;border-radius:10px;
+  background:#eef4fa;color:#607998!important;
+  font-size:11px;line-height:1.45;font-weight:700;
+}
+.tlw .itinerary-web-expanded svg{width:15px;height:15px;flex-basis:15px}
+.tlw .itinerary-web-expanded:focus-visible,
+.tlw .itinerary-web-pin:focus-visible{outline:2px solid #87a7c9;outline-offset:2px}
+/* 展開後不顯示摘要縮圖，完整首圖／相簿仍留在景點介紹上方。 */
+.tlw>details.row[open] .row-spot-thumb{display:none!important}
+.tlw>details.row.mv .itinerary-web-pin,
+.tlw>details.row.mv .itinerary-web-expanded{display:none!important}
+@media(max-width:360px){
+ .tlw>details.row>summary .row-inline-clock{padding-top:3px!important}
+ .tlw>details.row.mv>summary .row-inline-clock{padding-top:4px!important}
+}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -2420,7 +2466,9 @@ const row=(a,i,d)=>{
  const media=!mv?spotMedia(a):null,webUrl=!mv?itinerarySpotHref(a):'',clock=displayStartTime(a.time);
  const photoFirst=!mv&&media?(media.photos?.[0]?.src||media.src||''):'';
  const summaryPhoto=photoFirst?'<span class="row-spot-thumb" aria-hidden="true"><img src="'+esc(photoFirst)+'" alt="" loading="lazy"></span>':'';
- const summaryWeb=webUrl?'<a class="itinerary-web-pin" data-itinerary-web href="'+esc(webUrl)+'" target="_blank" rel="noopener noreferrer" title="開啟景點連結" aria-label="開啟景點連結">📍</a>':'';
+ const pinIcon=iconSvg('pin');
+ const summaryWeb=webUrl?'<a class="itinerary-web-pin" data-itinerary-web href="'+esc(webUrl)+'" target="_blank" rel="noopener noreferrer" title="在 Google Maps 開啟" aria-label="在 Google Maps 開啟">'+pinIcon+'</a>':'';
+ const expandedWeb=webUrl?'<a class="itinerary-web-expanded" data-itinerary-web href="'+esc(webUrl)+'" target="_blank" rel="noopener noreferrer" aria-label="在 Google Maps 開啟">'+pinIcon+'<span>Google Maps</span></a>':'';
  
  const durationDetail=!mv?(a.spotDuration?'預留停留約 '+String(a.spotDuration).trim():a.kind==='觀光'?timeSpan(a):''):'';
  const bd=[
@@ -2428,13 +2476,25 @@ const row=(a,i,d)=>{
   !mv&&cost&&'<p class="c">💴 '+esc(cost)+'</p>',
   !mv&&a.hours&&'<p class="h">🕘 '+esc(a.hours)+'</p>',
   mv?transportDetails(a,cost):durationDetail?'<div class="stay-duration">'+esc(durationDetail)+'</div>':'',
-  media?'<section class="spot-card">'+((media.photos&&media.photos.length)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide'+(ph.mode==='blur'?' blur-bg':ph.mode==='composed'?' composed-photo':'')+'">'+(ph.mode==='blur'&&ph.src?'<span class="spot-carousel-blur" style="background-image:url('+esc(ph.src)+')"></span>':'')+'<img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div>'+(media.photos.length>1?'<span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div>':'')+'</div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p></div></section>':'',
-  // 舊的 places 地圖連結統一移至收合摘要 📍，展開後不重複顯示。
+  media?'<section class="spot-card">'+((media.photos&&media.photos.length)?'<div class="spot-carousel" data-carousel><div class="spot-carousel-track">'+media.photos.map(ph=>'<div class="spot-carousel-slide'+(ph.mode==='blur'?' blur-bg':ph.mode==='composed'?' composed-photo':'')+'">'+(ph.mode==='blur'&&ph.src?'<span class="spot-carousel-blur" style="background-image:url('+esc(ph.src)+')"></span>':'')+'<img src="'+esc(ph.src)+'" alt="'+esc(ph.alt||media.alt)+'" loading="lazy"></div>').join('')+'</div>'+(media.photos.length>1?'<span class="spot-carousel-count">1/'+media.photos.length+'</span><div class="spot-carousel-dots">'+media.photos.map((_,j)=>'<button type="button" class="spot-carousel-dot'+(j===0?' active':'')+'" data-carousel-dot="'+j+'" aria-label="切換至第 '+(j+1)+' 張照片"></button>').join('')+'</div>':'')+'</div>':'<figure class="itinerary-photo">'+(media.src?'<img src="'+esc(media.src)+'" alt="'+esc(media.alt)+'" loading="lazy">':'')+'</figure>')+'<div class="spot-intro"><small>景點介紹</small><b>'+esc(media.alt)+'</b><p>'+esc(media.intro)+'</p>'+expandedWeb+'</div></section>':'',
+  // 只有展開後有完整景點介紹時，地圖連結放在景點介紹下方。
+  // 未附相簿的景點仍在展開後保有可點擊的 Google Maps 連結。
+  !mv&&!media&&expandedWeb,
  ].filter(Boolean).join('');
  return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'" data-clock="'+esc(clock)+'"'+(ov.has(a.id)?' open':'')+'><summary aria-label="'+esc(clock+' '+title)+'"><time class="row-inline-clock">'+esc(clock)+'</time><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a,d)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+summaryPhoto+summaryWeb+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>';
 };
-// Clicking the 📍 link never expands/collapses the itinerary summary.
-app.addEventListener('click',e=>{if(e.target.closest?.('[data-itinerary-web]'))e.stopPropagation();},true);
+// 景點摘要內的連結放在 <summary> 中；必須主動開啟新分頁，避免原生 details 阻擋導覽或誤觸收合。
+app.addEventListener('click',e=>{
+ const link=e.target.closest?.('[data-itinerary-web]');
+ if(!link)return;
+ if(link.closest('summary')){
+  e.preventDefault();
+  e.stopPropagation();
+  window.open(link.href,'_blank','noopener,noreferrer');
+ }else{
+  e.stopPropagation();
+ }
+},true);
 // 遠端照片無法載入時隱藏縮圖，避免折疊卡片出現沒有內容的色塊。
 app.addEventListener('error',e=>{const img=e.target;if(img?.matches?.('.row-spot-thumb img'))img.parentElement?.style.setProperty('display','none','important');},true);
 
