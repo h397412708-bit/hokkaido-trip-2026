@@ -1957,6 +1957,69 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 *,dialog#dlg.itinerary-editor .it
   margin-top:0!important;
   margin-bottom:0!important;
 }
+
+/* 2026-11-20｜行程新增／編輯：上下兩列共用相同欄寬，圓角輸入框完全等高。 */
+dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row{
+  display:grid!important;
+  grid-template-columns:minmax(0, 42fr) minmax(0, 58fr)!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  gap:8px!important;
+  align-items:end!important;
+}
+dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row > label{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-end!important;
+  min-width:0!important;
+  width:100%!important;
+  max-width:100%!important;
+}
+dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row :is(
+  input:not([type="time"]),select,.itinerary-clock-picker
+){
+  box-sizing:border-box!important;
+  height:46px!important;
+  min-height:46px!important;
+  max-height:46px!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin-top:6px!important;
+  border-radius:12px!important;
+}
+dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row .itinerary-clock-picker{
+  padding-top:0!important;
+  padding-bottom:0!important;
+}
+dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="time"]{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  margin:0!important;
+  padding:0!important;
+  opacity:0!important;
+}
+/* 景點名稱與預留時間收緊一點，保留整個文字群組與卡片垂直置中。 */
+.tlw > details.row:not(.mv) > summary .row-summary-main{
+  gap:1px!important;
+}
+.tlw > details.row:not(.mv) > summary .row-summary-heading{
+  margin:0!important;
+}
+.tlw > details.row:not(.mv) > summary .row-summary-duration{
+  margin-top:0!important;
+  margin-bottom:0!important;
+  line-height:1.32!important;
+}
+@media(max-width:360px){
+  dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row{
+    grid-template-columns:minmax(0, 42fr) minmax(0, 58fr)!important;
+    gap:7px!important;
+  }
+}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -3489,7 +3552,7 @@ function editDayItem(n,selectedKind){
  const modeField='<label class="itinerary-edit-field">交通工具<select name="transportMode" required>'+TRANSPORT_MODE_NAMES.map(mode=>'<option value="'+mode+'"'+(!adding&&transportModeFor(a)===mode?' selected':'')+'>'+mode+'</option>').join('')+'</select></label>';
  const transportLength=f('transportDuration','交通時間（選填）',false,'例如：35 分鐘');
  const spotLength=f('spotDuration','預留時間（選填）',false,'例如：90 分鐘');
- const secondRow='<div class="itinerary-form-row itinerary-mode-duration">'+(transport?modeField+transportLength:spotLength+booking)+'</div>';
+ const secondRow='<div class="itinerary-form-row itinerary-mode-duration">'+(transport?modeField+transportLength:booking+spotLength)+'</div>';
  const topFields=transport?
     firstRow+secondRow+f('hours','時刻／備註（選填）')+booking+f('desc','行程細節',true,'例如：乘車地點、轉車及搭乘資訊')+f('cost','預估費用（選填）',true,'例：約 ¥1,200／人'):
     firstRow+secondRow+f('desc','行程細節',true,'當日安排與注意事項')+f('hours','營業時間（選填）')+f('cost','預估費用（選填）',true,'例如：纜車票 ¥1,800');
