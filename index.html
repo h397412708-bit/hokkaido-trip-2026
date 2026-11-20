@@ -2367,6 +2367,20 @@ const PLANNED_TRANSPORT_DURATIONS={
   '航空公司報到・託運':'60 分鐘（報到／託運）'
  }
 };
+// 現有行程景點與活動的預估停留時間（不代表固定開放時間或訂位時長）。
+// 只替完全沒有 spotDuration 欄位的原始景點填入；空字串代表使用者已清空，不再補回。
+const PLANNED_SPOT_DURATIONS={"18":{"酷航 TR892｜TPE → CTS":"3 小時 45 分鐘","入境・領行李":"1 小時","晚餐與便利商店採買":"1 小時 15 分鐘","入住 SAPPORO STREAM HOTEL・休息":"45 分鐘（辦理入住）"},"19":{"早餐・出發準備":"45 分鐘","天狗山纜車與山頂雪景":"1 小時 30 分鐘","午餐（二選一）":"1 小時","船見坂拍照":"20 分鐘","堺町通・音樂盒堂・北一硝子・LeTAO":"2 小時","小樽運河黃昏與夜景":"50 分鐘","小樽倉庫 No.1 晚餐":"1 小時 30 分鐘","返回 SAPPORO STREAM HOTEL":"30 分鐘"},"20":{"飯店早餐":"45 分鐘","圓山公園散步":"30 分鐘","北海道神宮參拜":"50 分鐘","奧芝商店 おくしばぁちゃん｜湯咖哩":"1 小時 15 分鐘","北海道立近代美術館":"1 小時 45 分鐘","返回市中心・休息或咖啡":"1 小時 30 分鐘","慕尼黑聖誕市集":"2 小時"},"21":{"早餐・自由活動":"1 小時","札幌啤酒博物館":"1 小時 15 分鐘","午餐":"1 小時","大通商圈逛街":"2 小時 30 分鐘","AOAO SAPPORO 水族館":"1 小時 30 分鐘","狸小路・薄野商圈散步":"1 小時 30 分鐘","寺田壽司｜4 人預訂":"2 小時"},"22":{"飯店早餐":"45 分鐘","退房・寄存行李":"45 分鐘","札幌站周邊自由活動・午餐":"1 小時","第一瀧本館入住・休息":"45 分鐘（辦理入住）","地獄谷・鬼火之路":"1 小時 30 分鐘","飯店晚餐":"1 小時 15 分鐘","第一瀧本館泡湯":"1 小時 30 分鐘"},"23":{"飯店早餐":"45 分鐘","防滑雪靴・保暖準備":"30 分鐘","地獄谷白天觀景":"1 小時 15 分鐘","登別溫泉街散步":"1 小時","午餐":"1 小時","大湯沼方向探索（條件式）":"1 小時 30 分鐘（開放時）","返回飯店・泡湯休息":"2 小時 30 分鐘","飯店內晚餐":"1 小時 15 分鐘","自由活動・泡湯":"1 小時 30 分鐘"},"24":{"第一瀧本館早餐":"45 分鐘","整理行李・退房":"45 分鐘","溫泉街最後散步":"45 分鐘","乃之風飯店入住・休息":"45 分鐘（辦理入住）","洞爺湖畔散步":"1 小時","湖景溫泉・休息":"1 小時 30 分鐘","飯店內晚餐":"1 小時 30 分鐘","飯店自由活動":"1 小時"},"25":{"飯店早餐":"45 分鐘","雪地摩托車體驗（待訂）":"1 小時 15 分鐘（含裝備）","雪地拍照・觀景":"45 分鐘","午餐":"1 小時","Silo 展望台":"45 分鐘","返回飯店・湖畔散步":"45 分鐘","乃之風溫泉與自由時間":"2 小時","飯店內晚餐":"1 小時 30 分鐘","休息・整理行李":"45 分鐘"},"26":{"飯店早餐":"45 分鐘","整理行李・湖景休息":"45 分鐘","午餐・候車":"1 小時","休息或機場購物":"1 小時 30 分鐘","晚餐":"1 小時","整理返台行李":"45 分鐘"},"27":{"早餐":"40 分鐘","退房・整理行李":"45 分鐘","安檢・出境・候機":"1 小時 30 分鐘","AirAsia FD243｜CTS → TPE":"4 小時 55 分鐘"}};
+function seedMissingSpotDurations(day){
+ let added=0;
+ const defaults=PLANNED_SPOT_DURATIONS[String(day?.d)]||{};
+ for(const item of day?.items||[]){
+  if(!item||item.kind==='交通'||Object.prototype.hasOwnProperty.call(item,'spotDuration'))continue;
+  const estimated=defaults[String(item.title||'')];
+  if(!estimated)continue; // 只補原有且名稱完全符合的項目，不猜測新增景點
+  item.spotDuration=estimated;added++;
+ }
+ return added;
+}
 function seedMissingTransportDurations(day){
  let added=0;
  const defaults=PLANNED_TRANSPORT_DURATIONS[String(day?.d)]||{};
@@ -2416,6 +2430,7 @@ function migrateDays(source){
    if(refreshedHours&&!String(a.hours||'').trim())a.hours=refreshedHours;
   }
   seedMissingTransportDurations(d);
+  seedMissingSpotDurations(d);
  }
  return list;
 }
@@ -3951,21 +3966,27 @@ function makeCloudSync(){
         for(const [key,day] of Object.entries(remote)){
           if(!/^day_\d{1,2}$/.test(key)||!day||!Array.isArray(day.items))continue;
           const clone={...day,items:day.items.map(item=>({...item}))};
-          if(seedMissingTransportDurations(clone))patch[key]=clone;
+          const transportAdded=seedMissingTransportDurations(clone);
+          const spotAdded=seedMissingSpotDurations(clone);
+          if(transportAdded||spotAdded)patch[key]=clone;
         }
         if(Object.keys(patch).length)tx.set(ref,patch,{merge:true});
       });
     }catch(err){
-      console.warn('交通時間僅於此裝置補齊，待雲端連線穩定後會再嘗試同步：',err);
+      console.warn('景點預留時間／交通時間僅於此裝置補齊，待雲端連線穩定後會再嘗試同步：',err);
     }finally{durationBackfillInFlight=false;}
   }
   function hasSharedTravelDurationsToBackfill(remote){
     return Object.entries(remote||{}).some(([key,day])=>{
       if(!/^day_\d{1,2}$/.test(key)||!day||!Array.isArray(day.items))return false;
-      const defaults=PLANNED_TRANSPORT_DURATIONS[String(day.d)]||{};
-      return day.items.some(item=>item?.kind==='交通'&&
-        !Object.prototype.hasOwnProperty.call(item,'transportDuration')&&
-        Object.prototype.hasOwnProperty.call(defaults,String(item.title||'')));
+      const transportDefaults=PLANNED_TRANSPORT_DURATIONS[String(day.d)]||{};
+      const spotDefaults=PLANNED_SPOT_DURATIONS[String(day.d)]||{};
+      return day.items.some(item=>item&&(
+        (item.kind==='交通'&&!Object.prototype.hasOwnProperty.call(item,'transportDuration')&&
+         Object.prototype.hasOwnProperty.call(transportDefaults,String(item.title||'')))||
+        (item.kind!=='交通'&&!Object.prototype.hasOwnProperty.call(item,'spotDuration')&&
+         Object.prototype.hasOwnProperty.call(spotDefaults,String(item.title||'')))
+      ));
     });
   }
   function watchDocs(epoch){
@@ -3977,8 +3998,8 @@ function makeCloudSync(){
       applyItinerarySnapshot(snap);
       connected=true;
       if(snap.exists()&&hasSharedTravelDurationsToBackfill(snap.data())){
-        // 先接收使用者最新資料，再以交易補上真正缺少的交通時間。
-        // 任何已自行填寫或刻意清空的 transportDuration 都不會被補回。
+        // 先接收使用者最新資料，再以交易補上真正缺少的交通時間或景點預留時間。
+        // 任何已自行填寫或刻意清空的 transportDuration／spotDuration 都不會被補回。
         backfillSharedTravelDurations();
       }
       setStatus(exists.itinerary
