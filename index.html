@@ -2663,6 +2663,61 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
 #dlg.ld-dialog #ld-editor .ld-date-center-wrap input[name="datetime"]:focus{outline:0!important;border:0!important;box-shadow:none!important;}
 @media(prefers-reduced-motion:reduce){.ld-tax-guide .ld-tax-slide{animation:none}.ld-tax-guide .ld-tax-pagination button{transition:none}}
 
+
+/* 2026-11-22 — 退稅中心：總額右上入口、三分頁與真正露出原畫面的跟手返回 */
+.ld-total-actions{display:flex;align-items:center;gap:7px;flex:none;min-width:0}
+.ld-tax-entry{width:33px;height:33px;display:grid;place-items:center;flex:none;background:#ffffffba;border:1px solid #cfdbeb;border-radius:11px;color:#607b9e;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ld-tax-entry svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ld-tax-entry:focus-visible{outline:2px solid #b4c6d9;outline-offset:2px}
+.ld-tax-previous{position:relative;z-index:0;pointer-events:none;user-select:none}
+.ld-tax-screen{position:fixed;inset:0 0 calc(71px + var(--sb)) 0;max-width:640px;width:100%;box-sizing:border-box;margin-inline:auto;z-index:95;overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;background:linear-gradient(155deg,#f6f8fc,#eef3fb 68%,#f6f3fa);padding:calc(13px + env(safe-area-inset-top,0px)) 15px 32px;box-shadow:-12px 0 40px #26395a16;gap:11px}
+.ld-tax-screen .ld-sub-header{padding-top:4px;padding-bottom:5px}
+.ld-tax-tabs{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;isolation:isolate;overflow:hidden;border:1px solid #dce5f0;border-radius:14px;background:#eaf0f8}
+.ld-tax-tabs button{position:relative;z-index:1;min-width:0;background:transparent!important;border:0;border-radius:10px;padding:10px 2px;white-space:nowrap;color:#8391a8;font-size:12px;font-weight:750;transition:color .2s ease;cursor:pointer}
+.ld-tax-tabs button.on{color:#415f86}
+.ld-tax-tab-indicator{position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:calc((100% - 16px)/3);border-radius:10px;pointer-events:none;will-change:transform;transform:translate3d(4px,0,0);transition:transform 510ms cubic-bezier(.20,1.20,.34,1),width 280ms cubic-bezier(.20,.9,.32,1)}
+.ld-tax-tab-indicator .nav-lens-core{border-radius:10px}
+.ld-tax-tab-indicator.nav-no-motion{transition:none!important}
+.ld-tax-tab-indicator.nav-moving .nav-lens-core{animation:navLensElastic 510ms cubic-bezier(.2,.8,.2,1)}
+.ld-tax-tab-indicator.nav-moving .nav-lens-core::after{animation:navLensGlint 540ms ease-out}
+#ld-tax-tab-body{display:flex;flex-direction:column;gap:12px;min-width:0}
+.ld-tax-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.ld-tax-overview>div{min-width:0;padding:12px 8px;border-radius:15px;background:#fff;border:1px solid #e1e8f1;display:flex;flex-direction:column;gap:5px}
+.ld-tax-overview small{font-size:10px;color:#8998ad;line-height:1.4}
+.ld-tax-overview strong{font-size:15px;color:#425b7c;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.ld-tax-overview em{font-style:normal;font-size:10px;color:#8192ac}
+.ld-tax-list{display:flex;flex-direction:column;gap:8px}
+.ld-tax-record{display:flex;align-items:center;gap:9px;width:100%;min-width:0;padding:12px 10px;border:1px solid #e1e7f2;border-radius:15px;background:#fff;text-align:left;color:#415776;cursor:pointer}
+.ld-tax-record-icon{width:32px;height:32px;flex:none;border-radius:11px;display:grid;place-items:center;background:#ecf2fa;color:#718bae}
+.ld-tax-record-icon svg,.ld-tax-check-icon svg,.ld-tax-empty svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ld-tax-record-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:3px}
+.ld-tax-record-info strong{font-size:12px;font-weight:760;overflow-wrap:anywhere}
+.ld-tax-record-info small{font-size:10px;color:#8c9bb1;line-height:1.5;overflow-wrap:anywhere}
+.ld-tax-record-secondary{font-size:10px;color:#6a86a3}
+.ld-tax-record-side{min-width:0;flex:none;text-align:right;display:flex;align-items:flex-end;gap:3px;flex-direction:column}
+.ld-tax-record-side b{font-size:12px}.ld-tax-record-side small{font-size:10px;color:#7288a4}.ld-tax-record-side>span{font-size:18px;line-height:13px;color:#9fb0c4}
+.ld-tax-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:30px 15px;text-align:center}
+.ld-tax-empty>span{width:45px;height:45px;border-radius:15px;background:#edf3fa;color:#8299b8;display:grid;place-items:center}
+.ld-tax-empty strong{font-size:14px;color:#465c7b}.ld-tax-empty p{font-size:11px;color:#8b9aaf;margin:0;line-height:1.65}
+.ld-tax-empty button{border:0;border-radius:11px;background:#eaf0f8;padding:9px 13px;color:#5e7d9d;font-size:12px;font-weight:700;margin-top:5px}
+.ld-tax-check-panel{padding:13px!important}
+.ld-tax-check-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#4a6082}
+.ld-tax-check-heading strong{font-size:14px}.ld-tax-check-heading small{font-size:11px;color:#879bb2}
+.ld-tax-progress{height:5px;background:#e8edf5;border-radius:10px;margin:10px 0;overflow:hidden}.ld-tax-progress span{display:block;height:100%;background:#91abc7;border-radius:10px;transition:width .25s ease}
+.ld-tax-check-intro{font-size:11px;line-height:1.55;color:#8291a6;margin:1px 0 12px}
+.ld-tax-check-row{display:flex;gap:10px;align-items:center;padding:12px 2px;border-top:1px solid #eef1f6;min-width:0;cursor:pointer}
+.ld-tax-check-icon{color:#7193b3;width:31px;height:31px;border-radius:10px;background:#edf3f9;display:grid;place-items:center;flex:none}
+.ld-tax-check-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.ld-tax-check-text strong{font-size:12px;color:#485e7e}.ld-tax-check-text small{font-size:10px;color:#8394aa;line-height:1.55}
+.ld-tax-check-row input{appearance:none;-webkit-appearance:none;width:21px;height:21px;flex:none;border:1.5px solid #bfd0e3;border-radius:7px;background:#f9fbfd;display:grid;place-items:center;cursor:pointer}
+.ld-tax-check-row input:checked{background:#8ca7c4;border-color:#8ca7c4}
+.ld-tax-check-row input:checked::after{content:'✓';color:#fff;font-weight:900;font-size:15px;line-height:1}
+.ld-tax-screen .ld-tax-guide{display:block;min-width:0;padding:13px!important}
+.ld-tax-screen .ld-tax-guide .ld-tax-body{margin-top:0}
+.ld-tax-screen .ld-tax-guide .ld-tax-steps{gap:9px}
+@media(max-width:360px){.ld-tax-screen{padding-left:12px;padding-right:12px}.ld-tax-overview>div{padding:11px 7px}.ld-tax-overview strong{font-size:13px}.ld-tax-record{padding:11px 8px}}
+@media(prefers-reduced-motion:reduce){.ld-tax-tab-indicator{transition:none!important}.ld-tax-tab-indicator .nav-lens-core{animation:none!important}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -3505,6 +3560,7 @@ let ledgerDay='all',ledgerTaxOnly=false,ledgerPhotoTemp='',ledgerEditorId=null;
 let ledgerSort=LS('ledgerSortV1','asc')==='desc'?'desc':'asc',ledgerSearch='',ledgerFilterCategory='',ledgerFilterPayer='',ledgerFilterMethod='',ledgerFilterCurrency='',ledgerFiltersOpen=false;
 let ledgerView='main',ledgerDetailId=null,ledgerStatDay='2026-12-18',ledgerStatTab='daily',ledgerReturnScroll=0,ledgerPhotoLoading=false,ledgerFilterType='',ledgerNavStack=[];
 let ledgerCategoryDay='all',ledgerCategoryDetailed=false;
+let ledgerTaxTab='mine',ledgerTaxCheck=LS('ledgerTaxDepartureCheckV1',{}),ledgerTaxLensTimer=0;
 let fxCalc={amount:'1000',from:'JPY',to:'TWD',result:''};
 let fxInfo={loading:false,error:'',lastAttempt:0,updated:'',rates:null};
 const savedFx=LS('ledgerFxV1',null);
@@ -3846,7 +3902,7 @@ function ledgerOpenView(view,id=''){
  if(ledgerView===view&&ledgerDetailId===id)return;
  ledgerNavStack.push({view:ledgerView,id:ledgerDetailId,scroll:window.scrollY||0});
  ledgerView=view;ledgerDetailId=view==='detail'?id:null;
- render();window.scrollTo(0,0);
+ render();if(view!=='tax')window.scrollTo(0,0);
 }
 function ledgerBack(){
  if(ledgerView==='main')return;
@@ -3882,38 +3938,36 @@ function ledgerSearchControls(){
 let ledgerTaxPage=0;
 // 2026/11/01 起適用的日本旅客退稅新制，以簡短步驟卡分頁顯示。
 function ledgerTaxGuide(){
+ // 2026/11/01 後購物依日本觀光廳與日本海關的 refund method 說明。
  const pages=[
-  {label:'購物前',title:'先確認免稅資格',intro:'找到免稅店，先確認這筆能不能申請。',rows:[
-   ['receipt','同店同日未稅滿 ¥5,000','是未稅金額；同一天、同一間免稅店合計。'],
-   ['people','符合資格並帶護照','結帳時出示護照或店家要求的證明。'],
-   ['suitcase','商品要帶出日本','食品、化妝品等若在日本用掉，就可能無法退稅。']
+  {label:'購買',title:'確認能退稅再購買',intro:'在有辦理退稅的店家，確認資格與門檻。',rows:[
+   ['people','出示護照與確認身分','依店家規定出示有效護照；須符合短期旅客等免稅資格。'],
+   ['receipt','同店同日未稅滿 ¥5,000','以同一家免稅店、同一天的符合資格商品合計。']
   ]},
-  {label:'購物時',title:'先付錢，再等離境退',intro:'2026/11/01 起不再是結帳直接免稅。',rows:[
-   ['receipt','先付含稅的金額','例如標示含稅 ¥11,000，就先支付 ¥11,000。'],
-   ['image','保留購買紀錄','收據、店家提供的退款資訊妥善保存。'],
-   ['suitcase','商品與行李留好','同張收據商品要完整攜出，可能需要供海關檢查。']
+  {label:'結帳',title:'先付款，再保留商品',intro:'2026/11/01 起，購物時先支付含消費稅的價格。',rows:[
+   ['receipt','先付完整含稅價','例如含稅 ¥11,000，結帳先付 ¥11,000，不是現場直接折稅。'],
+   ['image','保留收據與退款資料','保存購買紀錄，記下店家／退款服務商與退款方式。'],
+   ['suitcase','商品別在日本使用掉','商品需實際帶出日本，必要時供海關查驗。']
   ]},
-  {label:'離境時',title:'先做海關確認，再託運',intro:'購買後 90 天內離境，務必預留辦理時間。',rows:[
-   ['flight','在離開日本的機場辦','國內轉國際航班，於最後離開日本的機場辦理。'],
-   ['receipt','託運行李前先完成','到退稅自助機掃護照；指定機場可用 Visit Japan Web。'],
-   ['suitcase','若顯示需檢查，帶商品找海關','例如從千歲轉成田出境，通常應於成田辦理。']
+  {label:'離境',title:'在離境時完成海關確認',intro:'從購買日算起 90 天內帶出日本，機場請預留時間。',rows:[
+   ['flight','到出境機場找退稅程序設備','依現場指示使用退稅程序機掃描護照；指定機場可能支援 Visit Japan Web。'],
+   ['suitcase','先確認，後託運需檢查的商品','如果被要求查驗，海關可能要看實物。若有轉機，依出境機場現場指示辦理。']
   ]},
-  {label:'退款後',title:'海關確認後才會退款',intro:'退稅不是海關現場一定直接給現金。',rows:[
-   ['receipt','店家／退款商負責退費','退款可至信用卡、帳戶、App 或指定現金方式，依店家而定。'],
-   ['clock','金額、手續費、時間都可能不同','以店家及退款商通知為準。'],
-   ['info','在記帳內追蹤退款','勾選「免稅購買」，實際收到退款後再填入金額。']
+  {label:'退款',title:'海關確認後等待退款',intro:'退費不是一定在機場立即領現金。',rows:[
+   ['receipt','依店家／退款服務商退回','可能退至卡片、帳戶或其他方式；依購買時的退款資訊為準。'],
+   ['clock','核對實收金額與入帳時間','手續費或匯差可能影響實收。在「我的退稅」更新退款進度和金額。']
   ]}
  ];
  const slides=pages.map((page,i)=>'<section class="ld-tax-slide" data-tax-page="'+i+'"'+(i===ledgerTaxPage?'':' hidden')+' aria-label="第 '+(i+1)+' 頁：'+page.label+'">'+
   '<div class="ld-tax-eyebrow">'+String(i+1).padStart(2,'0')+' / 04 · '+page.label+'</div><div class="ld-tax-page-title">'+page.title+'</div><p class="ld-tax-intro">'+page.intro+'</p>'+
   '<div class="ld-tax-steps">'+page.rows.map(row=>'<div class="ld-tax-step"><span class="ld-tax-step-icon">'+iconSvg(row[0])+'</span><span class="ld-tax-step-copy"><b>'+row[1]+'</b><small>'+row[2]+'</small></span></div>').join('')+'</div></section>').join('');
- return '<details class="ld-panel ld-tax-guide"><summary><span class="ld-tax-summary-left"><span class="ld-tax-main-icon">'+iconSvg('receipt')+'</span><span class="ld-tax-summary-title"><strong>日本退稅簡單看</strong><small>2026 新制 · 4 頁圖解</small></span></span><span class="ld-tax-summary-chevron" aria-hidden="true">⌄</span></summary>'+
+ return '<section class="ld-panel ld-tax-guide" aria-label="日本退稅新制圖文說明">'+
   '<div class="ld-tax-body"><div class="ld-tax-slides">'+slides+'</div>'+
   '<div class="ld-tax-navigation"><button type="button" class="ld-tax-nav-arrow" data-a="ledger-tax-prev" aria-label="上一頁"'+(ledgerTaxPage===0?' disabled':'')+'><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5-7 7 7 7"/></svg></button>'+
   '<span class="ld-tax-page-counter" aria-live="polite">'+(ledgerTaxPage+1)+' / 4</span><div class="ld-tax-pagination" aria-label="退稅說明頁數">'+pages.map((page,i)=>'<button type="button" class="'+(i===ledgerTaxPage?'on':'')+'" data-a="ledger-tax-page" data-v="'+i+'" aria-label="前往第 '+(i+1)+' 頁 '+page.label+'" aria-current="'+(i===ledgerTaxPage?'page':'false')+'"></button>').join('')+'</div>'+
   '<button type="button" class="ld-tax-nav-arrow" data-a="ledger-tax-next" aria-label="下一頁"'+(ledgerTaxPage===pages.length-1?' disabled':'')+'><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 5 7 7-7 7"/></svg></button></div>'+
   '<p class="ld-tax-source"><a href="https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html" target="_blank" rel="noopener noreferrer">日本觀光廳官方說明 '+iconSvg('externalLink')+'</a></p>'+
-  '<p class="ld-tax-note">此為流程提醒，是否符合退稅資格及實際退款請以店家、海關和退款商確認為準。</p></div></details>';
+  '<p class="ld-tax-note">實際免稅資格、海關查驗與退款時間以官方、店家及服務商指示為準。</p></div></section>';
 }
 function ledgerSelectTaxPage(index){
  const root=document.querySelector('.ld-tax-guide');if(!root)return;
@@ -3925,6 +3979,51 @@ function ledgerSelectTaxPage(index){
  if(prev)prev.disabled=ledgerTaxPage===0;
  if(next)next.disabled=ledgerTaxPage===3;
 }
+const LEDGER_TAX_CHECK_ITEMS=[
+ ['passport','people','帶好護照','退稅購物時使用的護照，離境也要帶在身上'],
+ ['goods','suitcase','準備帶出日本的商品','與收據對照，可能需要開箱或出示實物'],
+ ['receipts','receipt','確認收據／退款資料','保留店家、服務商、付款紀錄與退款方式'],
+ ['kiosk','receipt','離境時完成退稅程序','出境機場依指示掃護照、使用退稅設備或核准方式'],
+ ['customs','info','完成可能的海關查驗','有被抽查時先出示商品，確認後再託運需查驗的行李'],
+ ['refund','clock','回國後核對退款','查看退款是否到帳，再填寫各筆實際退款金額']
+];
+function ledgerTaxMyRecords(){
+ const records=ledger.entries.filter(e=>ledgerIsExpense(e)&&e.taxfree).slice().sort((a,b)=>String(b.datetime||'').localeCompare(String(a.datetime||'')));
+ const finished=records.filter(e=>e.refundStatus==='已退款').length;
+ const confirmed=records.filter(e=>String(e.refundAmount??'').trim()!=='');
+ const refundJPY=confirmed.reduce((sum,e)=>sum+(Number(e.refundAmount)||0),0);
+ const top='<div class="ld-tax-overview"><div><small>免稅紀錄</small><strong>'+records.length+' <em>筆</em></strong></div><div><small>標記已退款</small><strong>'+finished+' <em>筆</em></strong></div><div><small>已填退款金額</small><strong>'+ledgerMoney(refundJPY,'JPY')+'</strong></div></div>';
+ if(!records.length)return top+'<section class="ld-panel ld-tax-empty"><span>'+iconSvg('receipt')+'</span><strong>還沒有需要退稅的明細</strong><p>新增支出並勾選「免稅購買」，就會自動出現在這裡。</p><button type="button" data-a="ledger-tax-add">＋ 新增免稅支出</button></section>';
+ return top+'<div class="ld-tax-list">'+records.map(e=>{
+  const status=e.refundStatus||'待海關確認';
+  const refund=String(e.refundAmount??'').trim()!==''?'已填退款 '+ledgerMoney(Number(e.refundAmount),'JPY'):'退款金額未填';
+  return '<button type="button" class="ld-tax-record" data-a="ledger-detail" data-id="'+esc(e.id)+'" aria-label="查看免稅明細 '+esc(e.name)+'"><span class="ld-tax-record-icon">'+iconSvg('receipt')+'</span><span class="ld-tax-record-info"><strong>'+esc(e.name)+'</strong><small>'+esc(String(e.datetime||'').replace('T',' ').slice(0,16))+' · '+esc(e.store||'未填店家')+'</small><span class="ld-tax-record-secondary">'+esc(refund)+'</span></span><span class="ld-tax-record-side"><b>'+ledgerMoney(Number(e.amount)||0,e.currency||'JPY')+'</b><small>'+esc(status)+'</small><span aria-hidden="true">›</span></span></button>';
+ }).join('')+'</div><p class="ld-hint">點選紀錄可在明細詳情直接更新退稅進度與實際退款金額。</p>';
+}
+function ledgerTaxDepartureList(){
+ const done=LEDGER_TAX_CHECK_ITEMS.filter(x=>ledgerTaxCheck[x[0]]).length;
+ return '<section class="ld-panel ld-tax-check-panel"><div class="ld-tax-check-heading"><strong>離境檢查清單</strong><small>'+done+' / '+LEDGER_TAX_CHECK_ITEMS.length+' 項完成</small></div><div class="ld-tax-progress"><span style="width:'+(done/LEDGER_TAX_CHECK_ITEMS.length*100)+'%"></span></div><p class="ld-tax-check-intro">出境前逐項確認。勾選狀態只儲存在此手機，不影響記帳資料。</p>'+
+ LEDGER_TAX_CHECK_ITEMS.map(([id,icon,label,desc])=>'<label class="ld-tax-check-row"><span class="ld-tax-check-icon">'+iconSvg(icon)+'</span><span class="ld-tax-check-text"><strong>'+label+'</strong><small>'+desc+'</small></span><input type="checkbox" data-tax-check="'+id+'"'+(ledgerTaxCheck[id]?' checked':'')+' aria-label="'+label+'"></label>').join('')+
+ '</section><p class="ld-hint">重要：依日本 2026 年 11 月新制，須在購買日起 90 天內完成離境海關確認；如需出示實物，先完成查驗再託運。轉機時請遵循出境機場指示。</p>';
+}
+function ledgerTaxBody(){
+ return ledgerTaxTab==='mine'?ledgerTaxMyRecords():ledgerTaxTab==='check'?ledgerTaxDepartureList():ledgerTaxGuide();
+}
+function ledgerTaxPageView(){
+ const tabs=[['mine','我的退稅'],['check','離境檢查'],['guide','退稅資訊']];
+ return '<div class="ld-page ld-subpage ld-tax-screen" data-ledger-subpage="tax">'+ledgerSubHeader('退稅','2026 日本新制 · 免稅紀錄與離境提醒')+
+ '<nav class="ld-tax-tabs" aria-label="退稅分頁"><div class="ld-tax-tab-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>'+tabs.map(([id,label])=>'<button type="button" class="'+(ledgerTaxTab===id?'on':'')+'" data-a="ledger-tax-tab" data-v="'+id+'" aria-pressed="'+(ledgerTaxTab===id)+'">'+label+'</button>').join('')+'</nav>'+
+ '<div id="ld-tax-tab-body">'+ledgerTaxBody()+'</div></div>';
+}
+function ledgerSyncTaxLens(instant=false){
+ const bar=document.querySelector('.ld-tax-tabs');if(!bar)return;
+ const lens=bar.querySelector('.ld-tax-tab-indicator'),active=bar.querySelector('button.on');if(!lens||!active)return;
+ const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+ if(instant||reduce)lens.classList.add('nav-no-motion');
+ lens.style.width=active.offsetWidth+'px';lens.style.transform='translate3d('+active.offsetLeft+'px,0,0)';
+ if(!instant&&!reduce){clearTimeout(ledgerTaxLensTimer);lens.classList.remove('nav-moving');void lens.offsetWidth;lens.classList.add('nav-moving');ledgerTaxLensTimer=setTimeout(()=>lens.classList.remove('nav-moving'),540)}
+ if(instant||reduce)requestAnimationFrame(()=>requestAnimationFrame(()=>lens.classList.remove('nav-no-motion')));
+}
 let ledgerListScrollTop=0;
 function ledgerPage(){
  const filtered=ledgerFilteredEntries();
@@ -3932,13 +4031,12 @@ function ledgerPage(){
  const total=ledgerSum(expenseEntries,ledger.currency),taxRecords=expenseEntries.filter(x=>x.taxfree),taxPending=taxRecords.filter(x=>(x.refundStatus||'待海關確認')!=='已退款'&&(x.refundStatus||'')!=='不申請');
  const fxRate=ledgerHasRate()?'<span>¥1 ≈ NT$'+fxInfo.rates.TWD.toFixed(4)+' · CNY ¥'+fxInfo.rates.CNY.toFixed(4)+'</span>':'<span>尚無匯率資料，請更新後換算</span>';
  return '<div class="ld-page"><div class="ph sh-heading ld-heading"><div class="kicker">Expense Journal</div><h2>旅途記帳</h2><p>行前採購・12/18–12/27 旅途支出</p><button type="button" class="shop-glass-add" data-a="ledger-new" aria-label="新增記帳" title="新增記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
- '<section class="ld-total"><div class="ld-total-top"><span class="ld-total-label">整趟行程總消費</span><details class="ld-currency-picker"><summary aria-label="選擇顯示幣別"><span>'+({JPY:'¥',TWD:'NT$',CNY:'CN¥'}[ledger.currency])+'</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="ld-currency-menu">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="ledger-currency" data-v="'+code+'" class="'+(code===ledger.currency?'on':'')+'">'+LEDGER_CURRENCY_LABEL[code]+'</button>').join('')+'</div></details></div><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div><p>支出 '+expenseEntries.length+' 筆 · 收入 '+incomeEntries.length+' 筆 · 轉帳 '+transferEntries.length+' 筆 · '+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+'<br>跨幣別以參考匯率估算，非刷卡結算金額</p></section>'+
+ '<section class="ld-total"><div class="ld-total-top"><span class="ld-total-label">整趟行程總消費</span><div class="ld-total-actions"><details class="ld-currency-picker"><summary aria-label="選擇顯示幣別"><span>'+({JPY:'¥',TWD:'NT$',CNY:'CN¥'}[ledger.currency])+'</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="ld-currency-menu">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="ledger-currency" data-v="'+code+'" class="'+(code===ledger.currency?'on':'')+'">'+LEDGER_CURRENCY_LABEL[code]+'</button>').join('')+'</div></details><button type="button" class="ld-tax-entry" data-a="ledger-tax-open" title="退稅" aria-label="開啟退稅：我的退稅、離境檢查、退稅資訊">'+iconSvg('receipt')+'</button></div></div><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div><p>支出 '+expenseEntries.length+' 筆 · 收入 '+incomeEntries.length+' 筆 · 轉帳 '+transferEntries.length+' 筆 · '+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+'<br>跨幣別以參考匯率估算，非刷卡結算金額</p></section>'+
 
  '<section class="ld-panel"><div class="ld-section-head"><h3>匯率換算</h3><button type="button" class="ld-mini-link" data-a="ledger-fx-refresh">'+(fxInfo.loading?'更新中…':'⟳ 更新匯率')+'</button></div><div class="ld-rate-line">'+fxRate+'</div><div class="ld-calculator"><label>金額<span class="ld-fx-input-frame"><input type="number" id="ld-fx-amount" min="0" step="any" inputmode="decimal" value="'+esc(fxCalc.amount)+'"></span></label><label>原幣<select id="ld-fx-from">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.from===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label><label>換算<select id="ld-fx-to">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.to===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label></div><div class="ld-convert-row"><button type="button" data-a="ledger-convert" class="ld-convert-btn">按最新匯率換算</button><strong class="ld-result">'+(fxCalc.result||'—')+'</strong></div><p class="ld-hint">'+(fxInfo.error?esc(fxInfo.error)+' · ':'')+'資料來源：<a href="https://frankfurter.dev/" target="_blank" rel="noopener noreferrer">Frankfurter</a>，最新可用的每日參考匯率（非即時成交報價）。</p></section>'+
  '<section class="ld-panel ld-stats-panel"><button type="button" class="ld-stat-entry" data-a="ledger-stats"><span class="ld-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V13M10 20V8M16 20V11M22 20V4"/></svg></span><span><strong>支出統計</strong><small>每日支出・支出類別・支出方式</small></span><span class="ld-stat-arrow">›</span></button></section>'+
  '<section class="ld-panel ld-expense-panel ld-full-ledger-panel"><div class="ld-section-head"><h3>收支明細</h3></div>'+ledgerSearchControls()+
  '<div id="ld-entry-list" class="ld-scroll-entry-list" role="region" aria-label="可上下捲動的完整收支明細" tabindex="0">'+(filtered.length?ledgerExpenseGroups(filtered):'<div class="ld-empty">'+(ledger.entries.length?'沒有符合搜尋條件的收支明細。':'尚無收支紀錄，點右下角「＋」新增第一筆。')+'</div>')+'</div></section>'+
- ledgerTaxGuide()+
  '<section class="ld-panel"><div class="ld-section-head"><h3>備份與匯出</h3></div><p class="ld-hint">記帳與照片只儲存在這台手機的瀏覽器，不會自動同步給旅伴。建議定期下載 JSON 備份；CSV 適合用 Excel 整理。</p><div class="ld-backup-buttons"><button type="button" data-a="ledger-export-csv">匯出 CSV</button><button type="button" data-a="ledger-export-json">下載 JSON</button><button type="button" data-a="ledger-import-open">匯入 JSON</button></div><input type="file" id="ledger-import-input" accept="application/json,.json" hidden></section>'+
  '</div>';
 }
@@ -4128,6 +4226,9 @@ async function ledgerImportJSON(file){
 }
 async function ledgerClick(action,data){
  if(action==='ledger-new'){ledgerEdit(null)}
+ else if(action==='ledger-tax-open'){ledgerTaxTab='mine';ledgerOpenView('tax')}
+ else if(action==='ledger-tax-tab'){ledgerTaxTab=['mine','check','guide'].includes(data.v)?data.v:'mine';document.querySelectorAll('.ld-tax-tabs button').forEach(b=>{const active=b.dataset.v===ledgerTaxTab;b.classList.toggle('on',active);b.setAttribute('aria-pressed',String(active))});const tabBody=document.getElementById('ld-tax-tab-body');if(tabBody)tabBody.innerHTML=ledgerTaxBody();ledgerSyncTaxLens();}
+ else if(action==='ledger-tax-add'){ledgerEdit(null);const taxCheck=dlg.querySelector('[name="taxfree"]');if(taxCheck){taxCheck.checked=true;ledgerSetDependent();}}
  else if(action==='ledger-tax-next'){ledgerSelectTaxPage(ledgerTaxPage+1)}
  else if(action==='ledger-tax-prev'){ledgerSelectTaxPage(ledgerTaxPage-1)}
  else if(action==='ledger-tax-page'){ledgerSelectTaxPage(data.v)}
@@ -4760,7 +4861,7 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerStatPage():ledgerView==='detail'?ledgerDetailPage():ledgerPage())+'</main>';
+    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerStatPage():ledgerView==='detail'?ledgerDetailPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
@@ -4769,6 +4870,7 @@ function render(){
   applySwipeRows();
   syncNavGlass();
    if(st.tab==='ledger'&&ledgerView==='stats')ledgerSyncStatLens(true);
+  if(st.tab==='ledger'&&ledgerView==='tax')ledgerSyncTaxLens(true);
   runItineraryEntrance();
   if(st.tab==='plan')getWxForecast(false);
   if(st.tab==='ledger')ledgerRefreshFx(false);
@@ -5291,6 +5393,7 @@ document.addEventListener('focusout',e=>{
 });
 document.addEventListener('change',e=>{
  const t=e.target;
+ if(t?.dataset?.taxCheck){ledgerTaxCheck[t.dataset.taxCheck]=t.checked;SV('ledgerTaxDepartureCheckV1',ledgerTaxCheck);const body=document.getElementById('ld-tax-tab-body');if(body)body.innerHTML=ledgerTaxBody();return;}
  if(t.id==='ld-category-day'){ledgerCategoryDay=t.value;const target=document.getElementById('ld-stat-body');if(target)target.innerHTML=ledgerStatBody();return;}
  if(t.matches?.('[data-ledger-inline]')){
   if(t.dataset.ledgerInline==='datetime'){
