@@ -2506,6 +2506,44 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
  #dlg.ld-dialog .ld-form-row-date-only input[name="datetime"]{padding-left:8px!important;padding-right:8px!important;}
 }
 
+
+/* ── 記帳 v9：分段類型、金額與幣別一體、較長明細、iOS 輸入安全字級 ── */
+#dlg.ld-dialog .ld-type-field{display:block;position:relative}
+#dlg.ld-dialog .ld-type-field>span,#dlg.ld-dialog .ld-amount-field>span{display:block;font-size:11px;font-weight:700;color:#6c7c97}
+#dlg.ld-dialog .ld-type-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:6px;padding:4px;height:44px;box-sizing:border-box;border:1px solid #dbe3ee;border-radius:12px;background:#f1f4f9;width:100%;min-width:0}
+#dlg.ld-dialog .ld-type-option{min-width:0;padding:0 3px;border:0;border-radius:9px;background:transparent;color:#7585a0;font-size:12px;font-weight:750;line-height:1.2;cursor:pointer}
+#dlg.ld-dialog .ld-type-option.on{background:#fff;color:#46658d;box-shadow:0 1px 5px #3e618418}
+#dlg.ld-dialog .ld-type-option:focus-visible{outline:2px solid #b7c8d8;outline-offset:0}
+#dlg.ld-dialog .ld-type-native{position:absolute!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;clip-path:inset(50%)!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;padding:0!important;margin:0!important;border:0!important}
+#dlg.ld-dialog .ld-form-row-amount{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+#dlg.ld-dialog .ld-amount-combo{display:flex;align-items:center;gap:0;min-width:0;width:100%;height:44px;margin-top:6px;border:1px solid #dbe2ee;border-radius:12px;background:#f7f9fc;overflow:hidden;box-sizing:border-box}
+#dlg.ld-dialog .ld-amount-combo:focus-within{border-color:#b7c8d8;box-shadow:0 0 0 2px #eef2f6}
+#dlg.ld-dialog .ld-amount-combo input{flex:1 1 auto;width:0;min-width:0;max-width:none;height:100%;margin:0!important;padding:0 7px;border:0!important;border-radius:0!important;background:transparent!important;color:#36465f;box-shadow:none!important;outline:none!important;appearance:textfield}
+#dlg.ld-dialog .ld-amount-combo select{flex:0 0 69px;width:69px;min-width:0;height:100%;margin:0!important;padding:0 3px;border:0!important;border-left:1px solid #dbe2ee!important;border-radius:0!important;background:#edf3fa!important;color:#546d90;box-shadow:none!important;outline:none!important;text-align:center}
+#dlg.ld-dialog .ld-amount-combo input::-webkit-inner-spin-button,#dlg.ld-dialog .ld-amount-combo input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+#dlg.ld-dialog .ld-form-row-date-only input[name="datetime"]{text-align:center!important;text-align-last:center!important;padding:7px 12px!important;letter-spacing:-.2px!important}
+#dlg.ld-dialog .ld-form-row-date-only input[name="datetime"]::-webkit-datetime-edit{display:flex;align-items:center;justify-content:center;text-align:center;width:100%;padding:0}
+#dlg.ld-dialog .ld-form-row-date-only input[name="datetime"]::-webkit-datetime-edit-fields-wrapper{margin:auto;justify-content:center;flex:0 1 auto}
+/* iOS Safari 不縮放：真正可編輯的輸入值字級不小於 16px，標籤仍維持精巧。 */
+#dlg.ld-dialog input:not([type="checkbox"]):not([type="file"]),#dlg.ld-dialog select,#dlg.ld-dialog textarea,
+#dlg.ld-dialog .ld-form-row .ld-field>input,#dlg.ld-dialog .ld-form-row .ld-field>select,
+#dlg.ld-dialog .ld-amount-combo input,#dlg.ld-dialog .ld-amount-combo select{font-size:16px!important}
+#dlg.ld-dialog .ld-form-row-date-only input[name="datetime"]::-webkit-datetime-edit{font-size:16px!important}
+#dlg.ld-dialog .ld-form-row-date-only input[name="datetime"]::-webkit-datetime-edit-fields-wrapper{font-size:16px!important}
+#dlg.ld-dialog .ld-form-row .ld-field>input,#dlg.ld-dialog .ld-form-row .ld-field>select{padding-left:7px!important;padding-right:7px!important}
+/* 和上方「匯率換算」卡片相同的左右寬度。 */
+.ld-page .ld-stats-panel{width:100%!important;max-width:none!important;align-self:stretch!important;box-sizing:border-box}
+/* 類別展開箭頭在自己的欄位中置中，展開方向與位置一致。 */
+.ld-category-breakdown summary{grid-template-columns:minmax(0,1fr) auto auto 20px}
+.ld-category-breakdown summary .ld-breakdown-chevron{display:flex;align-items:center;justify-content:center;width:20px;height:24px;margin:0 auto;font-size:16px;line-height:1;text-align:center;transform-origin:center center}
+.ld-category-breakdown[open] summary .ld-breakdown-chevron{transform:rotate(180deg)}
+/* 明細再容納約兩筆；預留滾動條槽位避免擋住品項與金額。 */
+.ld-scroll-entry-list{max-height:min(76dvh,660px)!important;box-sizing:border-box;scrollbar-gutter:stable;padding-right:12px!important}
+.ld-scroll-entry-list::-webkit-scrollbar{width:4px}
+.ld-scroll-entry-list::-webkit-scrollbar-track{background:transparent}
+.ld-scroll-entry-list::-webkit-scrollbar-thumb{border-radius:10px;background:#c8d4e2}
+@media(max-width:360px){#dlg.ld-dialog .ld-form-row-amount{grid-template-columns:minmax(0,1.38fr) minmax(0,1fr)}#dlg.ld-dialog .ld-amount-combo select{flex-basis:62px;width:62px}.ld-scroll-entry-list{max-height:min(72dvh,620px)!important;padding-right:9px!important}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -3631,7 +3669,7 @@ function ledgerDetailPage(){
   else content='<input data-ledger-inline="'+field+'" data-id="'+esc(e.id)+'" type="'+kind+'"'+(kind==='number'?' min="0" step="any" inputmode="decimal"':'')+' value="'+esc(value)+'">';
   return '<label class="ld-inline-row"><span>'+esc(label)+'</span>'+content+'</label>';
  };
- const choice=(field,label,options)=>'<label class="ld-inline-row"><span>'+(field==='category'?ledgerCategoryIcon(e.category):'')+esc(label)+'</span>'+ledgerInlineSelect(e,field,options)+'</label>';
+ const choice=(field,label,options)=>'<label class="ld-inline-row"><span>'+esc(label)+'</span>'+ledgerInlineSelect(e,field,options)+'</label>';
  const type=ledgerType(e);
  const rows=[choice('type','記帳類型',Object.keys(LEDGER_TYPES)),inp('name','品項'),inp('datetime','記帳日期時間','datetime-local'),
  inp('amount','原始購買金額','number'),choice('currency','幣別',LEDGER_CURRENCIES),
@@ -3720,7 +3758,7 @@ function ledgerCustomSelect(name,label,items,current,placeholder='自行新增')
  return '<label class="ld-field">'+label+'<select name="'+name+'" data-ledger-choice="'+name+'"><option value="">請選擇</option>'+ledgerOptionList(all,current)+'<option value="__new__">＋ 自訂新增</option></select></label><label class="ld-field ld-custom" data-custom-for="'+name+'" hidden>'+placeholder+'<input name="'+name+'Custom" maxlength="80" placeholder="'+esc(placeholder)+'"></label>';
 }
 function ledgerSetDependent(){
- if(!dlg.open||!dlg.querySelector('#ld-editor'))return;
+ if(!dlg.querySelector('#ld-editor'))return;
  for(const select of dlg.querySelectorAll('[data-ledger-choice]')){
   const field=dlg.querySelector('[data-custom-for="'+select.dataset.ledgerChoice+'"]');
   if(field)field.hidden=select.value!=='__new__';
@@ -3729,6 +3767,7 @@ function ledgerSetDependent(){
  const card=dlg.querySelector('#ld-card-wrap');if(card)card.hidden=!['Apple Pay','LINE Pay','信用卡'].includes(method);
  dlg.querySelector('.ld-form-row-payment')?.classList.toggle('no-card',!!card?.hidden);
  const kind=dlg.querySelector('[name="type"]')?.value||'expense';
+ dlg.querySelectorAll('.ld-type-option').forEach(b=>{const selected=b.dataset.ledgerType===kind;b.classList.toggle('on',selected);b.setAttribute('aria-pressed',String(selected))});
  const tax=dlg.querySelector('[name="taxfree"]')?.checked&&kind==='expense';
  const taxToggle=dlg.querySelector('#ld-tax-toggle-wrap');if(taxToggle)taxToggle.hidden=kind!=='expense';
  const taxArea=dlg.querySelector('#ld-tax-fields');if(taxArea)taxArea.hidden=!tax;
@@ -3748,14 +3787,14 @@ function ledgerEdit(id,focusField=''){
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-chooser');dlg.classList.add('ld-dialog');
  dlg.innerHTML='<form id="ld-editor"><h3>'+(adding?'新增記帳':'編輯記帳')+'</h3><p class="ld-editor-sub">所有資料保存在這台裝置，可隨時備份</p>'+
  '<div class="ld-form-row ld-form-row-type-only">'+
- '<label class="ld-field">記帳類型<select name="type">'+Object.keys(LEDGER_TYPES).map(x=>'<option value="'+x+'"'+(ledgerType(a)===x?' selected':'')+'>'+LEDGER_TYPES[x]+'</option>').join('')+'</select></label></div>'+ 
+ '<div class="ld-field ld-type-field"><span>記帳類型</span><div class="ld-type-strip" role="group" aria-label="直接選擇記帳類型">'+Object.keys(LEDGER_TYPES).map(x=>'<button type="button" class="ld-type-option'+(ledgerType(a)===x?' on':'')+'" data-ledger-type="'+x+'" aria-pressed="'+(ledgerType(a)===x)+'">'+LEDGER_TYPES[x]+'</button>').join('')+'</div><select name="type" class="ld-type-native" tabindex="-1" aria-hidden="true">'+Object.keys(LEDGER_TYPES).map(x=>'<option value="'+x+'"'+(ledgerType(a)===x?' selected':'')+'>'+LEDGER_TYPES[x]+'</option>').join('')+'</select></div></div>'+ 
  '<div class="ld-form-row ld-form-row-date-only">'+
  '<label class="ld-field">記帳日期與時間<input name="datetime" type="datetime-local" required value="'+esc(a.datetime)+'"></label></div>'+ 
  '<div class="ld-form-row ld-form-row-name-category">'+
  '<label class="ld-field">品項 *<input name="name" maxlength="160" required placeholder="例如：小樽午餐" value="'+esc(a.name)+'"></label>'+ 
  '<div class="ld-field-cell">'+ledgerCustomSelect('category','類別 *',cats,a.category,'新增類別名稱')+'</div></div>'+ 
  '<div class="ld-form-row ld-form-row-amount">'+
- '<label class="ld-field">金額 *<input name="amount" type="number" inputmode="decimal" min="0" step="any" required placeholder="0" value="'+esc(a.amount)+'"></label>'+opt('幣別','currency',LEDGER_CURRENCIES)+
+ '<div class="ld-field ld-amount-field"><span>金額（含幣別） *</span><div class="ld-amount-combo"><input name="amount" type="number" inputmode="decimal" min="0" step="any" required placeholder="0" aria-label="金額" value="'+esc(a.amount)+'"><select name="currency" aria-label="幣別">'+ledgerChoices([...LEDGER_CURRENCIES,a.currency]).map(x=>'<option value="'+esc(x)+'"'+(x===a.currency?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select></div></div>'+ 
  '<div class="ld-field-cell">'+ledgerCustomSelect('payer','付款人',payers,a.payer,'新增付款人名稱')+'</div></div>'+ 
  '<div class="ld-form-row ld-form-row-payment">'+opt('付款方式','method',LEDGER_METHODS)+
  '<div class="ld-field-cell" id="ld-card-wrap">'+ledgerCustomSelect('card','使用卡片',cards,a.card,'新增卡片暱稱（例如：國泰 VISA）')+'</div></div>'+
@@ -3772,6 +3811,14 @@ function ledgerEdit(id,focusField=''){
  '<div class="ld-transfer-fields" id="ld-transfer-fields"'+(ledgerType(a)!=='transfer'?' hidden':'')+'><label class="ld-field">轉出帳戶／方式<input name="transferFrom" maxlength="100" placeholder="例如：日幣現金、台新帳戶" value="'+esc(a.transferFrom||'')+'"></label><label class="ld-field">轉入帳戶／方式<input name="transferTo" maxlength="100" placeholder="例如：Suica、現金錢包" value="'+esc(a.transferTo||'')+'"></label></div>'+
  '<div class="fb"><button type="button" data-a="ledger-cancel">取消</button><button type="submit" class="pri">'+(adding?'新增記帳':'儲存修改')+'</button></div></form>';
  ledgerSetDependent();ledgerUpdatePhotoPreview();
+ // 記帳類型改為單列直接選取；仍透過原 select 儲存，維持舊資料與事件相容。
+ dlg.querySelectorAll('.ld-type-option').forEach(button=>{
+  button.addEventListener('click',()=>{
+   const select=dlg.querySelector('select[name="type"]');if(!select)return;
+   select.value=button.dataset.ledgerType;
+   select.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+ });
  dlg.querySelector('form').onsubmit=e=>{
   e.preventDefault();if(ledgerPhotoLoading){alert('照片正在處理，請完成後再儲存');return}const fd=new FormData(e.target);
   const get=k=>String(fd.get(k)||'').trim();
