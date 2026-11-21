@@ -2460,7 +2460,7 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
   border-color:#b7c8d8!important;box-shadow:0 0 0 2px #edf3f8!important;
 }
 .ld-page .ld-calculator .ld-fx-input-frame input#ld-fx-amount{
-  display:block!important;width:133.3333%!important;max-width:none!important;
+  display:block!important;width:100%!important;max-width:100%!important;
   min-height:0!important;height:48px!important;box-sizing:border-box!important;
   margin:0!important;padding:0 12px!important;border:0!important;border-radius:0!important;
   background:transparent!important;color:#596c88!important;
@@ -2558,6 +2558,61 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
 .ld-stat-tabs button{position:relative;z-index:1;background:transparent!important;box-shadow:none!important;transition:color 220ms ease}
 .ld-stat-tabs button.on{color:#435e87}
 @media(prefers-reduced-motion:reduce){.ld-stat-tabs .ld-stat-slide-indicator{transition:none!important}.ld-stat-slide-indicator.nav-moving .nav-lens-core,.ld-stat-slide-indicator.nav-moving .nav-lens-core::after{animation:none!important}}
+
+
+/* 2026-11-22｜新增記帳滑動選取・精巧輸入・明細間距・統一新增浮鈕 */
+/* 在記帳類型選項底下滑動，動畫和主選單／統計分頁一致。 */
+#dlg.ld-dialog .ld-type-strip{position:relative;isolation:isolate;overflow:hidden}
+#dlg.ld-dialog .ld-type-slide-indicator{
+ position:absolute;z-index:0;top:4px;bottom:4px;left:0;
+ width:calc((100% - 16px)/3);border-radius:9px;pointer-events:none;
+ transform:translate3d(4px,0,0);will-change:transform;
+ transition:transform 510ms cubic-bezier(.20,1.20,.34,1),width 280ms cubic-bezier(.20,.9,.32,1);
+}
+#dlg.ld-dialog .ld-type-slide-indicator.nav-no-motion{transition:none!important}
+#dlg.ld-dialog .ld-type-slide-indicator .nav-lens-core{width:100%;height:100%;border-radius:9px;background:rgba(255,255,255,.91);box-shadow:inset 0 1px 2px #fff,0 1px 6px rgba(48,69,106,.12)}
+#dlg.ld-dialog .ld-type-slide-indicator.nav-moving .nav-lens-core{animation:navLensElastic 510ms cubic-bezier(.2,.8,.2,1)}
+#dlg.ld-dialog .ld-type-slide-indicator.nav-moving .nav-lens-core::after{animation:navLensGlint 540ms ease-out}
+#dlg.ld-dialog .ld-type-option{position:relative;z-index:1;background:transparent!important;box-shadow:none!important;transition:color 220ms ease}
+#dlg.ld-dialog .ld-type-option.on{background:transparent!important;box-shadow:none!important;color:#46658d}
+/* 真正的控制項仍使用 16px，並透過 zoom=0.75 呈現 12px 視覺，避免 iPhone 焦點放大。 */
+#dlg.ld-dialog #ld-editor .ld-field>input:not([type="checkbox"]):not([type="file"]),
+#dlg.ld-dialog #ld-editor .ld-field>select:not(.ld-type-native),
+#dlg.ld-dialog #ld-editor .ld-field>textarea,
+#dlg.ld-dialog #ld-editor .ld-field-cell select{
+ font-size:16px!important;zoom:.75;box-sizing:border-box;
+ width:100%!important;max-width:100%!important;
+}
+#dlg.ld-dialog #ld-editor .ld-field>input:not([type="checkbox"]):not([type="file"]),
+#dlg.ld-dialog #ld-editor .ld-field>select:not(.ld-type-native),
+#dlg.ld-dialog #ld-editor .ld-field-cell select{height:58.667px!important;min-height:58.667px!important}
+#dlg.ld-dialog #ld-editor .ld-field,
+#dlg.ld-dialog #ld-editor .ld-field-cell{overflow:hidden}
+#dlg.ld-dialog #ld-editor .ld-field>textarea{min-height:85px!important}
+#dlg.ld-dialog #ld-editor .ld-form-row-date-only input[name="datetime"]::-webkit-datetime-edit,
+#dlg.ld-dialog #ld-editor .ld-form-row-date-only input[name="datetime"]::-webkit-datetime-edit-fields-wrapper{font-size:16px!important}
+/* 整合金額／幣別使用自己的 44px 外框，只對內容做等比例縮小。 */
+#dlg.ld-dialog #ld-editor .ld-amount-combo{position:relative}
+#dlg.ld-dialog #ld-editor .ld-amount-combo>input,
+#dlg.ld-dialog #ld-editor .ld-amount-combo>select{font-size:16px!important;zoom:.75;height:58.667px!important;min-height:58.667px!important}
+#dlg.ld-dialog #ld-editor .ld-amount-combo>input{width:0!important;max-width:none!important;min-width:0!important}
+#dlg.ld-dialog #ld-editor .ld-amount-combo>select{flex-basis:90px;width:90px;min-width:90px}
+/* 縮小收支明細時間與付款方式兩行的垂直距離。 */
+.ld-item .ld-item-meta{margin-top:2px!important;line-height:1.25!important}
+.ld-item .ld-item-payment{margin-top:1px!important;line-height:1.27!important}
+.ld-item .ld-item-chips{margin-top:4px}
+/* 詳細分類：箭頭置於專用格的幾何中心，而不是文字基線。 */
+.ld-category-breakdown summary .ld-breakdown-chevron{display:grid!important;place-items:center!important;width:22px!important;height:22px!important;min-width:22px!important;align-self:center!important;justify-self:center!important;margin:0!important;line-height:1!important;transform-origin:50% 50%}
+.ld-category-breakdown[open] summary .ld-breakdown-chevron{transform:rotate(180deg)}
+/* 待辦與購物的＋與記帳相同位置、相同大小，捲動頁面仍固定。 */
+.sh-heading.todo-heading>.shop-glass-add{
+ position:fixed!important;top:auto!important;left:auto!important;
+ right:max(19px,calc((100vw - 640px)/2 + 25px))!important;
+ bottom:calc(85px + var(--sb))!important;
+ width:49px!important;height:49px!important;z-index:85!important;
+ box-shadow:0 7px 19px rgba(50,78,122,.13)!important;
+}
+@media(prefers-reduced-motion:reduce){#dlg.ld-dialog .ld-type-slide-indicator{transition:none!important}#dlg.ld-dialog .ld-type-slide-indicator.nav-moving .nav-lens-core{animation:none!important}}
 
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
@@ -3802,6 +3857,21 @@ function ledgerCustomSelect(name,label,items,current,placeholder='自行新增')
  const all=ledgerChoices([...items,current]);
  return '<label class="ld-field">'+label+'<select name="'+name+'" data-ledger-choice="'+name+'"><option value="">請選擇</option>'+ledgerOptionList(all,current)+'<option value="__new__">＋ 自訂新增</option></select></label><label class="ld-field ld-custom" data-custom-for="'+name+'" hidden>'+placeholder+'<input name="'+name+'Custom" maxlength="80" placeholder="'+esc(placeholder)+'"></label>';
 }
+let ledgerTypeLensTimer=0;
+function ledgerSyncTypeLens(instant=false){
+ const bar=dlg.querySelector('.ld-type-strip');if(!bar)return;
+ const lens=bar.querySelector('.ld-type-slide-indicator'),active=bar.querySelector('.ld-type-option.on');
+ if(!lens||!active)return;
+ const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+ if(instant||reduce)lens.classList.add('nav-no-motion');
+ lens.style.width=active.offsetWidth+'px';
+ lens.style.transform='translate3d('+active.offsetLeft+'px,0,0)';
+ if(!instant&&!reduce){
+  clearTimeout(ledgerTypeLensTimer);lens.classList.remove('nav-moving');void lens.offsetWidth;
+  lens.classList.add('nav-moving');ledgerTypeLensTimer=setTimeout(()=>lens.classList.remove('nav-moving'),550);
+ }
+ if(instant||reduce)requestAnimationFrame(()=>requestAnimationFrame(()=>lens.classList.remove('nav-no-motion')));
+}
 function ledgerSetDependent(){
  if(!dlg.querySelector('#ld-editor'))return;
  for(const select of dlg.querySelectorAll('[data-ledger-choice]')){
@@ -3848,7 +3918,7 @@ function ledgerEdit(id,focusField=''){
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-chooser');dlg.classList.add('ld-dialog');
  dlg.innerHTML='<form id="ld-editor"><h3>'+(adding?'新增記帳':'編輯記帳')+'</h3><p class="ld-editor-sub">所有資料保存在這台裝置，可隨時備份</p>'+
  '<div class="ld-form-row ld-form-row-type-only">'+
- '<div class="ld-field ld-type-field"><span>記帳類型</span><div class="ld-type-strip" role="group" aria-label="直接選擇記帳類型">'+Object.keys(LEDGER_TYPES).map(x=>'<button type="button" class="ld-type-option'+(ledgerType(a)===x?' on':'')+'" data-ledger-type="'+x+'" aria-pressed="'+(ledgerType(a)===x)+'">'+LEDGER_TYPES[x]+'</button>').join('')+'</div><select name="type" class="ld-type-native" tabindex="-1" aria-hidden="true">'+Object.keys(LEDGER_TYPES).map(x=>'<option value="'+x+'"'+(ledgerType(a)===x?' selected':'')+'>'+LEDGER_TYPES[x]+'</option>').join('')+'</select></div></div>'+ 
+ '<div class="ld-field ld-type-field"><span>記帳類型</span><div class="ld-type-strip" role="group" aria-label="直接選擇記帳類型"><div class="ld-type-slide-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>'+Object.keys(LEDGER_TYPES).map(x=>'<button type="button" class="ld-type-option'+(ledgerType(a)===x?' on':'')+'" data-ledger-type="'+x+'" aria-pressed="'+(ledgerType(a)===x)+'">'+LEDGER_TYPES[x]+'</button>').join('')+'</div><select name="type" class="ld-type-native" tabindex="-1" aria-hidden="true">'+Object.keys(LEDGER_TYPES).map(x=>'<option value="'+x+'"'+(ledgerType(a)===x?' selected':'')+'>'+LEDGER_TYPES[x]+'</option>').join('')+'</select></div></div>'+ 
  '<div class="ld-form-row ld-form-row-date-only">'+
  '<label class="ld-field">記帳日期與時間<input name="datetime" type="datetime-local" required value="'+esc(a.datetime)+'"></label></div>'+ 
  '<div class="ld-form-row ld-form-row-name-category">'+
@@ -3878,6 +3948,7 @@ function ledgerEdit(id,focusField=''){
    const select=dlg.querySelector('select[name="type"]');if(!select)return;
    select.value=button.dataset.ledgerType;
    select.dispatchEvent(new Event('change',{bubbles:true}));
+   ledgerSyncTypeLens(false);
   });
  });
  dlg.querySelector('form').onsubmit=e=>{
@@ -3904,6 +3975,7 @@ function ledgerEdit(id,focusField=''){
   dlg.close();ledgerPhotoTemp='';render();showSavedToast();
  };
  useAddBottomSheet();openEditorDialogNoKeyboard();
+ requestAnimationFrame(()=>ledgerSyncTypeLens(true));
  if(focusField){requestAnimationFrame(()=>{
   const element=dlg.querySelector('[name="'+focusField+'"]')||dlg.querySelector('#ld-photo-file');
   if(element){element.scrollIntoView({block:'center',behavior:'smooth'});if(element.tagName!=='INPUT'||element.type!=='file')element.focus({preventScroll:true});}
