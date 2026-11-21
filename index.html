@@ -2388,6 +2388,44 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
  .ld-category-breakdown-amount{font-size:10px}
 }
 
+
+/* 記帳 v7：近期摘要 / 全部明細 / iOS 不放大搜尋 / 緊湊並排表單 */
+.ld-recent-label{font-size:10px;font-weight:600;color:#9aaac0;margin-left:5px;vertical-align:middle}
+.ld-all-records{border:0;background:transparent;color:#8195b3;width:34px;height:34px;padding:8px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.ld-all-records svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ld-all-records:focus-visible{outline:2px solid #bbcadf}
+.ld-recent-panel .ld-section-head{margin-bottom:8px}
+.ld-all-screen .ld-sub-header{margin-bottom:12px}
+.ld-search-input-clip{height:34px;width:100%;min-width:0;max-width:100%;box-sizing:border-box;overflow:hidden;border:1px solid #e1e7f1;background:#fff;border-radius:9px}
+.ld-search-input-clip:focus-within{border-color:#b4c4d5;box-shadow:0 0 0 2px #e7edf5}
+.ld-search-tools .ld-search-input-clip input#ld-search{
+ box-sizing:border-box!important;width:125%!important;max-width:none!important;height:42.5px!important;min-height:0!important;
+ margin:0!important;padding:0 10px!important;border:0!important;border-radius:0!important;background:transparent!important;
+ font-size:16px!important;line-height:42.5px!important;color:#637693!important;letter-spacing:0!important;
+ transform:scale(.8);transform-origin:top left;outline:0!important;box-shadow:none!important;
+ -webkit-appearance:none;appearance:none
+}
+.ld-search-tools .ld-search-input-clip input#ld-search::placeholder{font-size:16px!important;color:#9aa8b9}
+#dlg.ld-dialog .ld-form-row{display:grid;gap:8px;min-width:0;align-items:start;width:100%}
+#dlg.ld-dialog .ld-form-row-type-date{grid-template-columns:minmax(0,.82fr) minmax(0,1.28fr)}
+#dlg.ld-dialog .ld-form-row-name-category{grid-template-columns:minmax(0,1.20fr) minmax(0,.94fr)}
+#dlg.ld-dialog .ld-form-row-amount{grid-template-columns:minmax(0,1.02fr) minmax(0,.64fr) minmax(0,.99fr)}
+#dlg.ld-dialog .ld-form-row-payment{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+#dlg.ld-dialog .ld-form-row-payment.no-card{grid-template-columns:minmax(0,1fr)}
+#dlg.ld-dialog .ld-field-cell{min-width:0;max-width:100%;width:100%}
+#dlg.ld-dialog .ld-form-row .ld-field{min-width:0;max-width:100%}
+#dlg.ld-dialog .ld-form-row .ld-field>input,#dlg.ld-dialog .ld-form-row .ld-field>select{height:44px;min-height:44px;max-width:100%;min-width:0;box-sizing:border-box;padding:7px 6px!important;font-size:12px!important;text-overflow:ellipsis}
+#dlg.ld-dialog .ld-form-row-type-date input[type="datetime-local"]{width:100%;min-width:0;letter-spacing:-.2px;padding:6px 3px!important;font-size:11px!important}
+#dlg.ld-dialog .ld-form-row-type-date input[type="datetime-local"]::-webkit-datetime-edit{font-size:11px;padding:0}
+#dlg.ld-dialog .ld-form-row .ld-field{font-size:11px}
+#dlg.ld-dialog .ld-form-row .ld-custom{margin-top:7px}
+.ld-page .ld-calculator input#ld-fx-amount{font-size:10px!important;letter-spacing:-.2px}
+@media(max-width:360px){
+ #dlg.ld-dialog .ld-form-row{gap:5px}
+ #dlg.ld-dialog .ld-form-row-amount{grid-template-columns:minmax(0,1fr) minmax(0,.65fr) minmax(0,1fr)}
+ #dlg.ld-dialog .ld-form-row-type-date{grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr)}
+ #dlg.ld-dialog .ld-form-row .ld-field>input,#dlg.ld-dialog .ld-form-row .ld-field>select{padding-left:5px!important;padding-right:5px!important;font-size:11px!important}
+}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -3218,7 +3256,7 @@ function ledgerNormalize(raw){
 let ledger=ledgerNormalize(LS('ledgerV1',null));
 let ledgerDay='all',ledgerTaxOnly=false,ledgerPhotoTemp='',ledgerEditorId=null;
 let ledgerSort=LS('ledgerSortV1','asc')==='desc'?'desc':'asc',ledgerSearch='',ledgerFilterCategory='',ledgerFilterPayer='',ledgerFilterMethod='',ledgerFilterCurrency='',ledgerFiltersOpen=false;
-let ledgerView='main',ledgerDetailId=null,ledgerStatDay='2026-12-18',ledgerStatTab='daily',ledgerReturnScroll=0,ledgerPhotoLoading=false,ledgerFilterType='';
+let ledgerView='main',ledgerDetailId=null,ledgerStatDay='2026-12-18',ledgerStatTab='daily',ledgerReturnScroll=0,ledgerPhotoLoading=false,ledgerFilterType='',ledgerNavStack=[];
 let ledgerCategoryDay='all',ledgerCategoryDetailed=false;
 let fxCalc={amount:'1000',from:'JPY',to:'TWD',result:''};
 let fxInfo={loading:false,error:'',lastAttempt:0,updated:'',rates:null};
@@ -3351,6 +3389,9 @@ function ledgerFilteredEntries(){
  (!ledgerFilterMethod||e.method===ledgerFilterMethod)&&(!ledgerFilterCurrency||e.currency===ledgerFilterCurrency)&&
  (!term||[e.name,e.store,e.note,e.category,e.payer,e.method,e.card,e.datetime,e.refundProvider,e.transferFrom,e.transferTo,LEDGER_TYPES[ledgerType(e)]].some(x=>String(x||'').toLocaleLowerCase().includes(term))))
  .sort((a,b)=>(ledgerSort==='asc'?1:-1)*(String(a.datetime||'').localeCompare(String(b.datetime||''))||String(a.id||'').localeCompare(String(b.id||''))));
+}
+function ledgerRecentEntries(){
+ return ledger.entries.slice().sort((a,b)=>String(b.datetime||'').localeCompare(String(a.datetime||''))||String(b.id||'').localeCompare(String(a.id||''))).slice(0,5);
 }
 function ledgerRefreshEntryList(){
  const rows=ledgerFilteredEntries(),list=document.getElementById('ld-entry-list'),count=document.getElementById('ld-visible-count');
@@ -3535,26 +3576,33 @@ function ledgerDetailPage(){
  '<button type="button" class="ld-detail-delete" data-a="ledger-delete" data-id="'+esc(e.id)+'">刪除此筆記帳</button></div>';
 }
 function ledgerOpenView(view,id=''){
- ledgerReturnScroll=window.scrollY||0;
+ if(ledgerView===view&&ledgerDetailId===id)return;
+ ledgerNavStack.push({view:ledgerView,id:ledgerDetailId,scroll:window.scrollY||0});
  ledgerView=view;ledgerDetailId=view==='detail'?id:null;
  render();window.scrollTo(0,0);
 }
 function ledgerBack(){
  if(ledgerView==='main')return;
  const panel=document.querySelector('[data-ledger-subpage]');
- if(panel&&!panel.classList.contains('ld-exiting')){
-  panel.style.transition='transform .24s cubic-bezier(.2,.7,.2,1), opacity .24s ease';
-  panel.style.transform='translate3d(105vw,0,0)';panel.style.opacity='0';panel.classList.add('ld-exiting');
-  setTimeout(()=>{if(ledgerView!=='main'){ledgerView='main';ledgerDetailId=null;render();requestAnimationFrame(()=>window.scrollTo(0,ledgerReturnScroll))}},245);
-  return;
- }
- ledgerView='main';ledgerDetailId=null;render();requestAnimationFrame(()=>window.scrollTo(0,ledgerReturnScroll));
+ if(panel?.classList.contains('ld-exiting'))return;
+ const goBack=()=>{
+  const previous=ledgerNavStack.pop()||{view:'main',id:null,scroll:0};
+  ledgerView=previous.view;ledgerDetailId=previous.id;
+  render();requestAnimationFrame(()=>window.scrollTo(0,previous.scroll||0));
+ };
+ if(panel){
+  panel.classList.add('ld-exiting');
+  panel.style.animation='none';
+  panel.style.transition='transform .24s cubic-bezier(.18,.7,.2,1), opacity .24s ease';
+  panel.style.transform='translate3d(105vw,0,0)';panel.style.opacity='0';
+  setTimeout(goBack,245);
+ }else goBack();
 }
 function ledgerSearchControls(){
  const select=(id,value,values,placeholder)=>'<select id="'+id+'" aria-label="'+placeholder+'"><option value="">'+placeholder+'</option>'+ledgerChoices(values).map(v=>'<option value="'+esc(v)+'"'+(v===value?' selected':'')+'>'+esc(v)+'</option>').join('')+'</select>';
  const active=!!(ledgerFilterType||ledgerFilterCategory||ledgerFilterPayer||ledgerFilterMethod||ledgerFilterCurrency||ledgerTaxOnly);
  const sortLabel=ledgerSort==='asc'?'時間由早到晚，點擊改為由晚到早':'時間由晚到早，點擊改為由早到晚';
- return '<div class="ld-search-tools"><input id="ld-search" type="search" autocomplete="off" placeholder="搜尋品項、店家、備註、付款人…" aria-label="搜尋支出明細" value="'+esc(ledgerSearch)+'">'+
+ return '<div class="ld-search-tools"><div class="ld-search-input-clip"><input id="ld-search" type="search" autocomplete="off" placeholder="搜尋品項、店家、備註、付款人…" aria-label="搜尋支出明細" value="'+esc(ledgerSearch)+'"></div>'+
  '<button class="ld-tool-icon ld-sort-btn" type="button" data-a="ledger-sort-toggle" title="'+sortLabel+'" aria-label="'+sortLabel+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 20V4m0 0L4.5 7.5M8 4l3.5 3.5M16 4v16m0 0-3.5-3.5M16 20l3.5-3.5"/></svg></button>'+ 
  '<button class="ld-tool-icon ld-filter-trigger'+(active?' has-active':'')+(ledgerFiltersOpen?' on':'')+'" type="button" data-a="ledger-filter-toggle" aria-label="篩選條件" title="篩選條件" aria-expanded="'+ledgerFiltersOpen+'" aria-controls="ld-filter-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2"/><circle cx="15" cy="17" r="2"/></svg></button></div>'+ 
  '<div id="ld-filter-panel" class="ld-filter-panel"'+(ledgerFiltersOpen?'':' hidden')+'><div class="ld-filter-heading">篩選條件 <button type="button" data-a="ledger-filters-clear">清除篩選</button></div><div class="ld-filter-row"><button type="button" class="'+(!ledgerTaxOnly?'on':'')+'" data-a="ledger-tax-filter" data-v="all">全部支出</button><button type="button" class="'+(ledgerTaxOnly?'on':'')+'" data-a="ledger-tax-filter" data-v="tax">只看退稅</button></div><div class="ld-search-filters">'+
@@ -3574,10 +3622,16 @@ function ledgerPage(){
 
  '<section class="ld-panel"><div class="ld-section-head"><h3>匯率換算</h3><button type="button" class="ld-mini-link" data-a="ledger-fx-refresh">'+(fxInfo.loading?'更新中…':'⟳ 更新匯率')+'</button></div><div class="ld-rate-line">'+fxRate+'</div><div class="ld-calculator"><label>金額<input type="number" id="ld-fx-amount" min="0" step="any" inputmode="decimal" value="'+esc(fxCalc.amount)+'"></label><label>原幣<select id="ld-fx-from">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.from===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label><label>換算<select id="ld-fx-to">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.to===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label></div><div class="ld-convert-row"><button type="button" data-a="ledger-convert" class="ld-convert-btn">按最新匯率換算</button><strong class="ld-result">'+(fxCalc.result||'—')+'</strong></div><p class="ld-hint">'+(fxInfo.error?esc(fxInfo.error)+' · ':'')+'資料來源：<a href="https://frankfurter.dev/" target="_blank" rel="noopener noreferrer">Frankfurter</a>，最新可用的每日參考匯率（非即時成交報價）。</p></section>'+
  '<section class="ld-panel ld-stats-panel"><button type="button" class="ld-stat-entry" data-a="ledger-stats"><span class="ld-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V13M10 20V8M16 20V11M22 20V4"/></svg></span><span><strong>支出統計</strong><small>每日支出・支出類別・支出方式</small></span><span class="ld-stat-arrow">›</span></button></section>'+
- '<section class="ld-panel ld-expense-panel"><div class="ld-section-head"><h3>收支明細</h3></div>'+ledgerSearchControls()+'<div id="ld-entry-list">'+ (filtered.length?ledgerExpenseGroups(filtered):'<div class="ld-empty">沒有符合條件的支出。</div>')+'</div></section>'+
+ '<section class="ld-panel ld-expense-panel ld-recent-panel"><div class="ld-section-head"><h3>收支明細 <small class="ld-recent-label">近期</small></h3><button type="button" class="ld-all-records" data-a="ledger-all" aria-label="查看完整收支明細" title="完整收支明細"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div><div id="ld-recent-list">'+(ledger.entries.length?ledgerExpenseGroups(ledgerRecentEntries()):'<div class="ld-empty">尚無收支紀錄，點右下角「＋」新增第一筆。</div>')+'</div></section>'+
  '<details class="ld-panel ld-tax-guide"><summary><strong>'+iconSvg('info')+' 日本退稅資訊（2026 新制）</strong><small>展開查看條件與離境流程</small></summary><div class="ld-tax-body"><p><b>2026 年 11 月 1 日起改為先付稅、離境後退稅。</b>符合資格旅客在免稅店先以含稅價購買，離境時經海關確認攜出後，才由店家或受託的退款服務商退款。</p><ol><li>同一免稅店同一天，免稅商品購買額合計須達 <b>未稅 ¥5,000</b>。</li><li>購物時依店家要求出示護照等資格文件，並妥善保存商品與購買紀錄。</li><li>購買日起 <b>90 天內</b>離境，在機場／港口辦理海關確認；需依要求出示護照與商品。</li><li>商品必須攜出日本；在日本已消耗的食品、化妝品等不可申請相應退稅。</li><li>退款方式、服務商、手續費及入帳時間依店家規定。不要直接將預估退款從支出扣除。</li></ol><p class="ld-tax-link"><a href="https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html" target="_blank" rel="noopener noreferrer">日本觀光廳｜退稅新制官方說明 ↗</a></p><p class="ld-hint">記帳中的「需退稅」是自行標記的待辦，不代表該商品必然符合退稅資格。</p></div></details>'+
  '<section class="ld-panel"><div class="ld-section-head"><h3>備份與匯出</h3></div><p class="ld-hint">記帳與照片只儲存在這台手機的瀏覽器，不會自動同步給旅伴。建議定期下載 JSON 備份；CSV 適合用 Excel 整理。</p><div class="ld-backup-buttons"><button type="button" data-a="ledger-export-csv">匯出 CSV</button><button type="button" data-a="ledger-export-json">下載 JSON</button><button type="button" data-a="ledger-import-open">匯入 JSON</button></div><input type="file" id="ledger-import-input" accept="application/json,.json" hidden></section>'+
  '</div>';
+}
+function ledgerAllPage(){
+ const filtered=ledgerFilteredEntries();
+ return '<div class="ld-page ld-subpage ld-all-screen" data-ledger-subpage="all">'+ledgerSubHeader('完整收支明細','所有記帳紀錄 · 向右滑動可返回')+
+ '<section class="ld-panel ld-expense-panel ld-all-panel"><div class="ld-section-head"><h3>全部收支明細</h3></div>'+ledgerSearchControls()+
+ '<div id="ld-entry-list">'+(filtered.length?ledgerExpenseGroups(filtered):'<div class="ld-empty">沒有符合搜尋條件的收支明細。</div>')+'</div></section></div>';
 }
 function ledgerCustomSelect(name,label,items,current,placeholder='自行新增'){
  const all=ledgerChoices([...items,current]);
@@ -3591,6 +3645,7 @@ function ledgerSetDependent(){
  }
  const method=dlg.querySelector('[name="method"]')?.value||'';
  const card=dlg.querySelector('#ld-card-wrap');if(card)card.hidden=!['Apple Pay','LINE Pay','信用卡'].includes(method);
+ dlg.querySelector('.ld-form-row-payment')?.classList.toggle('no-card',!!card?.hidden);
  const kind=dlg.querySelector('[name="type"]')?.value||'expense';
  const tax=dlg.querySelector('[name="taxfree"]')?.checked&&kind==='expense';
  const taxToggle=dlg.querySelector('#ld-tax-toggle-wrap');if(taxToggle)taxToggle.hidden=kind!=='expense';
@@ -3610,14 +3665,17 @@ function ledgerEdit(id,focusField=''){
  const knownProvider=LEDGER_REFUND_SERVICES.includes(a.refundProvider),providerSelected=knownProvider?a.refundProvider:'其他服務商',providerCustom=knownProvider?a.refundProviderCustom:(a.refundProviderCustom||a.refundProvider||'');
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-chooser');dlg.classList.add('ld-dialog');
  dlg.innerHTML='<form id="ld-editor"><h3>'+(adding?'新增記帳':'編輯記帳')+'</h3><p class="ld-editor-sub">所有資料保存在這台裝置，可隨時備份</p>'+
+ '<div class="ld-form-row ld-form-row-type-date">'+
  '<label class="ld-field">記帳類型<select name="type">'+Object.keys(LEDGER_TYPES).map(x=>'<option value="'+x+'"'+(ledgerType(a)===x?' selected':'')+'>'+LEDGER_TYPES[x]+'</option>').join('')+'</select></label>'+ 
- '<label class="ld-field">品項 *<input name="name" maxlength="160" required placeholder="例如：小樽午餐" value="'+esc(a.name)+'"></label>'+
- '<label class="ld-field">記帳日期與時間<input name="datetime" type="datetime-local" required value="'+esc(a.datetime)+'"></label>'+
- ledgerCustomSelect('category','類別 *',cats,a.category,'新增類別名稱')+
- '<div class="ld-form-two"><label class="ld-field">金額 *<input name="amount" type="number" inputmode="decimal" min="0" step="any" required placeholder="0" value="'+esc(a.amount)+'"></label>'+opt('幣別','currency',LEDGER_CURRENCIES)+'</div>'+
- ledgerCustomSelect('payer','付款人',payers,a.payer,'新增付款人名稱')+
- opt('付款方式','method',LEDGER_METHODS)+
- '<div id="ld-card-wrap">'+ledgerCustomSelect('card','使用卡片',cards,a.card,'新增卡片暱稱（例如：國泰 VISA）')+'</div>'+
+ '<label class="ld-field">記帳日期與時間<input name="datetime" type="datetime-local" required value="'+esc(a.datetime)+'"></label></div>'+ 
+ '<div class="ld-form-row ld-form-row-name-category">'+
+ '<label class="ld-field">品項 *<input name="name" maxlength="160" required placeholder="例如：小樽午餐" value="'+esc(a.name)+'"></label>'+ 
+ '<div class="ld-field-cell">'+ledgerCustomSelect('category','類別 *',cats,a.category,'新增類別名稱')+'</div></div>'+ 
+ '<div class="ld-form-row ld-form-row-amount">'+
+ '<label class="ld-field">金額 *<input name="amount" type="number" inputmode="decimal" min="0" step="any" required placeholder="0" value="'+esc(a.amount)+'"></label>'+opt('幣別','currency',LEDGER_CURRENCIES)+
+ '<div class="ld-field-cell">'+ledgerCustomSelect('payer','付款人',payers,a.payer,'新增付款人名稱')+'</div></div>'+ 
+ '<div class="ld-form-row ld-form-row-payment">'+opt('付款方式','method',LEDGER_METHODS)+
+ '<div class="ld-field-cell" id="ld-card-wrap">'+ledgerCustomSelect('card','使用卡片',cards,a.card,'新增卡片暱稱（例如：國泰 VISA）')+'</div></div>'+
  '<label class="ld-field">店家／地點<input name="store" maxlength="180" placeholder="例如：札幌車站" value="'+esc(a.store||'')+'"></label>'+
  '<label class="ld-field">備註<textarea name="note" rows="2" maxlength="900" placeholder="可以記下收據、分帳資訊…">'+esc(a.note||'')+'</textarea></label>'+
  '<div class="ld-photo-line"><div class="ld-photo-preview" id="ld-photo-preview"></div><div><button type="button" data-a="ledger-pick-photo" class="ld-photo-upload">選取／上傳照片</button><input type="file" data-ledger-file="photo" accept="image/*,.heic,.heif" id="ld-photo-file" class="ld-photo-input" aria-label="選擇支出照片"><small id="ld-photo-hint">照片會縮小後儲存在本機</small><button type="button" data-a="ledger-photo-remove" class="ld-photo-remove">移除照片</button></div></div>'+
@@ -3702,12 +3760,13 @@ async function ledgerImportJSON(file){
   const next=ledgerNormalize(payload.ledger);
   if(next.entries.some(e=>!e.id||!LEDGER_CURRENCIES.includes(e.currency)||!Number.isFinite(Number(e.amount))||Number(e.amount)<0))throw Error('invalid entries');
   if(!confirm('確定匯入 '+next.entries.length+' 筆記帳？這會取代目前記帳清單、付款人與自訂類別。建議先下載現有 JSON 備份。'))return;
-  const old=ledger;ledger=next;if(ledgerRemember(old)){ledgerDay='all';ledgerTaxOnly=false;ledgerView='main';ledgerDetailId=null;render();alert('匯入完成，共 '+ledger.entries.length+' 筆記帳')}
+  const old=ledger;ledger=next;if(ledgerRemember(old)){ledgerDay='all';ledgerTaxOnly=false;ledgerView='main';ledgerDetailId=null;ledgerNavStack=[];render();alert('匯入完成，共 '+ledger.entries.length+' 筆記帳')}
  }catch(err){alert('匯入失敗：僅支援本 App 匯出的 JSON 記帳備份，請確認檔案是否完整。')}
 }
 async function ledgerClick(action,data){
  if(action==='ledger-new'){ledgerEdit(null)}
  else if(action==='ledger-stats'){ledgerOpenView('stats')}
+ else if(action==='ledger-all'){ledgerOpenView('all')}
  else if(action==='ledger-detail'){ledgerOpenView('detail',data.id)}
  else if(action==='ledger-back'){ledgerBack()}
  else if(action==='ledger-stat-day'){ledgerStatSelectDay(data.v)}
@@ -4334,7 +4393,7 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerStatPage():ledgerView==='detail'?ledgerDetailPage():ledgerPage())+'</main>';
+    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerStatPage():ledgerView==='detail'?ledgerDetailPage():ledgerView==='all'?ledgerAllPage():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
@@ -4832,7 +4891,7 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const D=b.dataset,a=D.a,n=+D.i,L=D.l==='d'?days[st.day].items:D.l==='t'?todos:packs;
 if(a.startsWith('ledger-')){e.preventDefault();ledgerClick(a,D);return;}
 if(a==='drag'||a==='pack-drag'||a==='todo-drag'||a==='shop-drag'||a==='home-drag'){e.preventDefault();e.stopPropagation();return;}
-if(a==='tab'){st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;}if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
+if(a==='tab'){st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;ledgerNavStack=[];}if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
 else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
 else if(a==='add-choose'){useAddBottomSheet();chooseItineraryKind()}
