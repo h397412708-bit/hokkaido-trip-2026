@@ -2822,6 +2822,28 @@ body.ld-tax-fullscreen-open #ld-tax-tab-body{height:auto;min-height:0;overflow:v
 .ld-departure-steps .ld-departure-step-copy p{color:#8190a5;font-size:10.5px;line-height:1.55;margin:0;overflow-wrap:anywhere}
 @media(max-width:350px){.ld-departure-steps{padding:11px!important}.ld-departure-steps .ld-departure-step{padding:10px 9px;gap:9px}}
 
+
+/* 2026-11-22：離境確認僅保留海關項目；雙模式使用與退稅主分頁相同的滑動膠囊 */
+.ld-departure-switch{isolation:isolate}
+.ld-departure-switch-indicator,
+.ld-departure-switch-indicator.vjw{
+ z-index:0;left:0;right:auto;top:4px;bottom:4px;width:calc((100% - 16px)/2);
+ background:transparent;border:0;box-shadow:none;border-radius:13px;
+ transform:translate3d(4px,0,0);
+ transition:transform 510ms cubic-bezier(.20,1.20,.34,1),width 280ms cubic-bezier(.20,.9,.32,1);
+ will-change:transform;
+}
+.ld-departure-switch-indicator .nav-lens-core{border-radius:13px}
+.ld-departure-switch-indicator.nav-no-motion{transition:none!important}
+.ld-departure-switch-indicator.nav-moving .nav-lens-core{animation:navLensElastic 510ms cubic-bezier(.2,.8,.2,1)}
+.ld-departure-switch-indicator.nav-moving .nav-lens-core::after{animation:navLensGlint 540ms ease-out}
+#ld-departure-mode-body{display:flex;flex-direction:column;gap:13px;min-width:0}
+@media(prefers-reduced-motion:reduce){.ld-departure-switch-indicator{transition:none!important}.ld-departure-switch-indicator.nav-moving .nav-lens-core,.ld-departure-switch-indicator.nav-moving .nav-lens-core::after{animation:none!important}}
+/* 統計／明細詳情：向右跟手退場時，下方顯示上一層記帳／退稅頁內容 */
+main.ledger-layered-main{position:relative;isolation:isolate}
+.ld-return-underlay{position:absolute;inset:0 0 auto 0;z-index:0;pointer-events:none;user-select:none;width:100%;min-height:100%;overflow:hidden}
+main.ledger-layered-main > .ld-subpage{position:relative;z-index:1;min-height:calc(100dvh - 110px);background:linear-gradient(157deg,#f6f8fc,#eef3fb 70%,#f6f3fa);border-radius:18px;box-shadow:-8px 0 20px #26395a10}
+.ld-return-underlay .ld-tax-screen{position:relative!important;inset:auto!important;z-index:0!important;width:100%;max-width:none;min-height:calc(100dvh - 110px);max-height:none!important;overflow:visible!important;box-shadow:none!important;pointer-events:none!important}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -3664,7 +3686,7 @@ let ledgerDay='all',ledgerTaxOnly=false,ledgerPhotoTemp='',ledgerEditorId=null;
 let ledgerSort=LS('ledgerSortV1','asc')==='desc'?'desc':'asc',ledgerSearch='',ledgerFilterCategory='',ledgerFilterPayer='',ledgerFilterMethod='',ledgerFilterCurrency='',ledgerFiltersOpen=false;
 let ledgerView='main',ledgerDetailId=null,ledgerStatDay='2026-12-18',ledgerStatTab='daily',ledgerReturnScroll=0,ledgerPhotoLoading=false,ledgerFilterType='',ledgerNavStack=[];
 let ledgerCategoryDay='all',ledgerCategoryDetailed=false;
-let ledgerTaxTab='mine',ledgerTaxDepartureMode='kiosk',ledgerTaxCheck=LS('ledgerTaxDepartureCheckV1',{}),ledgerTaxLensTimer=0;
+let ledgerTaxTab='mine',ledgerTaxDepartureMode='kiosk',ledgerTaxLensTimer=0;
 let fxCalc={amount:'1000',from:'JPY',to:'TWD',result:''};
 let fxInfo={loading:false,error:'',lastAttempt:0,updated:'',rates:null};
 const savedFx=LS('ledgerFxV1',null);
@@ -4008,9 +4030,15 @@ function ledgerOpenView(view,id=''){
  ledgerView=view;ledgerDetailId=view==='detail'?id:null;
  render();if(view!=='tax')window.scrollTo(0,0);
 }
+// 子頁滑動時保留真正的上一層畫面，讓手勢往右移時不會露出空白背景。
+function ledgerReturnUnderlay(){
+ const previous=ledgerNavStack.length?ledgerNavStack[ledgerNavStack.length-1].view:'main';
+ const content=previous==='tax'?ledgerTaxPageView():previous==='stats'?ledgerStatPage():ledgerPage();
+ return '<div class="ld-return-underlay" aria-hidden="true" inert>'+content+'</div>';
+}
 function ledgerBack(){
  if(ledgerView==='main')return;
- const panel=document.querySelector('[data-ledger-subpage]');
+ const panel=document.querySelector('main > [data-ledger-subpage="'+ledgerView+'"]');
  if(panel?.classList.contains('ld-exiting'))return;
  const goBack=()=>{
   const previous=ledgerNavStack.pop()||{view:'main',id:null,scroll:0};
@@ -4083,14 +4111,6 @@ function ledgerSelectTaxPage(index){
  if(prev)prev.disabled=ledgerTaxPage===0;
  if(next)next.disabled=ledgerTaxPage===3;
 }
-const LEDGER_TAX_CHECK_ITEMS=[
- ['passport','people','帶好護照','退稅購物時使用的護照，離境也要帶在身上'],
- ['goods','suitcase','準備帶出日本的商品','與收據對照，可能需要開箱或出示實物'],
- ['receipts','receipt','確認收據／退款資料','保留店家、服務商、付款紀錄與退款方式'],
- ['kiosk','receipt','離境時完成退稅程序','出境機場依指示掃護照、使用退稅設備或核准方式'],
- ['customs','info','完成可能的海關查驗','有被抽查時先出示商品，確認後再託運需查驗的行李'],
- ['refund','clock','回國後核對退款','查看退款是否到帳，再填寫各筆實際退款金額']
-];
 function ledgerTaxMyRecords(){
  const records=ledger.entries.filter(e=>ledgerIsExpense(e)&&e.taxfree).slice().sort((a,b)=>String(b.datetime||'').localeCompare(String(a.datetime||'')));
  const finished=records.filter(e=>e.refundStatus==='已退款').length;
@@ -4104,7 +4124,7 @@ function ledgerTaxMyRecords(){
   return '<button type="button" class="ld-tax-record" data-a="ledger-detail" data-id="'+esc(e.id)+'" aria-label="查看免稅明細 '+esc(e.name)+'"><span class="ld-tax-record-icon">'+iconSvg('receipt')+'</span><span class="ld-tax-record-info"><strong>'+esc(e.name)+'</strong><small>'+esc(String(e.datetime||'').replace('T',' ').slice(0,16))+' · '+esc(e.store||'未填店家')+'</small><span class="ld-tax-record-secondary">'+esc(refund)+'</span></span><span class="ld-tax-record-side"><b>'+ledgerMoney(Number(e.amount)||0,e.currency||'JPY')+'</b><small>'+esc(status)+'</small><span aria-hidden="true">›</span></span></button>';
  }).join('')+'</div><p class="ld-hint">點選紀錄可在明細詳情直接更新退稅進度與實際退款金額。</p>';
 }
-function ledgerTaxDepartureList(){
+function ledgerTaxDepartureModeBody(){
  const steps=ledgerTaxDepartureMode==='kiosk' ? [
   ['到國際線出發大廳','先找「免稅手續機台」。需要查驗的免稅商品，託運前先保留可供出示。','flight'],
   ['在免稅手續機台掃護照','使用購物時登記的護照掃描，依照螢幕完成手續並查看結果。','people'],
@@ -4114,21 +4134,21 @@ function ledgerTaxDepartureList(){
   ['在國際線出發大廳連指定 Wi-Fi','在安檢前、指定範圍連接退稅手續專用 Wi-Fi；一般機場 Wi-Fi 不等同。','route'],
   ['在網頁完成確認，再去託運','依畫面辦理「退稅手續」，查看綠色或紅色判定；紅色需先找海關查驗。','receipt']
  ];
- const wait=ledger.entries.filter(e=>ledgerIsExpense(e)&&e.taxfree&&!['已海關確認','已退款','已確認完成','不申請'].includes(e.refundStatus||''));
- const prepared=wait.filter(e=>ledgerTaxCheck['item-'+e.id]).length;
- const done=LEDGER_TAX_CHECK_ITEMS.filter(x=>ledgerTaxCheck[x[0]]).length;
+ const wait=ledger.entries.filter(e=>ledgerIsExpense(e)&&e.taxfree&&(e.refundStatus||'待海關確認')==='待海關確認');
  const stepMarkup=steps.map((step,i)=>'<div class="ld-departure-step"><span class="ld-departure-step-icon" aria-hidden="true">'+iconSvg(step[2])+'</span><div class="ld-departure-step-copy"><span class="ld-departure-step-kicker">'+String(i+1).padStart(2,'0')+' / 03 · 離境確認</span><strong>'+esc(step[0])+'</strong><p>'+esc(step[1])+'</p></div></div>').join('');
  const urls='<div class="ld-departure-links"><a href="https://www.customs.go.jp/kaigairyoko/taxrefund/C-details.html" target="_blank" rel="noopener noreferrer">官方海關手續 '+iconSvg('externalLink')+'</a><a href="https://www.vjw.digital.go.jp/" target="_blank" rel="noopener noreferrer">Visit Japan Web '+iconSvg('externalLink')+'</a></div>';
  const result='<div class="ld-departure-results"><div class="ld-departure-result green"><strong><span>✓</span> 綠色</strong><p>海關確認完成，可依指示辦理後續託運。</p></div><div class="ld-departure-result red"><strong><span>!</span> 紅色</strong><p>帶護照與免稅商品到指定查驗區；尚未完成確認。</p></div></div>';
- const pendingList=wait.length?'<div class="ld-departure-pending-list">'+wait.map(e=>'<label class="ld-departure-pending-item"><input type="checkbox" data-tax-check="item-'+esc(e.id)+'"'+(ledgerTaxCheck['item-'+e.id]?' checked':'')+'><span><b>'+esc(e.name||'未命名品項')+'</b><small>'+esc((e.datetime||'').slice(0,10))+' · '+esc(e.store||'未填店家')+'</small></span></label>').join('')+'</div>':'<p class="ld-departure-empty">目前沒有標記為待確認的免稅支出。</p>';
+ const pendingList=wait.length?'<div class="ld-departure-pending-list">'+wait.map(e=>'<label class="ld-departure-pending-item"><input type="checkbox" data-tax-check="item-'+esc(e.id)+'" aria-label="海關確認完成：'+esc(e.name||'未命名品項')+'"><span><b>'+esc(e.name||'未命名品項')+'</b><small>'+esc((e.datetime||'').slice(0,10))+' · '+esc(e.store||'未填店家')+'</small></span></label>').join('')+'</div>':'<p class="ld-departure-empty">目前沒有「待海關確認」的免稅明細。已確認的紀錄請到「我的退稅」查看。</p>';
+ return '<section class="ld-panel ld-departure-steps" aria-label="'+(ledgerTaxDepartureMode==='kiosk'?'海關 Kiosk':'Visit Japan Web')+' 操作步驟"><div class="ld-departure-section-head"><span>離境手續 · 3 STEPS</span><strong>完成海關確認後再託運</strong></div><div class="ld-departure-step-list">'+stepMarkup+'</div></section>'+
+  (ledgerTaxDepartureMode==='vjw'?'<p class="ld-departure-airports">支援 Visit Japan Web 的機場：成田、羽田、關西、中部、福岡、<b>新千歲</b>、那霸。其他出境口請依現場指示使用 Kiosk。</p>':'')+
+  result+urls+
+  '<section class="ld-departure-wait"><div class="ld-departure-wait-title"><strong>待海關確認（'+wait.length+'）</strong></div><p>只有海關確認完成後才勾選；勾選會將該筆明細的退稅狀態改為<b>「待退款」</b>，並儲存到記帳資料。若判定為紅色，請先完成海關查驗。</p>'+pendingList+'</section>'+
+  '<p class="ld-hint">2026/11 新制：購買後 90 天內離境時完成海關確認。若有託運免稅品，請依海關指示先完成必要查驗。</p>';
+}
+function ledgerTaxDepartureList(){
  return '<div class="ld-departure-content">'+
- '<div class="ld-departure-switch" role="group" aria-label="選擇海關確認方式"><div class="ld-departure-switch-indicator'+(ledgerTaxDepartureMode==='vjw'?' vjw':'')+'" aria-hidden="true"></div><button type="button" data-a="ledger-tax-mode" data-v="kiosk" class="'+(ledgerTaxDepartureMode==='kiosk'?'on':'')+'" aria-pressed="'+(ledgerTaxDepartureMode==='kiosk')+'">海關 Kiosk</button><button type="button" data-a="ledger-tax-mode" data-v="vjw" class="'+(ledgerTaxDepartureMode==='vjw'?'on':'')+'" aria-pressed="'+(ledgerTaxDepartureMode==='vjw')+'">Visit Japan Web</button></div>'+
- '<section class="ld-panel ld-departure-steps" aria-label="'+(ledgerTaxDepartureMode==='kiosk'?'海關 Kiosk':'Visit Japan Web')+' 操作步驟"><div class="ld-departure-section-head"><span>離境手續 · 3 STEPS</span><strong>完成海關確認後再託運</strong></div><div class="ld-departure-step-list">'+stepMarkup+'</div></section>'+
- (ledgerTaxDepartureMode==='vjw'?'<p class="ld-departure-airports">支援 Visit Japan Web 的機場：成田、羽田、關西、中部、福岡、<b>新千歲</b>、那霸。其他出境口請依現場指示使用 Kiosk。</p>':'')+
- result+urls+
- '<section class="ld-departure-wait"><div class="ld-departure-wait-title"><strong>待海關確認（'+wait.length+'）</strong><small>已整理 '+prepared+' / '+wait.length+' 筆</small></div><p>這裡的勾選只是個人打包紀錄，<b>不代表海關已完成確認</b>；請以官方判定結果為準。</p>'+pendingList+'</section>'+
- '<details class="ld-panel ld-departure-personal"><summary>出發前檢查清單 <small>'+done+'/'+LEDGER_TAX_CHECK_ITEMS.length+' 項完成</small><span class="ld-personal-chevron">⌄</span></summary><div class="ld-departure-personal-body">'+LEDGER_TAX_CHECK_ITEMS.map(([id,ico,label,desc])=>'<label class="ld-tax-check-row"><span class="ld-tax-check-icon">'+iconSvg(ico)+'</span><span class="ld-tax-check-text"><strong>'+esc(label)+'</strong><small>'+esc(desc)+'</small></span><input type="checkbox" data-tax-check="'+id+'"'+(ledgerTaxCheck[id]?' checked':'')+' aria-label="'+esc(label)+'"></label>').join('')+'</div></details>'+
- '<p class="ld-hint">2026/11 新制：購買後 90 天內離境時完成海關確認。若有托運免稅品，先辦妥查驗再託運。</p></div>';
+  '<div class="ld-departure-switch" role="group" aria-label="選擇海關確認方式"><div class="ld-departure-switch-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div><button type="button" data-a="ledger-tax-mode" data-v="kiosk" class="'+(ledgerTaxDepartureMode==='kiosk'?'on':'')+'" aria-pressed="'+(ledgerTaxDepartureMode==='kiosk')+'">海關 Kiosk</button><button type="button" data-a="ledger-tax-mode" data-v="vjw" class="'+(ledgerTaxDepartureMode==='vjw'?'on':'')+'" aria-pressed="'+(ledgerTaxDepartureMode==='vjw')+'">Visit Japan Web</button></div>'+
+  '<div id="ld-departure-mode-body">'+ledgerTaxDepartureModeBody()+'</div></div>';
 }
 function ledgerTaxBody(){
  return ledgerTaxTab==='mine'?ledgerTaxMyRecords():ledgerTaxTab==='check'?ledgerTaxDepartureList():ledgerTaxGuide();
@@ -4146,6 +4166,16 @@ function ledgerSyncTaxLens(instant=false){
  if(instant||reduce)lens.classList.add('nav-no-motion');
  lens.style.width=active.offsetWidth+'px';lens.style.transform='translate3d('+active.offsetLeft+'px,0,0)';
  if(!instant&&!reduce){clearTimeout(ledgerTaxLensTimer);lens.classList.remove('nav-moving');void lens.offsetWidth;lens.classList.add('nav-moving');ledgerTaxLensTimer=setTimeout(()=>lens.classList.remove('nav-moving'),540)}
+ if(instant||reduce)requestAnimationFrame(()=>requestAnimationFrame(()=>lens.classList.remove('nav-no-motion')));
+}
+let ledgerDepartureLensTimer=0;
+function ledgerSyncDepartureLens(instant=false){
+ const bar=document.querySelector('.ld-tax-screen .ld-departure-switch');if(!bar)return;
+ const lens=bar.querySelector('.ld-departure-switch-indicator'),active=bar.querySelector('button.on');if(!lens||!active)return;
+ const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+ if(instant||reduce)lens.classList.add('nav-no-motion');
+ lens.style.width=active.offsetWidth+'px';lens.style.transform='translate3d('+active.offsetLeft+'px,0,0)';
+ if(!instant&&!reduce){clearTimeout(ledgerDepartureLensTimer);lens.classList.remove('nav-moving');void lens.offsetWidth;lens.classList.add('nav-moving');ledgerDepartureLensTimer=setTimeout(()=>lens.classList.remove('nav-moving'),540)}
  if(instant||reduce)requestAnimationFrame(()=>requestAnimationFrame(()=>lens.classList.remove('nav-no-motion')));
 }
 let ledgerListScrollTop=0;
@@ -4351,8 +4381,8 @@ async function ledgerImportJSON(file){
 async function ledgerClick(action,data){
  if(action==='ledger-new'){ledgerEdit(null)}
  else if(action==='ledger-tax-open'){ledgerTaxTab='mine';ledgerOpenView('tax')}
- else if(action==='ledger-tax-tab'){ledgerTaxTab=['mine','check','guide'].includes(data.v)?data.v:'mine';document.querySelectorAll('.ld-tax-tabs button').forEach(b=>{const active=b.dataset.v===ledgerTaxTab;b.classList.toggle('on',active);b.setAttribute('aria-pressed',String(active))});const tabBody=document.getElementById('ld-tax-tab-body');if(tabBody)tabBody.innerHTML=ledgerTaxBody();ledgerSyncTaxLens();}
- else if(action==='ledger-tax-mode'){ledgerTaxDepartureMode=data.v==='vjw'?'vjw':'kiosk';const body=document.getElementById('ld-tax-tab-body');if(body)body.innerHTML=ledgerTaxBody();}
+ else if(action==='ledger-tax-tab'){ledgerTaxTab=['mine','check','guide'].includes(data.v)?data.v:'mine';document.querySelectorAll('.ld-tax-tabs button').forEach(b=>{const active=b.dataset.v===ledgerTaxTab;b.classList.toggle('on',active);b.setAttribute('aria-pressed',String(active))});const tabBody=document.getElementById('ld-tax-tab-body');if(tabBody)tabBody.innerHTML=ledgerTaxBody();ledgerSyncTaxLens();if(ledgerTaxTab==='check')ledgerSyncDepartureLens(true);}
+ else if(action==='ledger-tax-mode'){ledgerTaxDepartureMode=data.v==='vjw'?'vjw':'kiosk';const bar=document.querySelector('.ld-tax-screen .ld-departure-switch');if(bar){bar.querySelectorAll('button').forEach(b=>{const on=b.dataset.v===ledgerTaxDepartureMode;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});const modeBody=document.getElementById('ld-departure-mode-body');if(modeBody)modeBody.innerHTML=ledgerTaxDepartureModeBody();ledgerSyncDepartureLens();}}
  else if(action==='ledger-tax-add'){ledgerEdit(null);const taxCheck=dlg.querySelector('[name="taxfree"]');if(taxCheck){taxCheck.checked=true;ledgerSetDependent();}}
  else if(action==='ledger-tax-next'){ledgerSelectTaxPage(ledgerTaxPage+1)}
  else if(action==='ledger-tax-prev'){ledgerSelectTaxPage(ledgerTaxPage-1)}
@@ -4987,7 +5017,7 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerStatPage():ledgerView==='detail'?ledgerDetailPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
+    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
@@ -4996,7 +5026,7 @@ function render(){
   applySwipeRows();
   syncNavGlass();
    if(st.tab==='ledger'&&ledgerView==='stats')ledgerSyncStatLens(true);
-  if(st.tab==='ledger'&&ledgerView==='tax')ledgerSyncTaxLens(true);
+  if(st.tab==='ledger'&&ledgerView==='tax'){ledgerSyncTaxLens(true);if(ledgerTaxTab==='check')ledgerSyncDepartureLens(true);}
   runItineraryEntrance();
   if(st.tab==='plan')getWxForecast(false);
   if(st.tab==='ledger')ledgerRefreshFx(false);
@@ -5519,7 +5549,7 @@ document.addEventListener('focusout',e=>{
 });
 document.addEventListener('change',e=>{
  const t=e.target;
- if(t?.dataset?.taxCheck){ledgerTaxCheck[t.dataset.taxCheck]=t.checked;SV('ledgerTaxDepartureCheckV1',ledgerTaxCheck);const body=document.getElementById('ld-tax-tab-body');if(body)body.innerHTML=ledgerTaxBody();return;}
+ if(t?.dataset?.taxCheck){const id=t.dataset.taxCheck.startsWith('item-')?t.dataset.taxCheck.slice(5):'';const entry=ledger.entries.find(x=>x.id===id);if(entry&&ledgerIsExpense(entry)&&entry.taxfree&&t.checked&&(entry.refundStatus||'待海關確認')==='待海關確認'){const old=structuredClone(ledger);entry.refundStatus='待退款';if(ledgerRemember(old)){const modeBody=document.getElementById('ld-departure-mode-body');if(modeBody)modeBody.innerHTML=ledgerTaxDepartureModeBody();showSavedToast();}}return;}
  if(t.id==='ld-category-day'){ledgerCategoryDay=t.value;const target=document.getElementById('ld-stat-body');if(target)target.innerHTML=ledgerStatBody();return;}
  if(t.matches?.('[data-ledger-inline]')){
   if(t.dataset.ledgerInline==='datetime'){
