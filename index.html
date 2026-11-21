@@ -2223,6 +2223,53 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
 .ld-subpage.ld-exiting{animation:none!important}
 .ld-bar-fill{transition:none}
 @media(max-width:360px){.ld-search-tools{grid-template-columns:minmax(0,1fr) 111px}.ld-search-tools select{font-size:10px}.ld-item.swipe-host>.swipe-face{gap:6px}.ld-inline-row{grid-template-columns:minmax(75px,32%) minmax(0,1fr);gap:6px}}
+
+/* 記帳 v4：按鈕篩選、日期分隔、幣別下拉及跟手返回 */
+.ld-heading>.shop-glass-add{position:fixed;top:auto;left:auto;right:max(19px,calc((100vw - 640px)/2 + 25px));bottom:calc(85px + var(--sb));width:49px;height:49px;z-index:85;box-shadow:0 7px 19px rgba(50,78,122,.13)}
+.ld-page>.ld-total{padding:13px 15px 11px;border-radius:17px}
+.ld-total-top{display:flex;align-items:center;justify-content:space-between;gap:9px;min-width:0}
+.ld-page>.ld-total .ld-grand{font-size:25px;line-height:1.16;margin:3px 0 4px}
+.ld-page>.ld-total p{font-size:9px;line-height:1.35;margin-top:4px}
+.ld-currency-picker{position:relative;flex:none;z-index:5}
+.ld-currency-picker summary{list-style:none;cursor:pointer;border:1px solid #cfdbea;background:#ffffffb3;border-radius:11px;padding:5px 8px;color:#536b95;display:flex;gap:5px;align-items:center;justify-content:center;min-width:54px;font-weight:800;font-size:11px}
+.ld-currency-picker summary::-webkit-details-marker{display:none}
+.ld-currency-picker summary svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ld-currency-picker[open] summary svg{transform:rotate(180deg)}
+.ld-currency-menu{position:absolute;right:0;top:calc(100% + 5px);min-width:136px;display:flex;flex-direction:column;padding:5px;border-radius:12px;border:1px solid #dae3f0;background:#fff;box-shadow:0 9px 24px #2b4e751c}
+.ld-currency-menu button{width:100%;padding:9px 10px;border:0;background:transparent;text-align:left;font-size:12px;color:#6a7b96;border-radius:8px}
+.ld-currency-menu button.on{background:#edf3fb;color:#3d567f;font-weight:800}
+.ld-search-tools{display:grid;grid-template-columns:minmax(0,1fr) 38px 38px;gap:7px;margin-bottom:9px}
+.ld-search-tools input{width:100%;min-width:0;height:38px;border-radius:11px;font-size:12px}
+.ld-tool-icon{position:relative;display:flex;align-items:center;justify-content:center;height:38px;width:38px;border:1px solid #e1e7f1;background:#fff;border-radius:11px;color:#617793;padding:0}
+.ld-tool-icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.ld-tool-icon.on{color:#3e6193;border-color:#9bb5d5;background:#edf4ff}
+.ld-tool-icon.has-active::after{content:'';position:absolute;top:4px;right:4px;width:6px;height:6px;border-radius:50%;background:#6d91c4}
+.ld-sort-btn.is-desc svg{transform:rotate(180deg)}
+.ld-filter-panel{padding:12px 11px 5px;margin:0 0 10px;background:#f2f6fc;border:1px solid #e1e8f1;border-radius:13px}
+.ld-filter-panel[hidden]{display:none!important}
+.ld-filter-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;color:#627792;font-size:11px;font-weight:800}
+.ld-filter-heading button{border:0;background:transparent;color:#6c87ad;font-size:11px;text-decoration:underline;text-underline-offset:3px;padding:3px}
+.ld-filter-panel .ld-filter-row{margin:0 0 9px}
+.ld-filter-panel .ld-filter-row button{padding:6px 11px;font-size:11px}
+.ld-filter-panel .ld-search-filters{margin-bottom:4px}
+.ld-date-divider{display:flex;align-items:center;gap:7px;margin:13px 0 0;padding:4px 1px 6px;color:#687d9c;font-size:11px;font-weight:800;min-width:0}
+.ld-date-divider:first-child{margin-top:4px}
+.ld-date-divider i{display:block;height:1px;background:#e4eaf3;flex:1;min-width:12px}
+.ld-date-divider small{white-space:nowrap;font-size:10px;font-style:normal;font-weight:600;color:#93a1b5}
+.ld-item.swipe-host>.swipe-face{padding:12px 1px;gap:7px}
+.ld-item-main{gap:0}
+.ld-item-chips span.ld-cat-chip{display:inline-flex;gap:4px;align-items:center}
+.ld-cat-chip svg.ld-category-svg{width:12px;height:12px;flex:none}
+.ld-inline-row>span{display:inline-flex;align-items:center;gap:4px}
+.ld-inline-row>span svg.ld-category-svg{width:14px;height:14px;flex:none}
+.ld-pie-key>span:nth-child(2){display:flex;align-items:center;gap:5px;min-width:0}
+.ld-pie-key svg.ld-category-svg{width:14px;height:14px;flex:none;color:#8096b6}
+/* 覆蓋全站 16px 輸入字級；聚焦時暫回 16px 避免 iPhone 自動縮放頁面。 */
+.ld-subpage .ld-inline-row input:not([type="checkbox"]),.ld-subpage .ld-inline-row textarea,.ld-subpage .ld-inline-row select{font-size:13px!important;line-height:1.45}
+.ld-subpage .ld-inline-row input:not([type="checkbox"]):focus,.ld-subpage .ld-inline-row textarea:focus,.ld-subpage .ld-inline-row select:focus{font-size:16px!important}
+.ld-subpage{touch-action:pan-y;overscroll-behavior-x:contain}
+.ld-subpage.ld-exiting{pointer-events:none}
+@media(max-width:360px){.ld-search-tools{grid-template-columns:minmax(0,1fr) 36px 36px;gap:5px}.ld-tool-icon{width:36px;height:36px}.ld-date-divider{gap:5px;font-size:10px}}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -3045,7 +3092,7 @@ function ledgerNormalize(raw){
 }
 let ledger=ledgerNormalize(LS('ledgerV1',null));
 let ledgerDay='all',ledgerTaxOnly=false,ledgerPhotoTemp='',ledgerEditorId=null;
-let ledgerSort=LS('ledgerSortV1','asc')==='desc'?'desc':'asc',ledgerSearch='',ledgerFilterCategory='',ledgerFilterPayer='',ledgerFilterMethod='',ledgerFilterCurrency='';
+let ledgerSort=LS('ledgerSortV1','asc')==='desc'?'desc':'asc',ledgerSearch='',ledgerFilterCategory='',ledgerFilterPayer='',ledgerFilterMethod='',ledgerFilterCurrency='',ledgerFiltersOpen=false;
 let ledgerView='main',ledgerDetailId=null,ledgerStatDay='2026-12-18',ledgerReturnScroll=0,ledgerPhotoLoading=false;
 let fxCalc={amount:'1000',from:'JPY',to:'TWD',result:''};
 let fxInfo={loading:false,error:'',lastAttempt:0,updated:'',rates:null};
@@ -3124,6 +3171,40 @@ function ledgerOptionList(values,current){
 function ledgerCurrencyButtons(value,action){
  return '<div class="ld-currency-row">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="'+action+'" data-v="'+code+'" class="'+(code===value?'on':'')+'">'+(code==='JPY'?'日幣':code==='TWD'?'台幣':'人民幣')+'</button>').join('')+'</div>';
 }
+// 分類使用簡約線條圖示；自訂類別使用通用標籤，不在品項左側放圖示。
+function ledgerCategoryIcon(category){
+ const paths={
+ '餐飲':'<path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M16 21V3c3.6 1.4 5 4.8 5 8v2h-5"/>',
+ '交通':'<circle cx="6" cy="5" r="2"/><path d="M6 7v4c0 2 3 2 6 2h1c3 0 5 1 5 4v2m-3-3 3 3 3-3"/>',
+ '購物':'<path d="M4 8h16l-1.3 13H5.3L4 8Zm4 0V6a4 4 0 0 1 8 0v2"/>',
+ '住宿':'<path d="M3 5v15M3 10h18v10M3 16h18M7 10V7a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3"/>',
+ '門票':'<path d="M3 8V5h18v3a3 3 0 0 0 0 6v5H3v-5a3 3 0 0 0 0-6Zm10-3v2m0 3v4m0 3v2"/>',
+ '藥品':'<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 7v10M7 12h10"/>',
+ '美妝':'<path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2ZM19 17l.7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7L19 17Z"/>',
+ '衣服':'<path d="m8 3-5 4 3 4 2-2v12h8V9l2 2 3-4-5-4c-2 3-6 3-8 0Z"/>',
+ '休閒娛樂':'<circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4V8Z"/>',
+ '其他':'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+ '自訂':'<path d="M3 4h9l9 9-8 8L3 11V4Zm4 4h.01"/>'
+ };
+ return '<svg class="ld-category-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">'+(paths[category]||paths['自訂'])+'</svg>';
+}
+function ledgerExpenseGroups(entries){
+ let html='',last=null,countByDate=new Map();
+ entries.forEach(e=>{const d=String(e.datetime||'').slice(0,10);countByDate.set(d,(countByDate.get(d)||0)+1)});
+ entries.forEach(e=>{
+  const date=String(e.datetime||'').slice(0,10);
+  if(date!==last){
+   last=date;
+   const valid=/^\d{4}-\d{2}-\d{2}$/.test(date);
+   const weekday=valid?new Intl.DateTimeFormat('zh-TW',{weekday:'short',timeZone:'UTC'}).format(new Date(date+'T12:00:00Z')):'';
+   const label=valid?date.replace(/-/g,'/')+(weekday?' · '+weekday:''):'未指定日期';
+   const type=date<'2026-12-18'?'行前':date>'2026-12-27'?'旅後':'';
+   html+='<div class="ld-date-divider"><span>'+esc(label)+'</span>'+(type?'<small>'+type+'支出</small>':'')+'<i></i><small>'+countByDate.get(date)+' 筆</small></div>';
+  }
+  html+=ledgerExpenseItem(e);
+ });
+ return html;
+}
 function ledgerExpenseItem(e){
  const category=String(e.category||'其他'),p=LEDGER_CURRENCIES.includes(e.currency)?e.currency:'JPY';
  const net=ledgerNetAmount(e,p),converted=ledgerNetAmount(e,ledger.currency);
@@ -3131,8 +3212,8 @@ function ledgerExpenseItem(e){
  const who=[e.store,String(e.datetime||'').slice(0,16).replace('T',' '),e.payer].filter(Boolean).map(esc).join(' · ');
  const payment=[e.method,e.card?'（'+e.card+'）':''].filter(Boolean).join('');
  return '<article class="ld-item" data-id="'+esc(e.id)+'" data-a="ledger-detail" role="button" tabindex="0" aria-label="查看 '+esc(e.name)+' 的記帳詳情">'+
- '<div class="ld-item-main"><span class="ld-item-symbol">'+iconSvg(e.taxfree?'bag':'receipt')+'</span>'+
- '<div class="ld-item-copy"><b>'+esc(e.name)+'</b><div class="ld-item-meta">'+who+'</div>'+(payment?'<div class="ld-item-payment">付款方式：'+esc(payment)+'</div>':'')+'<div class="ld-item-chips"><span>'+esc(category)+'</span>'+(beforeTrip?'<span class="ld-pretrip-tag">行前支出</span>':'')+(e.taxfree?'<span class="ld-tax-pill">退稅 · '+esc(e.refundStatus||'待海關確認')+'</span>':'')+'</div></div></div>'+
+ '<div class="ld-item-main">'+
+ '<div class="ld-item-copy"><b>'+esc(e.name)+'</b><div class="ld-item-meta">'+who+'</div>'+(payment?'<div class="ld-item-payment">付款方式：'+esc(payment)+'</div>':'')+'<div class="ld-item-chips"><span class="ld-cat-chip">'+ledgerCategoryIcon(category)+esc(category)+'</span>'+(beforeTrip?'<span class="ld-pretrip-tag">行前支出</span>':'')+(e.taxfree?'<span class="ld-tax-pill">退稅 · '+esc(e.refundStatus||'待海關確認')+'</span>':'')+'</div></div></div>'+
  '<div class="ld-item-right"><strong>'+ledgerMoney(net,p)+'</strong>'+(p!==ledger.currency?'<small>≈ '+ledgerMoney(converted,ledger.currency)+'</small>':'')+(e.taxfree&&String(e.refundAmount??'').trim()!==''?'<small class="ld-net-note">已扣退款</small>':'')+'</div>'+
  '<div class="ld-item-actions"><button type="button" data-a="ledger-delete" data-id="'+esc(e.id)+'">刪除</button></div></article>';
 }
@@ -3147,7 +3228,7 @@ function ledgerFilteredEntries(){
 function ledgerRefreshEntryList(){
  const rows=ledgerFilteredEntries(),list=document.getElementById('ld-entry-list'),count=document.getElementById('ld-visible-count');
  if(count)count.textContent=rows.length+' 筆';
- if(list){list.innerHTML=rows.length?rows.map(ledgerExpenseItem).join(''):'<div class="ld-empty">沒有符合搜尋條件的支出。</div>';applySwipeRows();}
+ if(list){list.innerHTML=rows.length?ledgerExpenseGroups(rows):'<div class="ld-empty">沒有符合搜尋條件的支出。</div>';applySwipeRows();}
 }
 function ledgerValidDateTime(value){
  if(!/^20\d\d-\d\d-\d\dT\d\d:\d\d$/.test(value))return false;
@@ -3170,7 +3251,7 @@ function ledgerStatPieContent(selectedDay){
   return LEDGER_CHART_COLORS[idx%LEDGER_CHART_COLORS.length]+' '+from.toFixed(3)+'% '+Math.min(100,cursor).toFixed(3)+'%';
  });
  const pie=categories.length&&pickedSum!==null&&pickedSum>0?'<div class="ld-pie" role="img" aria-label="'+esc(selectedDay+' 支出類別圓餅圖')+'" style="background:conic-gradient('+stops.join(',')+')"><div class="ld-pie-inner"><small>當日支出</small><strong>'+ledgerMoney(pickedSum,ledger.currency)+'</strong></div></div>':'<div class="ld-pie ld-pie-empty"><div class="ld-pie-inner"><small>當日支出</small><strong>'+ledgerMoney(pickedSum,ledger.currency)+'</strong></div></div>';
- const legend=categories.map(([cat,amount],idx)=>'<div class="ld-pie-key"><span class="ld-color-dot" style="background:'+LEDGER_CHART_COLORS[idx%LEDGER_CHART_COLORS.length]+'"></span><span>'+esc(cat)+'</span><strong>'+ledgerMoney(amount,ledger.currency)+'</strong><small>'+(pickedSum?Math.round(amount/pickedSum*100):0)+'%</small></div>').join('');
+ const legend=categories.map(([cat,amount],idx)=>'<div class="ld-pie-key"><span class="ld-color-dot" style="background:'+LEDGER_CHART_COLORS[idx%LEDGER_CHART_COLORS.length]+'"></span><span>'+ledgerCategoryIcon(cat)+esc(cat)+'</span><strong>'+ledgerMoney(amount,ledger.currency)+'</strong><small>'+(pickedSum?Math.round(amount/pickedSum*100):0)+'%</small></div>').join('');
  return '<div class="ld-section-head"><h3>12/'+selectedDay.slice(-2)+' 支出類別</h3><span class="ld-count">'+picked.length+' 筆</span></div>'+pie+(categories.length?'<div class="ld-pie-legend">'+legend+'</div>':'<p class="ld-empty">這一天還沒有可以統計的消費類別。</p>');
 }
 function ledgerStatPage(){
@@ -3268,7 +3349,7 @@ function ledgerDetailPage(){
   const value=e[field]??'';const content=kind==='textarea'?'<textarea rows="3" maxlength="900" data-ledger-inline="'+field+'" data-id="'+esc(e.id)+'">'+esc(value)+'</textarea>':'<input data-ledger-inline="'+field+'" data-id="'+esc(e.id)+'" type="'+kind+'"'+(kind==='number'?' min="0" step="any" inputmode="decimal"':'')+' value="'+esc(value)+'">';
   return '<label class="ld-inline-row"><span>'+esc(label)+'</span>'+content+'</label>';
  };
- const choice=(field,label,options)=>'<label class="ld-inline-row"><span>'+esc(label)+'</span>'+ledgerInlineSelect(e,field,options)+'</label>';
+ const choice=(field,label,options)=>'<label class="ld-inline-row"><span>'+(field==='category'?ledgerCategoryIcon(e.category):'')+esc(label)+'</span>'+ledgerInlineSelect(e,field,options)+'</label>';
  const rows=[inp('name','品項'),inp('datetime','記帳日期時間','datetime-local'),
  inp('amount','原始購買金額','number'),choice('currency','幣別',LEDGER_CURRENCIES),
  choice('category','類別',[...LEDGER_BASE_CATS,...ledger.categories,...ledger.entries.map(x=>x.category)]),
@@ -3308,22 +3389,26 @@ function ledgerBack(){
 }
 function ledgerSearchControls(){
  const select=(id,value,values,placeholder)=>'<select id="'+id+'" aria-label="'+placeholder+'"><option value="">'+placeholder+'</option>'+ledgerChoices(values).map(v=>'<option value="'+esc(v)+'"'+(v===value?' selected':'')+'>'+esc(v)+'</option>').join('')+'</select>';
+ const active=!!(ledgerFilterCategory||ledgerFilterPayer||ledgerFilterMethod||ledgerFilterCurrency||ledgerTaxOnly);
+ const sortLabel=ledgerSort==='asc'?'時間由早到晚，點擊改為由晚到早':'時間由晚到早，點擊改為由早到晚';
  return '<div class="ld-search-tools"><input id="ld-search" type="search" autocomplete="off" placeholder="搜尋品項、店家、備註、付款人…" aria-label="搜尋支出明細" value="'+esc(ledgerSearch)+'">'+
- '<select id="ld-sort" aria-label="支出明細排序"><option value="asc"'+(ledgerSort==='asc'?' selected':'')+'>時間由早到晚</option><option value="desc"'+(ledgerSort==='desc'?' selected':'')+'>時間由晚到早</option></select></div>'+
- '<div class="ld-search-filters">'+select('ld-filter-cat',ledgerFilterCategory,[...LEDGER_BASE_CATS,...ledger.categories,...ledger.entries.map(e=>e.category)],'所有類別')+
+ '<button class="ld-tool-icon ld-sort-btn" type="button" data-a="ledger-sort-toggle" title="'+sortLabel+'" aria-label="'+sortLabel+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 20V4m0 0L4.5 7.5M8 4l3.5 3.5M16 4v16m0 0-3.5-3.5M16 20l3.5-3.5"/></svg></button>'+ 
+ '<button class="ld-tool-icon ld-filter-trigger'+(active?' has-active':'')+(ledgerFiltersOpen?' on':'')+'" type="button" data-a="ledger-filter-toggle" aria-label="篩選條件" title="篩選條件" aria-expanded="'+ledgerFiltersOpen+'" aria-controls="ld-filter-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2"/><circle cx="15" cy="17" r="2"/></svg></button></div>'+ 
+ '<div id="ld-filter-panel" class="ld-filter-panel"'+(ledgerFiltersOpen?'':' hidden')+'><div class="ld-filter-heading">篩選條件 <button type="button" data-a="ledger-filters-clear">清除篩選</button></div><div class="ld-filter-row"><button type="button" class="'+(!ledgerTaxOnly?'on':'')+'" data-a="ledger-tax-filter" data-v="all">全部支出</button><button type="button" class="'+(ledgerTaxOnly?'on':'')+'" data-a="ledger-tax-filter" data-v="tax">只看退稅</button></div><div class="ld-search-filters">'+
+ select('ld-filter-cat',ledgerFilterCategory,[...LEDGER_BASE_CATS,...ledger.categories,...ledger.entries.map(e=>e.category)],'所有類別')+
  select('ld-filter-payer',ledgerFilterPayer,[...ledger.payers,...ledger.entries.map(e=>e.payer)],'所有付款人')+
  select('ld-filter-method',ledgerFilterMethod,LEDGER_METHODS,'所有付款方式')+
- select('ld-filter-currency',ledgerFilterCurrency,LEDGER_CURRENCIES,'所有幣別')+'</div>';
+ select('ld-filter-currency',ledgerFilterCurrency,LEDGER_CURRENCIES,'所有幣別')+'</div></div>';
 }
 function ledgerPage(){
  const filtered=ledgerFilteredEntries();
  const total=ledgerSum(ledger.entries,ledger.currency),taxRecords=ledger.entries.filter(x=>x.taxfree),taxPending=taxRecords.filter(x=>(x.refundStatus||'待海關確認')!=='已退款'&&(x.refundStatus||'')!=='不申請');
  const fxRate=ledgerHasRate()?'<span>¥1 ≈ NT$'+fxInfo.rates.TWD.toFixed(4)+' · CNY ¥'+fxInfo.rates.CNY.toFixed(4)+'</span>':'<span>尚無匯率資料，請更新後換算</span>';
  return '<div class="ld-page"><div class="ph sh-heading ld-heading"><div class="kicker">Expense Journal</div><h2>旅途記帳</h2><p>行前採購・12/18–12/27 旅途支出</p><button type="button" class="shop-glass-add" data-a="ledger-new" aria-label="新增記帳" title="新增記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
- '<section class="ld-total"><span class="ld-total-label">整趟行程總消費</span><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div>'+ledgerCurrencyButtons(ledger.currency,'ledger-currency')+'<p>已記錄 '+ledger.entries.length+' 筆 · '+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+'<br>跨幣別金額以參考匯率估算，非實際刷卡結算金額</p></section>'+
+ '<section class="ld-total"><div class="ld-total-top"><span class="ld-total-label">整趟行程總消費</span><details class="ld-currency-picker"><summary aria-label="選擇顯示幣別"><span>'+({JPY:'¥',TWD:'NT$',CNY:'CN¥'}[ledger.currency])+'</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="ld-currency-menu">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="ledger-currency" data-v="'+code+'" class="'+(code===ledger.currency?'on':'')+'">'+LEDGER_CURRENCY_LABEL[code]+'</button>').join('')+'</div></details></div><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div><p>已記錄 '+ledger.entries.length+' 筆 · '+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+'<br>跨幣別以參考匯率估算，非刷卡結算金額</p></section>'+
  '<section class="ld-panel"><div class="ld-section-head"><h3>匯率換算</h3><button type="button" class="ld-mini-link" data-a="ledger-fx-refresh">'+(fxInfo.loading?'更新中…':'⟳ 更新匯率')+'</button></div><div class="ld-rate-line">'+fxRate+'</div><div class="ld-calculator"><label>金額<input type="number" id="ld-fx-amount" min="0" step="any" inputmode="decimal" value="'+esc(fxCalc.amount)+'"></label><label>原幣<select id="ld-fx-from">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.from===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label><label>換算<select id="ld-fx-to">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.to===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label></div><div class="ld-convert-row"><button type="button" data-a="ledger-convert" class="ld-convert-btn">按最新匯率換算</button><strong class="ld-result">'+(fxCalc.result||'—')+'</strong></div><p class="ld-hint">'+(fxInfo.error?esc(fxInfo.error)+' · ':'')+'資料來源：<a href="https://frankfurter.dev/" target="_blank" rel="noopener noreferrer">Frankfurter</a>，最新可用的每日參考匯率（非即時成交報價）。</p></section>'+
  '<section class="ld-panel ld-stats-panel"><button type="button" class="ld-stat-entry" data-a="ledger-stats"><span class="ld-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V13M10 20V8M16 20V11M22 20V4"/></svg></span><span><strong>支出統計</strong><small>每日消費比較・各日類別圓餅圖</small></span><span class="ld-stat-arrow">›</span></button></section>'+
- '<section class="ld-panel ld-expense-panel"><div class="ld-section-head"><h3>支出明細</h3><span class="ld-count" id="ld-visible-count">'+filtered.length+' 筆</span></div>'+ledgerSearchControls()+'<div class="ld-filter-row"><button type="button" class="'+(!ledgerTaxOnly?'on':'')+'" data-a="ledger-tax-filter" data-v="all">全部支出</button><button type="button" class="'+(ledgerTaxOnly?'on':'')+'" data-a="ledger-tax-filter" data-v="tax">退稅明細 '+taxRecords.length+' · 待辦 '+taxPending.length+'</button></div><div id="ld-entry-list">'+ (filtered.length?filtered.map(ledgerExpenseItem).join(''):'<div class="ld-empty">沒有符合條件的支出。</div>')+'</div></section>'+
+ '<section class="ld-panel ld-expense-panel"><div class="ld-section-head"><h3>支出明細</h3><span class="ld-count" id="ld-visible-count">'+filtered.length+' 筆</span></div>'+ledgerSearchControls()+'<div id="ld-entry-list">'+ (filtered.length?ledgerExpenseGroups(filtered):'<div class="ld-empty">沒有符合條件的支出。</div>')+'</div></section>'+
  '<details class="ld-panel ld-tax-guide"><summary><strong>'+iconSvg('info')+' 日本退稅資訊（2026 新制）</strong><small>展開查看條件與離境流程</small></summary><div class="ld-tax-body"><p><b>2026 年 11 月 1 日起改為先付稅、離境後退稅。</b>符合資格旅客在免稅店先以含稅價購買，離境時經海關確認攜出後，才由店家或受託的退款服務商退款。</p><ol><li>同一免稅店同一天，免稅商品購買額合計須達 <b>未稅 ¥5,000</b>。</li><li>購物時依店家要求出示護照等資格文件，並妥善保存商品與購買紀錄。</li><li>購買日起 <b>90 天內</b>離境，在機場／港口辦理海關確認；需依要求出示護照與商品。</li><li>商品必須攜出日本；在日本已消耗的食品、化妝品等不可申請相應退稅。</li><li>退款方式、服務商、手續費及入帳時間依店家規定。不要直接將預估退款從支出扣除。</li></ol><p class="ld-tax-link"><a href="https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html" target="_blank" rel="noopener noreferrer">日本觀光廳｜退稅新制官方說明 ↗</a></p><p class="ld-hint">記帳中的「需退稅」是自行標記的待辦，不代表該商品必然符合退稅資格。</p></div></details>'+
  '<section class="ld-panel"><div class="ld-section-head"><h3>備份與匯出</h3></div><p class="ld-hint">記帳與照片只儲存在這台手機的瀏覽器，不會自動同步給旅伴。建議定期下載 JSON 備份；CSV 適合用 Excel 整理。</p><div class="ld-backup-buttons"><button type="button" data-a="ledger-export-csv">匯出 CSV</button><button type="button" data-a="ledger-export-json">下載 JSON</button><button type="button" data-a="ledger-import-open">匯入 JSON</button></div><input type="file" id="ledger-import-input" accept="application/json,.json" hidden></section>'+
  '</div>';
@@ -3467,6 +3552,9 @@ async function ledgerClick(action,data){
  else if(action==='ledger-detail-photo-remove'){const x=ledger.entries.find(x=>x.id===data.id);if(x&&confirm('移除這張明細照片嗎？')){const old=structuredClone(ledger);x.photo='';if(ledgerRemember(old))ledgerDetailRefresh();}}
  else if(action==='ledger-day'){ledgerDay=data.v;render()}
  else if(action==='ledger-tax-filter'){ledgerTaxOnly=data.v==='tax';render()}
+ else if(action==='ledger-sort-toggle'){ledgerSort=ledgerSort==='asc'?'desc':'asc';SV('ledgerSortV1',ledgerSort);ledgerRefreshEntryList();const b=document.querySelector('.ld-sort-btn');if(b){const label=ledgerSort==='asc'?'時間由早到晚，點擊改為由晚到早':'時間由晚到早，點擊改為由早到晚';b.setAttribute('aria-label',label);b.title=label;b.classList.toggle('is-desc',ledgerSort==='desc')}}
+ else if(action==='ledger-filter-toggle'){ledgerFiltersOpen=!ledgerFiltersOpen;const panel=document.getElementById('ld-filter-panel'),btn=document.querySelector('.ld-filter-trigger');if(panel)panel.hidden=!ledgerFiltersOpen;if(btn){btn.setAttribute('aria-expanded',String(ledgerFiltersOpen));btn.classList.toggle('on',ledgerFiltersOpen)}}
+ else if(action==='ledger-filters-clear'){ledgerFilterCategory='';ledgerFilterPayer='';ledgerFilterMethod='';ledgerFilterCurrency='';ledgerTaxOnly=false;render()}
  else if(action==='ledger-currency'){const old=structuredClone(ledger);ledger.currency=data.v;if(!ledgerRemember(old))return;render();ledgerRefreshFx(false)}
  else if(action==='ledger-fx-refresh'){ledgerRefreshFx(true)}
  else if(action==='ledger-convert'){
@@ -3927,16 +4015,16 @@ document.addEventListener('touchstart',e=>{
 document.addEventListener('touchmove',e=>{
  const t=ledgerSubSwipe;if(!t||!t.sub.isConnected||e.touches.length!==1)return;
  const dx=e.touches[0].clientX-t.x,dy=e.touches[0].clientY-t.y;
- if(!t.active&&Math.abs(dx)>11&&Math.abs(dx)>Math.abs(dy)*1.45)t.active=true;
+ if(!t.active&&dx>9&&dx>Math.abs(dy)*1.25)t.active=true;
  if(!t.active)return;
  if(e.cancelable)e.preventDefault();
- t.sub.style.transition='none';t.sub.style.transform='translate3d('+Math.min(innerWidth,Math.abs(dx)*.86)+'px,0,0)';
+ t.sub.style.animation='none';t.sub.style.transition='none';t.sub.style.transform='translate3d('+Math.min(innerWidth,Math.max(0,dx))+'px,0,0)';
 },{passive:false});
 document.addEventListener('touchend',e=>{
  const t=ledgerSubSwipe;ledgerSubSwipe=null;
  if(!t||!t.sub.isConnected||e.changedTouches.length!==1)return;
  const dx=e.changedTouches[0].clientX-t.x,dy=e.changedTouches[0].clientY-t.y;
- if(t.active&&Math.abs(dx)>=85&&Math.abs(dx)>Math.abs(dy)*1.45&&st.tab==='ledger'&&ledgerView!=='main')ledgerBack();
+ if(t.active&&dx>=85&&dx>Math.abs(dy)*1.25&&st.tab==='ledger'&&ledgerView!=='main')ledgerBack();
  else if(t.active){t.sub.style.transition='transform .22s ease';t.sub.style.transform='translate3d(0,0,0)';}
 },{passive:true});
 document.addEventListener('touchcancel',()=>{const t=ledgerSubSwipe;ledgerSubSwipe=null;if(t?.sub?.isConnected){t.sub.style.transition='transform .22s ease';t.sub.style.transform='translate3d(0,0,0)';}},{passive:true});
