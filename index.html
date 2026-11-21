@@ -2721,14 +2721,15 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
 
 /* 2026-11-22 | 退稅獨立全螢幕、機場確認雙模式、說明翻頁定高 */
 body.ld-tax-fullscreen-open {overflow:hidden!important;overscroll-behavior:none}
-body.ld-tax-fullscreen-open .bottom-nav{display:none!important}
+/* 返回手勢時讓下方的記帳頁（包括底部分頁）自然露出 */
+body.ld-tax-fullscreen-open .bottom-nav{display:flex}
 body.ld-tax-fullscreen-open .ld-tax-screen{
  position:fixed!important;inset:0!important;top:0!important;right:0!important;bottom:0!important;left:0!important;
  z-index:1100!important;width:100%!important;max-width:none!important;margin:0!important;
  border-radius:0!important;box-shadow:none!important;
  padding:calc(12px + env(safe-area-inset-top,0px)) max(15px,calc((100vw - 620px)/2)) calc(26px + env(safe-area-inset-bottom,0px))!important;
  min-height:100dvh;max-height:100dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
- animation:none!important;transform:none!important;background:linear-gradient(150deg,#f6f8fc,#edf3fa 74%,#f6f3fa)!important;
+ animation:none!important;transform:translate3d(0,0,0);will-change:transform;background:linear-gradient(150deg,#f6f8fc,#edf3fa 74%,#f6f3fa)!important;
 }
 .ld-departure-content{display:flex;flex-direction:column;gap:13px;min-width:0}
 .ld-departure-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));position:relative;gap:4px;padding:4px;background:#e9eef6;border-radius:16px;isolation:isolate;min-height:45px}
@@ -2784,6 +2785,43 @@ body.ld-tax-fullscreen-open .ld-tax-screen{
 
 
 body.ld-tax-fullscreen-open #hk-cloud-toggle{display:none!important}
+
+/* 2026-11-22 | 退稅離境檢查：固定分頁尺寸，步驟與退稅資訊採相同卡片語言 */
+/* 退稅全螢幕為 flex 容器，離境檢查內容較長時不得把分頁列壓縮。 */
+body.ld-tax-fullscreen-open .ld-tax-screen > .ld-sub-header,
+body.ld-tax-fullscreen-open .ld-tax-screen > .ld-tax-tabs,
+body.ld-tax-fullscreen-open .ld-tax-screen > #ld-tax-tab-body{
+  flex:0 0 auto!important;
+}
+body.ld-tax-fullscreen-open .ld-tax-screen > .ld-tax-tabs{
+  min-height:50px;
+  align-self:stretch;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+body.ld-tax-fullscreen-open .ld-tax-tabs > button{min-height:40px;height:40px;min-width:0;align-self:center;white-space:nowrap}
+body.ld-tax-fullscreen-open #ld-tax-tab-body{height:auto;min-height:0;overflow:visible}
+.ld-departure-steps{padding:13px!important}
+.ld-departure-section-head{display:flex;flex-direction:column;gap:4px;padding:1px 2px 11px}
+.ld-departure-section-head > span{font-size:10px;letter-spacing:.065em;font-weight:750;color:#839ab4}
+.ld-departure-section-head > strong{color:#405a79;font-weight:780;font-size:15px;line-height:1.45}
+.ld-departure-step-list{display:flex;flex-direction:column;gap:8px}
+.ld-departure-steps .ld-departure-step{
+  display:flex;align-items:center;gap:10px;min-width:0;
+  padding:11px 10px;border:1px solid #e7edf5;
+  background:#f6f8fc;border-radius:13px;
+}
+.ld-departure-steps .ld-departure-step+.ld-departure-step{border-top:1px solid #e7edf5}
+.ld-departure-steps .ld-departure-step-icon{
+  width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;
+  border-radius:11px;background:#e9f0f8;color:#627fa4;
+}
+.ld-departure-steps .ld-departure-step-icon svg{width:20px;height:20px;stroke-width:1.7}
+.ld-departure-steps .ld-departure-step-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.ld-departure-step-kicker{font-size:10px;line-height:1.25;letter-spacing:.035em;font-weight:750;color:#8098b3}
+.ld-departure-steps .ld-departure-step-copy strong{display:block;color:#405875;font-size:12px;line-height:1.4;font-weight:760}
+.ld-departure-steps .ld-departure-step-copy p{color:#8190a5;font-size:10.5px;line-height:1.55;margin:0;overflow-wrap:anywhere}
+@media(max-width:350px){.ld-departure-steps{padding:11px!important}.ld-departure-steps .ld-departure-step{padding:10px 9px;gap:9px}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -3983,7 +4021,7 @@ function ledgerBack(){
   panel.classList.add('ld-exiting');
   panel.style.animation='none';
   panel.style.transition='transform .24s cubic-bezier(.18,.7,.2,1), opacity .24s ease';
-  panel.style.transform='translate3d(105vw,0,0)';panel.style.opacity='0';
+  panel.style.transform='translate3d(105vw,0,0)';panel.style.opacity='1';
   setTimeout(goBack,245);
  }else goBack();
 }
@@ -4079,13 +4117,13 @@ function ledgerTaxDepartureList(){
  const wait=ledger.entries.filter(e=>ledgerIsExpense(e)&&e.taxfree&&!['已海關確認','已退款','已確認完成','不申請'].includes(e.refundStatus||''));
  const prepared=wait.filter(e=>ledgerTaxCheck['item-'+e.id]).length;
  const done=LEDGER_TAX_CHECK_ITEMS.filter(x=>ledgerTaxCheck[x[0]]).length;
- const stepMarkup=steps.map((step,i)=>'<div class="ld-departure-step"><span class="ld-departure-number">'+(i+1)+'</span><div class="ld-departure-step-copy"><strong>'+esc(step[0])+'</strong><p>'+esc(step[1])+'</p></div><span class="ld-departure-step-icon">'+iconSvg(step[2])+'</span></div>').join('');
+ const stepMarkup=steps.map((step,i)=>'<div class="ld-departure-step"><span class="ld-departure-step-icon" aria-hidden="true">'+iconSvg(step[2])+'</span><div class="ld-departure-step-copy"><span class="ld-departure-step-kicker">'+String(i+1).padStart(2,'0')+' / 03 · 離境確認</span><strong>'+esc(step[0])+'</strong><p>'+esc(step[1])+'</p></div></div>').join('');
  const urls='<div class="ld-departure-links"><a href="https://www.customs.go.jp/kaigairyoko/taxrefund/C-details.html" target="_blank" rel="noopener noreferrer">官方海關手續 '+iconSvg('externalLink')+'</a><a href="https://www.vjw.digital.go.jp/" target="_blank" rel="noopener noreferrer">Visit Japan Web '+iconSvg('externalLink')+'</a></div>';
  const result='<div class="ld-departure-results"><div class="ld-departure-result green"><strong><span>✓</span> 綠色</strong><p>海關確認完成，可依指示辦理後續託運。</p></div><div class="ld-departure-result red"><strong><span>!</span> 紅色</strong><p>帶護照與免稅商品到指定查驗區；尚未完成確認。</p></div></div>';
  const pendingList=wait.length?'<div class="ld-departure-pending-list">'+wait.map(e=>'<label class="ld-departure-pending-item"><input type="checkbox" data-tax-check="item-'+esc(e.id)+'"'+(ledgerTaxCheck['item-'+e.id]?' checked':'')+'><span><b>'+esc(e.name||'未命名品項')+'</b><small>'+esc((e.datetime||'').slice(0,10))+' · '+esc(e.store||'未填店家')+'</small></span></label>').join('')+'</div>':'<p class="ld-departure-empty">目前沒有標記為待確認的免稅支出。</p>';
  return '<div class="ld-departure-content">'+
  '<div class="ld-departure-switch" role="group" aria-label="選擇海關確認方式"><div class="ld-departure-switch-indicator'+(ledgerTaxDepartureMode==='vjw'?' vjw':'')+'" aria-hidden="true"></div><button type="button" data-a="ledger-tax-mode" data-v="kiosk" class="'+(ledgerTaxDepartureMode==='kiosk'?'on':'')+'" aria-pressed="'+(ledgerTaxDepartureMode==='kiosk')+'">海關 Kiosk</button><button type="button" data-a="ledger-tax-mode" data-v="vjw" class="'+(ledgerTaxDepartureMode==='vjw'?'on':'')+'" aria-pressed="'+(ledgerTaxDepartureMode==='vjw')+'">Visit Japan Web</button></div>'+
- '<section class="ld-panel ld-departure-steps" aria-label="'+(ledgerTaxDepartureMode==='kiosk'?'海關 Kiosk':'Visit Japan Web')+' 操作步驟">'+stepMarkup+'</section>'+
+ '<section class="ld-panel ld-departure-steps" aria-label="'+(ledgerTaxDepartureMode==='kiosk'?'海關 Kiosk':'Visit Japan Web')+' 操作步驟"><div class="ld-departure-section-head"><span>離境手續 · 3 STEPS</span><strong>完成海關確認後再託運</strong></div><div class="ld-departure-step-list">'+stepMarkup+'</div></section>'+
  (ledgerTaxDepartureMode==='vjw'?'<p class="ld-departure-airports">支援 Visit Japan Web 的機場：成田、羽田、關西、中部、福岡、<b>新千歲</b>、那霸。其他出境口請依現場指示使用 Kiosk。</p>':'')+
  result+urls+
  '<section class="ld-departure-wait"><div class="ld-departure-wait-title"><strong>待海關確認（'+wait.length+'）</strong><small>已整理 '+prepared+' / '+wait.length+' 筆</small></div><p>這裡的勾選只是個人打包紀錄，<b>不代表海關已完成確認</b>；請以官方判定結果為準。</p>'+pendingList+'</section>'+
@@ -4794,7 +4832,7 @@ document.addEventListener('keydown',e=>{
 let ledgerSubSwipe=null;
 document.addEventListener('touchstart',e=>{
  const sub=e.target.closest?.('[data-ledger-subpage]');
- if(!sub||sub.dataset.ledgerSubpage==='tax'||e.touches.length!==1||e.target.closest('input,select,textarea'))return;
+ if(!sub||e.touches.length!==1||e.target.closest('input,select,textarea'))return;
  ledgerSubSwipe={x:e.touches[0].clientX,y:e.touches[0].clientY,sub,active:false};
 },{passive:true});
 document.addEventListener('touchmove',e=>{
@@ -4949,12 +4987,12 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerStatPage():ledgerView==='detail'?ledgerDetailPage():ledgerView==='tax'?ledgerTaxPageView():ledgerPage())+'</main>';
+    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerStatPage():ledgerView==='detail'?ledgerDetailPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
   document.querySelectorAll('.bottom-nav button').forEach(b=>{const active=b.dataset.v===st.tab;b.classList.toggle('on',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
-  if(st.tab==='ledger'&&ledgerView==='main'){const scroller=app.querySelector('#ld-entry-list');if(scroller)scroller.scrollTop=ledgerListScrollTop;}
+  if(st.tab==='ledger'&&(ledgerView==='main'||ledgerView==='tax')){const scroller=app.querySelector('#ld-entry-list');if(scroller)scroller.scrollTop=ledgerListScrollTop;}
   applySwipeRows();
   syncNavGlass();
    if(st.tab==='ledger'&&ledgerView==='stats')ledgerSyncStatLens(true);
