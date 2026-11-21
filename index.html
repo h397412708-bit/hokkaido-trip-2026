@@ -2020,6 +2020,13 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
     gap:7px!important;
   }
 }
+/* 多行備註／景點介紹依照編輯時的換行顯示，不影響時間或表單排版。 */
+#app .tlw details.row .bd>p,
+#app .tlw details.row .spot-intro p,
+#app .tlw details.row .spot-intro b,
+#app .tlw details.row .transport-details p{
+ white-space:pre-wrap;overflow-wrap:anywhere;
+}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -2164,7 +2171,7 @@ const DAYS = [
       activity('18:00–20:00','飯店內晚餐','已確認在洞爺湖景乃之風度假酒店內用晚餐，實際用餐時段依飯店安排。','已預訂',{booked:true}),
       activity('20:00 後','休息・整理行李','隔天回千歲地區。','休息')
     ]},
-    {d:'26',week:'六',city:'洞爺湖 → 千歲',tone:'airport',title:'告別湖景，回到千歲',sub:'退房・JR 往南千歲・機場附近住宿',sleep:'新千歲機場附近飯店（名稱待補）',low:6000,high:10000,note:'最後一晚住機場附近，因此先比較洞爺 → 南千歲／新千歲機場的路線，不直接假定要繞去札幌。末晚飯店地址仍待補充。',items:[
+    {d:'26',week:'六',city:'洞爺湖 → 千歲',tone:'airport',title:'告別湖景，回到千歲',sub:'退房・JR 經南千歲轉往千歲・入住 JR INN 千歳',sleep:'JR INN 千歳（JR Inn Chitose）',low:6000,high:10000,note:'最後一晚住機場附近，因此先比較洞爺 → 南千歲／新千歲機場的路線，不直接假定要繞去札幌。最後一晚入住 JR INN 千歳，位於 JR 千歲站旁；洞爺搭 JR 經南千歲轉車前往千歲站。',items:[
       activity('08:00–09:00','飯店早餐','最後欣賞洞爺湖的早晨。','用餐'),
       activity('09:00–10:00','整理行李・湖景休息','預留退房時間。','準備'),
       activity('10:00–11:00','乃之風退房 → 洞爺站','道南巴士或計程車。','交通'),
@@ -2189,7 +2196,7 @@ const DAYS = [
     {date:'12/18（五）入住・12/22（二）退房',nights:'4 晚',name:'SAPPORO STREAM HOTEL',addr:'北海道札幌市中央區南4條西4丁目1-1',q:'Sapporo Stream Hotel',ok:true,detail:'連住 4 晚；位於薄野／COCONO SUSUKINO，適合札幌市區景點與購物。12/19 小樽一日遊可輕裝出發。'},
     {date:'12/22（二）入住・12/24（四）退房',nights:'2 晚',name:'第一瀧本館 Dai-ichi Takimotokan',addr:'北海道登別市登別溫泉町55',q:'Dai-ichi Takimotokan Noboribetsu',ok:true,detail:'鄰近地獄谷；12/23 已安排飯店內晚餐，12/22 晚餐與每日用餐時間可再依飯店安排確認。'},
     {date:'12/24（四）入住・12/26（六）退房',nights:'2 晚',name:'洞爺湖景乃之風度假酒店',addr:'北海道虻田郡洞爺湖町洞爺湖溫泉29-1',q:'The Lake View Toya Nonokaze Resort',ok:true,detail:'湖畔住宿；12/24、12/25 晚餐均已確認在飯店內享用，實際用餐時段依飯店安排。'},
-    {date:'12/26（六）入住・12/27（日）退房',nights:'1 晚',name:'新千歲機場附近飯店（待補）',addr:'尚未提供飯店名稱及地址',ok:false,detail:'最後一晚已預訂住宿，但尚未得知具體飯店名稱。需確認隔天航廈接駁。'}
+    {date:'12/26（六）入住・12/27（日）退房',nights:'1 晚',name:'JR INN 千歳（JR Inn Chitose）',addr:'日本北海道千歲市末廣6丁目4-4',ok:true,detail:'12/26 入住、12/27 退房，共 1 晚；位於 JR 千歲站旁，隔天可搭 JR 前往新千歲機場。',q:'JR Inn Chitose'}
   ];
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const LS=(k,f)=>{try{const v=localStorage.getItem('hk26v2_'+k);return v===null?f:JSON.parse(v)}catch(e){return f}};
@@ -2455,9 +2462,25 @@ function seedMissingTransportDurations(day){
  }
  return added;
 }
+// 12/26 舊行程標題的飯店待補提示：只有完全符合舊範本的欄位才更新，保留自訂路線。
+function upgradeLegacyFinalHotelDay(d){
+ if(String(d?.d)!=='26')return false;
+ let changed=false;
+ if(d.sleep==='新千歲機場附近飯店（名稱待補）'){
+  d.sleep='JR INN 千歳（JR Inn Chitose）';changed=true;
+ }
+ if(d.sub==='退房・JR 往南千歲・機場附近住宿'){
+  d.sub='退房・JR 經南千歲轉往千歲・入住 JR INN 千歳';changed=true;
+ }
+ if(String(d.note||'').includes('末晚飯店地址仍待補充。')){
+  d.note=d.note.replace('末晚飯店地址仍待補充。','最後一晚入住 JR INN 千歳，位於 JR 千歲站旁；洞爺搭 JR 經南千歲轉車前往千歲站。');changed=true;
+ }
+ return changed;
+}
 function migrateDays(source){
  const list=Array.isArray(source)?source:prep();
  for(const d of list){
+  upgradeLegacyFinalHotelDay(d);
   for(const a of d.items||[]){
    const key=matchBookingKey(d,a);
    if(key&&!a.bookingKey)a.bookingKey=key;
@@ -2517,8 +2540,8 @@ const DEFAULT_STAYS=hotels.map((h,i)=>({
  id:'stay_2026_'+i,name:h.name,
  checkin:['2026-12-18','2026-12-22','2026-12-24','2026-12-26'][i],
  checkout:['2026-12-22','2026-12-24','2026-12-26','2026-12-27'][i],
- address:i===3?'':h.addr,note:h.detail||'',
- mapUrl:h.q?SEARCH(h.q):''
+ address:h.addr,note:h.detail||'',
+ mapUrl:i===3?'https://maps.app.goo.gl/bf9bHL6q1myxMzRT8?g_st=ic':(h.q?SEARCH(h.q):'')
 }));
 const DEFAULT_DINING=[
  {id:'meal_2026_0',name:'小樽倉庫 No.1 啤酒釀造所',date:'2026-12-19',time:'17:30',note:'4 位成人。晚餐後搭 JR 返回札幌。',mapUrl:SEARCH('Otaru Soko No.1 Otaru')},
@@ -2527,6 +2550,29 @@ const DEFAULT_DINING=[
 let stays=LS('stays',null),dining=LS('dining',null);
 if(!Array.isArray(stays))stays=DEFAULT_STAYS.map(x=>({...x}));
 if(!Array.isArray(dining))dining=DEFAULT_DINING.map(x=>({...x}));
+// 舊版住宿清單的末晚飯店仍是「待補」：只替換該筆舊範本，不動旅伴已編輯的真實飯店。
+// 相同的條件也用於 Firebase 既有 stays 欄位，避免雲端舊資料覆蓋新飯店。
+function isLegacyFinalHotel(item){
+ if(!item||typeof item!=='object')return false;
+ const name=String(item.name||'').trim();
+ return (item.id==='stay_2026_3'||item.checkin==='2026-12-26')&&
+  (/新千歲機場附近飯店/.test(name)||/機場附近飯店.*待補/.test(name));
+}
+function upgradeLegacyFinalHotel(list){
+ if(!Array.isArray(list))return false;
+ let changed=false;
+ const latest=DEFAULT_STAYS[3];
+ for(const item of list){
+  if(!isLegacyFinalHotel(item))continue;
+  item.name=latest.name;
+  item.address=latest.address;
+  item.mapUrl=latest.mapUrl;
+  if(!item.note||/尚未得知|接駁|尚未提供|最後一晚已預訂/.test(item.note))item.note=latest.note;
+  changed=true;
+ }
+ return changed;
+}
+if(upgradeLegacyFinalHotel(stays))SV('stays',stays);
 function nightsBetween(start,end){
  if(!/^\d{4}-\d{2}-\d{2}$/.test(start||'')||!/^\d{4}-\d{2}-\d{2}$/.test(end||''))return 0;
  const a=Date.parse(start+'T00:00:00Z'),b=Date.parse(end+'T00:00:00Z');
@@ -2628,27 +2674,36 @@ const guessTransportMode=text=>{
  return '';
 };
 const transportModeFor=a=>{
- const selected=String(a.transportMode||'').trim();
- if(TRANSPORT_MODE_NAMES.includes(selected))return selected;
+ // 有設定過 transportMode 卻留空時，不再從名稱自動猜測補回。
+ if(Object.prototype.hasOwnProperty.call(a,'transportMode')){
+  const selected=String(a.transportMode||'').trim();
+  return TRANSPORT_MODE_NAMES.includes(selected)?selected:'';
+ }
  return guessTransportMode(a.title)||guessTransportMode(a.desc)||guessTransportMode(a.meta)||'其他';
 };
 const transportBadge=a=>{
  const name=transportModeFor(a);
- return '<span class="transport-mode-badge mode-'+TRANSPORT_MODE_CLASSES[name]+'" aria-label="交通工具：'+name+'">'+name+'</span>';
+ return name?'<span class="transport-mode-badge mode-'+TRANSPORT_MODE_CLASSES[name]+'" aria-label="交通工具：'+name+'">'+name+'</span>':'';
 };
 
 // 直接使用「編輯行程」的完整行程細節與費用說明，絕不以正則式截取替代。
 const transportDetails=(a,cost)=>{
- const method=String(a.desc||'').trim()||'交通方式待確認';
- const price=String(cost||'').trim()||'費用待確認';
- return '<section class="transport-details"><b>交通方式</b><p>'+esc(method)+'</p>'+(String(a.hours||'').trim()?'<b>時刻／備註</b><p>'+esc(String(a.hours).trim())+'</p>':'')+'<b>預估費用</b><p>'+esc(price)+'</p></section>';
+ const method=String(a.desc||'').trim();
+ const schedule=String(a.hours||'').trim();
+ const price=String(cost||'').trim();
+ if(!method&&!schedule&&!price)return '';
+ return '<section class="transport-details">'+
+   (method?'<b>交通方式</b><p>'+esc(method)+'</p>':'')+
+   (schedule?'<b>時刻／備註</b><p>'+esc(schedule)+'</p>':'')+
+   (price?'<b>預估費用</b><p>'+esc(price)+'</p>':'')+'</section>';
 };
 // 景點連結來源：新增的 webUrl 優先，既有景點原有的 places / OVR 連結次之。
 // 交通不產生任何跳轉連結，並保留原本的 a.places 資料供日後編輯使用。
 const itinerarySpotHref=a=>{
  if(a.kind==='交通')return '';
- const custom=safeLink(String(a.webUrl||''));
- if(custom)return custom;
+ // 有 webUrl 欄位即代表使用者已設定（空字串代表明確刪除）。
+ // 舊版沒有 webUrl 欄位的景點才回退使用原本 places 連結。
+ if(Object.prototype.hasOwnProperty.call(a,'webUrl'))return safeLink(String(a.webUrl||''))||'';
  const places=Array.isArray(a.places)?a.places:[];
  const candidate=places.find(p=>p&&typeof p==='object'&&(p.q||p.url));
  if(!candidate)return '';
@@ -3539,7 +3594,10 @@ function editDayItem(n,selectedKind){
  itineraryPhotoTemp=Array.isArray(a.photos)&&a.userPhotos?a.photos.map(ph=>({...ph})):[];
  itineraryPhotoChanged=false;
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-chooser');dlg.classList.add('itinerary-editor');
- const f=(key,label,area=false,placeholder='')=>'<label class="itinerary-edit-field">'+label+(area?'<textarea name="'+key+'" rows="3" placeholder="'+esc(placeholder)+'">'+esc(a[key]||'')+'</textarea>':'<input name="'+key+'" placeholder="'+esc(placeholder)+'" value="'+esc(a[key]||'')+'">')+'</label>';
+ const f=(key,label,area=false,placeholder='')=>{
+  const value=key==='webUrl'&&!transport&&!Object.prototype.hasOwnProperty.call(a,'webUrl')?itinerarySpotHref(a):(a[key]||'');
+  return '<label class="itinerary-edit-field">'+label+(area?'<textarea name="'+key+'" rows="3" placeholder="'+esc(placeholder)+'">'+esc(value)+'</textarea>':'<input name="'+key+'" placeholder="'+esc(placeholder)+'" value="'+esc(value)+'">')+'</label>';
+ };
  const booking='<label class="booking-status-label">訂位狀態（選填）<select name="bookingStatus" aria-label="訂位狀態（選填)">'+
   '<option value=""'+(!a.booked&&!a.pending?' selected':'')+'>不設定</option>'+
   '<option value="pending"'+(!a.booked&&a.pending?' selected':'')+'>待確認</option>'+
@@ -3549,7 +3607,7 @@ function editDayItem(n,selectedKind){
  const clockField='<label class="itinerary-edit-field itinerary-clock-field">'+(transport?'開始時間':'時間')+'<span class="itinerary-clock-picker"><span class="itinerary-clock-value">'+esc(timeValue||'選擇時間')+'</span><input name="time" type="time" aria-label="'+(transport?'開始時間':'時間')+'" value="'+esc(timeValue)+'"></span></label>';
  const titleField=f('title',transport?'交通名稱 *':'行程名稱 *',false,transport?'例如：JR 札幌 → 小樽':'例如：小樽運河散步');
  const firstRow='<div class="itinerary-form-row itinerary-time-title">'+clockField+titleField+'</div>';
- const modeField='<label class="itinerary-edit-field">交通工具<select name="transportMode" required>'+TRANSPORT_MODE_NAMES.map(mode=>'<option value="'+mode+'"'+(!adding&&transportModeFor(a)===mode?' selected':'')+'>'+mode+'</option>').join('')+'</select></label>';
+ const modeField='<label class="itinerary-edit-field">交通工具（選填）<select name="transportMode"><option value=""'+(adding||!transportModeFor(a)?' selected':'')+'>不設定</option>'+TRANSPORT_MODE_NAMES.map(mode=>'<option value="'+mode+'"'+(!adding&&transportModeFor(a)===mode?' selected':'')+'>'+mode+'</option>').join('')+'</select></label>';
  const transportLength=f('transportDuration','交通時間（選填）',false,'例如：35 分鐘');
  const spotLength=f('spotDuration','預留時間（選填）',false,'例如：90 分鐘');
  const secondRow='<div class="itinerary-form-row itinerary-mode-duration">'+(transport?modeField+transportLength:booking+spotLength)+'</div>';
@@ -3557,7 +3615,7 @@ function editDayItem(n,selectedKind){
     firstRow+secondRow+f('hours','時刻／備註（選填）')+booking+f('desc','行程細節',true,'例如：乘車地點、轉車及搭乘資訊')+f('cost','預估費用（選填）',true,'例：約 ¥1,200／人'):
     firstRow+secondRow+f('desc','行程細節',true,'當日安排與注意事項')+f('hours','營業時間（選填）')+f('cost','預估費用（選填）',true,'例如：纜車票 ¥1,800');
  dlg.innerHTML='<form class="itinerary-edit-form itinerary-edit-v2'+(transport?' transport-form':' scenic-form')+'" id="itinerary-edit-form"><h3>'+(adding?(transport?'添加交通':'添加行程'):(transport?'編輯交通':'編輯行程'))+'</h3><p class="form-sub">12/'+esc(days[st.day].d)+' · '+(transport?'交通資訊':'景點與活動資訊')+'</p>'+topFields+
- (transport?'':'<div class="itinerary-photo-section"><b>景點照片 <span id="itinerary-photo-count" style="float:right;color:#9aacc0;font-weight:500">0 / 4 張</span></b><div id="itinerary-photo-grid" class="itinerary-photo-grid"></div><label class="itinerary-photo-upload" for="itinerary-photo-file">＋ 上傳景點照片<input id="itinerary-photo-file" type="file" accept="image/*" multiple data-a="itinerary-photo"></label><p class="itinerary-photo-help">最多 4 張，上傳的照片僅儲存在目前裝置。</p></div>'+f('photoIntro','景點介紹',true,'介紹景點特色、推薦看點或體驗')+f('webUrl','網頁連結（選填）',false,'https://...'))+
+ (transport?'':'<div class="itinerary-photo-section"><b>景點照片 <span id="itinerary-photo-count" style="float:right;color:#9aacc0;font-weight:500">0 / 4 張</span></b><div id="itinerary-photo-grid" class="itinerary-photo-grid"></div><label class="itinerary-photo-upload" for="itinerary-photo-file">＋ 上傳景點照片<input id="itinerary-photo-file" type="file" accept="image/*" multiple data-a="itinerary-photo"></label><p class="itinerary-photo-help">最多 4 張，上傳的照片僅儲存在目前裝置。</p></div>'+f('photoIntro','景點介紹',true,'介紹景點特色、推薦看點或體驗')+f('webUrl','Google Maps／網頁連結（選填，可清空刪除）',false,'https://...'))+
  '<div class="fb"><button type="button" data-a="cx">取消</button><button type="submit" class="pri">'+(adding?'新增':'儲存')+'</button></div></form>';
  if(!transport)updateItineraryPhotoPreview();
  const clockInput=dlg.querySelector('input[name="time"]');
@@ -3571,7 +3629,7 @@ function editDayItem(n,selectedKind){
    // Preserve an old '09:30–11:00' range unless the user actually changes its starting clock.
    const storedTime=!adding&&newTime===displayStartTime(a.time)?a.time:newTime;
    const candidate={...a,title,time:storedTime,desc:String(fd.get('desc')||'').trim(),cost:String(fd.get('cost')||'').trim(),hours:String(fd.get('hours')||'').trim(),kind,booked:choice==='booked',pending:choice==='pending'};
-   if(transport){candidate.transportMode=TRANSPORT_MODE_NAMES.includes(String(fd.get('transportMode')||''))?String(fd.get('transportMode')):'其他';candidate.transportDuration=String(fd.get('transportDuration')||'').trim();}
+   if(transport){candidate.transportMode=TRANSPORT_MODE_NAMES.includes(String(fd.get('transportMode')||''))?String(fd.get('transportMode')):'';candidate.transportDuration=String(fd.get('transportDuration')||'').trim();}
    if(!transport){candidate.spotDuration=String(fd.get('spotDuration')||'').trim();candidate.photoIntro=String(fd.get('photoIntro')||'').trim();candidate.photoAlt=title;
      const url=String(fd.get('webUrl')||'').trim();if(url&&!safeLink(url)){alert('網頁連結請輸入 http:// 或 https:// 網址');return;}candidate.webUrl=url;
      if(itineraryPhotoChanged){candidate.photos=itineraryPhotoTemp.map(ph=>({...ph,alt:title}));candidate.userPhotos=itineraryPhotoTemp.length>0;if(!itineraryPhotoTemp.length)delete candidate.photos;}
@@ -3962,6 +4020,7 @@ function makeCloudSync(){
       return fresh;
     })};
     const seeded=seedMissingTransportDurations(copied);
+    upgradeLegacyFinalHotelDay(copied);
     days[currentIndex]=copied;
     if(seeded)itineraryBaseline[key]=json(shareDay(copied));
   }
@@ -4009,7 +4068,7 @@ function makeCloudSync(){
       }
       if(json(shareHome(key))!==serialized){
         preserveLocalBackup();
-        if(key==='stays')stays=remote[key].map(item=>({...item}));
+        if(key==='stays'){stays=remote[key].map(item=>({...item}));upgradeLegacyFinalHotel(stays);}
         else dining=remote[key].map(item=>({...item}));
         SV(key,homeValue(key));changed=true;
       }
@@ -4031,7 +4090,13 @@ function makeCloudSync(){
           const clone={...day,items:day.items.map(item=>({...item}))};
           const transportAdded=seedMissingTransportDurations(clone);
           const spotAdded=seedMissingSpotDurations(clone);
-          if(transportAdded||spotAdded)patch[key]=clone;
+          const hotelTitleUpdated=upgradeLegacyFinalHotelDay(clone);
+          if(transportAdded||spotAdded||hotelTitleUpdated)patch[key]=clone;
+        }
+        // 升級雲端舊版『新千歲機場附近飯店（待補）』，不改動其他已編輯的住宿。
+        if(Array.isArray(remote.stays)){
+          const upgraded=remote.stays.map(item=>({...item}));
+          if(upgradeLegacyFinalHotel(upgraded))patch.stays=upgraded;
         }
         if(Object.keys(patch).length)tx.set(ref,patch,{merge:true});
       });
@@ -4060,7 +4125,9 @@ function makeCloudSync(){
       exists.itinerary=snap.exists();
       applyItinerarySnapshot(snap);
       connected=true;
-      if(snap.exists()&&hasSharedTravelDurationsToBackfill(snap.data())){
+      if(snap.exists()&&(hasSharedTravelDurationsToBackfill(snap.data())||
+        (Array.isArray(snap.data()?.stays)&&snap.data().stays.some(isLegacyFinalHotel))||
+        (snap.data()?.day_26 && upgradeLegacyFinalHotelDay({...snap.data().day_26})))){
         // 先接收使用者最新資料，再以交易補上真正缺少的交通時間或景點預留時間。
         // 任何已自行填寫或刻意清空的 transportDuration／spotDuration 都不會被補回。
         backfillSharedTravelDurations();
