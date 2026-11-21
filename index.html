@@ -2332,6 +2332,62 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
 .ld-inline-date-field svg{width:16px;height:16px;fill:none;stroke:#7d8dab;stroke-width:1.75;flex:none;pointer-events:none}
 .ld-inline-date-field input[type="datetime-local"]{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;max-width:100%!important;opacity:0!important;cursor:pointer;margin:0!important;padding:0!important;z-index:2}
 .ld-inline-date-field:focus-within{border-color:#bacadd;box-shadow:0 0 0 2px #eff3f8}
+
+/* 記帳 v6：精簡欄位與每日／類別分離式統計 */
+/* 保留收入、轉帳資料，首頁不再顯示兩個摘要框 */
+.ld-page>.ld-flow-summary{display:none!important}
+/* 收支資訊：邏輯字級維持 16px 以避免 iPhone 鍵盤開啟時自動縮放，視覺縮至 90%。 */
+.ld-subpage:not(.ld-stat-screen) .ld-detail-fields .ld-inline-row input:not([type="checkbox"]):not([type="datetime-local"]),
+.ld-subpage:not(.ld-stat-screen) .ld-detail-fields .ld-inline-row textarea,
+.ld-subpage:not(.ld-stat-screen) .ld-detail-fields .ld-inline-row select{
+ font-size:16px!important;line-height:1.35!important;
+ width:111.111%!important;max-width:none!important;
+ transform:scale(.9);transform-origin:left center;
+}
+.ld-detail-fields .ld-inline-date-display{font-size:12px}
+.ld-detail-fields .ld-inline-row>span{font-size:10px}
+.ld-detail-fields .ld-inline-save-hint{font-size:10px}
+.ld-search-tools input#ld-search{font-size:10px!important;letter-spacing:0}
+.ld-search-tools input#ld-search::placeholder{font-size:10px;color:#9aa8b9}
+.ld-filter-panel{padding:9px 9px 4px}
+.ld-filter-panel .ld-filter-row button{padding:5px 8px;font-size:10px}
+.ld-filter-panel .ld-search-filters{gap:5px}
+.ld-filter-panel .ld-search-filters select{height:32px;font-size:10px;padding:0 6px;border-radius:9px}
+.ld-page .ld-calculator input,.ld-page .ld-calculator select{font-size:11px!important;color:#596c88}
+.ld-page .ld-calculator input:focus,.ld-page .ld-calculator select:focus{outline:2px solid #dce7f1!important;outline-offset:0!important;border-color:#b9cadf!important;box-shadow:0 0 0 2px #eff4fa!important}
+.ld-page .ld-calculator label{font-size:10px}
+.ld-stat-category-controls{display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:9px;margin-bottom:12px}
+.ld-category-date-picker{min-width:0;display:flex;flex-direction:column;gap:5px;color:#7f8eaa;font-size:10px;font-weight:650}
+.ld-category-date-picker select{height:34px;width:130px;max-width:50vw;border:1px solid #dce5f0;border-radius:10px;padding:0 9px;background:#f9fbff;color:#536e92;font-size:12px;font-family:inherit;outline-color:#b6c9de}
+.ld-detail-toggle{height:34px;padding:0 12px;border-radius:10px;background:#f6f9fd;border:1px solid #dce5f0;color:#647d9d;font-size:11px;font-weight:750;white-space:nowrap}
+.ld-detail-toggle.on{color:#3f6797;background:#eaf1fa;border-color:#b2c7e0}
+.ld-stat-category-panel .ld-section-head{margin-bottom:10px}
+.ld-category-detail-heading{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:15px 0 5px;padding-top:13px;border-top:1px solid #e9eef6;color:#53698b;font-size:12px;font-weight:790}
+.ld-category-detail-heading small{color:#94a2b5;font-size:10px;font-weight:500}
+.ld-category-detail-list{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.ld-category-breakdown{border:1px solid #e6ecf4;background:#f8faff;border-radius:12px;overflow:hidden}
+.ld-category-breakdown summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto auto 10px;align-items:center;gap:7px;min-height:42px;padding:10px;color:#5a7396;cursor:pointer}
+.ld-category-breakdown summary::-webkit-details-marker{display:none}
+.ld-category-breakdown-name{display:flex;align-items:center;gap:6px;min-width:0;font-size:12px;font-weight:740;overflow-wrap:anywhere}
+.ld-category-breakdown-name svg{height:15px;width:15px;flex:none}
+.ld-category-breakdown-amount{font-size:11px;font-weight:750;color:#4e6283;white-space:nowrap}
+.ld-category-breakdown summary>small{font-size:9px;white-space:nowrap;color:#92a1b6}
+.ld-breakdown-chevron{font-size:15px;line-height:1;color:#a0afc3}
+.ld-category-breakdown[open] .ld-breakdown-chevron{transform:rotate(180deg)}
+.ld-category-purchases{padding:0 10px 9px}
+.ld-category-purchase{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 3px;border-top:1px solid #e8edf5;min-width:0}
+.ld-category-purchase>span{display:flex;flex-direction:column;min-width:0;gap:3px}
+.ld-category-purchase strong{font-size:11px;color:#5d708f;overflow-wrap:anywhere}
+.ld-category-purchase small{font-size:9px;color:#9eabc0}
+.ld-category-purchase>b{font-size:11px;white-space:nowrap;color:#516b8d}
+.ld-stat-screen .ld-bar-row{cursor:default}
+@media(max-width:360px){
+ .ld-category-date-picker select{width:120px}
+ .ld-category-breakdown summary{gap:4px;padding:9px 7px}
+ .ld-category-breakdown-name{font-size:11px}
+ .ld-category-breakdown-amount{font-size:10px}
+}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -3163,6 +3219,7 @@ let ledger=ledgerNormalize(LS('ledgerV1',null));
 let ledgerDay='all',ledgerTaxOnly=false,ledgerPhotoTemp='',ledgerEditorId=null;
 let ledgerSort=LS('ledgerSortV1','asc')==='desc'?'desc':'asc',ledgerSearch='',ledgerFilterCategory='',ledgerFilterPayer='',ledgerFilterMethod='',ledgerFilterCurrency='',ledgerFiltersOpen=false;
 let ledgerView='main',ledgerDetailId=null,ledgerStatDay='2026-12-18',ledgerStatTab='daily',ledgerReturnScroll=0,ledgerPhotoLoading=false,ledgerFilterType='';
+let ledgerCategoryDay='all',ledgerCategoryDetailed=false;
 let fxCalc={amount:'1000',from:'JPY',to:'TWD',result:''};
 let fxInfo={loading:false,error:'',lastAttempt:0,updated:'',rates:null};
 const savedFx=LS('ledgerFxV1',null);
@@ -3320,18 +3377,45 @@ function ledgerStatPieFrom(entries,groupBy,title,totalLabel='總支出'){
  return '<div class="ld-section-head"><h3>'+esc(title)+'</h3><span class="ld-count">'+entries.length+' 筆</span></div>'+pie+(categories.length?'<div class="ld-pie-legend">'+legend+'</div>':'<p class="ld-empty">尚無可統計的支出資料。</p>');
 }
 function ledgerStatPieContent(selectedDay){return ledgerStatPieFrom(ledgerEntriesFor(selectedDay),'category','12/'+selectedDay.slice(-2)+' 支出類別','當日支出')}
+// 旅程的分類分析：全年程或任一天；「詳細分類」可展開每類的購買明細。
+function ledgerCategoryBreakdown(entries){
+ const groups=new Map();
+ entries.forEach(e=>{
+  const key=String(e.category||'其他'),amount=ledgerNetAmount(e,ledger.currency);
+  if(!groups.has(key))groups.set(key,{rows:[],sum:0,unknown:false});
+  const group=groups.get(key);group.rows.push(e);
+  if(amount===null)group.unknown=true;else group.sum+=amount;
+ });
+ const ordered=[...groups.entries()].sort((a,b)=>b[1].sum-a[1].sum);
+ const total=ledgerSum(entries,ledger.currency);
+ if(!ordered.length)return '<p class="ld-empty">這個日期尚無支出明細。</p>';
+ return '<div class="ld-category-detail-list">'+ordered.map(([cat,g])=>{
+  const percent=total&&total>0&&!g.unknown?Math.round(g.sum/total*100):null;
+  return '<details class="ld-category-breakdown"><summary><span class="ld-category-breakdown-name">'+ledgerCategoryIcon(cat)+esc(cat)+'</span><span class="ld-category-breakdown-amount">'+(g.unknown?'—':ledgerMoney(g.sum,ledger.currency))+'</span><small>'+g.rows.length+' 筆'+(percent===null?'':' · '+percent+'%')+'</small><span class="ld-breakdown-chevron">⌄</span></summary><div class="ld-category-purchases">'+
+   g.rows.slice().sort((a,b)=>String(a.datetime||'').localeCompare(String(b.datetime||''))).map(e=>'<div class="ld-category-purchase"><span><strong>'+esc(e.name||'未命名')+'</strong><small>'+esc(String(e.datetime||'').replace('T',' ').slice(0,16))+'</small></span><b>'+ledgerMoney(ledgerNetAmount(e,ledger.currency),ledger.currency)+'</b></div>').join('')+'</div></details>';
+ }).join('')+'</div>';
+}
+function ledgerStatCategoryView(){
+ const dates=Array.from({length:10},(_,i)=>'2026-12-'+String(18+i).padStart(2,'0'));
+ if(ledgerCategoryDay!=='all'&&!dates.includes(ledgerCategoryDay))ledgerCategoryDay='all';
+ const entries=ledgerCategoryDay==='all'?ledgerTripExpenses():ledgerEntriesFor(ledgerCategoryDay);
+ const label=ledgerCategoryDay==='all'?'全旅程支出類別':'12/'+ledgerCategoryDay.slice(-2)+' 支出類別';
+ const dropdown='<label class="ld-category-date-picker"><span>查看日期</span><select id="ld-category-day" aria-label="查看支出類別日期"><option value="all"'+(ledgerCategoryDay==='all'?' selected':'')+'>全部旅程</option>'+dates.map(day=>'<option value="'+day+'"'+(ledgerCategoryDay===day?' selected':'')+'>12/'+day.slice(-2)+'</option>').join('')+'</select></label>';
+ const detailToggle='<button type="button" data-a="ledger-category-detail-toggle" class="ld-detail-toggle'+(ledgerCategoryDetailed?' on':'')+'" aria-pressed="'+ledgerCategoryDetailed+'">'+(ledgerCategoryDetailed?'✓ ':'')+'詳細分類</button>';
+ return '<section class="ld-panel ld-stat-breakdown ld-stat-category-panel"><div class="ld-stat-category-controls">'+dropdown+detailToggle+'</div>'+ledgerStatPieFrom(entries,'category',label)+(ledgerCategoryDetailed?'<div class="ld-category-detail-heading">詳細分類 <small>點開類別可查看品項與金額</small></div>'+ledgerCategoryBreakdown(entries):'')+'</section>';
+}
 function ledgerStatBody(){
  const dates=Array.from({length:10},(_,i)=>'2026-12-'+String(18+i).padStart(2,'0'));
- if(ledgerStatTab==='category')return '<section class="ld-panel ld-stat-breakdown">'+ledgerStatPieFrom(ledgerTripExpenses(),'category','旅程支出類別')+'</section>';
+ if(ledgerStatTab==='category')return ledgerStatCategoryView();
  if(ledgerStatTab==='method')return '<section class="ld-panel ld-stat-breakdown">'+ledgerStatPieFrom(ledgerTripExpenses(),'method','旅程支出方式')+'</section>';
  const daily=dates.map(d=>({date:d,items:ledgerEntriesFor(d),sum:ledgerSum(ledgerEntriesFor(d),ledger.currency)}));
  const valid=daily.filter(d=>d.sum!==null),max=Math.max(0,...valid.map(d=>d.sum)),hasExpense=daily.some(d=>d.items.length>0);
  if(!dates.includes(ledgerStatDay))ledgerStatDay=dates[0];
- const bars=daily.map(d=>{const selected=d.date===ledgerStatDay,pct=max>0&&d.sum!==null?Math.max(d.sum>0?2:0,d.sum/max*100):0;return '<button type="button" data-a="ledger-stat-day" data-v="'+d.date+'" class="ld-bar-row'+(selected?' selected':'')+(max>0&&d.sum===max?' top-day':'')+'" aria-pressed="'+(selected?'true':'false')+'"><span class="ld-bar-date">12/'+d.date.slice(-2)+'</span><span class="ld-bar-track"><span class="ld-bar-fill" style="width:'+pct.toFixed(2)+'%"></span></span><strong>'+ledgerMoney(d.sum,ledger.currency)+'</strong></button>'}).join('');
+ const bars=daily.map(d=>{const selected=d.date===ledgerStatDay,pct=max>0&&d.sum!==null?Math.max(d.sum>0?2:0,d.sum/max*100):0;return '<div class="ld-bar-row'+(max>0&&d.sum===max?' top-day':'')+'"><span class="ld-bar-date">12/'+d.date.slice(-2)+'</span><span class="ld-bar-track"><span class="ld-bar-fill" style="width:'+pct.toFixed(2)+'%"></span></span><strong>'+ledgerMoney(d.sum,ledger.currency)+'</strong></div>'}).join('');
  const pre=ledger.entries.filter(e=>ledgerIsExpense(e)&&String(e.datetime||'').slice(0,10)<'2026-12-18');
  const post=ledger.entries.filter(e=>ledgerIsExpense(e)&&String(e.datetime||'').slice(0,10)>'2026-12-27');
- return '<section class="ld-panel ld-stat-bars"><div class="ld-section-head"><h3>每日支出</h3><span class="ld-hint">'+(hasExpense?'點選日期查看類別':'尚未有旅程支出')+'</span></div><div class="ld-bars">'+bars+'</div></section>'+
- '<section class="ld-panel ld-stat-breakdown" id="ld-stat-category">'+ledgerStatPieContent(ledgerStatDay)+'</section>'+
+ return '<section class="ld-panel ld-stat-bars"><div class="ld-section-head"><h3>每日支出</h3><span class="ld-hint">'+(hasExpense?'已按每日金額比較':'尚未有旅程支出')+'</span></div><div class="ld-bars">'+bars+'</div></section>'+
+
  (pre.length||post.length?'<section class="ld-panel ld-stat-outside"><h3 class="ld-muted-title">旅程以外的支出</h3>'+(pre.length?'<p class="ld-extra-spend">行前支出 '+pre.length+' 筆：<b>'+ledgerMoney(ledgerSum(pre,ledger.currency),ledger.currency)+'</b></p>':'')+(post.length?'<p class="ld-extra-spend">行程後支出 '+post.length+' 筆：<b>'+ledgerMoney(ledgerSum(post,ledger.currency),ledger.currency)+'</b></p>':'')+'</section>':'');
 }
 function ledgerStatPage(){
@@ -3487,7 +3571,7 @@ function ledgerPage(){
  const fxRate=ledgerHasRate()?'<span>¥1 ≈ NT$'+fxInfo.rates.TWD.toFixed(4)+' · CNY ¥'+fxInfo.rates.CNY.toFixed(4)+'</span>':'<span>尚無匯率資料，請更新後換算</span>';
  return '<div class="ld-page"><div class="ph sh-heading ld-heading"><div class="kicker">Expense Journal</div><h2>旅途記帳</h2><p>行前採購・12/18–12/27 旅途支出</p><button type="button" class="shop-glass-add" data-a="ledger-new" aria-label="新增記帳" title="新增記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
  '<section class="ld-total"><div class="ld-total-top"><span class="ld-total-label">整趟行程總消費</span><details class="ld-currency-picker"><summary aria-label="選擇顯示幣別"><span>'+({JPY:'¥',TWD:'NT$',CNY:'CN¥'}[ledger.currency])+'</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="ld-currency-menu">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="ledger-currency" data-v="'+code+'" class="'+(code===ledger.currency?'on':'')+'">'+LEDGER_CURRENCY_LABEL[code]+'</button>').join('')+'</div></details></div><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div><p>支出 '+expenseEntries.length+' 筆 · 收入 '+incomeEntries.length+' 筆 · 轉帳 '+transferEntries.length+' 筆 · '+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+'<br>跨幣別以參考匯率估算，非刷卡結算金額</p></section>'+
- '<div class="ld-flow-summary"><span>收入 <b>'+ledgerMoney(ledgerSum(incomeEntries,ledger.currency),ledger.currency)+'</b></span><span>轉帳紀錄 <b>'+ledgerMoney(ledgerSum(transferEntries,ledger.currency),ledger.currency)+'</b></span></div>'+
+
  '<section class="ld-panel"><div class="ld-section-head"><h3>匯率換算</h3><button type="button" class="ld-mini-link" data-a="ledger-fx-refresh">'+(fxInfo.loading?'更新中…':'⟳ 更新匯率')+'</button></div><div class="ld-rate-line">'+fxRate+'</div><div class="ld-calculator"><label>金額<input type="number" id="ld-fx-amount" min="0" step="any" inputmode="decimal" value="'+esc(fxCalc.amount)+'"></label><label>原幣<select id="ld-fx-from">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.from===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label><label>換算<select id="ld-fx-to">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.to===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label></div><div class="ld-convert-row"><button type="button" data-a="ledger-convert" class="ld-convert-btn">按最新匯率換算</button><strong class="ld-result">'+(fxCalc.result||'—')+'</strong></div><p class="ld-hint">'+(fxInfo.error?esc(fxInfo.error)+' · ':'')+'資料來源：<a href="https://frankfurter.dev/" target="_blank" rel="noopener noreferrer">Frankfurter</a>，最新可用的每日參考匯率（非即時成交報價）。</p></section>'+
  '<section class="ld-panel ld-stats-panel"><button type="button" class="ld-stat-entry" data-a="ledger-stats"><span class="ld-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V13M10 20V8M16 20V11M22 20V4"/></svg></span><span><strong>支出統計</strong><small>每日支出・支出類別・支出方式</small></span><span class="ld-stat-arrow">›</span></button></section>'+
  '<section class="ld-panel ld-expense-panel"><div class="ld-section-head"><h3>收支明細</h3></div>'+ledgerSearchControls()+'<div id="ld-entry-list">'+ (filtered.length?ledgerExpenseGroups(filtered):'<div class="ld-empty">沒有符合條件的支出。</div>')+'</div></section>'+
@@ -3627,6 +3711,7 @@ async function ledgerClick(action,data){
  else if(action==='ledger-detail'){ledgerOpenView('detail',data.id)}
  else if(action==='ledger-back'){ledgerBack()}
  else if(action==='ledger-stat-day'){ledgerStatSelectDay(data.v)}
+ else if(action==='ledger-category-detail-toggle'){ledgerCategoryDetailed=!ledgerCategoryDetailed;const section=document.getElementById('ld-stat-body');if(section)section.innerHTML=ledgerStatBody()}
  else if(action==='ledger-stat-tab'){ledgerStatTab=['daily','category','method'].includes(data.v)?data.v:'daily';document.querySelectorAll('.ld-stat-tabs button').forEach(b=>{const on=b.dataset.v===ledgerStatTab;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});const target=document.getElementById('ld-stat-body');if(target)target.innerHTML=ledgerStatBody()}
  else if(action==='ledger-detail-edit'){document.querySelector('[data-ledger-inline="'+data.field+'"]')?.focus()}
  else if(action==='ledger-pick-photo'){dlg.querySelector('#ld-photo-file')?.click()}
@@ -4778,6 +4863,7 @@ document.addEventListener('focusout',e=>{
 });
 document.addEventListener('change',e=>{
  const t=e.target;
+ if(t.id==='ld-category-day'){ledgerCategoryDay=t.value;const target=document.getElementById('ld-stat-body');if(target)target.innerHTML=ledgerStatBody();return;}
  if(t.matches?.('[data-ledger-inline]')){
   if(t.dataset.ledgerInline==='datetime'){
    const label=t.closest('.ld-inline-date-field')?.querySelector('.ld-inline-date-display');
