@@ -2721,15 +2721,14 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
 
 /* 2026-11-22 | 退稅獨立全螢幕、機場確認雙模式、說明翻頁定高 */
 body.ld-tax-fullscreen-open {overflow:hidden!important;overscroll-behavior:none}
-/* 返回手勢時讓下方的記帳頁（包括底部分頁）自然露出 */
-body.ld-tax-fullscreen-open .bottom-nav{display:flex}
+body.ld-tax-fullscreen-open .bottom-nav{display:none!important}
 body.ld-tax-fullscreen-open .ld-tax-screen{
  position:fixed!important;inset:0!important;top:0!important;right:0!important;bottom:0!important;left:0!important;
  z-index:1100!important;width:100%!important;max-width:none!important;margin:0!important;
  border-radius:0!important;box-shadow:none!important;
  padding:calc(12px + env(safe-area-inset-top,0px)) max(15px,calc((100vw - 620px)/2)) calc(26px + env(safe-area-inset-bottom,0px))!important;
  min-height:100dvh;max-height:100dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
- animation:none!important;transform:translate3d(0,0,0);will-change:transform;background:linear-gradient(150deg,#f6f8fc,#edf3fa 74%,#f6f3fa)!important;
+ animation:none!important;transform:none!important;background:linear-gradient(150deg,#f6f8fc,#edf3fa 74%,#f6f3fa)!important;
 }
 .ld-departure-content{display:flex;flex-direction:column;gap:13px;min-width:0}
 .ld-departure-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));position:relative;gap:4px;padding:4px;background:#e9eef6;border-radius:16px;isolation:isolate;min-height:45px}
@@ -3984,7 +3983,7 @@ function ledgerBack(){
   panel.classList.add('ld-exiting');
   panel.style.animation='none';
   panel.style.transition='transform .24s cubic-bezier(.18,.7,.2,1), opacity .24s ease';
-  panel.style.transform='translate3d(105vw,0,0)';panel.style.opacity='1';
+  panel.style.transform='translate3d(105vw,0,0)';panel.style.opacity='0';
   setTimeout(goBack,245);
  }else goBack();
 }
@@ -4795,7 +4794,7 @@ document.addEventListener('keydown',e=>{
 let ledgerSubSwipe=null;
 document.addEventListener('touchstart',e=>{
  const sub=e.target.closest?.('[data-ledger-subpage]');
- if(!sub||e.touches.length!==1||e.target.closest('input,select,textarea'))return;
+ if(!sub||sub.dataset.ledgerSubpage==='tax'||e.touches.length!==1||e.target.closest('input,select,textarea'))return;
  ledgerSubSwipe={x:e.touches[0].clientX,y:e.touches[0].clientY,sub,active:false};
 },{passive:true});
 document.addEventListener('touchmove',e=>{
@@ -4950,12 +4949,12 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerStatPage():ledgerView==='detail'?ledgerDetailPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
+    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerStatPage():ledgerView==='detail'?ledgerDetailPage():ledgerView==='tax'?ledgerTaxPageView():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
   document.querySelectorAll('.bottom-nav button').forEach(b=>{const active=b.dataset.v===st.tab;b.classList.toggle('on',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
-  if(st.tab==='ledger'&&(ledgerView==='main'||ledgerView==='tax')){const scroller=app.querySelector('#ld-entry-list');if(scroller)scroller.scrollTop=ledgerListScrollTop;}
+  if(st.tab==='ledger'&&ledgerView==='main'){const scroller=app.querySelector('#ld-entry-list');if(scroller)scroller.scrollTop=ledgerListScrollTop;}
   applySwipeRows();
   syncNavGlass();
    if(st.tab==='ledger'&&ledgerView==='stats')ledgerSyncStatLens(true);
