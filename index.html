@@ -2119,6 +2119,64 @@ dialog#dlg.itinerary-editor .itinerary-edit-v2 .itinerary-form-row input[type="t
 .wx-live-now svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8}
 @media (max-width:360px){.ld-grand{font-size:29px}.ld-panel{padding:13px}.ld-calculator{gap:5px}.ld-calculator select{font-size:12px}.ld-convert-btn{font-size:11px;padding:10px}.ld-result{font-size:14px}.ld-item-right{max-width:87px}.ld-days{gap:6px}.ld-day strong{font-size:15px}.bottom-nav span{font-size:9.5px}}
 
+/* 記帳第二版｜統計、明細及左滑操作 */
+.ld-stats-panel{padding:5px 10px}
+.ld-stat-entry{display:flex;width:100%;align-items:center;text-align:left;gap:12px;padding:13px 4px;border:0;background:transparent;color:#405577}
+.ld-stat-entry>span:nth-child(2){flex:1;min-width:0}
+.ld-stat-entry strong{display:block;font-size:15px;font-weight:800}
+.ld-stat-entry small{display:block;margin-top:5px;font-size:11px;color:#92a0b3}
+.ld-stat-arrow{font-size:27px;color:#9aaac0}
+.ld-stat-icon{display:flex;align-items:center;justify-content:center;width:43px;height:43px;border-radius:15px;background:#edf3fa;color:#6686b3}
+.ld-stat-icon svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ld-item.swipe-host{display:block!important;padding:0!important;border-top:1px solid #eef1f7;cursor:pointer}
+.ld-item.swipe-host>.swipe-face{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 12px;padding:14px 1px;background:#fff}
+.ld-item.swipe-host>.swipe-actions>button[data-a="ledger-edit"]{background:#7e9bb7!important}
+.ld-item.swipe-host>.swipe-actions>button[data-a="ledger-delete"]{background:#29394f!important}
+.ld-item .ld-pretrip-tag{background:#eaf2fc;color:#637f9d}
+.ld-item .ld-item-photo{cursor:inherit}
+.ld-subpage{animation:ld-sub-appear .22s ease both}
+@keyframes ld-sub-appear{from{opacity:.6;transform:translateX(7px)}to{opacity:1;transform:translateX(0)}}
+.ld-sub-header{display:flex;align-items:center;gap:13px;padding:14px 0 4px;color:#384d71}
+.ld-sub-header .ld-back{width:39px;height:39px;flex:none;background:#edf2fa;color:#547095;border:1px solid #dae3f1;border-radius:14px;display:flex;align-items:center;justify-content:center}
+.ld-sub-header svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ld-sub-header h2{font-size:23px;line-height:1.4;margin:1px 0 0}
+.ld-sub-header p{font-size:11px;color:#8797ac;line-height:1.5;margin:3px 0 0}
+.ld-bars{display:flex;flex-direction:column;gap:4px;padding-top:9px}
+.ld-bar-row{display:grid;grid-template-columns:45px minmax(0,1fr) 91px;gap:9px;align-items:center;border:0;background:transparent;text-align:left;padding:8px 3px;border-radius:10px;min-width:0}
+.ld-bar-row.selected{background:#eef3fa}
+.ld-bar-date{font-size:12px;font-weight:800;color:#647895}
+.ld-bar-track{height:15px;border-radius:50px;background:#eef1f7;overflow:hidden}
+.ld-bar-fill{height:100%;border-radius:50px;background:#a7bbd8;display:block;transition:width .2s ease}
+.ld-bar-row.selected .ld-bar-fill{background:#5f82b3}
+.ld-bar-row strong{text-align:right;font-size:11px;font-weight:780;color:#435779;overflow-wrap:anywhere}
+.ld-pie{height:210px;width:210px;border-radius:100%;margin:16px auto;display:flex;align-items:center;justify-content:center;background:#edf2fa}
+.ld-pie-empty{background:#eef1f7}
+.ld-pie-inner{background:#fff;height:112px;width:112px;display:flex;align-items:center;justify-content:center;flex-direction:column;border-radius:100%;text-align:center;padding:7px;box-shadow:0 0 0 2px #ffffffe8}
+.ld-pie-inner small{font-size:10px;color:#8797b1}.ld-pie-inner strong{font-size:14px;line-height:1.4;color:#455b7f;overflow-wrap:anywhere}
+.ld-pie-legend{display:flex;flex-direction:column;gap:8px}
+.ld-pie-key{display:grid;grid-template-columns:10px minmax(0,1fr) auto 35px;align-items:center;gap:9px;font-size:12px;color:#647997}
+.ld-color-dot{height:10px;width:10px;border-radius:50%}
+.ld-pie-key strong{color:#415577;font-size:12px}.ld-pie-key small{text-align:right;color:#8997ad}
+.ld-muted-title{font-size:14px;margin:0 0 10px;color:#596e90}
+.ld-extra-spend{display:flex;justify-content:space-between;gap:7px;font-size:12px;color:#536b91;margin:7px 0}
+.ld-detail-photo{padding:0;overflow:hidden;border-radius:18px;background:#eef2f9}
+.ld-detail-photo button{display:block;border:0;background:transparent;padding:0;width:100%}
+.ld-detail-photo img{width:100%;max-height:360px;object-fit:contain;display:block}
+.ld-detail-total{padding:16px 20px}
+.ld-detail-total .ld-grand{font-size:29px;margin:4px 0 0}
+.ld-detail-fields{display:flex;flex-direction:column}
+.ld-detail-field{width:100%;display:grid;grid-template-columns:95px minmax(0,1fr) 12px;align-items:center;gap:6px;padding:13px 1px;border:0;border-top:1px solid #eef1f7;background:transparent;text-align:left;color:#64748e}
+.ld-detail-field>span{font-size:11px;color:#8a97a9}
+.ld-detail-field>strong{font-size:13px;line-height:1.55;font-weight:730;color:#3f5373;white-space:pre-wrap;overflow-wrap:anywhere}
+.ld-detail-field svg{width:12px;height:15px;fill:none;stroke:#9aaac0;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ld-detail-add-photo,.ld-detail-delete{border:1px solid #d6e1ed;border-radius:14px;background:#fff;padding:13px 14px;font-size:13px;color:#59769d;font-weight:760;width:100%}
+.ld-detail-delete{color:#b77b84;border-color:#eddcde}
+#dlg.ld-dialog .ld-photo-upload{display:inline-flex;align-items:center;justify-content:center;width:auto;min-width:115px;font-family:inherit}
+#dlg.ld-dialog .ld-photo-input{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;clip-path:inset(50%)!important;pointer-events:none!important}
+@media(max-width:360px){.ld-bar-row{grid-template-columns:40px minmax(0,1fr) 75px;gap:6px}.ld-bar-row strong{font-size:10px}.ld-detail-field{grid-template-columns:80px minmax(0,1fr) 12px}}
+
+
+.ld-bar-row.top-day .ld-bar-fill{background:#7392b8}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -2928,8 +2986,8 @@ const LEDGER_CURRENCIES=['JPY','TWD','CNY'];
 const LEDGER_CURRENCY_LABEL={JPY:'日幣 JPY',TWD:'台幣 TWD',CNY:'人民幣 CNY'};
 const LEDGER_CURRENCY_SYMBOL={JPY:'¥',TWD:'NT$',CNY:'CN¥'};
 const LEDGER_METHODS=['現金','Apple Pay','LINE Pay','信用卡','Suica'];
-const LEDGER_REFUND_SERVICES=['店家自行退款','Global Blue','Planet','其他服務商'];
-const LEDGER_REFUND_METHODS=['原信用卡／金融卡','現金','電子支付／帳戶','其他'];
+const LEDGER_REFUND_SERVICES=['店家自行退款','Global Blue','JPrefund','PIE VAT','J-TaxRefund','機場 Self Tax Refund 自助機','其他服務商'];
+const LEDGER_REFUND_METHODS=['待確認','原信用卡／金融卡','現金','電子支付／帳戶','其他'];
 const LEDGER_REFUND_STATES=['待海關確認','待退款','已退款','不申請'];
 function ledgerNormalize(raw){
  const o=raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{};
@@ -2941,6 +2999,7 @@ function ledgerNormalize(raw){
 }
 let ledger=ledgerNormalize(LS('ledgerV1',null));
 let ledgerDay='all',ledgerTaxOnly=false,ledgerPhotoTemp='',ledgerEditorId=null;
+let ledgerView='main',ledgerDetailId=null,ledgerStatDay='2026-12-18',ledgerReturnScroll=0,ledgerPhotoLoading=false;
 let fxCalc={amount:'1000',from:'JPY',to:'TWD',result:''};
 let fxInfo={loading:false,error:'',lastAttempt:0,updated:'',rates:null};
 const savedFx=LS('ledgerFxV1',null);
@@ -2971,10 +3030,11 @@ function ledgerMoney(value,currency){
  return LEDGER_CURRENCY_SYMBOL[currency]+num;
 }
 function ledgerDateISO(){
- const today=japanToday();return today>='2026-12-18'&&today<='2026-12-27'?today:'2026-12-'+String(days[st.day]?.d||18).padStart(2,'0');
+ // 記帳可在旅行前購買，因此預設為當天的日本當地日期，並不鎖在旅程期間。
+ return japanToday();
 }
 function ledgerNowDateTime(){
- const d=new Date();return ledgerDateISO()+'T'+(japanToday()===ledgerDateISO()?new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Tokyo'}).format(d):'12:00');
+ const d=new Date();return ledgerDateISO()+'T'+new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Tokyo'}).format(d);
 }
 function ledgerEntriesFor(date){return ledger.entries.filter(e=>String(e.datetime||'').slice(0,10)===date)}
 function ledgerPersistAfterChange(old){if(ledgerRemember(old)){render();showSavedToast()}}
@@ -3007,33 +3067,93 @@ function ledgerOptionList(values,current){
 function ledgerCurrencyButtons(value,action){
  return '<div class="ld-currency-row">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="'+action+'" data-v="'+code+'" class="'+(code===value?'on':'')+'">'+(code==='JPY'?'日幣':code==='TWD'?'台幣':'人民幣')+'</button>').join('')+'</div>';
 }
-function ledgerDailyBlock(){
- const daysMarkup=Array.from({length:10},(_,i)=>{
-  const date='2026-12-'+String(i+18).padStart(2,'0');
-  const entries=ledgerEntriesFor(date),sum=ledgerSum(entries,ledger.currency);
-  return '<button class="ld-day'+(ledgerDay===date?' selected':'')+'" type="button" data-a="ledger-day" data-v="'+date+'" aria-pressed="'+(ledgerDay===date?'true':'false')+'"><span>12/'+(18+i)+'</span><strong>'+ledgerMoney(sum,ledger.currency)+'</strong><small>'+entries.length+' 筆</small></button>';
- });
- return '<div class="ld-section-head"><h3>每日總消費</h3><button type="button" class="ld-mini-link" data-a="ledger-day" data-v="all">'+(ledgerDay==='all'?'顯示全部':'查看全部')+'</button></div><div class="ld-days">'+daysMarkup.join('')+'</div>';
-}
 function ledgerExpenseItem(e){
  const category=String(e.category||'其他'),p=LEDGER_CURRENCIES.includes(e.currency)?e.currency:'JPY';
  const converted=ledgerConvert(Number(e.amount),p,ledger.currency);
- const sub=(e.store?esc(e.store)+' · ':'')+esc(String(e.datetime||'').slice(5,16).replace('T',' '))+(e.payer?' · '+esc(e.payer):'')+(e.method?' · '+esc(e.method)+(e.card?'（'+esc(e.card)+'）':''):'');
- return '<article class="ld-item"><div class="ld-item-main">'+(e.photo?'<button type="button" data-a="ledger-photo-view" data-id="'+esc(e.id)+'" class="ld-item-photo" aria-label="放大支出照片"><img loading="lazy" src="'+esc(e.photo)+'" alt="'+esc(e.name)+'"></button>':'<span class="ld-item-symbol">'+iconSvg(e.taxfree?'bag':'receipt')+'</span>')+
- '<div class="ld-item-copy"><b>'+esc(e.name)+'</b><div class="ld-item-meta">'+sub+'</div><div class="ld-item-chips"><span>'+esc(category)+'</span>'+(e.taxfree?'<span class="ld-tax-pill">退稅 · '+esc(e.refundStatus||'待海關確認')+'</span>':'')+'</div></div></div>'+
+ const sub=(e.store?esc(e.store)+' · ':'')+esc(String(e.datetime||'').slice(0,16).replace('T',' '))+(e.payer?' · '+esc(e.payer):'')+(e.method?' · '+esc(e.method)+(e.card?'（'+esc(e.card)+'）':''):'');
+ const beforeTrip=String(e.datetime||'').slice(0,10)<'2026-12-18';
+ return '<article class="ld-item" data-id="'+esc(e.id)+'" data-a="ledger-detail" role="button" tabindex="0" aria-label="查看 '+esc(e.name)+' 的記帳詳情">'+
+ '<div class="ld-item-main">'+(e.photo?'<span class="ld-item-photo"><img loading="lazy" src="'+esc(e.photo)+'" alt="'+esc(e.name)+'"></span>':'<span class="ld-item-symbol">'+iconSvg(e.taxfree?'bag':'receipt')+'</span>')+
+ '<div class="ld-item-copy"><b>'+esc(e.name)+'</b><div class="ld-item-meta">'+sub+'</div><div class="ld-item-chips"><span>'+esc(category)+'</span>'+(beforeTrip?'<span class="ld-pretrip-tag">行前支出</span>':'')+(e.taxfree?'<span class="ld-tax-pill">退稅 · '+esc(e.refundStatus||'待海關確認')+'</span>':'')+'</div></div></div>'+
  '<div class="ld-item-right"><strong>'+ledgerMoney(Number(e.amount),p)+'</strong>'+(p!==ledger.currency?'<small>≈ '+ledgerMoney(converted,ledger.currency)+'</small>':'')+'</div>'+
  '<div class="ld-item-actions"><button type="button" data-a="ledger-edit" data-id="'+esc(e.id)+'">編輯</button><button type="button" data-a="ledger-delete" data-id="'+esc(e.id)+'">刪除</button></div></article>';
 }
+function ledgerValidDateTime(value){
+ if(!/^20\d\d-\d\d-\d\dT\d\d:\d\d$/.test(value))return false;
+ const [day,clock]=value.split('T'),[yr,mo,dt]=day.split('-').map(Number),[h,min]=clock.split(':').map(Number);
+ const test=new Date(Date.UTC(yr,mo-1,dt));return test.getUTCFullYear()===yr&&test.getUTCMonth()===mo-1&&test.getUTCDate()===dt&&h<24&&min<60;
+}
+const LEDGER_CHART_COLORS=['#7c96bc','#aebbd9','#b5a3ca','#92b8b0','#d4b28c','#94a3bb','#d5a7b6','#87adaf','#a4b4d7','#b6bfc9','#c3adc9','#8eb4cf','#d4c49e'];
+function ledgerSubHeader(title,subtitle){
+ return '<header class="ld-sub-header"><button class="ld-back" type="button" data-a="ledger-back" aria-label="返回記帳">'+
+ '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><div><div class="kicker">Expense Journal</div><h2>'+esc(title)+'</h2>'+(subtitle?'<p>'+esc(subtitle)+'</p>':'')+'</div></header>';
+}
+function ledgerStatPage(){
+ const dates=Array.from({length:10},(_,i)=>'2026-12-'+String(18+i).padStart(2,'0'));
+ const daily=dates.map(d=>({date:d,items:ledgerEntriesFor(d),sum:ledgerSum(ledgerEntriesFor(d),ledger.currency)}));
+ const valid=daily.filter(d=>d.sum!==null),max=Math.max(0,...valid.map(d=>d.sum)),hasExpense=daily.some(d=>d.items.length>0);
+ if(!dates.includes(ledgerStatDay))ledgerStatDay=dates[0];
+ const top=Math.max(0,...valid.map(d=>d.sum));
+ const bars=daily.map(d=>{
+  const selected=d.date===ledgerStatDay,pct=max>0&&d.sum!==null?Math.max(d.sum>0?2:0,d.sum/max*100):0;
+  return '<button type="button" data-a="ledger-stat-day" data-v="'+d.date+'" class="ld-bar-row'+(selected?' selected':'')+(max>0&&d.sum===max?' top-day':'')+'" aria-pressed="'+(selected?'true':'false')+'"><span class="ld-bar-date">12/'+d.date.slice(-2)+'</span><span class="ld-bar-track"><span class="ld-bar-fill" style="width:'+pct.toFixed(2)+'%"></span></span><strong>'+ledgerMoney(d.sum,ledger.currency)+'</strong></button>';
+ }).join('');
+ const picked=ledgerEntriesFor(ledgerStatDay),pickedSum=ledgerSum(picked,ledger.currency);
+ const amounts=new Map();
+ for(const e of picked){const k=String(e.category||'其他');const val=ledgerConvert(Number(e.amount),e.currency,ledger.currency);if(val===null)continue;amounts.set(k,(amounts.get(k)||0)+val)}
+ const categories=[...amounts.entries()].filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);
+ let cursor=0;
+ const stops=categories.map(([cat,amount],idx)=>{
+  const from=cursor;cursor+=(pickedSum&&pickedSum>0?amount/pickedSum*100:0);
+  return LEDGER_CHART_COLORS[idx%LEDGER_CHART_COLORS.length]+' '+from.toFixed(3)+'% '+Math.min(100,cursor).toFixed(3)+'%';
+ });
+ const pie=categories.length&&pickedSum!==null&&pickedSum>0?'<div class="ld-pie" role="img" aria-label="'+esc(ledgerStatDay+' 支出類別圓餅圖')+'" style="background:conic-gradient('+stops.join(',')+')"><div class="ld-pie-inner"><small>當日支出</small><strong>'+ledgerMoney(pickedSum,ledger.currency)+'</strong></div></div>':'<div class="ld-pie ld-pie-empty"><div class="ld-pie-inner"><small>當日支出</small><strong>'+ledgerMoney(pickedSum,ledger.currency)+'</strong></div></div>';
+ const legend=categories.map(([cat,amount],idx)=>'<div class="ld-pie-key"><span class="ld-color-dot" style="background:'+LEDGER_CHART_COLORS[idx%LEDGER_CHART_COLORS.length]+'"></span><span>'+esc(cat)+'</span><strong>'+ledgerMoney(amount,ledger.currency)+'</strong><small>'+(pickedSum?Math.round(amount/pickedSum*100):0)+'%</small></div>').join('');
+ const pre=ledger.entries.filter(e=>String(e.datetime||'').slice(0,10)<'2026-12-18');
+ const post=ledger.entries.filter(e=>String(e.datetime||'').slice(0,10)>'2026-12-27');
+ return '<div class="ld-page ld-subpage" data-ledger-subpage="stats">'+ledgerSubHeader('支出統計','12/18–12/27 每日比較 · 左滑可返回')+
+ '<section class="ld-panel"><div class="ld-section-head"><h3>每日支出</h3><span class="ld-hint">'+(hasExpense?'點選日期查看類別':'尚未有旅程支出')+'</span></div><p class="ld-hint">每一條長度代表當天相對於最高消費日的金額。'+(top>0?'最高消費日以較深色標示。':'')+'</p><div class="ld-bars">'+bars+'</div></section>'+
+ '<section class="ld-panel"><div class="ld-section-head"><h3>12/'+ledgerStatDay.slice(-2)+' 支出類別</h3><span class="ld-count">'+picked.length+' 筆</span></div>'+pie+(categories.length?'<div class="ld-pie-legend">'+legend+'</div>':'<p class="ld-empty">這一天還沒有可以統計的消費類別。</p>')+'</section>'+
+ (pre.length||post.length?'<section class="ld-panel"><h3 class="ld-muted-title">旅程以外的支出</h3>'+(pre.length?'<p class="ld-extra-spend">行前支出 '+pre.length+' 筆：<b>'+ledgerMoney(ledgerSum(pre,ledger.currency),ledger.currency)+'</b></p>':'')+(post.length?'<p class="ld-extra-spend">行程後支出 '+post.length+' 筆：<b>'+ledgerMoney(ledgerSum(post,ledger.currency),ledger.currency)+'</b></p>':'')+'<p class="ld-hint">以上支出會列入記帳總額，但不計入 12/18–12/27 每日長條圖。</p></section>':'')+
+ (!ledgerHasRate()?'<p class="ld-hint">如有不同幣別的明細，請返回記帳更新參考匯率，以完成跨幣別統計。</p>':'')+'</div>';
+}
+function ledgerDetailPage(){
+ const e=ledger.entries.find(x=>x.id===ledgerDetailId);
+ if(!e){ledgerView='main';ledgerDetailId=null;return ledgerPage()}
+ const fields=[
+ ['品項','name',e.name],['記帳日期時間','datetime',String(e.datetime||'').replace('T',' ')],['金額','amount',ledgerMoney(Number(e.amount),e.currency)],
+ ['幣別','currency',LEDGER_CURRENCY_LABEL[e.currency]||e.currency],['類別','category',e.category],['付款人','payer',e.payer],
+ ['付款方式','method',e.method],['使用卡片','card',e.card],['店家／地點','store',e.store],['備註','note',e.note],
+ ['免稅購買','taxfree',e.taxfree?'是':'否']
+ ];
+ if(e.taxfree)fields.push(['退款服務商','refundProvider',e.refundProvider==='其他服務商'?(e.refundProviderCustom||'其他服務商'):(e.refundProvider||'')],['退款方式','refundMethod',e.refundMethod],['退稅進度','refundStatus',e.refundStatus||'待海關確認'],['實際退款金額','refundAmount',e.refundAmount?ledgerMoney(Number(e.refundAmount),'JPY'):'尚未填寫']);
+ const rows=fields.map(([label,field,val])=>'<button type="button" class="ld-detail-field" data-a="ledger-detail-edit" data-id="'+esc(e.id)+'" data-field="'+esc(field)+'"><span>'+esc(label)+'</span><strong>'+esc(String(val||'未填寫'))+'</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 7 7-7 7"/></svg></button>').join('');
+ return '<div class="ld-page ld-subpage" data-ledger-subpage="detail">'+ledgerSubHeader('明細詳情','點選任一細項即可編輯 · 左滑返回')+
+ (e.photo?'<section class="ld-detail-photo"><button type="button" data-a="ledger-photo-view" data-id="'+esc(e.id)+'" aria-label="放大支出照片"><img src="'+esc(e.photo)+'" alt="'+esc(e.name)+' 的照片"></button></section>':'')+
+ '<section class="ld-total ld-detail-total"><span class="ld-total-label">'+esc(e.category||'其他')+'</span><div class="ld-grand">'+ledgerMoney(Number(e.amount),e.currency)+'</div><p>'+esc(String(e.datetime||'').replace('T',' '))+'</p></section>'+
+ '<section class="ld-panel"><div class="ld-section-head"><h3>支出資訊</h3><button type="button" class="ld-mini-link" data-a="ledger-edit" data-id="'+esc(e.id)+'">編輯全部</button></div><div class="ld-detail-fields">'+rows+'</div></section>'+
+ (!e.photo?'<button type="button" class="ld-detail-add-photo" data-a="ledger-detail-edit" data-id="'+esc(e.id)+'" data-field="photo">＋ 上傳明細照片</button>':'<button type="button" class="ld-detail-add-photo" data-a="ledger-detail-edit" data-id="'+esc(e.id)+'" data-field="photo">更換／移除照片</button>')+
+ '<button type="button" class="ld-detail-delete" data-a="ledger-delete" data-id="'+esc(e.id)+'">刪除此筆支出</button></div>';
+}
+function ledgerOpenView(view,id=''){
+ ledgerReturnScroll=window.scrollY||0;
+ ledgerView=view;ledgerDetailId=view==='detail'?id:null;
+ render();window.scrollTo(0,0);
+}
+function ledgerBack(){
+ ledgerView='main';ledgerDetailId=null;
+ render();requestAnimationFrame(()=>window.scrollTo(0,ledgerReturnScroll));
+}
 function ledgerPage(){
- const all=ledger.entries.slice().sort((a,b)=>String(b.datetime||'').localeCompare(String(a.datetime||'')));
- const filtered=all.filter(e=>(ledgerDay==='all'||String(e.datetime||'').startsWith(ledgerDay))&&(!ledgerTaxOnly||e.taxfree));
+ const all=ledger.entries.slice().sort((a,b)=>String(a.datetime||'').localeCompare(String(b.datetime||''))||String(a.id||'').localeCompare(String(b.id||'')));
+ const filtered=all.filter(e=>!ledgerTaxOnly||e.taxfree);
  const total=ledgerSum(ledger.entries,ledger.currency),taxRecords=ledger.entries.filter(x=>x.taxfree),taxPending=taxRecords.filter(x=>(x.refundStatus||'待海關確認')!=='已退款'&&(x.refundStatus||'')!=='不申請');
  const fxRate=ledgerHasRate()?'<span>¥1 ≈ NT$'+fxInfo.rates.TWD.toFixed(4)+' · CNY ¥'+fxInfo.rates.CNY.toFixed(4)+'</span>':'<span>尚無匯率資料，請更新後換算</span>';
- return '<div class="ld-page"><div class="ph sh-heading ld-heading"><div class="kicker">Expense Journal</div><h2>旅途記帳</h2><p>2026.12.18 — 12.27 · 每一筆旅行開銷</p><button type="button" class="shop-glass-add" data-a="ledger-new" aria-label="新增記帳" title="新增記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
+ return '<div class="ld-page"><div class="ph sh-heading ld-heading"><div class="kicker">Expense Journal</div><h2>旅途記帳</h2><p>行前採購・12/18–12/27 旅途支出</p><button type="button" class="shop-glass-add" data-a="ledger-new" aria-label="新增記帳" title="新增記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
  '<section class="ld-total"><span class="ld-total-label">整趟行程總消費</span><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div>'+ledgerCurrencyButtons(ledger.currency,'ledger-currency')+'<p>已記錄 '+ledger.entries.length+' 筆 · '+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+'<br>跨幣別金額以參考匯率估算，非實際刷卡結算金額</p></section>'+
  '<section class="ld-panel"><div class="ld-section-head"><h3>匯率換算</h3><button type="button" class="ld-mini-link" data-a="ledger-fx-refresh">'+(fxInfo.loading?'更新中…':'⟳ 更新匯率')+'</button></div><div class="ld-rate-line">'+fxRate+'</div><div class="ld-calculator"><label>金額<input type="number" id="ld-fx-amount" min="0" step="any" inputmode="decimal" value="'+esc(fxCalc.amount)+'"></label><label>原幣<select id="ld-fx-from">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.from===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label><label>換算<select id="ld-fx-to">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.to===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label></div><div class="ld-convert-row"><button type="button" data-a="ledger-convert" class="ld-convert-btn">按最新匯率換算</button><strong class="ld-result">'+(fxCalc.result||'—')+'</strong></div><p class="ld-hint">'+(fxInfo.error?esc(fxInfo.error)+' · ':'')+'資料來源：<a href="https://frankfurter.dev/" target="_blank" rel="noopener noreferrer">Frankfurter</a>，最新可用的每日參考匯率（非即時成交報價）。</p></section>'+
- '<section class="ld-panel">'+ledgerDailyBlock()+'</section>'+
- '<section class="ld-panel"><div class="ld-section-head"><h3>支出明細</h3><span class="ld-count">'+filtered.length+' 筆</span></div><div class="ld-filter-row"><button type="button" class="'+(!ledgerTaxOnly?'on':'')+'" data-a="ledger-tax-filter" data-v="all">全部支出</button><button type="button" class="'+(ledgerTaxOnly?'on':'')+'" data-a="ledger-tax-filter" data-v="tax">退稅明細 '+taxRecords.length+' · 待辦 '+taxPending.length+'</button></div>'+ (filtered.length?filtered.map(ledgerExpenseItem).join(''):'<div class="ld-empty">目前沒有符合條件的支出。<br>點右上角「＋」新增第一筆記帳。</div>')+'</section>'+
+ '<section class="ld-panel ld-stats-panel"><button type="button" class="ld-stat-entry" data-a="ledger-stats"><span class="ld-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V13M10 20V8M16 20V11M22 20V4"/></svg></span><span><strong>支出統計</strong><small>每日消費比較・各日類別圓餅圖</small></span><span class="ld-stat-arrow">›</span></button></section>'+
+ '<section class="ld-panel"><div class="ld-section-head"><h3>支出明細</h3><span class="ld-count">'+filtered.length+' 筆 · 依時間由早到晚</span></div><div class="ld-filter-row"><button type="button" class="'+(!ledgerTaxOnly?'on':'')+'" data-a="ledger-tax-filter" data-v="all">全部支出</button><button type="button" class="'+(ledgerTaxOnly?'on':'')+'" data-a="ledger-tax-filter" data-v="tax">退稅明細 '+taxRecords.length+' · 待辦 '+taxPending.length+'</button></div>'+ (filtered.length?filtered.map(ledgerExpenseItem).join(''):'<div class="ld-empty">目前沒有符合條件的支出。<br>點右上角「＋」新增第一筆記帳。</div>')+'</section>'+
  '<details class="ld-panel ld-tax-guide"><summary><strong>'+iconSvg('info')+' 日本退稅資訊（2026 新制）</strong><small>展開查看條件與離境流程</small></summary><div class="ld-tax-body"><p><b>2026 年 11 月 1 日起改為先付稅、離境後退稅。</b>符合資格旅客在免稅店先以含稅價購買，離境時經海關確認攜出後，才由店家或受託的退款服務商退款。</p><ol><li>同一免稅店同一天，免稅商品購買額合計須達 <b>未稅 ¥5,000</b>。</li><li>購物時依店家要求出示護照等資格文件，並妥善保存商品與購買紀錄。</li><li>購買日起 <b>90 天內</b>離境，在機場／港口辦理海關確認；需依要求出示護照與商品。</li><li>商品必須攜出日本；在日本已消耗的食品、化妝品等不可申請相應退稅。</li><li>退款方式、服務商、手續費及入帳時間依店家規定。不要直接將預估退款從支出扣除。</li></ol><p class="ld-tax-link"><a href="https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html" target="_blank" rel="noopener noreferrer">日本觀光廳｜退稅新制官方說明 ↗</a></p><p class="ld-hint">記帳中的「需退稅」是自行標記的待辦，不代表該商品必然符合退稅資格。</p></div></details>'+
  '<section class="ld-panel"><div class="ld-section-head"><h3>備份與匯出</h3></div><p class="ld-hint">記帳與照片只儲存在這台手機的瀏覽器，不會自動同步給旅伴。建議定期下載 JSON 備份；CSV 適合用 Excel 整理。</p><div class="ld-backup-buttons"><button type="button" data-a="ledger-export-csv">匯出 CSV</button><button type="button" data-a="ledger-export-json">下載 JSON</button><button type="button" data-a="ledger-import-open">匯入 JSON</button></div><input type="file" id="ledger-import-input" accept="application/json,.json" hidden></section>'+
  '</div>';
@@ -3055,18 +3175,19 @@ function ledgerSetDependent(){
  const provider=dlg.querySelector('[name="refundProvider"]');
  if(provider){const f=dlg.querySelector('[data-custom-for="refundProvider"]');if(f)f.hidden=provider.value!=='其他服務商'}
 }
-function ledgerEdit(id){
+function ledgerEdit(id,focusField=''){
  const entry=ledger.entries.find(e=>e.id===id),adding=!entry;
  const a=entry||{id:'',name:'',datetime:ledgerNowDateTime(),category:'餐飲',amount:'',currency:'JPY',payer:'',method:'現金',card:'',store:'',note:'',taxfree:false,refundProvider:'店家自行退款',refundMethod:'原信用卡／金融卡',refundStatus:'待海關確認',refundAmount:'',photo:''};
  ledgerEditorId=entry?.id||null;ledgerPhotoTemp=a.photo||'';
  const cats=ledgerChoices([...LEDGER_BASE_CATS,...ledger.categories,...ledger.entries.map(x=>x.category)]);
  const payers=ledgerChoices([...ledger.payers,...ledger.entries.map(x=>x.payer)]);
  const cards=ledgerChoices([...ledger.cards,...ledger.entries.map(x=>x.card)]);
- const opt=(key,value,opts)=>'<label class="ld-field">'+key+'<select name="'+value+'">'+opts.map(x=>'<option value="'+esc(x)+'"'+(x===a[value]?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select></label>';
+ const opt=(key,value,opts)=>'<label class="ld-field">'+key+'<select name="'+value+'">'+ledgerChoices([...opts,a[value]]).map(x=>'<option value="'+esc(x)+'"'+(x===a[value]?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select></label>';
+ const knownProvider=LEDGER_REFUND_SERVICES.includes(a.refundProvider),providerSelected=knownProvider?a.refundProvider:'其他服務商',providerCustom=knownProvider?a.refundProviderCustom:(a.refundProviderCustom||a.refundProvider||'');
  dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-chooser');dlg.classList.add('ld-dialog');
  dlg.innerHTML='<form id="ld-editor"><h3>'+(adding?'新增記帳':'編輯記帳')+'</h3><p class="ld-editor-sub">所有資料保存在這台裝置，可隨時備份</p>'+
  '<label class="ld-field">品項 *<input name="name" maxlength="160" required placeholder="例如：小樽午餐" value="'+esc(a.name)+'"></label>'+
- '<label class="ld-field">記帳日期與時間<input name="datetime" type="datetime-local" min="2026-12-18T00:00" max="2026-12-27T23:59" required value="'+esc(a.datetime)+'"></label>'+
+ '<label class="ld-field">記帳日期與時間<input name="datetime" type="datetime-local" required value="'+esc(a.datetime)+'"></label>'+
  ledgerCustomSelect('category','類別 *',cats,a.category,'新增類別名稱')+
  '<div class="ld-form-two"><label class="ld-field">金額 *<input name="amount" type="number" inputmode="decimal" min="0" step="any" required placeholder="0" value="'+esc(a.amount)+'"></label>'+opt('幣別','currency',LEDGER_CURRENCIES)+'</div>'+
  ledgerCustomSelect('payer','付款人',payers,a.payer,'新增付款人名稱')+
@@ -3074,22 +3195,22 @@ function ledgerEdit(id){
  '<div id="ld-card-wrap">'+ledgerCustomSelect('card','使用卡片',cards,a.card,'新增卡片暱稱（例如：國泰 VISA）')+'</div>'+
  '<label class="ld-field">店家／地點<input name="store" maxlength="180" placeholder="例如：札幌車站" value="'+esc(a.store||'')+'"></label>'+
  '<label class="ld-field">備註<textarea name="note" rows="2" maxlength="900" placeholder="可以記下收據、分帳資訊…">'+esc(a.note||'')+'</textarea></label>'+
- '<div class="ld-photo-line"><div class="ld-photo-preview" id="ld-photo-preview"></div><div><label class="ld-photo-upload">上傳照片<input type="file" data-a="ledger-photo-file" accept="image/*" id="ld-photo-file" hidden></label><small>照片會縮小後儲存在本機</small><button type="button" data-a="ledger-photo-remove" class="ld-photo-remove">移除照片</button></div></div>'+
+ '<div class="ld-photo-line"><div class="ld-photo-preview" id="ld-photo-preview"></div><div><button type="button" data-a="ledger-pick-photo" class="ld-photo-upload">選取／上傳照片</button><input type="file" data-ledger-file="photo" accept="image/*,.heic,.heif" id="ld-photo-file" class="ld-photo-input" aria-label="選擇支出照片"><small id="ld-photo-hint">照片會縮小後儲存在本機</small><button type="button" data-a="ledger-photo-remove" class="ld-photo-remove">移除照片</button></div></div>'+
  '<label class="ld-tax-toggle"><input type="checkbox" name="taxfree" '+(a.taxfree?'checked':'')+'><span>免稅購買／需要退稅</span></label>'+
  '<div id="ld-tax-fields" class="ld-tax-editor">'+
  '<p class="ld-hint">2026 新制先付含稅價，離境海關確認後才退款。實際服務商請依店家收據填寫。</p>'+
- '<label class="ld-field">退款服務商<select name="refundProvider">'+LEDGER_REFUND_SERVICES.map(x=>'<option value="'+esc(x)+'"'+(a.refundProvider===x?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select></label>'+
- '<label class="ld-field ld-custom" data-custom-for="refundProvider" hidden>其他退款服務商<input name="refundProviderCustom" maxlength="100" value="'+esc(a.refundProviderCustom||'')+'" placeholder="自行輸入服務商"></label>'+
+ '<label class="ld-field">退款服務商<select name="refundProvider">'+LEDGER_REFUND_SERVICES.map(x=>'<option value="'+esc(x)+'"'+(providerSelected===x?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select></label>'+
+ '<label class="ld-field ld-custom" data-custom-for="refundProvider" hidden>其他退款服務商<input name="refundProviderCustom" maxlength="100" value="'+esc(providerCustom||'')+'" placeholder="自行輸入服務商"></label>'+
  opt('退款方式','refundMethod',LEDGER_REFUND_METHODS)+opt('退稅進度','refundStatus',LEDGER_REFUND_STATES)+
  '<label class="ld-field">實際退款金額（JPY，可不填）<input type="number" name="refundAmount" inputmode="decimal" step="any" min="0" placeholder="尚未退款可留空" value="'+esc(a.refundAmount??'')+'"></label></div>'+
  '<div class="fb"><button type="button" data-a="ledger-cancel">取消</button><button type="submit" class="pri">'+(adding?'新增記帳':'儲存修改')+'</button></div></form>';
  ledgerSetDependent();ledgerUpdatePhotoPreview();
  dlg.querySelector('form').onsubmit=e=>{
-  e.preventDefault();const fd=new FormData(e.target);
+  e.preventDefault();if(ledgerPhotoLoading){alert('照片正在處理，請完成後再儲存');return}const fd=new FormData(e.target);
   const get=k=>String(fd.get(k)||'').trim();
   const getCustom=k=>get(k)==='__new__'?get(k+'Custom'):get(k);
   const name=get('name'),amount=Number(get('amount')),datetime=get('datetime');
-  if(!name||!Number.isFinite(amount)||amount<0||!/^2026-12-(1[89]|2[0-7])T\d\d:\d\d$/.test(datetime)){alert('請確認品項、日期與金額；日期需在 12/18–12/27 之間');return}
+  if(!name||!Number.isFinite(amount)||amount<0||!ledgerValidDateTime(datetime)){alert('請確認品項、日期與金額，日期時間需為有效日期');return}
   const category=getCustom('category'),payer=getCustom('payer'),card=getCustom('card');
   if(!category){alert('請選擇或輸入類別');return}
   if(get('payer')==='__new__'&&!payer){alert('請填寫新增付款人的名稱');return}
@@ -3107,6 +3228,10 @@ function ledgerEdit(id){
   dlg.close();ledgerPhotoTemp='';render();showSavedToast();
  };
  useAddBottomSheet();openEditorDialogNoKeyboard();
+ if(focusField){requestAnimationFrame(()=>{
+  const element=dlg.querySelector('[name="'+focusField+'"]')||dlg.querySelector('#ld-photo-file');
+  if(element){element.scrollIntoView({block:'center',behavior:'smooth'});if(element.tagName!=='INPUT'||element.type!=='file')element.focus({preventScroll:true});}
+ });}
 }
 function ledgerUpdatePhotoPreview(){
  const p=dlg.querySelector('#ld-photo-preview');if(!p)return;
@@ -3116,14 +3241,20 @@ async function ledgerReadPhoto(file){
  if(!file)return;
  if(!file.type.startsWith('image/')&&!/\.(jpg|jpeg|png|webp|heic|heif)$/i.test(file.name)){alert('請選擇圖片檔');return}
  if(file.size>35*1024*1024){alert('請選擇 35 MB 以下的圖片');return}
+ ledgerPhotoLoading=true;
+ const hint=dlg.querySelector('#ld-photo-hint'),save=dlg.querySelector('#ld-editor [type="submit"]');
+ if(hint)hint.textContent='正在處理照片…';if(save)save.disabled=true;
  const url=URL.createObjectURL(file),img=new Image();
  try{
   await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=url});
-  const scale=Math.min(1,750/Math.max(img.naturalWidth,img.naturalHeight));
+  const scale=Math.min(1,1100/Math.max(img.naturalWidth,img.naturalHeight));
   const c=document.createElement('canvas');c.width=Math.max(1,Math.floor(img.naturalWidth*scale));c.height=Math.max(1,Math.floor(img.naturalHeight*scale));
-  const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);
-  ledgerPhotoTemp=c.toDataURL('image/jpeg',.68);ledgerUpdatePhotoPreview();
- }catch(err){alert('無法讀取這張照片，建議換用 JPG 或 PNG')}finally{URL.revokeObjectURL(url)}
+  const ctx=c.getContext('2d');if(!ctx)throw Error('canvas unavailable');ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);
+  const result=c.toDataURL('image/jpeg',.73);if(!result.startsWith('data:image/jpeg'))throw Error('encoding failed');
+  ledgerPhotoTemp=result;ledgerUpdatePhotoPreview();
+  if(hint)hint.textContent='已選擇：'+file.name+' · 將隨記帳一起儲存';
+ }catch(err){if(hint)hint.textContent='照片讀取失敗';alert('無法讀取這張照片，請改用 JPG 或 PNG 照片')}
+ finally{URL.revokeObjectURL(url);ledgerPhotoLoading=false;if(save)save.disabled=false;}
 }
 function ledgerDownload(filename,content,mime){
  const blob=new Blob([content],{type:mime}),url=URL.createObjectURL(blob),link=document.createElement('a');
@@ -3133,7 +3264,7 @@ function ledgerExportJSON(){ledgerDownload('北海道旅誌_記帳備份_2026.js
 function ledgerExportCSV(){
  const headings=['品項','日期時間','類別','金額','幣別','付款人','付款方式','卡片','店家／地點','備註','免稅購買','退款服務商','服務商自訂','退款方式','退稅進度','實際退款 JPY'];
  const quote=v=>'"'+String(v??'').replace(/"/g,'""').replace(/^[=+\-@\t\r]/,s=>"'"+s)+'"';
- const rows=ledger.entries.map(e=>[e.name,e.datetime,e.category,e.amount,e.currency,e.payer,e.method,e.card,e.store,e.note,e.taxfree?'是':'否',e.refundProvider,e.refundProviderCustom,e.refundMethod,e.refundStatus,e.refundAmount].map(quote).join(','));
+ const rows=ledger.entries.slice().sort((a,b)=>String(a.datetime||'').localeCompare(String(b.datetime||''))).map(e=>[e.name,e.datetime,e.category,e.amount,e.currency,e.payer,e.method,e.card,e.store,e.note,e.taxfree?'是':'否',e.refundProvider,e.refundProviderCustom,e.refundMethod,e.refundStatus,e.refundAmount].map(quote).join(','));
  ledgerDownload('北海道旅誌_記帳明細_2026.csv','\uFEFF'+[headings.map(quote).join(','),...rows].join('\r\n'),'text/csv;charset=utf-8');
 }
 async function ledgerImportJSON(file){
@@ -3145,15 +3276,21 @@ async function ledgerImportJSON(file){
   const next=ledgerNormalize(payload.ledger);
   if(next.entries.some(e=>!e.id||!LEDGER_CURRENCIES.includes(e.currency)||!Number.isFinite(Number(e.amount))||Number(e.amount)<0))throw Error('invalid entries');
   if(!confirm('確定匯入 '+next.entries.length+' 筆記帳？這會取代目前記帳清單、付款人與自訂類別。建議先下載現有 JSON 備份。'))return;
-  const old=ledger;ledger=next;if(ledgerRemember(old)){ledgerDay='all';ledgerTaxOnly=false;render();alert('匯入完成，共 '+ledger.entries.length+' 筆記帳')}
+  const old=ledger;ledger=next;if(ledgerRemember(old)){ledgerDay='all';ledgerTaxOnly=false;ledgerView='main';ledgerDetailId=null;render();alert('匯入完成，共 '+ledger.entries.length+' 筆記帳')}
  }catch(err){alert('匯入失敗：僅支援本 App 匯出的 JSON 記帳備份，請確認檔案是否完整。')}
 }
 async function ledgerClick(action,data){
  if(action==='ledger-new'){ledgerEdit(null)}
+ else if(action==='ledger-stats'){ledgerOpenView('stats')}
+ else if(action==='ledger-detail'){ledgerOpenView('detail',data.id)}
+ else if(action==='ledger-back'){ledgerBack()}
+ else if(action==='ledger-stat-day'){ledgerStatDay=data.v;render()}
+ else if(action==='ledger-detail-edit'){ledgerEdit(data.id,data.field)}
+ else if(action==='ledger-pick-photo'){dlg.querySelector('#ld-photo-file')?.click()}
  else if(action==='ledger-edit'){ledgerEdit(data.id)}
  else if(action==='ledger-delete'){
   const row=ledger.entries.find(x=>x.id===data.id);
-  if(row&&confirm('確定刪除「'+row.name+'」這筆支出嗎？')){const old=structuredClone(ledger);ledger.entries=ledger.entries.filter(x=>x.id!==data.id);ledgerPersistAfterChange(old)}
+  if(row&&confirm('確定刪除「'+row.name+'」這筆支出嗎？')){const old=structuredClone(ledger);ledger.entries=ledger.entries.filter(x=>x.id!==data.id);if(ledgerDetailId===data.id){ledgerView='main';ledgerDetailId=null;}ledgerPersistAfterChange(old)}
  }else if(action==='ledger-cancel'){dismissDialogDown()}
  else if(action==='ledger-photo-remove'){ledgerPhotoTemp='';ledgerUpdatePhotoPreview();const f=dlg.querySelector('#ld-photo-file');if(f)f.value=''}
  else if(action==='ledger-photo-view'){const x=ledger.entries.find(x=>x.id===data.id);if(x?.photo)shopShowImage(x.photo,x.name)}
@@ -3541,6 +3678,12 @@ function applySwipeRows(){
    const buttons=bar?[...bar.querySelectorAll(':scope > button[data-a="home-edit"],:scope > button[data-a="home-remove"]')]:[];
    makeSwipeActions(row,bar,buttons);
  });
+ // 記帳：與待辦一樣左滑露出「編輯／刪除」，點正面可看詳情。
+ document.querySelectorAll('.ld-item').forEach(row=>{
+   const bar=row.querySelector(':scope > .ld-item-actions');
+   const buttons=bar?[...bar.querySelectorAll(':scope > button[data-a="ledger-edit"],:scope > button[data-a="ledger-delete"]')]:[];
+   makeSwipeActions(row,bar,buttons);
+ });
  // 購物：商品照片、勾選與連結都保留。
  document.querySelectorAll('.sh-flat .sh-product').forEach(row=>{
    const bar=row.querySelector('.sh-mini-actions');
@@ -3599,6 +3742,23 @@ document.addEventListener('click',e=>{
    setSwipeOpen(currentlyOpenSwipe,false);
  }
 },true);
+document.addEventListener('keydown',e=>{
+ const item=e.target.closest?.('.ld-item[data-a="ledger-detail"]');
+ if(item&&e.target===item&&(e.key==='Enter'||e.key===' ')){e.preventDefault();ledgerOpenView('detail',item.dataset.id);}
+});
+// 在統計／明細詳情畫面，水平往左滑即可返回記帳清單；也支援 iOS 習慣的右滑。
+let ledgerSubSwipe=null;
+document.addEventListener('touchstart',e=>{
+ const sub=e.target.closest?.('[data-ledger-subpage]');
+ if(!sub||e.touches.length!==1)return;
+ ledgerSubSwipe={x:e.touches[0].clientX,y:e.touches[0].clientY,sub};
+},{passive:true});
+document.addEventListener('touchend',e=>{
+ const start=ledgerSubSwipe;ledgerSubSwipe=null;
+ if(!start||!start.sub.isConnected||e.changedTouches.length!==1)return;
+ const dx=e.changedTouches[0].clientX-start.x,dy=e.changedTouches[0].clientY-start.y;
+ if(Math.abs(dx)>=85&&Math.abs(dx)>Math.abs(dy)*1.65&&st.tab==='ledger'&&ledgerView!=='main'){ledgerBack();}
+},{passive:true});
 document.addEventListener('keydown',e=>{
  const host=e.target.closest?.('.swipe-host');
  if(!host||!['ArrowLeft','ArrowRight'].includes(e.key))return;
@@ -3732,7 +3892,7 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerPage())+'</main>';
+    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerStatPage():ledgerView==='detail'?ledgerDetailPage():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
@@ -4230,7 +4390,7 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const D=b.dataset,a=D.a,n=+D.i,L=D.l==='d'?days[st.day].items:D.l==='t'?todos:packs;
 if(a.startsWith('ledger-')){e.preventDefault();ledgerClick(a,D);return;}
 if(a==='drag'||a==='pack-drag'||a==='todo-drag'||a==='shop-drag'||a==='home-drag'){e.preventDefault();e.stopPropagation();return;}
-if(a==='tab'){st.tab=D.v;if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
+if(a==='tab'){st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;}if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
 else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
 else if(a==='add-choose'){useAddBottomSheet();chooseItineraryKind()}
@@ -4257,7 +4417,7 @@ document.addEventListener('change',e=>{
  const t=e.target;
  if(t.dataset?.a==='shop-photo'&&t.files?.[0])shopReadPhoto(t.files[0]);
  if(t.dataset?.a==='itinerary-photo'&&t.files?.length)readItineraryPhotos(t.files);
- if(t.dataset?.a==='ledger-photo-file'&&t.files?.[0])ledgerReadPhoto(t.files[0]);
+ if(t.dataset?.ledgerFile==='photo'&&t.files?.[0])ledgerReadPhoto(t.files[0]);
  if(t.id==='ledger-import-input'&&t.files?.[0]){ledgerImportJSON(t.files[0]);t.value='';}
  if(t.closest?.('#ld-editor'))ledgerSetDependent();
 });
