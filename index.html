@@ -3029,6 +3029,35 @@ dialog#dlg.ticket-list-editor .ticket-time-row input[type="time"]::-webkit-calen
 }
 #dlg.ld-dialog #ld-editor .ld-amount-combo:focus-within{box-shadow:0 0 0 2px #eef2f6!important;border-color:#b7c8d8!important}
 
+
+/* 2026.11.22｜已訂票券：日期／單一時間與名稱同寬，區間起迄時間並排且等寬。 */
+dialog#dlg.ticket-list-editor form.ticket-edit-form{width:100%;max-width:100%;min-width:0;box-sizing:border-box;}
+dialog#dlg.ticket-list-editor form.ticket-edit-form>.home-edit-field,
+dialog#dlg.ticket-list-editor form.ticket-edit-form>.home-edit-field>input,
+dialog#dlg.ticket-list-editor form.ticket-edit-form>.ticket-time-row{
+ width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-time-row{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:9px!important;align-items:end;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-time-row:has(.ticket-end-time[hidden]){
+ grid-template-columns:minmax(0,1fr)!important;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-time-row>.home-edit-field{
+ display:block!important;min-width:0!important;max-width:100%!important;width:100%!important;
+ box-sizing:border-box!important;margin-bottom:12px;overflow:visible!important;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form :is(input[name="date"],input[name="startTime"],input[name="endTime"]){
+ display:block!important;inline-size:100%!important;width:100%!important;min-width:0!important;
+ max-width:100%!important;box-sizing:border-box!important;height:46px!important;
+ padding:8px 6px!important;font-size:16px!important;text-align:center!important;
+ overflow:hidden;border-radius:12px!important;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form input[type="time"]::-webkit-datetime-edit,
+dialog#dlg.ticket-list-editor form.ticket-edit-form input[type="date"]::-webkit-datetime-edit{min-width:0!important;max-width:100%;padding:0 2px;}
+dialog#dlg.ticket-list-editor form.ticket-edit-form input[type="time"]::-webkit-calendar-picker-indicator{margin:0 0 0 1px;flex-shrink:0;}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -3900,9 +3929,10 @@ let ledgerView='main',ledgerDetailId=null,ledgerStatDay='2026-12-18',ledgerStatT
 let ledgerCategoryDay='all',ledgerCategoryDetailed=false;
 let ledgerTaxTab='mine',ledgerTaxDepartureMode='kiosk',ledgerTaxLensTimer=0;
 let fxCalc={amount:'1000',from:'JPY',to:'TWD',result:''};
-let fxInfo={loading:false,error:'',lastAttempt:0,updated:'',rates:null};
-const savedFx=LS('ledgerFxV1',null);
-if(savedFx&&savedFx.rates&&LEDGER_CURRENCIES.every(k=>Number.isFinite(savedFx.rates[k])&&savedFx.rates[k]>0)){
+// 臺灣銀行即期牌告價由公開 JSON 鏡像提供；不沿用舊版 Frankfurter 快取，以免標錯來源。
+let fxInfo={loading:false,error:'',lastAttempt:0,updated:'',rates:null,source:'臺灣銀行即期匯率（買賣均價）'};
+const savedFx=LS('ledgerBotFxV1',null);
+if(savedFx&&savedFx.source==='bot-spot-mid'&&savedFx.rates&&LEDGER_CURRENCIES.every(k=>Number.isFinite(Number(savedFx.rates[k]))&&Number(savedFx.rates[k])>0)){
  fxInfo.rates=savedFx.rates;fxInfo.updated=String(savedFx.updated||'');
 }
 function ledgerRemember(old){
@@ -3947,26 +3977,49 @@ function ledgerNowDateTime(){
 }
 function ledgerEntriesFor(date){return ledger.entries.filter(e=>ledgerIsExpense(e)&&String(e.datetime||'').slice(0,10)===date)}
 function ledgerPersistAfterChange(old){if(ledgerRemember(old)){render();showSavedToast()}}
-function ledgerRateLabel(){return fxInfo.updated?'參考匯率日期 '+esc(fxInfo.updated):'尚未取得匯率'}
+function ledgerRateLabel(){return fxInfo.updated?'臺銀牌告 '+esc(fxInfo.updated):'尚未取得臺銀匯率'}
+// 匯率以 1 JPY 為基準；使用臺銀 JPY、CNY 即期買賣價的算術中間價換算。
+// 來源由 HaoRate 公開鏡像轉載臺銀資料；非銀行刷卡入帳價，也非逐秒市場報價。
+function ledgerTaiwanBankRates(data){
+ if(!data||data.base!=='TWD'||!data.details||!String(data.source||'').toLowerCase().match(/taiwan bank|臺灣銀行/))throw Error('非臺灣銀行資料');
+ const mid=currency=>{
+  const spot=data.details[currency]?.spot;
+  const buy=Number(spot?.buy),sell=Number(spot?.sell);
+  if(!Number.isFinite(buy)||!Number.isFinite(sell)||buy<=0||sell<=0||sell<buy)throw Error('缺少'+currency+'臺銀即期報價');
+  return (buy+sell)/2;
+ };
+ const jpy=mid('JPY'),cny=mid('CNY');
+ const timestamp=Date.parse(data.timestamp||'');
+ if(!Number.isFinite(timestamp)||Math.abs(Date.now()-timestamp)>14*24*3600*1000)throw Error('來源報價過期，請稍後更新');
+ const updated=new Intl.DateTimeFormat('zh-TW',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(timestamp);
+ return {rates:{JPY:1,TWD:jpy,CNY:jpy/cny},updated};
+}
 async function ledgerRefreshFx(force=false){
  if(fxInfo.loading)return false;
- if(!force&&Date.now()-fxInfo.lastAttempt<35*60*1000)return !!fxInfo.rates;
+ if(!force&&Date.now()-fxInfo.lastAttempt<5*60*1000)return !!fxInfo.rates;
  fxInfo.loading=true;fxInfo.error='';fxInfo.lastAttempt=Date.now();
  if(st.tab==='ledger'&&ledgerView==='main')render();
  try{
-  // Frankfurter：中央銀行日參考匯率（非逐秒即時成交價），不需 API key。
-  const resp=await fetch('https://api.frankfurter.dev/v2/rates?base=JPY&quotes=TWD,CNY',{cache:'no-store'});
-  if(!resp.ok)throw Error('HTTP '+resp.status);
-  const data=await resp.json();
-  if(!Array.isArray(data))throw Error('invalid data');
-  const twd=data.find(x=>x.quote==='TWD'),cny=data.find(x=>x.quote==='CNY');
-  if(!twd||!cny||Number(twd.rate)<=0||Number(cny.rate)<=0)throw Error('missing currency');
-  const rates={JPY:1,TWD:Number(twd.rate),CNY:Number(cny.rate)};
-  const updated=String(twd.date||cny.date||'');
-  fxInfo.rates=rates;fxInfo.updated=updated;
-  SV('ledgerFxV1',{rates,updated});
+  // 首選 jsDelivr CDN（支援瀏覽器跨網域），備援 GitHub 原始 JSON；皆取自臺銀牌告公開資料。
+  const urls=[
+   'https://cdn.jsdelivr.net/gh/haotool/app@data/public/rates/latest.json',
+   'https://raw.githubusercontent.com/haotool/app/data/public/rates/latest.json'
+  ];
+  let result=null,lastError=null;
+  for(const url of urls){
+   try{
+    const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),9000);
+    let resp;
+    try{resp=await fetch(url,{cache:'no-store',signal:ctrl.signal});}finally{clearTimeout(timer)}
+    if(!resp.ok)throw Error('HTTP '+resp.status);
+    result=ledgerTaiwanBankRates(await resp.json());break;
+   }catch(err){lastError=err}
+  }
+  if(!result)throw lastError||Error('臺銀資料暫時無法取得');
+  fxInfo.rates=result.rates;fxInfo.updated=result.updated;
+  SV('ledgerBotFxV1',{...result,source:'bot-spot-mid'});
   return true;
- }catch(err){fxInfo.error='無法連線取得匯率'+(fxInfo.rates?'，目前顯示上次資料':'，請連線後重試');return false}
+ }catch(err){fxInfo.error='臺銀匯率更新失敗'+(fxInfo.rates?'，仍顯示上次牌告':'，請連線後重試');return false}
  finally{fxInfo.loading=false;if(st.tab==='ledger'&&ledgerView==='main')render()}
 }
 function ledgerOptionList(values,current){
@@ -4459,11 +4512,11 @@ function ledgerPage(){
  const filtered=ledgerFilteredEntries();
  const expenseEntries=ledger.entries.filter(ledgerIsExpense),incomeEntries=ledger.entries.filter(e=>ledgerType(e)==='income'),transferEntries=ledger.entries.filter(e=>ledgerType(e)==='transfer');
  const total=ledgerSum(expenseEntries,ledger.currency),taxRecords=expenseEntries.filter(x=>x.taxfree),taxPending=taxRecords.filter(x=>(x.refundStatus||'待海關確認')!=='已退款'&&(x.refundStatus||'')!=='不申請');
- const fxRate=ledgerHasRate()?'<span>¥1 ≈ NT$'+fxInfo.rates.TWD.toFixed(4)+' · CNY ¥'+fxInfo.rates.CNY.toFixed(4)+'</span>':'<span>尚無匯率資料，請更新後換算</span>';
+ const fxRate=ledgerHasRate()?'<span>臺銀即期中間價 · ¥1 ≈ NT$'+fxInfo.rates.TWD.toFixed(4)+' · CN¥'+fxInfo.rates.CNY.toFixed(4)+'</span>':'<span>尚無臺銀匯率，請更新後換算</span>';
  return '<div class="ld-page"><div class="ph sh-heading ld-heading"><div class="kicker">Expense Journal</div><h2>旅途記帳</h2><p>行前採購・12/18–12/27 旅途支出</p><button type="button" class="shop-glass-add" data-a="ledger-new" aria-label="新增記帳" title="新增記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
  '<section class="ld-total"><div class="ld-total-top"><span class="ld-total-label">整趟行程總消費</span><div class="ld-total-actions"><details class="ld-currency-picker"><summary aria-label="選擇顯示幣別"><span>'+({JPY:'¥',TWD:'NT$',CNY:'CN¥'}[ledger.currency])+'</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="ld-currency-menu">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="ledger-currency" data-v="'+code+'" class="'+(code===ledger.currency?'on':'')+'">'+LEDGER_CURRENCY_LABEL[code]+'</button>').join('')+'</div></details><button type="button" class="ld-tax-entry" data-a="ledger-tax-open" title="退稅" aria-label="開啟退稅：我的退稅、離境檢查、退稅資訊">'+iconSvg('receipt')+'</button></div></div><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div><p>支出 '+expenseEntries.length+' 筆 · 收入 '+incomeEntries.length+' 筆 · 轉帳 '+transferEntries.length+' 筆 · '+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+'<br>跨幣別以參考匯率估算，非刷卡結算金額</p></section>'+
 
- '<section class="ld-panel"><div class="ld-section-head"><h3>匯率換算</h3><button type="button" class="ld-mini-link" data-a="ledger-fx-refresh">'+(fxInfo.loading?'更新中…':'⟳ 更新匯率')+'</button></div><div class="ld-rate-line">'+fxRate+'</div><div class="ld-calculator"><label>金額<span class="ld-fx-input-frame"><input type="number" id="ld-fx-amount" min="0" step="any" inputmode="decimal" value="'+esc(fxCalc.amount)+'"></span></label><label>原幣<select id="ld-fx-from">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.from===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label><label>換算<select id="ld-fx-to">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.to===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label></div><div class="ld-convert-row"><button type="button" data-a="ledger-convert" class="ld-convert-btn">按最新匯率換算</button><strong class="ld-result">'+(fxCalc.result||'—')+'</strong></div><p class="ld-hint">'+(fxInfo.error?esc(fxInfo.error)+' · ':'')+'資料來源：<a href="https://frankfurter.dev/" target="_blank" rel="noopener noreferrer">Frankfurter</a>，最新可用的每日參考匯率（非即時成交報價）。</p></section>'+
+ '<section class="ld-panel"><div class="ld-section-head"><h3>匯率換算</h3><button type="button" class="ld-mini-link" data-a="ledger-fx-refresh">'+(fxInfo.loading?'更新中…':'⟳ 更新匯率')+'</button></div><div class="ld-rate-line">'+fxRate+'</div><div class="ld-calculator"><label>金額<span class="ld-fx-input-frame"><input type="number" id="ld-fx-amount" min="0" step="any" inputmode="decimal" value="'+esc(fxCalc.amount)+'"></span></label><label>原幣<select id="ld-fx-from">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.from===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label><label>換算<select id="ld-fx-to">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.to===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label></div><div class="ld-convert-row"><button type="button" data-a="ledger-convert" class="ld-convert-btn">按最新匯率換算</button><strong class="ld-result">'+(fxCalc.result||'—')+'</strong></div><p class="ld-hint">'+(fxInfo.error?esc(fxInfo.error)+' · ':'')+'資料來源：<a href="https://rate.bot.com.tw/xrt" target="_blank" rel="noopener noreferrer">臺灣銀行牌告匯率</a>（<a href="https://haotool.org/ratewise/open-data/" target="_blank" rel="noopener noreferrer">公開資料鏡像</a>）；以即期買賣均價估算，更新時間見上方，非銀行實際刷卡或現鈔成交價。</p></section>'+
  '<section class="ld-panel ld-stats-panel"><button type="button" class="ld-stat-entry" data-a="ledger-stats"><span class="ld-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V13M10 20V8M16 20V11M22 20V4"/></svg></span><span><strong>支出統計</strong><small>每日支出・支出類別・支出方式</small></span><span class="ld-stat-arrow">›</span></button></section>'+
  '<section class="ld-panel ld-expense-panel ld-full-ledger-panel"><div class="ld-section-head"><h3>收支明細</h3></div>'+ledgerSearchControls()+
  '<div id="ld-entry-list" class="ld-scroll-entry-list" role="region" aria-label="可上下捲動的完整收支明細" tabindex="0">'+(filtered.length?ledgerExpenseGroups(filtered):'<div class="ld-empty">'+(ledger.entries.length?'沒有符合搜尋條件的收支明細。':'尚無收支紀錄，點右下角「＋」新增第一筆。')+'</div>')+'</div></section>'+
