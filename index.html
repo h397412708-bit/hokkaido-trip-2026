@@ -3431,6 +3431,11 @@ dialog#dlg.fl2-pass-dialog .fl2-pass-form{display:block;padding:12px 18px 25px;m
 }
 
 
+/* 航班折疊卡片：減少上下留白，讓兩行資訊及箭頭垂直置中。 */
+.fl3-leg:not([open]){
+  padding-top:2px;
+  padding-bottom:5px;
+}
 /* 航班卡片：摺疊時保留左右排列，文字在各自區塊內垂直置中。 */
 .fl3-leg:not([open]) .fl3-leg-head{
   display:flex;
@@ -3438,8 +3443,8 @@ dialog#dlg.fl2-pass-dialog .fl2-pass-form{display:block;padding:12px 18px 25px;m
   align-items:center;
   justify-content:flex-start;
   position:relative;
-  min-height:48px;
-  padding:7px 4px;
+  min-height:40px;
+  padding:4px 4px;
   gap:7px;
   text-align:left;
 }
@@ -3465,8 +3470,8 @@ dialog#dlg.fl2-pass-dialog .fl2-pass-form{display:block;padding:12px 18px 25px;m
   flex-direction:row;
   align-items:center;
   justify-content:space-between;
-  min-height:70px;
-  padding:10px 5px;
+  min-height:50px;
+  padding:5px 5px;
   gap:12px;
   text-align:left;
 }
