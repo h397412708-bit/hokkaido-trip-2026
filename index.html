@@ -1652,9 +1652,9 @@ dialog#dlg.bottom-sheet form .fb > button{
 
 
 /* 住宿／餐廳清單：同行李的左滑操作與長按六點拖曳。 */
-.overview-h .home-entry,.overview-r .home-entry{position:relative;margin:0;border-top:1px solid rgba(132,153,185,.18);padding:0;min-height:78px;overflow:hidden;background:transparent}
-.overview-h .home-entry:first-child,.overview-r .home-entry:first-child{border-top:0}
-.overview-h .home-entry.swipe-host>.swipe-face,.overview-r .home-entry.swipe-host>.swipe-face{display:flex;align-items:center;gap:8px;min-width:0;padding:13px 3px 13px 0;background:transparent!important;box-sizing:border-box}
+.overview-h .home-entry,.overview-r .home-entry,.overview-k .home-entry{position:relative;margin:0;border-top:1px solid rgba(132,153,185,.18);padding:0;min-height:78px;overflow:hidden;background:transparent}
+.overview-h .home-entry:first-child,.overview-r .home-entry:first-child,.overview-k .home-entry:first-child{border-top:0}
+.overview-h .home-entry.swipe-host>.swipe-face,.overview-r .home-entry.swipe-host>.swipe-face,.overview-k .home-entry.swipe-host>.swipe-face{display:flex;align-items:center;gap:8px;min-width:0;padding:13px 3px 13px 0;background:transparent!important;box-sizing:border-box}
 .home-entry-info{min-width:0;flex:1;overflow-wrap:anywhere}
 .home-entry-info small{display:block;font-weight:700;letter-spacing:.01em;color:#788cab;font-size:11px;line-height:1.5;margin-bottom:4px}
 .home-entry-info b{display:block;font-size:14px;line-height:1.5;color:#29364d;font-weight:750}
@@ -2906,6 +2906,43 @@ main.ledger-layered-main>.ld-preserved-underlay{
 main.ledger-layered-main>.ld-preserved-underlay .ld-tax-screen{
   pointer-events:none!important;
 }
+
+/* 2026.11.22｜總覽已訂票券 */
+.overview-k .home-entry{gap:8px;align-items:center}
+.overview-k .home-entry-info{min-width:0;flex:1 1 auto}
+.overview-k .home-entry-note{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65}
+.overview-k .ticket-cover{flex:0 0 64px;width:64px;height:64px;min-width:64px;border:0;padding:0;border-radius:12px;background:#edf3f9;overflow:hidden;cursor:zoom-in}
+.overview-k .ticket-cover img{display:block;width:100%;height:100%;object-fit:contain}
+.ticket-gallery{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.ticket-gallery button{width:43px;height:43px;display:block;border:0;background:#eaf0f8;border-radius:9px;overflow:hidden;padding:0;cursor:zoom-in}
+.ticket-gallery img{width:100%;height:100%;object-fit:contain}
+.overview-k .swipe-actions>button[data-a="home-edit"]{background:#8396af;color:#fff}
+.overview-k .swipe-actions>button[data-a="home-remove"]{background:#ce6975;color:#fff}
+dialog#dlg.ticket-list-editor .ticket-time-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:8px}
+dialog#dlg.ticket-list-editor .ticket-time-options label{position:relative;min-width:0}
+dialog#dlg.ticket-list-editor .ticket-time-options input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer;margin:0}
+dialog#dlg.ticket-list-editor .ticket-time-options span{display:flex;min-height:41px;align-items:center;justify-content:center;padding:7px;border-radius:12px;background:#edf2f8;border:1px solid #d9e3f0;color:#6d809b;box-sizing:border-box;font-size:12px}
+dialog#dlg.ticket-list-editor .ticket-time-options input:checked+span{background:#dfe9f6;border-color:#b7cbe2;color:#456487}
+dialog#dlg.ticket-list-editor .ticket-time-options input:focus-visible+span{outline:2px solid #9cb4d1;outline-offset:2px}
+dialog#dlg.ticket-list-editor .ticket-time-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+dialog#dlg.ticket-list-editor .ticket-time-row:has(.ticket-end-time[hidden]){grid-template-columns:minmax(0,1fr)}
+dialog#dlg.ticket-list-editor .ticket-end-time[hidden]{display:none!important}
+dialog#dlg.ticket-list-editor .ticket-time-row label{min-width:0;overflow:hidden}
+dialog#dlg.ticket-list-editor .ticket-time-row input{width:100%;min-width:0;font-size:16px!important}
+dialog#dlg.ticket-list-editor textarea[name="note"]{height:124px;min-height:88px;max-height:150px;overflow-y:auto;resize:vertical;white-space:pre-wrap;scrollbar-gutter:stable}
+dialog#dlg.ticket-list-editor .ticket-photo-preview{display:flex;gap:8px;flex-wrap:wrap;padding:9px;margin-top:6px;min-height:81px;box-sizing:border-box;border-radius:12px;background:#f2f6fb;border:1px dashed #c7d6e8;align-items:center}
+dialog#dlg.ticket-list-editor .ticket-photo-preview-item{width:66px;height:66px;position:relative;border-radius:10px;overflow:hidden;background:#e4ebf5}
+dialog#dlg.ticket-list-editor .ticket-photo-preview-item>button:first-child{width:100%;height:100%;padding:0;border:0;background:transparent;cursor:zoom-in}
+dialog#dlg.ticket-list-editor .ticket-photo-preview-item img{width:100%;height:100%;object-fit:contain}
+dialog#dlg.ticket-list-editor .ticket-photo-remove{position:absolute;top:0;right:0;width:22px;height:22px;color:#fff;background:#9c6a77ba;border:0;border-radius:0 0 0 9px;padding:0}
+dialog#dlg.ticket-list-editor .ticket-photo-empty{font-size:11px;color:#8b9bb3;padding:0 7px}
+dialog#dlg.ticket-list-editor .ticket-photo-footer{display:flex;align-items:center;gap:10px;margin:9px 0 2px}
+dialog#dlg.ticket-list-editor .ticket-upload-label{font-size:12px;font-weight:750;color:#557292;background:#e4ecf7;border-radius:10px;padding:10px 13px;cursor:pointer}
+dialog#dlg.ticket-list-editor .ticket-photo-footer small{font-size:11px;color:#8a9cb4}
+/* 支出明細清單維持不顯示照片，詳情有照片時完整顯示 */
+.ld-detail-photo.ld-photo-visible{display:block!important;width:100%;margin:8px 0 14px}
+.ld-detail-photo.ld-photo-visible img{display:block!important;width:100%;height:auto;max-height:390px;object-fit:contain}
+#dlg.ld-dialog #ld-editor input:focus,#dlg.ld-dialog #ld-editor textarea:focus,#dlg.ld-dialog #ld-editor select:focus{outline-color:#b9cada!important;border-color:#b8c9de!important;box-shadow:0 0 0 2px rgba(158,179,206,.15)!important}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -2920,7 +2957,7 @@ main.ledger-layered-main>.ld-preserved-underlay .ld-tax-screen{
 <button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led"></span><span id="hk-cloud-label">雲端連線中</span></button>
 <dialog id="hk-cloud-dialog" aria-label="北海道行程雲端同步設定">
   <div class="hk-cloud-title"><h3 tabindex="-1">共用行程同步</h3><button id="hk-cloud-close" type="button" class="hk-cloud-x" aria-label="關閉">×</button></div>
-  <p class="hk-cloud-sub">每日行程（包含待確認／已訂）、住宿一覽與已訂餐廳同步給旅伴；待辦、行李、購物清單各自在自己的手機儲存。</p>
+  <p class="hk-cloud-sub">每日行程、住宿、餐廳與票券文字資料同步給旅伴；票券照片與待辦、行李、購物、記帳資料各自在自己的手機儲存。</p>
   <div id="hk-cloud-signedout">
     <form id="hk-cloud-login-form">
       <label>電子郵件<input name="email" type="email" autocomplete="username" required placeholder="旅行成員的 Email"></label>
@@ -3119,6 +3156,7 @@ function iconSvg(name){
     flight:'<path d="M12 2c.9 0 1.3.9 1.3 1.7v7l7.7 5V18l-7.7-2.5v4l2.1 1.5V23L12 21.7 8.6 23v-2l2.1-1.5v-4L3 18v-2.3l7.7-5v-7C10.7 2.9 11.1 2 12 2z"/>',
     bed:'<path d="M3 5v15M3 10h18v10M3 16h18M7 10V7c0-1 .8-2 2-2h3c1.1 0 2 1 2 2v3"/>',
     dining:'<path d="M4 3v6a3 3 0 0 0 6 0V3M7 3v18M16 21V3c3.5 1.5 5 4.7 5 8v2h-5"/>',
+    ticket:'<path d="M4 5h16v5a2.5 2.5 0 0 0 0 5v4H4v-4a2.5 2.5 0 0 0 0-5V5z"/><path d="M12 6.5v2M12 11v2M12 15.5v2"/>',
     externalLink:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M20 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4"/>',
     route:'<circle cx="6" cy="5" r="2"/><path d="M6 7v3c0 2 3 2 6 2h1c3 0 5 1 5 4v2"/><path d="m15 16 3 3 3-3"/><path d="M10 17h-2M6 17H4"/>',
     suitcase:'<rect x="4" y="7" width="16" height="14" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M8 7v14M16 7v14M7 21v1M17 21v1"/>',
@@ -3432,7 +3470,8 @@ const DEFAULT_DINING=[
  {id:'meal_2026_0',name:'小樽倉庫 No.1 啤酒釀造所',date:'2026-12-19',time:'17:30',note:'4 位成人。晚餐後搭 JR 返回札幌。',mapUrl:SEARCH('Otaru Soko No.1 Otaru')},
  {id:'meal_2026_1',name:'寺田壽司 Sushi Terada',date:'2026-12-21',time:'20:30',note:'4 位成人；Terada 季節全套餐：¥18,000／人（含稅），約 2 小時；前菜五道、壽司十三貫、湯品、甜點。',mapUrl:SEARCH('寺田 寿司 狸小路 札幌')}
 ];
-let stays=LS('stays',null),dining=LS('dining',null);
+let stays=LS('stays',null),dining=LS('dining',null),tickets=LS('tickets',[]);
+if(!Array.isArray(tickets))tickets=[];
 if(!Array.isArray(stays))stays=DEFAULT_STAYS.map(x=>({...x}));
 if(!Array.isArray(dining))dining=DEFAULT_DINING.map(x=>({...x}));
 // 舊版住宿清單的末晚飯店仍是「待補」：只替換該筆舊範本，不動旅伴已編輯的真實飯店。
@@ -3473,25 +3512,34 @@ const homeMapAnchor=url=>{
  return valid?'<a class="home-map-link" href="'+esc(valid)+'" target="_blank" rel="noopener noreferrer">📍在Google Maps 開啟</a>':'';
 };
 const homeDragGrip=(kind,i,name)=>'<button type="button" class="home-drag-handle" data-a="home-drag" data-kind="'+kind+'" data-i="'+i+'" title="長按拖曳排序" aria-label="長按拖曳「'+esc(name)+'」排序；鍵盤 Alt 加上下鍵調整"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>';
+const homeListData=kind=>kind==='stays'?stays:kind==='dining'?dining:tickets;
+function ticketTimeLine(item){
+ const start=String(item.startTime||''),end=String(item.endTime||'');
+ return item.timeMode==='range'?(start&&end?start+'–'+end:start||end):(start||'');
+}
 function homeListItem(kind,item,i){
- const isStay=kind==='stays';
+ const isStay=kind==='stays',isTicket=kind==='tickets';
  const dateLine=isStay
   ?(shortTripDate(item.checkin)+' 入住 → '+shortTripDate(item.checkout)+' 退房'+(nightsBetween(item.checkin,item.checkout)?'・'+nightsBetween(item.checkin,item.checkout)+' 晚':''))
+  :isTicket?(item.date?shortTripDate(item.date):'未設定使用日期')+(ticketTimeLine(item)?' · '+ticketTimeLine(item):'')
   :(shortTripDate(item.date)+(item.time?' '+item.time:''));
- return '<div class="home-entry '+(isStay?'ht':'rs')+'" data-home-kind="'+kind+'" data-home-index="'+i+'">'+
+ const photo=isTicket&&Array.isArray(item.photos)&&item.photos[0]?
+   '<button type="button" class="ticket-cover" data-a="ticket-zoom" data-i="'+i+'" data-photo="0" aria-label="放大「'+esc(item.name)+'」票券照片"><img src="'+esc(item.photos[0])+'" alt="'+esc(item.name)+' 的票券照片" loading="lazy"></button>':'';
+ return '<div class="home-entry '+(isStay?'ht':isTicket?'tk':'rs')+'" data-home-kind="'+kind+'" data-home-index="'+i+'">'+
    '<div class="home-entry-info"><small>'+esc(dateLine)+'</small><b class="home-entry-title">'+esc(item.name)+'</b>'+
    (isStay&&item.address?'<p class="overview-address">'+iconSvg('pin')+esc(item.address)+'</p>':'')+
    (item.note?'<p class="home-entry-note">'+esc(item.note)+'</p>':'')+
-   homeMapAnchor(item.mapUrl)+'</div>'+homeDragGrip(kind,i,item.name)+
+   (isTicket&&Array.isArray(item.photos)&&item.photos.length>1?'<div class="ticket-gallery">'+item.photos.slice(1).map((src,k)=>'<button type="button" data-a="ticket-zoom" data-i="'+i+'" data-photo="'+(k+1)+'" aria-label="放大第 '+(k+2)+' 張票券照片"><img src="'+esc(src)+'" alt="票券照片 '+(k+2)+'" loading="lazy"></button>').join('')+'</div>':'')+
+   homeMapAnchor(item.mapUrl)+'</div>'+photo+homeDragGrip(kind,i,item.name)+
    '<div class="tl"><button type="button" data-a="home-edit" data-kind="'+kind+'" data-i="'+i+'">編輯</button><button type="button" data-a="home-remove" data-kind="'+kind+'" data-i="'+i+'">刪除</button></div></div>';
 }
 function homeListBody(kind){
- const list=kind==='stays'?stays:dining;
+ const list=homeListData(kind);
  return list.map((item,i)=>homeListItem(kind,item,i)).join('')+
  (list.length?'':'<p class="home-list-empty">還沒有資料，點擊下方新增。</p>')+
- '<button type="button" class="add home-add" data-a="home-add" data-kind="'+kind+'">＋ '+(kind==='stays'?'新增住宿':'新增餐廳')+'</button>';
+ '<button type="button" class="add home-add" data-a="home-add" data-kind="'+kind+'">＋ '+(kind==='stays'?'新增住宿':kind==='dining'?'新增餐廳':'新增票券')+'</button>';
 }
-function persistHomeList(kind){SV(kind,kind==='stays'?stays:dining);if(cloudSync)cloudSync.onHomeChange(kind);}
+function persistHomeList(kind){SV(kind,homeListData(kind));if(cloudSync)cloudSync.onHomeChange(kind);}
 const links=pl=>{const u=[...new Map((pl||[]).map(p=>[p.q,p])).values()];return u.length?'<div class="lk">'+u.map(p=>'<a href="'+esc(OVR[p.q]||(p.search?SEARCH(p.q):MAP(p.q,p.mode)))+'" target="_blank" rel="noopener noreferrer">📍 '+esc(p.name)+'</a>').join('')+'</div>':''};
 const tool=(l,i)=>['編輯|0|ed','刪除|0|rm'].map(s=>{const x=s.split('|');return '<button data-a="'+x[2]+'" data-l="'+l+'" data-i="'+i+'" data-d="'+x[1]+'">'+x[0]+'</button>'}).join('');
 const dragGrip=i=>'<button type="button" class="row-drag-handle" data-a="drag" data-i="'+i+'" aria-label="長按拖曳排序；鍵盤按 Alt 加上下方向鍵調整順序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>';
@@ -4081,7 +4129,7 @@ function ledgerDetailPage(){
   rows.push(choice('refundMethod','退款方式',LEDGER_REFUND_METHODS),choice('refundStatus','退稅進度',LEDGER_REFUND_STATES),inp('refundAmount','實際退款 JPY','number'));
  }
  return '<div class="ld-page ld-subpage ld-ledger-overlay" data-ledger-subpage="detail">'+ledgerSubHeader('明細詳情','點選欄位直接修改，離開後儲存 · 向右滑動返回')+
- (e.photo?'<section class="ld-detail-photo"><button type="button" data-a="ledger-photo-view" data-id="'+esc(e.id)+'" aria-label="放大支出照片"><img src="'+esc(e.photo)+'" alt="'+esc(e.name)+' 的照片"></button></section>':'')+
+ ((e.photo||e.image)?'<section class="ld-detail-photo ld-photo-visible"><button type="button" data-a="ledger-photo-view" data-id="'+esc(e.id)+'" aria-label="放大支出照片"><img src="'+esc(e.photo||e.image)+'" alt="'+esc(e.name)+' 的照片" loading="eager"></button></section>':'')+
  '<section class="ld-panel"><div class="ld-section-head"><h3>收支資訊</h3><span class="ld-inline-save-hint">修改後自動儲存</span></div>'+
  ledgerNetSummary(e)+
  '<div class="ld-detail-fields">'+rows.join('')+'</div></section>'+
@@ -4519,7 +4567,7 @@ async function ledgerClick(action,data){
   if(row&&confirm('確定刪除「'+row.name+'」這筆記帳嗎？')){const old=structuredClone(ledger);ledger.entries=ledger.entries.filter(x=>x.id!==data.id);if(ledgerDetailId===data.id){ledgerView='main';ledgerDetailId=null;}ledgerPersistAfterChange(old)}
  }else if(action==='ledger-cancel'){dismissDialogDown()}
  else if(action==='ledger-photo-remove'){ledgerPhotoTemp='';ledgerUpdatePhotoPreview();const f=dlg.querySelector('#ld-photo-file');if(f)f.value=''}
- else if(action==='ledger-photo-view'){const x=ledger.entries.find(x=>x.id===data.id);if(x?.photo)shopShowImage(x.photo,x.name)}
+ else if(action==='ledger-photo-view'){const x=ledger.entries.find(x=>x.id===data.id);if(x?.photo||x?.image)shopShowImage(x.photo||x.image,x.name)}
  else if(action==='ledger-detail-photo-remove'){const x=ledger.entries.find(x=>x.id===data.id);if(x&&confirm('移除這張明細照片嗎？')){const old=structuredClone(ledger);x.photo='';if(ledgerRemember(old))ledgerDetailRefresh();}}
  else if(action==='ledger-day'){ledgerDay=data.v;render()}
  else if(action==='ledger-tax-filter'){ledgerTaxOnly=data.v==='tax';render()}
@@ -4689,6 +4737,7 @@ function home(){const n=packs.filter(p=>p.done).length;
  return travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程','<div class="flight-traveler-title"><span>台北出發・台北返程</span><small>直飛</small></div><div class="flight-board">'+fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分')+'<p class="flight-board-note">起飛及抵達時間均為當地時間。</p></div>'+alternateFlightBoard())
  +sec('h',iconSvg('hotel'),'住宿一覽',stays.length+' 間・共 '+totalNights+' 晚',homeListBody('stays'))
  +sec('r',iconSvg('utensils'),'已訂餐廳',dining.length+' 間・訂位資料',homeListBody('dining'))
+ +sec('k',iconSvg('ticket'),'已訂票券',tickets.length+' 筆・票券資料',homeListBody('tickets'))
  +sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'" data-pack-index="'+i+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><button type="button" class="pack-drag-handle" data-a="pack-drag" data-i="'+i+'" aria-label="長按拖曳「'+esc(p.t)+'」排序；鍵盤 Alt 加上下鍵調整" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join('')+'<button class="add" data-a="add" data-l="p">＋ 新增物品</button>')
  +'<button class="add ghost" data-a="rs">還原預設內容</button>'}
 const hero=()=>'<header class="hero"><div class="topline"><div class="brand">'+iconSvg('snowflake')+' HOKKAIDO / 2026</div><div class="pill">WINTER JOURNAL</div></div><div class="hc"><div class="eb">WINTER TRAVEL NOTES • JAPAN</div><h1 class="ht1">A winter<br>to remember.</h1><div class="hs">北海道冬日旅誌</div><div class="hm">12.18 — 12.27 ✦ 札幌 · 小樽 · 登別 · 洞爺湖</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><div class="summary"><div><strong>10 天 9 夜</strong><span>旅程天數</span></div><div><strong>4 位旅伴</strong><span>一同出發</span></div><div><strong>12/18–27</strong><span>2026・北海道</span></div></div>';
@@ -4904,7 +4953,7 @@ function applySwipeRows(){
    makeSwipeActions(row,bar,buttons);
  });
  // 住宿與餐廳：與行李使用一致的左滑編輯／刪除。
- document.querySelectorAll('.overview-h .home-entry,.overview-r .home-entry').forEach(row=>{
+ document.querySelectorAll('.overview-h .home-entry,.overview-r .home-entry,.overview-k .home-entry').forEach(row=>{
    const bar=row.querySelector(':scope > .tl');
    const buttons=bar?[...bar.querySelectorAll(':scope > button[data-a="home-edit"],:scope > button[data-a="home-remove"]')]:[];
    makeSwipeActions(row,bar,buttons);
@@ -5187,9 +5236,79 @@ function openEditorDialogNoKeyboard(){
 function form(title,fs,v,cb){dlg.innerHTML='<form><h3>'+title+'</h3>'+fs.map(f=>'<label>'+f[1]+(f[2]==='area'?'<textarea name="'+f[0]+'" rows="3">'+esc(v[f[0]])+'</textarea>':f[2]==='sel'?'<select name="'+f[0]+'">'+f[3].map(o=>'<option'+(o===v[f[0]]?' selected':'')+'>'+o+'</option>').join('')+'</select>':'<input name="'+f[0]+'" value="'+esc(v[f[0]])+'">')+'</label>').join('')+'<div class="fb"><button type="button" data-a="cx">取消</button><button class="pri">儲存</button></div></form>';dlg.querySelector('form').onsubmit=e=>{e.preventDefault();const o={};new FormData(e.target).forEach((x,k)=>o[k]=String(x).trim());dlg.close();cb(o)};openEditorDialogNoKeyboard()}
 
 
+// 已訂票券：照片保留在本機，時間／名稱／備註／順序與旅伴共用。
+let ticketPhotoEditing=[];
+function ticketPhotoPreview(){
+ const holder=dlg.querySelector('#ticket-photo-preview');if(!holder)return;
+ holder.innerHTML=ticketPhotoEditing.length?ticketPhotoEditing.map((src,i)=>
+  '<div class="ticket-photo-preview-item"><button type="button" data-a="ticket-preview-zoom" data-photo="'+i+'" aria-label="放大第 '+(i+1)+' 張照片"><img src="'+esc(src)+'" alt="票券照片 '+(i+1)+'"></button><button type="button" class="ticket-photo-remove" data-a="ticket-photo-remove" data-photo="'+i+'" aria-label="移除照片">×</button></div>').join(''):
+  '<p class="ticket-photo-empty">尚未選擇照片</p>';
+ const hint=dlg.querySelector('#ticket-photo-hint');if(hint)hint.textContent=ticketPhotoEditing.length+' / 4 張';
+}
+async function ticketReadPhotos(files){
+ const chosen=Array.from(files||[]);if(!chosen.length)return;
+ if(chosen.length+ticketPhotoEditing.length>4){alert('每筆票券最多可上傳 4 張照片');return;}
+ const submit=dlg.querySelector('.ticket-edit-form button[type="submit"]');if(submit)submit.disabled=true;
+ try{
+  for(const file of chosen){
+   if(!file.type.startsWith('image/')&&!/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name)){alert('請選擇圖片檔');continue;}
+   if(file.size>35*1024*1024){alert('照片須小於 35 MB');continue;}
+   const url=URL.createObjectURL(file);
+   try{
+    const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=reject;image.src=url});
+    const ratio=Math.min(1,1200/Math.max(image.naturalWidth,image.naturalHeight));
+    const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(image.naturalWidth*ratio));canvas.height=Math.max(1,Math.round(image.naturalHeight*ratio));
+    const ctx=canvas.getContext('2d');if(!ctx)throw new Error('圖片無法讀取');
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,0,0,canvas.width,canvas.height);
+    let data=canvas.toDataURL('image/jpeg',.72);
+    if(data.length>330000)data=canvas.toDataURL('image/jpeg',.52);
+    ticketPhotoEditing.push(data);
+   }finally{URL.revokeObjectURL(url);}
+  }
+ }catch(err){alert('照片處理失敗，請改用 JPG 或 PNG 照片。');}
+ finally{if(submit)submit.disabled=false;ticketPhotoPreview();}
+}
+function editTicket(index){
+ const adding=index<0,current=adding?{name:'',date:'',timeMode:'single',startTime:'',endTime:'',note:'',photos:[]}:tickets[index];
+ if(!current)return;
+ ticketPhotoEditing=Array.isArray(current.photos)?current.photos.slice():[];
+ const mode=current.timeMode==='range'?'range':'single';
+ dlg.classList.remove('sh-dialog','shop-pop-opening','itinerary-editor','itinerary-chooser');
+ dlg.classList.add('home-list-editor','ticket-list-editor');
+ dlg.innerHTML='<form class="home-edit-form ticket-edit-form"><h3>'+(adding?'新增':'編輯')+'已訂票券</h3><p class="home-edit-hint">使用日期與時間都可留空，照片可點擊放大（照片保存在上傳的手機）。</p>'+
+ '<label class="home-edit-field">名稱<input name="name" type="text" maxlength="180" required placeholder="例如：天狗山纜車票券" value="'+esc(current.name||'')+'"></label>'+
+ '<label class="home-edit-field">使用日期（選填）<input name="date" type="date" value="'+esc(current.date||'')+'"></label>'+
+ '<div class="home-edit-field ticket-time-mode"><span>時間類型</span><div class="ticket-time-options"><label><input type="radio" name="timeMode" value="single"'+(mode==='single'?' checked':'')+'><span>單一時間</span></label><label><input type="radio" name="timeMode" value="range"'+(mode==='range'?' checked':'')+'><span>時間區間</span></label></div></div>'+
+ '<div class="ticket-time-row"><label class="home-edit-field">'+(mode==='range'?'開始時間':'使用時間')+'<input name="startTime" type="time" value="'+esc(current.startTime||'')+'"></label><label class="home-edit-field ticket-end-time"'+(mode==='range'?'':' hidden')+'>結束時間<input name="endTime" type="time" value="'+esc(current.endTime||'')+'"></label></div>'+
+ '<label class="home-edit-field">備註<textarea name="note" rows="5" placeholder="票券使用方式、兌換資訊、注意事項…">'+esc(current.note||'')+'</textarea></label>'+
+ '<div class="home-edit-field"><span>票券照片</span><div id="ticket-photo-preview" class="ticket-photo-preview"></div><div class="ticket-photo-footer"><label class="ticket-upload-label" for="ticket-photo-file">＋ 上傳照片</label><small id="ticket-photo-hint"></small></div><input type="file" accept="image/*,.heic,.heif" id="ticket-photo-file" multiple hidden></div>'+
+ '<div class="fb"><button type="button" data-a="cx">取消</button><button type="submit" class="pri">儲存</button></div></form>';
+ const form=dlg.querySelector('form'),start=form.elements.startTime,end=form.elements.endTime;
+ function refreshTimeMode(){const range=form.elements.timeMode.value==='range';dlg.querySelector('.ticket-end-time').hidden=!range;dlg.querySelector('.ticket-time-row>label:first-child').childNodes[0].textContent=range?'開始時間':'使用時間';if(!range)end.value='';}
+ form.querySelectorAll('[name="timeMode"]').forEach(input=>input.addEventListener('change',refreshTimeMode));
+ dlg.querySelector('#ticket-photo-file').addEventListener('change',e=>{ticketReadPhotos(e.target.files);e.target.value='';});
+ ticketPhotoPreview();
+ form.onsubmit=e=>{
+  e.preventDefault();const values=Object.fromEntries(new FormData(form).entries());
+  values.name=String(values.name||'').trim();values.note=String(values.note||'');
+  if(!values.name){alert('請填寫票券名稱');return;}
+  if(values.timeMode==='range'&&values.startTime&&values.endTime&&values.endTime<values.startTime){alert('結束時間不能早於開始時間');return;}
+  if(values.timeMode!=='range')values.endTime='';
+  const result={...current,...values,photos:ticketPhotoEditing.slice()};
+  const before=tickets.slice();
+  if(adding)tickets.push({id:uid(),...result});else tickets[index]=result;
+  try{localStorage.setItem('hk26v2_tickets',JSON.stringify(tickets));}
+  catch(err){tickets=before;alert('照片或票券資料超出此手機瀏覽器的可用儲存空間，請減少照片數量後重試。');return;}
+  if(cloudSync)cloudSync.onHomeChange('tickets');
+  ov.add('k');dlg.close();dlg.classList.remove('home-list-editor','ticket-list-editor');render();showSavedToast();
+ };
+ useAddBottomSheet();openEditorDialogNoKeyboard();
+}
+
 // 住宿與已訂餐廳：共用行李清單相同的底部新增／編輯面板與取消動畫。
 // 住宿日期範圍採單一日曆：選入住日，再選退房日，醒目顯示日期區間。
 function editHomeList(kind,index){
+ if(kind==='tickets'){editTicket(index);return;}
  const list=kind==='stays'?stays:dining,adding=index<0;
  const current=adding?(kind==='stays'?{name:'',checkin:'',checkout:'',address:'',note:'',mapUrl:''}:{name:'',date:'',time:'',note:'',mapUrl:''}):list[index];
  if(!current)return;
@@ -5590,7 +5709,7 @@ function finishPackDrag(commit){
  document.body.classList.remove('pack-drag-active');
  try{if(drag.handle.hasPointerCapture?.(drag.pointerId))drag.handle.releasePointerCapture(drag.pointerId);}catch(_){ }
  if(!commit||!drag.active||!drag.list.isConnected)return;
- const list=drag.kind==='stays'?stays:drag.kind==='dining'?dining:packs;
+ const list=drag.kind==='packs'?packs:homeListData(drag.kind);
  const to=Math.min(list.length-1,Math.max(0,drag.to>drag.from?drag.to-1:drag.to));
  if(to===drag.from)return;
  const [moved]=list.splice(drag.from,1);list.splice(to,0,moved);
@@ -5603,10 +5722,10 @@ document.addEventListener('pointerdown',e=>{
  const handle=e.target.closest?.('.pack-drag-handle,.home-drag-handle');
  if(!handle||(e.pointerType==='mouse'&&e.button!==0))return;
  finishPackDrag(false);
- const row=handle.closest('.overview-p .pk,.overview-h .home-entry,.overview-r .home-entry');
- const list=row?.closest('.overview-p,.overview-h,.overview-r');
+ const row=handle.closest('.overview-p .pk,.overview-h .home-entry,.overview-r .home-entry,.overview-k .home-entry');
+ const list=row?.closest('.overview-p,.overview-h,.overview-r,.overview-k');
  if(!row||!list||st.tab!=='home')return;
- const kind=list.classList.contains('overview-h')?'stays':list.classList.contains('overview-r')?'dining':'packs';
+ const kind=list.classList.contains('overview-h')?'stays':list.classList.contains('overview-r')?'dining':list.classList.contains('overview-k')?'tickets':'packs';
  const rows=[...list.querySelectorAll(':scope > .bd > .pk,:scope > .bd > .home-entry')];
  const from=rows.indexOf(row);if(from<0)return;
  const drag={pointerId:e.pointerId,handle,row,list,rows,kind,from,to:from,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,active:false,timer:0,raf:0,ghost:null};
@@ -5628,7 +5747,7 @@ document.addEventListener('keydown',e=>{
  if(!handle||!e.altKey||!['ArrowUp','ArrowDown'].includes(e.key))return;
  e.preventDefault();e.stopPropagation();
  const kind=handle.classList.contains('home-drag-handle')?handle.dataset.kind:'packs';
- const list=kind==='stays'?stays:kind==='dining'?dining:packs;
+ const list=kind==='packs'?packs:homeListData(kind);
  const i=Number(handle.dataset.i),j=i+(e.key==='ArrowUp'?-1:1);
  if(j<0||j>=list.length)return;
  [list[i],list[j]]=[list[j],list[i]];
@@ -5660,7 +5779,10 @@ else if(a==='add-kind'){const kind=D.kind;dlg.close();dlg.classList.remove('itin
 else if(a==='itinerary-photo-remove'){itineraryPhotoTemp.splice(n,1);itineraryPhotoChanged=true;updateItineraryPhotoPreview()}
 else if(a==='home-add'){editHomeList(D.kind,-1)}
 else if(a==='home-edit'){editHomeList(D.kind,n)}
-else if(a==='home-remove'){const list=D.kind==='stays'?stays:dining;const item=list[n];if(item&&confirm('確定刪除「'+item.name+'」嗎？')){list.splice(n,1);persistHomeList(D.kind);render();showSavedToast()}}
+else if(a==='home-remove'){const list=homeListData(D.kind);const item=list[n];if(item&&confirm('確定刪除「'+item.name+'」嗎？')){list.splice(n,1);persistHomeList(D.kind);render();showSavedToast()}}
+else if(a==='ticket-zoom'){const item=tickets[n];const src=item?.photos?.[Number(D.photo)||0];if(src)shopShowImage(src,item.name)}
+else if(a==='ticket-preview-zoom'){const src=ticketPhotoEditing[Number(D.photo)||0];if(src)shopShowImage(src,'票券照片')}
+else if(a==='ticket-photo-remove'){ticketPhotoEditing.splice(Number(D.photo)||0,1);ticketPhotoPreview()}
 else if(a==='shop-add'){useAddBottomSheet();shopEditor(null)}
 else if(a==='shop-edit'){useAddBottomSheet();shopEditor(D.id)}
 else if(a==='shop-zoom'){const p=shopping.find(x=>x.id===D.id);if(p)shopShowImage(p.image,p.name)}
@@ -5764,8 +5886,8 @@ function makeCloudSync(){
   let api=null,auth=null,db=null,user=null,verified=false,connected=false,busy=false;
   let unsub=[],initial={itinerary:false},exists={itinerary:false};
   let itineraryBaseline={},localPendingDays=new Set();
-  let homeBaseline={stays:null,dining:null};
-  let homeReady={stays:false,dining:false};
+  let homeBaseline={stays:null,dining:null,tickets:null};
+  let homeReady={stays:false,dining:false,tickets:false};
   const localPendingHome=new Set();
   let flushTimer=0,liveEpoch=0,autoLoginPrompt=false,cloudError='';
   const dayKey=d=>'day_'+String(d.d);
@@ -5781,9 +5903,9 @@ function makeCloudSync(){
   };
   const shareDays=()=>Object.fromEntries(days.map(d=>[dayKey(d),shareDay(d)]));
   // 住宿／餐廳沿用各項目穩定的 id；同步日期、備註、順序及地圖連結。
-  const homeValue=key=>key==='stays'?stays:dining;
-  const shareHome=key=>homeValue(key).map(item=>({...item}));
-  const homeNames=['stays','dining'];
+  const homeValue=key=>homeListData(key);
+  const shareHome=key=>homeValue(key).map(item=>{const copy={...item};if(key==='tickets')delete copy.photos;return copy;});
+  const homeNames=['stays','dining','tickets'];
   const json=x=>JSON.stringify(x);
   const makeReadableError=err=>{
     const code=String(err?.code||'');
@@ -5819,7 +5941,7 @@ function makeCloudSync(){
     window.clearTimeout(flushTimer);flushTimer=0;unsub.forEach(f=>{try{f()}catch(e){}});unsub=[];
     initial={itinerary:false};exists={itinerary:false};
     itineraryBaseline={};localPendingDays.clear();
-    homeBaseline={stays:null,dining:null};homeReady={stays:false,dining:false};localPendingHome.clear();
+    homeBaseline={stays:null,dining:null,tickets:null};homeReady={stays:false,dining:false,tickets:false};localPendingHome.clear();
     connected=false;verified=false;cloudError='';liveEpoch++;
   }
   // 同步文件的文字資料，但保留同一台手機上使用者自行上傳的照片。
@@ -5845,7 +5967,7 @@ function makeCloudSync(){
   function preserveLocalBackup(){
     try{
       if(localStorage.getItem('hk26v2_cloud_backup_created'))return;
-      const content=json({days,todos,packs,shopping,stays,dining,backedUpAt:new Date().toISOString()});
+      const content=json({days,todos,packs,shopping,stays,dining,tickets,backedUpAt:new Date().toISOString()});
       if(content.length<1300000){
         localStorage.setItem('hk26v2_precloud_backup',content);
         localStorage.setItem('hk26v2_cloud_backup_created',new Date().toISOString());
@@ -5887,7 +6009,8 @@ function makeCloudSync(){
       if(json(shareHome(key))!==serialized){
         preserveLocalBackup();
         if(key==='stays'){stays=remote[key].map(item=>({...item}));upgradeLegacyFinalHotel(stays);}
-        else dining=remote[key].map(item=>({...item}));
+        else if(key==='dining')dining=remote[key].map(item=>({...item}));
+        else {const images=new Map(tickets.map(item=>[item.id,Array.isArray(item.photos)?item.photos:[]]));tickets=remote[key].map(item=>({...item,photos:images.get(item.id)||[]}));}
         SV(key,homeValue(key));changed=true;
       }
     }
@@ -6022,7 +6145,7 @@ function makeCloudSync(){
       await api.runTransaction(db,async tx=>{
         const existing=await tx.get(ref);
         if(existing.exists())return;
-        const body={...shareDays(),stays:shareHome('stays'),dining:shareHome('dining')};
+        const body={...shareDays(),stays:shareHome('stays'),dining:shareHome('dining'),tickets:shareHome('tickets')};
         if(json(body).length>850000)throw new Error('共用資料超過同步大小上限，請先縮減資料。');
         tx.set(ref,body);
       });
@@ -6036,8 +6159,8 @@ function makeCloudSync(){
     if(!verified||!user||busy||!connected||!exists.itinerary||!initial.itinerary)return;
     const missing=homeNames.filter(key=>!homeReady[key]);
     if(!missing.length)return;
-    if(!confirm('要將這台手機的'+missing.map(key=>key==='stays'?'住宿':'餐廳').join('、')+'清單首次上傳給所有旅伴嗎？\n請只在資料最完整的主要手機進行，避免其他手機的舊資料變成共用版本。'))return;
-    busy=true;paint();setStatus('正在建立住宿／餐廳共用資料…');
+    if(!confirm('要將這台手機的'+missing.map(key=>key==='stays'?'住宿':key==='dining'?'餐廳':'票券').join('、')+'清單首次上傳給所有旅伴嗎？\n請只在資料最完整的主要手機進行，避免其他手機的舊資料變成共用版本。'))return;
+    busy=true;paint();setStatus('正在建立住宿／餐廳／票券共用資料…');
     try{
       const ref=api.doc(db,'shared_trip_data','itinerary');
       await api.runTransaction(db,async tx=>{
@@ -6047,15 +6170,15 @@ function makeCloudSync(){
         const patch={};
         for(const key of homeNames)if(!Array.isArray(remote[key]))patch[key]=shareHome(key);
         if(!Object.keys(patch).length)return;
-        if(json(patch).length>250000)throw new Error('住宿／餐廳資料太大，請精簡備註後再試。');
+        if(json(patch).length>250000)throw new Error('住宿／餐廳／票券文字資料太大，請精簡備註後再試。');
         tx.set(ref,patch,{merge:true});
       });
-      cloudError='';setStatus('首次上傳完成，正在取得所有旅伴共用的住宿與餐廳資料。');
+      cloudError='';setStatus('首次上傳完成，正在取得所有旅伴共用的住宿、餐廳與票券資料。');
     }catch(err){cloudError=makeReadableError(err);setStatus(cloudError,true);}
     finally{busy=false;paint();}
   }
   function downloadBackup(){
-    const backup={format:'Hokkaido Winter Journal Backup',createdAt:new Date().toISOString(),days,todos,packs,shopping,stays,dining};
+    const backup={format:'Hokkaido Winter Journal Backup',createdAt:new Date().toISOString(),days,todos,packs,shopping,stays,dining,tickets};
     const blob=new Blob([json(backup)],{type:'application/json;charset=utf-8'});
     const url=URL.createObjectURL(blob),a=document.createElement('a');
     a.href=url;a.download='北海道旅誌_手機資料備份_'+new Date().toISOString().slice(0,10)+'.json';
