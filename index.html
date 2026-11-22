@@ -3398,6 +3398,38 @@ dialog#dlg.fl2-pass-dialog .fl2-pass-form{display:block;padding:12px 18px 25px;m
  .fl3-flight-duration{font-size:9px}
 }
 
+/* 2026-11-22 航班精簡：所有圖示為低飽和藍灰線條，避免航空公司名稱前重複顯示飛機。 */
+.overview-f .fl3-flights svg{
+  color:#8ea7bd;fill:none;stroke:currentColor;stroke-width:1.65;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.overview-f > summary > .sum-ic svg{fill:none;stroke:#8ea7bd;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.fl3-group-head{gap:8px}
+.fl3-ticket-header{gap:5px}
+.fl3-flight-duration{color:#839bb3}
+.fl3-route-center{color:#8ea7bd}
+.fl3-route-center i{border-color:#c8d7e5}
+.fl3-baggage>summary svg,.fl3-transfer>svg,.fl3-chevron svg{color:#8ea7bd}
+/* 上傳後的預覽照取代圖示，出現在「登機證／QR Code」文字左方。 */
+.fl3-pass-row{display:flex;align-items:center;gap:8px;min-width:0}
+.fl3-pass .fl2-pass-preview{flex:none;display:flex;align-items:center;width:auto;max-width:58px;min-width:0;margin:0;padding:6px 0;gap:0;overflow:hidden}
+.fl3-pass .fl2-pass-preview:empty{display:none}
+.fl3-pass .fl2-pass-preview button{width:55px;height:58px;min-width:55px;flex:none;padding:3px;border-radius:9px;background:#f5f9fd}
+.fl3-pass .fl2-pass-button{flex:1;width:auto;min-width:0;gap:7px}
+.fl3-pass .fl2-pass-button>svg{width:25px;height:25px;padding:5px;box-sizing:content-box;color:#8ea7bd;background:#f4f8fc;border-color:#c7d7e8}
+.fl3-pass.has-preview .fl2-pass-button>svg{display:none}
+.fl3-pass .fl2-pass-button>span:first-of-type{min-width:0;flex:1}
+.fl3-pass .fl2-pass-count{flex:none}
+.fl3-pass .fl3-pass-action{flex:none;padding:6px 7px;order:1}
+@media(max-width:360px){
+ .fl3-pass-row{gap:5px}
+ .fl3-pass .fl2-pass-preview{max-width:48px}
+ .fl3-pass .fl2-pass-preview button{width:46px;height:52px;min-width:46px}
+ .fl3-pass .fl2-pass-button{gap:5px}
+ .fl3-pass .fl2-pass-button>span:first-of-type{font-size:10px}
+ .fl3-pass .fl3-pass-action{padding:5px 6px;font-size:9px}
+}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -5216,8 +5248,8 @@ const fl3Ticket=(flightNo)=>{
  const f=FL3_ROUTES[flightNo];if(!f)return '';
  const bag=FLIGHT_BAGGAGE[flightNo];
  const bagView=bag?'<details class="fl3-baggage"><summary>'+iconSvg('suitcase')+'<span>隨身 <b>'+esc(bag.carry)+'</b>　｜　托運 <b>'+esc(bag.checked)+'</b></span>'+iconSvg('chevron')+'</summary><div class="fl3-baggage-body">'+bag.detail.map(x=>'<div><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join('')+'<small>依訂單資料整理，實際依航空公司最新確認額度為準。</small></div></details>':'';
- const pass=FLIGHT_OUTBOUND_IDS.has(flightNo)?'<div class="fl2-pass-inline fl3-pass"><button type="button" class="fl2-pass-button" data-a="flight-pass-open" data-flight-id="'+esc(flightNo)+'" aria-label="上傳或管理 '+esc(flightNo)+' 登機證">'+fl3Image+'<span>登機證／QR Code<small>只存在自己的手機</small></span><b>上傳 ＋</b><span class="fl2-pass-count" aria-hidden="true"></span></button><div class="fl2-pass-preview" data-flight-preview="'+esc(flightNo)+'" aria-label="已上傳的登機證縮圖"></div></div>':'';
- return '<article class="fl3-ticket" data-flight-no="'+esc(flightNo)+'"><div class="fl3-ticket-header"><div class="fl3-airline-ic">'+fl3Plane+'</div><div class="fl3-airline"><b>'+esc(f.company)+'</b><span>'+esc(flightNo)+'</span></div><div class="fl3-flight-duration">'+fl3Clock+' '+esc(f.duration)+'</div></div>'+ 
+ const pass=FLIGHT_OUTBOUND_IDS.has(flightNo)?'<div class="fl2-pass-inline fl3-pass"><div class="fl3-pass-row"><div class="fl2-pass-preview" data-flight-preview="'+esc(flightNo)+'" aria-label="已上傳的登機證縮圖"></div><button type="button" class="fl2-pass-button" data-a="flight-pass-open" data-flight-id="'+esc(flightNo)+'" aria-label="上傳或管理 '+esc(flightNo)+' 登機證">'+fl3Image+'<span>登機證／QR Code<small>只存在自己的手機</small></span><span class="fl2-pass-count" aria-hidden="true"></span><b class="fl3-pass-action">上傳 ＋</b></button></div></div>':'';
+ return '<article class="fl3-ticket" data-flight-no="'+esc(flightNo)+'"><div class="fl3-ticket-header"><div class="fl3-airline"><b>'+esc(f.company)+'</b><span>'+esc(flightNo)+'</span></div><div class="fl3-flight-duration">'+fl3Clock+' '+esc(f.duration)+'</div></div>'+ 
  '<div class="fl3-route"><div class="fl3-place"><strong>'+esc(f.d)+'</strong><b>'+esc(f.dc)+'</b><span>'+esc(f.dep)+'</span></div><div class="fl3-route-center">'+fl3Plane+'<i></i><small>'+(f.direct?'直飛':'航段')+'</small></div><div class="fl3-place fl3-place-end"><strong>'+esc(f.a)+'</strong><b>'+esc(f.ac)+'</b><span>'+esc(f.arr)+'</span></div></div>'+bagView+pass+
  '<footer class="fl3-ticket-footer"><span>航班時間為當地時間</span><b>'+esc(flightNo)+' · 2026</b></footer></article>';
 };
@@ -5230,10 +5262,10 @@ const fl3Leg=(key,type,route,summary,flights,notes,connection)=>{
  flights.map((no,i)=>(i===1?fl3Transfer(connection):'')+fl3Ticket(no)).join('')+ 
  (notes?'<p class="fl3-note">'+esc(notes)+'</p>':'')+'</div></details>';
 };
-const fl3Group=(name,type,legs)=>'<div class="fl3-group"><div class="fl3-group-head"><span class="fl3-group-icon">'+fl3Plane+'</span><div><b>'+esc(name)+'</b><small>2026 / 12 / 18 — 12 / 27</small></div><span class="fl3-group-kind">'+esc(type)+'</span></div>'+legs.join('')+'</div>';
+const fl3Group=(name,type,legs)=>'<div class="fl3-group"><div class="fl3-group-head"><div><b>'+esc(name)+'</b><small>2026 / 12 / 18 — 12 / 27</small></div><span class="fl3-group-kind">'+esc(type)+'</span></div>'+legs.join('')+'</div>';
 const alternateFlightBoard=()=>fl3Group('廈門出發 · 廈門返程','成田轉機',[
- fl3Leg('xiamen-out','去程','廈門 → 成田 → 札幌','09:20 XMN → CTS 18:40',['MF815','MM575'],'此組機票尚未提供行李重量，因此不顯示額度。','3 小時 5 分'),
- fl3Leg('xiamen-return','回程','札幌 → 成田 → 廈門','10:05 CTS → XMN 18:25',['MM570','MF816'],'回程不需上傳登機證。','3 小時')]);
+ fl3Leg('xiamen-out','去程','廈門 → 成田 → 札幌','09:20 XMN → CTS 18:40',['MF815','MM575'],'','3 小時 5 分'),
+ fl3Leg('xiamen-return','回程','札幌 → 成田 → 廈門','10:05 CTS → XMN 18:25',['MM570','MF816'],'','3 小時')]);
 const primaryFlightBoard=()=>fl3Group('台北出發 · 台北返程','直飛',[
  fl3Leg('taipei-out','去程','台北 → 札幌','12:15 TPE → CTS 17:00',['TR892'],'',null),
  fl3Leg('taipei-return','回程','札幌 → 台北','14:00 CTS → TPE 17:55',['FD243'],'',null)]);
@@ -5765,9 +5797,10 @@ async function flightPassCounts(){
   const id=b.dataset.flightId,preview=b.closest('.fl2-pass-inline')?.querySelector('.fl2-pass-preview');
   try{const items=await flightPassRead(id);if(!b.isConnected)return;
    const badge=b.querySelector('.fl2-pass-count');if(badge)badge.textContent=items.length?items.length+' 張':'';
-   if(preview){preview.innerHTML=items.slice(0,4).map((photo,i)=>
-    '<button type="button" data-a="flight-pass-quick-view" data-flight-id="'+esc(id)+'" data-i="'+i+'" aria-label="放大查看第 '+(i+1)+' 張去程登機證"><img src="'+esc(photo.src)+'" alt="第 '+(i+1)+' 張登機證" loading="lazy"></button>').join('')+
-    (items.length>4?'<span class="fl2-pass-more">＋'+(items.length-4)+' 張</span>':'');}
+   const passArea=b.closest('.fl3-pass');if(passArea)passArea.classList.toggle('has-preview',!!items.length);
+   const action=b.querySelector('.fl3-pass-action');if(action)action.textContent=items.length?'管理 ＋':'上傳 ＋';
+   if(preview){preview.innerHTML=items.slice(0,1).map((photo,i)=>
+    '<button type="button" data-a="flight-pass-quick-view" data-flight-id="'+esc(id)+'" data-i="'+i+'" aria-label="放大查看第 '+(i+1)+' 張去程登機證"><img src="'+esc(photo.src)+'" alt="第 '+(i+1)+' 張登機證" loading="lazy"></button>').join('');}
   }catch(_){if(preview)preview.innerHTML='';/* 本機資料庫不可用時仍可進入上傳面板查看提示。 */}
  }));
 }
