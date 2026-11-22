@@ -3318,6 +3318,86 @@ dialog#dlg.fl2-pass-dialog .fl2-pass-form{display:block;padding:12px 18px 25px;m
 @media(max-width:355px){.fl2-pass-preview button{width:60px;height:65px;min-width:60px}}
 @media(prefers-reduced-motion:reduce){.itinerary-add-trigger.shop-glass-add{transition:none!important}}
 
+
+/* 2026-11-22：重新設計的電子機票 + 兩組航班分別摺疊。 */
+.overview-f .fl3-flights{min-width:0;display:grid;gap:20px;padding:4px 0 6px}
+.fl3-flights,.fl3-flights *{box-sizing:border-box}
+.fl3-group{min-width:0}
+.fl3-group-head{display:flex;align-items:center;gap:9px;margin:1px 2px 12px;min-width:0}
+.fl3-group-icon{width:30px;height:30px;border-radius:11px;flex:none;display:grid;place-items:center;background:linear-gradient(145deg,#aec9e8,#dbe7f6);color:#fff}
+.fl3-group-icon svg{height:16px;width:16px}
+.fl3-group-head>div{min-width:0;flex:1}
+.fl3-group-head b{display:block;font-size:13px;font-weight:800;line-height:1.4;color:#34445a}
+.fl3-group-head small{display:block;font-size:9.5px;color:#93a4bb;letter-spacing:.6px;line-height:1.6}
+.fl3-group-kind{font-size:10px;color:#6b87a7;background:#e6eef8;border-radius:13px;padding:5px 8px;white-space:nowrap}
+.fl3-leg{margin:0 0 11px;min-width:0}
+.fl3-leg:not([open]){background:rgba(255,255,255,.76);border:1px solid rgba(215,227,241,.96);border-radius:18px;padding:3px 8px 10px;box-shadow:0 4px 18px rgba(68,103,145,.045)}
+.fl3-leg-head{list-style:none;display:flex;align-items:center;gap:7px;min-width:0;min-height:43px;padding:5px 2px;border:0;border-radius:12px;cursor:pointer;color:#465f7d;-webkit-tap-highlight-color:transparent}
+.fl3-leg-head::-webkit-details-marker{display:none}.fl3-leg-head::marker{display:none;content:''}
+.fl3-leg-head:active{background:rgba(210,224,242,.45)}
+.fl3-direction{flex:none;background:#e4effb;color:#6786a9;border-radius:7px;padding:4px 8px;font-size:10px;font-weight:800;line-height:1.4}
+.fl3-direction.fl3-return{background:#f1eafb;color:#907da6}
+.fl3-leg-head>b{flex:none;font-size:11px;letter-spacing:-.025em;white-space:nowrap;color:#41536b}
+.fl3-leg-route{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;color:#93a2b7;text-align:right}
+.fl3-chevron{flex:none;width:17px;height:17px;color:#95a8c1;transition:transform .25s ease;display:grid;place-items:center}
+.fl3-chevron svg{height:17px;width:17px}
+.fl3-leg[open] .fl3-chevron{transform:rotate(180deg)}
+.fl3-leg:not([open]) .fl3-leg-head{margin:0}
+.fl3-collapsed{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #eff3f9;margin:0 2px;padding:10px 3px 0;min-width:0}
+.fl3-leg[open] .fl3-collapsed{display:none}
+.fl3-collapsed>div{min-width:0}.fl3-collapsed strong{display:block;font-size:11px;line-height:1.45;color:#425a77;white-space:normal}
+.fl3-collapsed span{display:block;font-size:10px;line-height:1.6;color:#97a9bf}
+.fl3-collapsed>small{flex:none;font-size:9px;line-height:1.7;text-align:right;color:#8aa2c0}
+.fl3-leg-content{display:grid;gap:10px;min-width:0;padding:1px 0 0}
+.fl3-ticket{min-width:0;position:relative;overflow:hidden;border-radius:18px;padding:13px 12px 8px;background:rgba(255,255,255,.97);border:1px solid #e0e8f2;box-shadow:0 9px 28px rgba(77,111,153,.075),0 2px 6px rgba(89,112,141,.04)}
+.fl3-ticket:before,.fl3-ticket:after{content:'';position:absolute;width:13px;height:13px;border-radius:50%;background:#f3f7fc;bottom:19px;z-index:2}
+.fl3-ticket:before{left:-7px;box-shadow:inset -1px 0 0 #e3eaf4}.fl3-ticket:after{right:-7px;box-shadow:inset 1px 0 0 #e3eaf4}
+.fl3-ticket-header{display:flex;align-items:center;gap:8px;min-width:0}
+.fl3-airline-ic{width:31px;height:31px;display:grid;place-items:center;border-radius:10px;background:#e8f0fa;color:#7b99bc;flex:none}
+.fl3-airline-ic svg{height:17px;width:17px}
+.fl3-airline{min-width:0;flex:1}.fl3-airline b{display:block;font-size:11px;color:#394e6c;line-height:1.35}
+.fl3-airline span{display:block;font-size:10px;color:#899db6;line-height:1.6}
+.fl3-flight-duration{display:flex;align-items:center;gap:3px;font-size:9.5px;font-weight:700;color:#8b9db3;white-space:nowrap;flex:none}
+.fl3-flight-duration svg{height:13px;width:13px;flex:none}
+.fl3-route{display:grid;grid-template-columns:minmax(0,1fr) 52px minmax(0,1fr);gap:2px;align-items:center;padding:17px 0 13px;min-width:0}
+.fl3-place{min-width:0}.fl3-place-end{text-align:right}
+.fl3-place strong{font-size:23px;letter-spacing:-.055em;line-height:1.1;font-weight:830;font-variant-numeric:tabular-nums;display:block;color:#2b3b50;white-space:nowrap}
+.fl3-place b{display:block;margin-top:7px;color:#728daf;font-size:13px;font-weight:850;letter-spacing:.6px}
+.fl3-place span{display:block;margin-top:4px;color:#9aa8ba;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fl3-route-center{display:grid;justify-items:center;align-items:center;color:#8ca9ca;min-width:0;padding-top:5px}
+.fl3-route-center svg{width:18px;height:18px;display:block}.fl3-route-center i{width:100%;border-top:1.5px dashed #c4d6e9;margin-top:-2px}
+.fl3-route-center small{font-size:9px;color:#a5b6cb;margin-top:6px}
+.fl3-baggage{background:#f2f7fc;border:1px solid #e7eef8;border-radius:10px;margin:0 0 8px;overflow:hidden}
+.fl3-baggage>summary{display:flex;align-items:center;gap:7px;min-height:34px;padding:8px 9px;cursor:pointer;list-style:none;font-size:10px;color:#8094ae}
+.fl3-baggage>summary::-webkit-details-marker{display:none}.fl3-baggage>summary span{flex:1;min-width:0}
+.fl3-baggage>summary b{color:#54779a}.fl3-baggage>summary svg{height:14px;width:14px;flex:none;color:#7d99b8}
+.fl3-baggage-body{padding:4px 10px 11px;border-top:1px solid #e4edf8}
+.fl3-baggage-body>div{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:7px 0;color:#72849e;font-size:10px;border-bottom:1px solid #e7edf5}
+.fl3-baggage-body>div>b{font-weight:750;flex:0 0 73px;color:#536b8d}.fl3-baggage-body>div>span{text-align:right;min-width:0}
+.fl3-baggage-body small{display:block;color:#97a6ba;margin-top:7px;font-size:9px;line-height:1.5}
+.fl3-pass{margin-top:3px;min-width:0;border-top:1px solid #eef2f8}
+.fl3-pass .fl2-pass-button{display:flex;align-items:center;gap:7px;width:100%;margin:0;padding:10px 0 7px;background:transparent;border:none;text-align:left;cursor:pointer;min-width:0;color:#7d9abb}
+.fl3-pass .fl2-pass-button>svg{height:26px;width:29px;flex:none;background:#f2f8fd;border:1px dashed #b7cde6;border-radius:7px;padding:5px;box-sizing:content-box}
+.fl3-pass .fl2-pass-button>span:first-of-type{flex:1;min-width:0;font-weight:800;font-size:11px;color:#627f9f;line-height:1.4}
+.fl3-pass .fl2-pass-button>span:first-of-type small{display:block;color:#a4b4c8;font-size:9px;font-weight:500}
+.fl3-pass .fl2-pass-button>b{background:#e8f1fb;color:#7799ba;border-radius:8px;padding:6px 8px;font-size:10px;white-space:nowrap}
+.fl3-pass .fl2-pass-count{font-size:9px;white-space:nowrap;color:#90a5bd}
+.fl3-pass .fl2-pass-preview{margin:0;padding:4px 0 8px;gap:6px}
+.fl3-pass .fl2-pass-preview button{width:58px;height:63px;min-width:58px}
+.fl3-ticket-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:6px;padding:9px 2px 1px;border-top:1px dashed #e7edf6;font-size:9px;line-height:1.35;color:#a6b6ca}
+.fl3-ticket-footer b{font-size:9px;letter-spacing:.2px;color:#96abc3}
+.fl3-transfer{display:flex;align-items:center;gap:9px;background:#e8f1fc;border:1px solid #e1ebfa;border-radius:11px;padding:10px 11px;min-width:0}
+.fl3-transfer>svg{height:18px;width:18px;color:#7999bd;flex:none}
+.fl3-transfer>div{min-width:0}.fl3-transfer b{font-size:10.5px;color:#637f9e;line-height:1.5;display:block}
+.fl3-transfer small{font-size:9px;color:#95a7bf;line-height:1.5;display:block}
+.fl3-note{font-size:9px;color:#9caabe;margin:1px 4px 0;line-height:1.6}
+@media(max-width:360px){
+ .fl3-group-head b{font-size:12px}.fl3-leg-head{gap:5px}.fl3-leg-head>b{font-size:10px}.fl3-leg-route{font-size:9px}
+ .fl3-ticket{padding-left:10px;padding-right:10px}.fl3-route{grid-template-columns:minmax(0,1fr) 39px minmax(0,1fr)}
+ .fl3-place strong{font-size:20px}.fl3-place span{font-size:8.5px}
+ .fl3-flight-duration{font-size:9px}
+}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -5115,32 +5195,49 @@ const FLIGHT_BAGGAGE={
  TR892:{carry:'10 kg',checked:'每人 20 kg',detail:[['個人物品','每人 1 件，40 × 30 × 10 cm'],['手提行李','每人 1 件，54 × 38 × 23 cm'],['托運行李','每人 1 件，每件 20 kg']]},
  FD243:{carry:'7 kg',checked:'總共 20 kg',detail:[['個人物品','每人 1 件，40 × 30 × 10 cm'],['手提行李','每人 1 件，56 × 23 × 36 cm'],['托運行李','訂單標示共 20 kg；件數、尺寸以航空公司確認為準']]}
 };
-const FLIGHT_OUTBOUND_IDS=new Set(['TR892','MF815','MM575']);
+// 只有台北直飛、廈門至成田這兩段需要在 App 保存登機證。
+const FLIGHT_OUTBOUND_IDS=new Set(['TR892','MF815']);
 const FLIGHT_PASS_LABELS={TR892:'12/18 酷航 TR892',FD243:'12/27 泰國亞航 FD243',MF815:'12/18 廈門航空 MF815',MM575:'12/18 樂桃航空 MM575',MM570:'12/27 樂桃航空 MM570',MF816:'12/27 廈門航空 MF816'};
-const fl=(lb,a,at,b,bt,duration)=>{
- const parts=lb.split('｜'),date=parts[0]||'',rawAirline=parts.slice(1).join('｜')||'';
- const direction=date.includes('去程')?'去程':'回程';
- const day=date.replace(/去程|回程/g,'').trim();
- const codeMatch=rawAirline.match(/\b([A-Z]{2}\s*\d{2,4})\b/),flightNo=codeMatch?codeMatch[1].replace(/\s/g,''):'';
- const airline=flightNo?rawAirline.replace(codeMatch[0],'').trim():rawAirline;
- const airport=label=>{
-   if(label.includes('桃園'))return {code:'TPE',name:'台灣桃園國際機場',terminal:'T1'};
-   if(label.includes('廈門')||label.includes('高崎'))return {code:'XMN',name:'廈門高崎國際機場',terminal:'T3'};
-   if(label.includes('成田'))return {code:'NRT',name:'東京成田國際機場',terminal:'T1'};
-   if(label.includes('新千歲'))return {code:'CTS',name:'札幌新千歲機場',terminal:label.includes(' D')?'D':''};
-   return {code:'',name:label,terminal:''};
- };
- const dep=airport(a),arr=airport(b),bag=FLIGHT_BAGGAGE[flightNo],showPass=direction==='去程'&&FLIGHT_OUTBOUND_IDS.has(flightNo);
- const stop=(time,place,type)=>'<div class="fl2-stop fl2-'+type+'"><time>'+esc(time)+'</time><span class="fl2-stop-dot" aria-hidden="true"></span><div class="fl2-location"><strong>'+esc(place.code)+'</strong><span>'+esc(place.name)+'</span>'+(place.terminal?'<small>'+esc(place.terminal)+'</small>':'')+'</div></div>';
- const bagView=bag?'<details class="fl2-luggage"><summary>'+iconSvg('suitcase')+'<b>行李額度</b><span>隨身合計 '+esc(bag.carry)+'・托運 '+esc(bag.checked)+'</span>'+iconSvg('chevron')+'</summary><div class="fl2-luggage-detail">'+bag.detail.map(it=>'<div><b>'+esc(it[0])+'</b><span>'+esc(it[1])+'</span></div>').join('')+'<small>依訂單截圖整理；實際以航空公司確認的額度為準。</small></div></details>':'';
- return '<section class="fl2-leg" data-flight-no="'+esc(flightNo)+'" aria-label="'+esc(day+' '+direction+' '+flightNo)+'">'+
-  '<div class="fl2-leg-header"><span class="fl2-date">'+esc(day)+' <b>'+direction+'</b></span><span class="fl2-duration">'+iconSvg('clock')+esc(duration)+'</span></div>'+
-  '<div class="fl2-timeline">'+stop(at,dep,'departure')+
-   '<div class="fl2-carrier"><span class="fl2-carrier-line" aria-hidden="true"></span><div class="fl2-carrier-content">'+iconSvg('planeMini')+'<span>'+esc(airline)+'</span><b>'+esc(flightNo)+'</b></div></div>'+
-   stop(bt,arr,'arrival')+'</div>'+
-  bagView+
-  (showPass?'<div class="fl2-pass-inline"><button class="fl2-pass-button" type="button" data-a="flight-pass-open" data-flight-id="'+esc(flightNo)+'" aria-label="上傳或管理 '+esc(flightNo)+' 去程登機證">'+iconSvg('ticket')+'<span>去程登機證／QR Code</span><small>僅此手機</small><span class="fl2-pass-count" aria-hidden="true"></span>'+iconSvg('chevron')+'</button><div class="fl2-pass-preview" data-flight-preview="'+esc(flightNo)+'" aria-label="已上傳的登機證縮圖"></div></div>':'')+'</section>';
-}; const sec=(k,ic,t,sub,body)=>'<details class="card overview-panel overview-'+k+'" data-k="'+k+'"'+(ov.has(k)?' open':'')+'><summary><span class="sum-ic">'+ic+'</span><div><b>'+t+'</b><small>'+sub+'</small></div></summary><div class="bd">'+body+'</div></details>';
+// 電子機票風格：完整資訊收於獨立去程／回程面板，機票 QR Code 始終個人本機保存。
+const FL3_LEG_STATE={'taipei-out':true,'taipei-return':false,'xiamen-out':true,'xiamen-return':false};
+const fl3Clock='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3.2 1.9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+const fl3Plane='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3 8.7 15.3M21 3l-7.2 18-4.3-9.5L0 7.2 21 3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"/></svg>';
+const fl3Arrow='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>';
+const fl3Image='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="9" r="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m5 18 4.7-5.2 3.2 3 3.4-3.2 3.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+const FL3_ROUTES={
+ TR892:{company:'酷航 Scoot',dep:'台北桃園 T1',arr:'札幌新千歲',d:'12:15',a:'17:00',dc:'TPE',ac:'CTS',duration:'3 小時 45 分',direct:true},
+ FD243:{company:'泰國亞航 AirAsia',dep:'札幌新千歲',arr:'台北桃園 T1',d:'14:00',a:'17:55',dc:'CTS',ac:'TPE',duration:'4 小時 55 分',direct:true},
+ MF815:{company:'廈門航空 XiamenAir',dep:'廈門高崎 T3',arr:'東京成田 T1',d:'09:20',a:'13:45',dc:'XMN',ac:'NRT',duration:'3 小時 25 分'},
+ MM575:{company:'樂桃航空 Peach',dep:'東京成田 T1',arr:'札幌新千歲',d:'16:50',a:'18:40',dc:'NRT',ac:'CTS',duration:'1 小時 50 分'},
+ MM570:{company:'樂桃航空 Peach',dep:'札幌新千歲',arr:'東京成田 T1',d:'10:05',a:'11:55',dc:'CTS',ac:'NRT',duration:'1 小時 50 分'},
+ MF816:{company:'廈門航空 XiamenAir',dep:'東京成田 T1',arr:'廈門高崎 T3',d:'14:55',a:'18:25',dc:'NRT',ac:'XMN',duration:'4 小時 30 分'}
+};
+const fl3Ticket=(flightNo)=>{
+ const f=FL3_ROUTES[flightNo];if(!f)return '';
+ const bag=FLIGHT_BAGGAGE[flightNo];
+ const bagView=bag?'<details class="fl3-baggage"><summary>'+iconSvg('suitcase')+'<span>隨身 <b>'+esc(bag.carry)+'</b>　｜　托運 <b>'+esc(bag.checked)+'</b></span>'+iconSvg('chevron')+'</summary><div class="fl3-baggage-body">'+bag.detail.map(x=>'<div><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join('')+'<small>依訂單資料整理，實際依航空公司最新確認額度為準。</small></div></details>':'';
+ const pass=FLIGHT_OUTBOUND_IDS.has(flightNo)?'<div class="fl2-pass-inline fl3-pass"><button type="button" class="fl2-pass-button" data-a="flight-pass-open" data-flight-id="'+esc(flightNo)+'" aria-label="上傳或管理 '+esc(flightNo)+' 登機證">'+fl3Image+'<span>登機證／QR Code<small>只存在自己的手機</small></span><b>上傳 ＋</b><span class="fl2-pass-count" aria-hidden="true"></span></button><div class="fl2-pass-preview" data-flight-preview="'+esc(flightNo)+'" aria-label="已上傳的登機證縮圖"></div></div>':'';
+ return '<article class="fl3-ticket" data-flight-no="'+esc(flightNo)+'"><div class="fl3-ticket-header"><div class="fl3-airline-ic">'+fl3Plane+'</div><div class="fl3-airline"><b>'+esc(f.company)+'</b><span>'+esc(flightNo)+'</span></div><div class="fl3-flight-duration">'+fl3Clock+' '+esc(f.duration)+'</div></div>'+ 
+ '<div class="fl3-route"><div class="fl3-place"><strong>'+esc(f.d)+'</strong><b>'+esc(f.dc)+'</b><span>'+esc(f.dep)+'</span></div><div class="fl3-route-center">'+fl3Plane+'<i></i><small>'+(f.direct?'直飛':'航段')+'</small></div><div class="fl3-place fl3-place-end"><strong>'+esc(f.a)+'</strong><b>'+esc(f.ac)+'</b><span>'+esc(f.arr)+'</span></div></div>'+bagView+pass+
+ '<footer class="fl3-ticket-footer"><span>航班時間為當地時間</span><b>'+esc(flightNo)+' · 2026</b></footer></article>';
+};
+const fl3Transfer=(duration)=>'<div class="fl3-transfer">'+iconSvg('route')+'<div><b>東京成田轉機 · '+esc(duration)+'</b><small>需重新託運行李，請預留辦理手續時間</small></div></div>';
+const fl3Leg=(key,type,route,summary,flights,notes,connection)=>{
+ const outward=type==='去程',date=outward?'12 月 18 日・週五':'12 月 27 日・週日';
+ const flightList=flights.join(' · '),isOpen=FL3_LEG_STATE[key]!==undefined?FL3_LEG_STATE[key]:outward;
+ return '<details class="fl3-leg" data-flight-leg-key="'+esc(key)+'"'+(isOpen?' open':'')+'><summary class="fl3-leg-head"><span class="fl3-direction'+(outward?'':' fl3-return')+'">'+type+'</span><b>'+date+'</b><span class="fl3-leg-route">'+esc(route)+'</span><span class="fl3-chevron">'+fl3Arrow+'</span></summary>'+ 
+ '<div class="fl3-collapsed"><div><strong>'+esc(summary)+'</strong><span>'+esc(flightList)+'</span></div><small>'+(connection?'成田轉機':'直飛航班')+'<span>點擊展開</span></small></div><div class="fl3-leg-content">'+ 
+ flights.map((no,i)=>(i===1?fl3Transfer(connection):'')+fl3Ticket(no)).join('')+ 
+ (notes?'<p class="fl3-note">'+esc(notes)+'</p>':'')+'</div></details>';
+};
+const fl3Group=(name,type,legs)=>'<div class="fl3-group"><div class="fl3-group-head"><span class="fl3-group-icon">'+fl3Plane+'</span><div><b>'+esc(name)+'</b><small>2026 / 12 / 18 — 12 / 27</small></div><span class="fl3-group-kind">'+esc(type)+'</span></div>'+legs.join('')+'</div>';
+const alternateFlightBoard=()=>fl3Group('廈門出發 · 廈門返程','成田轉機',[
+ fl3Leg('xiamen-out','去程','廈門 → 成田 → 札幌','09:20 XMN → CTS 18:40',['MF815','MM575'],'此組機票尚未提供行李重量，因此不顯示額度。','3 小時 5 分'),
+ fl3Leg('xiamen-return','回程','札幌 → 成田 → 廈門','10:05 CTS → XMN 18:25',['MM570','MF816'],'回程不需上傳登機證。','3 小時')]);
+const primaryFlightBoard=()=>fl3Group('台北出發 · 台北返程','直飛',[
+ fl3Leg('taipei-out','去程','台北 → 札幌','12:15 TPE → CTS 17:00',['TR892'],'',null),
+ fl3Leg('taipei-return','回程','札幌 → 台北','14:00 CTS → TPE 17:55',['FD243'],'',null)]);
+ const sec=(k,ic,t,sub,body)=>'<details class="card overview-panel overview-'+k+'" data-k="'+k+'"'+(ov.has(k)?' open':'')+'><summary><span class="sum-ic">'+ic+'</span><div><b>'+t+'</b><small>'+sub+'</small></div></summary><div class="bd">'+body+'</div></details>';
 
 const TRIP_WEBS=[
  {group:'交通・班次',hint:'下雪天先查運行情況',links:[
@@ -5168,20 +5265,9 @@ const travelLinksPanel=()=>{
  return sec('useful',iconSvg('externalLink'),'旅途中常用網站','交通・景點・入境',body);
 };
 
-const alternateFlightBoard=()=>'<div class="fl2-itinerary"><div class="flight-traveler-title"><span>廈門出發・廈門返程</span><small>成田轉機</small></div>'+ 
- '<div class="flight-board flight-board-transfer">'+
- '<div class="flight-trip-direction"><strong>12/18（五） · 去程</strong><span>廈門 → 東京成田 → 札幌</span></div>'+ 
- fl('12/18（五）去程｜廈門航空 MF815','廈門高崎 T3','09:20','成田 T1','13:45','3 小時 25 分')+
- '<div class="fl2-connection">'+iconSvg('route')+'<div><b>東京成田轉機 · 3 小時 5 分</b><small>需重新托運行李，請預留辦理手續時間</small></div></div>'+ 
- fl('12/18（五）去程｜樂桃航空 MM575','成田 T1','16:50','新千歲 D','18:40','1 小時 50 分')+
- '<div class="flight-trip-direction flight-trip-return"><strong>12/27（日） · 回程</strong><span>札幌 → 東京成田 → 廈門</span></div>'+ 
- fl('12/27（日）回程｜樂桃航空 MM570','新千歲 D','10:05','成田 T1','11:55','1 小時 50 分')+
- '<div class="fl2-connection">'+iconSvg('route')+'<div><b>東京成田轉機 · 3 小時</b><small>需重新托運行李，請預留辦理手續時間</small></div></div>'+ 
- fl('12/27（日）回程｜廈門航空 MF816','成田 T1','14:55','廈門高崎 T3','18:25','4 小時 30 分')+
- '<p class="flight-board-note">時間均為機場當地時間。此組機票未提供行李重量，故不顯示額度。</p></div></div>';
 function home(){const n=packs.filter(p=>p.done).length;
  const totalNights=stays.reduce((sum,item)=>sum+nightsBetween(item.checkin,item.checkout),0);
- return travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程','<div class="fl2-itinerary"><div class="flight-traveler-title"><span>台北出發・台北返程</span><small>直飛</small></div><div class="flight-board">'+fl('12/18（五）去程｜酷航 Scoot TR892','台北桃園 T1','12:15','札幌新千歲 CTS','17:00','3 小時 45 分')+fl('12/27（日）回程｜泰國亞航 AirAsia FD243','札幌新千歲 CTS','14:00','台北桃園 T1','17:55','4 小時 55 分')+'<p class="flight-board-note">航班時間均為當地時間，行李額度依你提供的訂單截圖整理。</p></div></div>'+alternateFlightBoard())
+ return travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程', '<div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div>')
  +sec('h',iconSvg('hotel'),'住宿一覽',stays.length+' 間・共 '+totalNights+' 晚',homeListBody('stays'))
  +sec('r',iconSvg('utensils'),'已訂餐廳',dining.length+' 間・訂位資料',homeListBody('dining'))
  +sec('k',iconSvg('ticket'),'已訂票券',tickets.length+' 筆・票券資料',homeListBody('tickets'))
@@ -6464,6 +6550,8 @@ document.addEventListener('change',e=>{
  }
 });
 document.addEventListener('toggle',e=>{
+ const legKey=e.target.dataset?.flightLegKey;
+ if(legKey&&Object.prototype.hasOwnProperty.call(FL3_LEG_STATE,legKey))FL3_LEG_STATE[legKey]=e.target.open;
  const k=e.target.dataset&&e.target.dataset.k;
  if(k){e.target.open?ov.add(k):ov.delete(k)}
 },true);
