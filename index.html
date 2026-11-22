@@ -3525,6 +3525,37 @@ dialog#dlg.fl2-pass-dialog .fl2-pass-form{display:block;padding:12px 18px 25px;m
 }
 #app .tlw details.row .ld-itin-detail-icon{display:block;line-height:1.6;white-space:nowrap;min-width:0}
 #app .tlw details.row .ld-itin-detail-value{display:block;min-width:0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}
+
+/* 2026.11.22 | Complete transaction history: open from the entry-list header. */
+.ld-full-ledger-panel .ld-all-open{
+  display:inline-flex;align-items:center;justify-content:center;flex:none;
+  width:29px;height:29px;margin:-3px -4px -3px 0;padding:4px;
+  background:transparent;border:0;border-radius:9px;color:#849bb4;cursor:pointer;
+}
+.ld-full-ledger-panel .ld-all-open svg{
+  width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.65;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.ld-full-ledger-panel .ld-all-open:active{background:#eaf0f7}
+.ld-all-screen{gap:12px!important}
+.ld-all-screen .ld-sub-header{margin-bottom:0}
+.ld-all-screen .ld-all-tabs{grid-template-columns:repeat(2,minmax(0,1fr));flex:0 0 auto;min-height:50px}
+.ld-all-screen .ld-all-tabs>button{min-height:40px;height:40px}
+.ld-all-screen .ld-all-tabs .ld-tax-tab-indicator{width:calc((100% - 12px)/2)}
+.ld-all-screen #ld-all-tab-body{display:flex;flex-direction:column;gap:12px;min-width:0;flex:0 0 auto}
+.ld-all-screen .ld-all-panel{min-width:0}
+.ld-all-screen .ld-all-entry-list{overflow:visible;min-height:0;max-height:none;padding:0}
+.ld-all-screen .ld-all-stat-content{display:flex;flex-direction:column;gap:12px;min-width:0}
+.ld-all-screen .ld-stat-tabs{flex:0 0 auto}
+/* When transaction details are opened from this screen, show the actual
+   previously scrolled full-details page beneath the swipe-back transition. */
+body.ld-ledger-overlay-open main.ledger-layered-main>.ld-preserved-underlay>.ld-all-screen{
+  position:fixed!important;inset:0!important;width:100%!important;
+  height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;
+  overflow-y:auto!important;padding:calc(12px + env(safe-area-inset-top,0px)) max(15px,calc((100vw - 620px)/2)) calc(108px + env(safe-area-inset-bottom,0px))!important;
+  background:linear-gradient(150deg,#f6f8fc,#edf3fa 74%,#f6f3fa)!important;
+  pointer-events:none!important;
+}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -4432,6 +4463,7 @@ let ledgerDay='all',ledgerTaxOnly=false,ledgerPhotoTemp='',ledgerEditorId=null;
 let ledgerSort=LS('ledgerSortV1','asc')==='desc'?'desc':'asc',ledgerSearch='',ledgerFilterCategory='',ledgerFilterPayer='',ledgerFilterMethod='',ledgerFilterCurrency='',ledgerFiltersOpen=false;
 let ledgerView='main',ledgerDetailId=null,ledgerStatDay='2026-12-18',ledgerStatTab='daily',ledgerReturnScroll=0,ledgerPhotoLoading=false,ledgerFilterType='',ledgerNavStack=[];
 let ledgerCategoryDay='all',ledgerCategoryDetailed=false;
+let ledgerAllTab='entries',ledgerAllScrollTop=0,ledgerAllLensTimer=0;
 let ledgerTaxTab='mine',ledgerTaxDepartureMode='kiosk',ledgerTaxLensTimer=0;
 let fxCalc={amount:'1000',from:'JPY',to:'TWD',result:''};
 // 臺灣銀行即期牌告價由公開 JSON 鏡像提供；不沿用舊版 Frankfurter 快取，以免標錯來源。
@@ -4675,12 +4707,14 @@ function ledgerSyncStatLens(force=false){
  ledgerStatLensTab=tab;
  if(instant)requestAnimationFrame(()=>requestAnimationFrame(()=>lens.classList.remove('nav-no-motion')));
 }
-function ledgerStatPage(){
+function ledgerStatInner(){
  const tabs=[['daily','每日支出'],['category','支出類別'],['method','支出方式']];
- return '<div class="ld-page ld-subpage ld-stat-screen ld-ledger-overlay" data-ledger-subpage="stats">'+ledgerSubHeader('支出統計','12/18–12/27 · 向右滑動返回')+
- '<nav class="ld-stat-tabs" aria-label="統計類型"><div class="ld-stat-slide-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>'+tabs.map(([key,label])=>'<button type="button" data-a="ledger-stat-tab" data-v="'+key+'" class="'+(ledgerStatTab===key?'on':'')+'" aria-pressed="'+(ledgerStatTab===key)+'">'+label+'</button>').join('')+'</nav>'+
- '<div id="ld-stat-body">'+ledgerStatBody()+'</div>'+
- (!ledgerHasRate()?'<p class="ld-hint">跨幣別統計需要匯率，請返回記帳更新參考匯率。</p>':'')+'</div>';
+ return '<nav class="ld-stat-tabs" aria-label="統計類型"><div class="ld-stat-slide-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>'+tabs.map(([key,label])=>'<button type="button" data-a="ledger-stat-tab" data-v="'+key+'" class="'+(ledgerStatTab===key?'on':'')+'" aria-pressed="'+(ledgerStatTab===key)+'">'+label+'</button>').join('')+'</nav>'+ 
+ '<div id="ld-stat-body">'+ledgerStatBody()+'</div>'+ 
+ (!ledgerHasRate()?'<p class="ld-hint">跨幣別統計需要匯率，請返回記帳更新參考匯率。</p>':'');
+}
+function ledgerStatPage(){
+ return '<div class="ld-page ld-subpage ld-stat-screen ld-ledger-overlay" data-ledger-subpage="stats">'+ledgerSubHeader('支出統計','12/18–12/27 · 向右滑動返回')+ledgerStatInner()+'</div>';
 }
 function ledgerStatSelectDay(date){
  ledgerStatDay=date;
@@ -4806,7 +4840,7 @@ function ledgerDetailPage(){
 }
 // 子頁開啟時保留「實際顯示中的」上一頁 DOM 與捲動狀態，
 // 避免重建一份從頂端開始的記帳頁，造成右滑返回時底下畫面錯位。
-let ledgerUnderlayDirty=false;
+let ledgerUnderlayDirty=false,ledgerUnderlaySequence=0;
 function ledgerMountLiveSubpage(view){
  const main=app.querySelector('main');
  if(!main)return false;
@@ -4816,18 +4850,28 @@ function ledgerMountLiveSubpage(view){
   .map(node=>({node,top:node.scrollTop,left:node.scrollLeft}));
  const preserved=document.createElement('div');
  preserved.className='ld-return-underlay ld-preserved-underlay';
+ const layer=String(++ledgerUnderlaySequence);
+ preserved.dataset.ledgerLayer=layer;
  preserved.setAttribute('aria-hidden','true');
  preserved.inert=true;
  while(main.firstChild)preserved.appendChild(main.firstChild);
+ // Underlying screens are inert. Hide their duplicate IDs until they are restored
+ // so search, filters and statistics always target the topmost live screen.
+ preserved.querySelectorAll('[id]').forEach(node=>{
+  if(node.dataset.ledgerStoredLayer)return;
+  node.dataset.ledgerStoredId=node.id;node.dataset.ledgerStoredLayer=layer;
+  node.id='ld-preserved-'+layer+'-'+node.id;
+ });
  main.appendChild(preserved);
  main.classList.add('ledger-layered-main');
- main.insertAdjacentHTML('beforeend',view==='stats'?ledgerStatPage():ledgerDetailPage());
+ main.insertAdjacentHTML('beforeend',view==='all'?ledgerAllPage():view==='stats'?ledgerStatPage():ledgerDetailPage());
  document.body.classList.add('ld-ledger-overlay-open');
  // 若上一層是退稅，保留它原來的全螢幕及已捲動的位置。
  if(main.querySelector('.ld-preserved-underlay .ld-tax-screen'))document.body.classList.add('ld-tax-fullscreen-open');
  // CSS 改為覆蓋模式後再恢復 scrollTop，避免瀏覽器在重新掛載時清零。
  for(const {node,top,left} of scrolledNodes){if(node.isConnected){node.scrollTop=top;node.scrollLeft=left}}
- if(view==='stats')ledgerSyncStatLens(true);
+ if(view==='stats'||(view==='all'&&ledgerAllTab==='stats'))ledgerSyncStatLens(true);
+ if(view==='all')ledgerSyncAllLens(true);
  return true;
 }
 function ledgerOpenView(view,id=''){
@@ -4835,17 +4879,17 @@ function ledgerOpenView(view,id=''){
  const main=app.querySelector('main');
  const previousPanel=main?.querySelector(':scope > [data-ledger-subpage]');
  ledgerNavStack.push({view:ledgerView,id:ledgerDetailId,scroll:window.scrollY||0,
-  listScroll:main?.querySelector('#ld-entry-list')?.scrollTop||0,
+  listScroll:(previousPanel||main)?.querySelector('#ld-entry-list')?.scrollTop||0,
   subScroll:previousPanel?.scrollTop||0});
  ledgerView=view;ledgerDetailId=view==='detail'?id:null;
  // 明細與統計保留上一頁的真實 DOM，滑出時才能露出相同的捲動位置。
- if((view==='detail'||view==='stats')&&ledgerMountLiveSubpage(view))return;
+ if((view==='detail'||view==='stats'||view==='all')&&ledgerMountLiveSubpage(view))return;
  render();if(view!=='tax')window.scrollTo(0,0);
 }
 // 初次載入缺少上一頁 DOM 時的相容回退；正常使用走 ledgerMountLiveSubpage。
 function ledgerReturnUnderlay(){
  const previous=ledgerNavStack.length?ledgerNavStack[ledgerNavStack.length-1].view:'main';
- const content=previous==='tax'?ledgerTaxPageView():previous==='stats'?ledgerStatPage():ledgerPage();
+ const content=previous==='tax'?ledgerTaxPageView():previous==='all'?ledgerAllPage():previous==='stats'?ledgerStatPage():ledgerPage();
  return '<div class="ld-return-underlay" aria-hidden="true" inert>'+content+'</div>';
 }
 function ledgerBack(){
@@ -4860,17 +4904,25 @@ function ledgerBack(){
   ledgerView=previous.view;ledgerDetailId=previous.id;
   if(hasLivePage){
    panel.remove();
+   const layer=underlay.dataset.ledgerLayer;
+   underlay.querySelectorAll('[data-ledger-stored-layer="'+layer+'"]').forEach(node=>{
+    node.id=node.dataset.ledgerStoredId;
+    delete node.dataset.ledgerStoredId;delete node.dataset.ledgerStoredLayer;
+   });
    while(underlay.firstChild)main.insertBefore(underlay.firstChild,underlay);
    underlay.remove();
-   const hasOverlay=previous.view==='detail'||previous.view==='stats';
+   const hasOverlay=previous.view==='detail'||previous.view==='stats'||previous.view==='all';
    main.classList.toggle('ledger-layered-main',hasOverlay);
    document.body.classList.toggle('ld-ledger-overlay-open',hasOverlay);
    document.body.classList.toggle('ld-tax-fullscreen-open',previous.view==='tax'||!!main.querySelector('.ld-tax-screen'));
    if(ledgerUnderlayDirty){
-    ledgerUnderlayDirty=false;
+    // Keep the pending refresh through nested pages (all → detail → all → main):
+    // changes made on a detail page must also reach the original journal page.
+    if(previous.view==='main')ledgerUnderlayDirty=false;
     render();
    }
-   const list=app.querySelector('#ld-entry-list');
+   const previousRoot=previous.view==='main'?main:main.querySelector(':scope > [data-ledger-subpage="'+previous.view+'"]');
+   const list=previousRoot?.querySelector('#ld-entry-list');
    if(list)list.scrollTop=previous.listScroll||0;
    const sub=app.querySelector('main > [data-ledger-subpage]');
    if(sub)sub.scrollTop=previous.subScroll||0;
@@ -5022,17 +5074,32 @@ function ledgerPage(){
  '<section class="ld-total"><div class="ld-total-top"><span class="ld-total-label">整趟行程總消費</span><div class="ld-total-actions"><details class="ld-currency-picker"><summary aria-label="選擇顯示幣別"><span>'+({JPY:'¥',TWD:'NT$',CNY:'CN¥'}[ledger.currency])+'</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="ld-currency-menu">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="ledger-currency" data-v="'+code+'" class="'+(code===ledger.currency?'on':'')+'">'+LEDGER_CURRENCY_LABEL[code]+'</button>').join('')+'</div></details><button type="button" class="ld-tax-entry" data-a="ledger-tax-open" title="退稅" aria-label="開啟退稅：我的退稅、離境檢查、退稅資訊">'+iconSvg('receipt')+'</button></div></div><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div><p>支出 '+expenseEntries.length+' 筆 · 收入 '+incomeEntries.length+' 筆 · 轉帳 '+transferEntries.length+' 筆 · '+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+'<br>跨幣別以參考匯率估算，非刷卡結算金額</p></section>'+
 
  '<section class="ld-panel"><div class="ld-section-head"><h3>匯率換算</h3><button type="button" class="ld-mini-link" data-a="ledger-fx-refresh">'+(fxInfo.loading?'更新中…':'⟳ 更新匯率')+'</button></div><div class="ld-rate-line">'+fxRate+'</div><div class="ld-calculator"><label>金額<span class="ld-fx-input-frame"><input type="number" id="ld-fx-amount" min="0" step="any" inputmode="decimal" value="'+esc(fxCalc.amount)+'"></span></label><label>原幣<select id="ld-fx-from">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.from===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label><label>換算<select id="ld-fx-to">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.to===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label></div><div class="ld-convert-row"><button type="button" data-a="ledger-convert" class="ld-convert-btn">按最新匯率換算</button><strong class="ld-result">'+(fxCalc.result||'—')+'</strong></div><p class="ld-hint">'+(fxInfo.error?esc(fxInfo.error)+' · ':'')+'資料來源：<a href="https://rate.bot.com.tw/xrt" target="_blank" rel="noopener noreferrer">臺灣銀行牌告匯率</a>（<a href="https://haotool.org/ratewise/open-data/" target="_blank" rel="noopener noreferrer">公開資料鏡像</a>）；以即期買賣均價估算，更新時間見上方，非銀行實際刷卡或現鈔成交價。</p></section>'+
- '<section class="ld-panel ld-stats-panel"><button type="button" class="ld-stat-entry" data-a="ledger-stats"><span class="ld-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V13M10 20V8M16 20V11M22 20V4"/></svg></span><span><strong>支出統計</strong><small>每日支出・支出類別・支出方式</small></span><span class="ld-stat-arrow">›</span></button></section>'+
- '<section class="ld-panel ld-expense-panel ld-full-ledger-panel"><div class="ld-section-head"><h3>收支明細</h3></div>'+ledgerSearchControls()+
+
+ '<section class="ld-panel ld-expense-panel ld-full-ledger-panel"><div class="ld-section-head"><h3>收支明細</h3><button type="button" class="ld-all-open" data-a="ledger-all-open" aria-label="查看完整收支明細" title="完整收支明細"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>'+ledgerSearchControls()+
  '<div id="ld-entry-list" class="ld-scroll-entry-list" role="region" aria-label="可上下捲動的完整收支明細" tabindex="0">'+(filtered.length?ledgerExpenseGroups(filtered):'<div class="ld-empty">'+(ledger.entries.length?'沒有符合搜尋條件的收支明細。':'尚無收支紀錄，點右下角「＋」新增第一筆。')+'</div>')+'</div></section>'+
  '<section class="ld-panel"><div class="ld-section-head"><h3>備份與匯出</h3></div><p class="ld-hint">記帳與照片只儲存在這台手機的瀏覽器，不會自動同步給旅伴。建議定期下載 JSON 備份；CSV 適合用 Excel 整理。</p><div class="ld-backup-buttons"><button type="button" data-a="ledger-export-csv">匯出 CSV</button><button type="button" data-a="ledger-export-json">下載 JSON</button><button type="button" data-a="ledger-import-open">匯入 JSON</button></div><input type="file" id="ledger-import-input" accept="application/json,.json" hidden></section>'+
  '</div>';
 }
-function ledgerAllPage(){
+function ledgerAllBody(){
+ if(ledgerAllTab==='stats')return '<div class="ld-all-stat-content">'+ledgerStatInner()+'</div>';
  const filtered=ledgerFilteredEntries();
- return '<div class="ld-page ld-subpage ld-all-screen" data-ledger-subpage="all">'+ledgerSubHeader('完整收支明細','所有記帳紀錄 · 向右滑動可返回')+
- '<section class="ld-panel ld-expense-panel ld-all-panel"><div class="ld-section-head"><h3>全部收支明細</h3></div>'+ledgerSearchControls()+
- '<div id="ld-entry-list">'+(filtered.length?ledgerExpenseGroups(filtered):'<div class="ld-empty">沒有符合搜尋條件的收支明細。</div>')+'</div></section></div>';
+ return '<section class="ld-panel ld-expense-panel ld-all-panel"><div class="ld-section-head"><h3>收支明細</h3><span class="ld-count" id="ld-visible-count">'+filtered.length+' 筆</span></div>'+ledgerSearchControls()+
+ '<div id="ld-entry-list" class="ld-all-entry-list" aria-label="完整收支明細">'+(filtered.length?ledgerExpenseGroups(filtered):'<div class="ld-empty">'+(ledger.entries.length?'沒有符合搜尋條件的收支明細。':'尚無收支紀錄，請返回記帳頁點「＋」新增第一筆。')+'</div>')+'</div></section>';
+}
+function ledgerAllPage(){
+ const tabs=[['entries','收支明細'],['stats','支出統計']];
+ return '<div class="ld-page ld-subpage ld-all-screen ld-ledger-overlay" data-ledger-subpage="all">'+ledgerSubHeader('完整收支明細','收支明細與支出統計 · 向右滑動返回')+
+ '<nav class="ld-tax-tabs ld-all-tabs" aria-label="完整收支明細欄目"><div class="ld-tax-tab-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>'+tabs.map(([id,label])=>'<button type="button" data-a="ledger-all-tab" data-v="'+id+'" class="'+(ledgerAllTab===id?'on':'')+'" aria-pressed="'+(ledgerAllTab===id)+'">'+label+'</button>').join('')+'</nav>'+
+ '<div id="ld-all-tab-body">'+ledgerAllBody()+'</div></div>';
+}
+function ledgerSyncAllLens(instant=false){
+ const bar=document.querySelector('main > .ld-all-screen .ld-all-tabs');if(!bar)return;
+ const lens=bar.querySelector('.ld-tax-tab-indicator'),active=bar.querySelector('button.on');if(!lens||!active)return;
+ const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+ if(instant||reduce)lens.classList.add('nav-no-motion');
+ lens.style.width=active.offsetWidth+'px';lens.style.transform='translate3d('+active.offsetLeft+'px,0,0)';
+ if(!instant&&!reduce){clearTimeout(ledgerAllLensTimer);lens.classList.remove('nav-moving');void lens.offsetWidth;lens.classList.add('nav-moving');ledgerAllLensTimer=setTimeout(()=>lens.classList.remove('nav-moving'),540)}
+ if(instant||reduce)requestAnimationFrame(()=>requestAnimationFrame(()=>lens.classList.remove('nav-no-motion')));
 }
 function ledgerCustomSelect(name,label,items,current,placeholder='自行新增'){
  const all=ledgerChoices([...items,current]);
@@ -5221,7 +5288,17 @@ async function ledgerClick(action,data){
  else if(action==='ledger-tax-next'){ledgerSelectTaxPage(ledgerTaxPage+1)}
  else if(action==='ledger-tax-prev'){ledgerSelectTaxPage(ledgerTaxPage-1)}
  else if(action==='ledger-tax-page'){ledgerSelectTaxPage(data.v)}
- else if(action==='ledger-stats'){ledgerOpenView('stats')}
+ else if(action==='ledger-all-open'){ledgerAllTab='entries';ledgerAllScrollTop=0;ledgerOpenView('all')}
+ else if(action==='ledger-stats'){ledgerAllTab='stats';ledgerOpenView('all')}
+ else if(action==='ledger-all-tab'){
+  const page=document.querySelector('main > .ld-all-screen');
+  if(page){if(ledgerAllTab==='entries')ledgerAllScrollTop=page.scrollTop;ledgerAllTab=data.v==='stats'?'stats':'entries';
+   page.querySelectorAll('.ld-all-tabs button').forEach(b=>{const on=b.dataset.v===ledgerAllTab;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});
+   const body=page.querySelector('#ld-all-tab-body');if(body)body.innerHTML=ledgerAllBody();
+   ledgerSyncAllLens();if(ledgerAllTab==='stats'){ledgerSyncStatLens(true);page.scrollTop=0;}
+   else {applySwipeRows();page.scrollTop=ledgerAllScrollTop;}
+  }
+ }
  else if(action==='ledger-detail'){ledgerOpenView('detail',data.id)}
  else if(action==='ledger-back'){ledgerBack()}
  else if(action==='ledger-stat-day'){ledgerStatSelectDay(data.v)}
@@ -5995,21 +6072,23 @@ async function viewFlightPassPreview(flightId,index){
 
 function render(){
   // 明細詳情 / 統計的重繪不能取代下方的上一頁：保留真實捲動位置與 DOM。
-  if(st.tab==='ledger'&&(ledgerView==='detail'||ledgerView==='stats')){
+  if(st.tab==='ledger'&&(ledgerView==='detail'||ledgerView==='stats'||ledgerView==='all')){
    const liveMain=app.querySelector('main.ledger-layered-main');
    const preserved=liveMain?.querySelector(':scope > .ld-preserved-underlay');
    const visible=liveMain?.querySelector(':scope > [data-ledger-subpage]');
    if(preserved&&visible){
     const top=visible.scrollTop;
-    visible.outerHTML=ledgerView==='detail'?ledgerDetailPage():ledgerStatPage();
+    visible.outerHTML=ledgerView==='detail'?ledgerDetailPage():ledgerView==='all'?ledgerAllPage():ledgerStatPage();
     const refreshed=liveMain.querySelector(':scope > [data-ledger-subpage]');
     if(refreshed)refreshed.scrollTop=top;
-    if(ledgerView==='stats')ledgerSyncStatLens(true);
+    if(ledgerView==='stats'||(ledgerView==='all'&&ledgerAllTab==='stats'))ledgerSyncStatLens(true);
+    if(ledgerView==='all')ledgerSyncAllLens(true);
+    applySwipeRows();
     return;
    }
   }
   document.body.classList.toggle('ld-tax-fullscreen-open',st.tab==='ledger'&&ledgerView==='tax');
-  document.body.classList.toggle('ld-ledger-overlay-open',st.tab==='ledger'&&(ledgerView==='detail'||ledgerView==='stats'));
+  document.body.classList.toggle('ld-ledger-overlay-open',st.tab==='ledger'&&(ledgerView==='detail'||ledgerView==='stats'||ledgerView==='all'));
   const ledgerListBefore=app.querySelector('#ld-entry-list');
  if(ledgerListBefore)ledgerListScrollTop=ledgerListBefore.scrollTop;
  const existingStrip=app.querySelector('main .days:not(.cats)');
@@ -6029,7 +6108,7 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
+    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail'||ledgerView==='all')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='all'?ledgerReturnUnderlay()+ledgerAllPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
@@ -6037,7 +6116,8 @@ function render(){
   if(st.tab==='ledger'&&(ledgerView==='main'||ledgerView==='tax')){const scroller=app.querySelector('#ld-entry-list');if(scroller)scroller.scrollTop=ledgerListScrollTop;}
   applySwipeRows();
   syncNavGlass();
-   if(st.tab==='ledger'&&ledgerView==='stats')ledgerSyncStatLens(true);
+   if(st.tab==='ledger'&&(ledgerView==='stats'||(ledgerView==='all'&&ledgerAllTab==='stats')))ledgerSyncStatLens(true);
+   if(st.tab==='ledger'&&ledgerView==='all')ledgerSyncAllLens(true);
   if(st.tab==='ledger'&&ledgerView==='tax'){ledgerSyncTaxLens(true);if(ledgerTaxTab==='check')ledgerSyncDepartureLens(true);}
   runItineraryEntrance();
   if(st.tab==='plan')getWxForecast(false);
