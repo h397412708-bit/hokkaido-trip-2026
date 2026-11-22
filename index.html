@@ -3503,6 +3503,20 @@ dialog#dlg.fl2-pass-dialog .fl2-pass-form{display:block;padding:12px 18px 25px;m
 }
 .fl3-route-center svg.fl3-direct-plane path{stroke-width:1.2}
 
+
+/* 2026-11-22｜總覽標題和簡介靠近一點，不更動卡片尺寸與其他分頁。 */
+.overview-panel > summary > div > b,
+.weather-overview > summary > div > b{
+  display:block;line-height:1.23;margin:0;
+}
+.overview-panel > summary > div > small,
+.weather-overview > summary > div > small{
+  display:block;line-height:1.3;margin-top:2px;
+}
+/* 沒有可展開內容的景點：仍可左滑編輯／刪除，也可點 Google Maps。 */
+.tlw > details.row.no-spot-details > summary{cursor:default}
+.tlw > details.row.no-spot-details > summary::after{display:none!important}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -4266,6 +4280,17 @@ const row=(a,i,d)=>{
  const cost=status.booked&&a.bookingKey==='snow'?String(a.cost||'').replace('尚未預訂','依已訂方案'):a.cost;
  const media=!mv?spotMedia(a):null,webUrl=!mv?itinerarySpotHref(a):'',mapOpenUrl=webUrl?itineraryMapsDirectHref(webUrl,a):'',clock=displayStartTime(a.time);
  const photoFirst=!mv&&media?(media.photos?.[0]?.src||media.src||''):'';
+ // 僅當「行程細節、營業時間、預估費用、景點照片、景點介紹」
+ // 五類均沒有內容時，景點卡片才不可展開；交通項目維持原設定。
+ // 以實際可顯示的 media 判斷，兼容既有預設景點圖集與舊資料。
+ const hasMediaContent=!!(media&&(
+   String(media.src||'').trim()||String(media.intro||'').trim()||
+   (Array.isArray(media.photos)&&media.photos.some(ph=>String(ph?.src||'').trim()))
+ ));
+ const canExpand=mv||!!(
+   String(a.desc||'').trim()||String(a.hours||'').trim()||
+   String(a.cost||'').trim()||hasMediaContent
+ );
  const summaryPhoto=photoFirst?'<span class="row-spot-thumb" aria-hidden="true"><img src="'+esc(photoFirst)+'" alt="" loading="lazy"></span>':'';
  const pinIcon=iconSvg('pin');
  const summaryWeb=mapOpenUrl?'<a class="itinerary-web-pin" data-itinerary-web href="'+esc(mapOpenUrl)+'" title="在 Google Maps 開啟" aria-label="在 Google Maps 開啟">'+pinIcon+'</a>':'';
@@ -4281,8 +4306,20 @@ const row=(a,i,d)=>{
   // 未附相簿的景點仍在展開後保有可點擊的 Google Maps 連結。
   !mv&&!media&&expandedWeb,
  ].filter(Boolean).join('');
- return '<details class="row'+(mv?' mv':'')+'" data-k="'+a.id+'" data-clock="'+esc(clock)+'"'+(ov.has(a.id)?' open':'')+'><summary aria-label="'+esc(clock+' '+title)+'"><time class="row-inline-clock">'+esc(clock)+'</time><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+summaryPhoto+summaryWeb+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>';
+ return '<details class="row'+(mv?' mv':'')+(canExpand?'':' no-spot-details')+'" data-k="'+a.id+'" data-clock="'+esc(clock)+'"'+(canExpand&&ov.has(a.id)?' open':'')+'><summary'+(canExpand?'':' data-no-expand="true"')+' aria-label="'+esc(clock+' '+title)+(canExpand?'':'，尚無詳細資訊；可左滑編輯')+'"><time class="row-inline-clock">'+esc(clock)+'</time><span class="row-summary-main">'+(mv?'<span class="row-summary-heading">'+transportBadge(a)+'<span class="row-summary-title">'+esc(title)+'</span></span>':'<span class="row-summary-title">'+esc(title)+'</span>')+durationFor(a)+'</span>'+(status.booked?'<i class="bk">已訂</i>':status.pending?'<i class="pd">待確認</i>':'')+summaryPhoto+summaryWeb+dragGrip(i)+'</summary><div class="bd">'+bd+'<div class="tl">'+tool('d',i)+'</div></div></details>';
 };
+// 景點無五類詳細資料時，點標題不展開；保留 Google Maps 連結、左滑與操作按鈕。
+app.addEventListener('click',e=>{
+ const summary=e.target.closest?.('.tlw > details.row.no-spot-details > summary');
+ if(!summary||e.target.closest('a,button,input,select,textarea'))return;
+ e.preventDefault();
+},true);
+// 鍵盤 Enter / 空白也不應展開無內容卡片；仍讓連結及按鈕可操作。
+app.addEventListener('keydown',e=>{
+ if(e.key!=='Enter'&&e.key!==' ')return;
+ const summary=e.target.closest?.('.tlw > details.row.no-spot-details > summary');
+ if(summary&&!e.target.closest('a,button,input,select,textarea'))e.preventDefault();
+},true);
 // 地標使用真正的 <a href="comgooglemaps://…"> 原生導覽，不阻止連結預設動作。
 // 收合 summary 仍攔截事件向上傳遞，避免點擊地標把卡片打開。
 app.addEventListener('click',e=>{
