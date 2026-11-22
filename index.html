@@ -3365,7 +3365,7 @@ dialog#dlg.fl2-pass-dialog .fl2-pass-form{display:block;padding:12px 18px 25px;m
 .fl3-place b{display:block;margin-top:7px;color:#728daf;font-size:13px;font-weight:850;letter-spacing:.6px}
 .fl3-place span{display:block;margin-top:4px;color:#9aa8ba;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fl3-route-center{display:grid;justify-items:center;align-items:center;color:#8ca9ca;min-width:0;padding-top:5px}
-.fl3-route-center svg{width:18px;height:18px;display:block}.fl3-route-center i{width:100%;border-top:1.5px dashed #c4d6e9;margin-top:-2px}
+.fl3-route-center svg{width:18px;height:18px;display:block}
 .fl3-route-center small{font-size:9px;color:#a5b6cb;margin-top:6px}
 .fl3-baggage{background:#f2f7fc;border:1px solid #e7eef8;border-radius:10px;margin:0 0 8px;overflow:hidden}
 .fl3-baggage>summary{display:flex;align-items:center;gap:7px;min-height:34px;padding:8px 9px;cursor:pointer;list-style:none;font-size:10px;color:#8094ae}
@@ -3408,7 +3408,6 @@ dialog#dlg.fl2-pass-dialog .fl2-pass-form{display:block;padding:12px 18px 25px;m
 .fl3-ticket-header{gap:5px}
 .fl3-flight-duration{color:#839bb3}
 .fl3-route-center{color:#8ea7bd}
-.fl3-route-center i{border-color:#c8d7e5}
 .fl3-baggage>summary svg,.fl3-transfer>svg,.fl3-chevron svg{color:#8ea7bd}
 /* 上傳後的預覽照取代圖示，出現在「登機證／QR Code」文字左方。 */
 .fl3-pass-row{display:flex;align-items:center;gap:8px;min-width:0}
@@ -3494,13 +3493,15 @@ dialog#dlg.fl2-pass-dialog .fl2-pass-form{display:block;padding:12px 18px 25px;m
   text-align:right;
 }
 .fl3-leg:not([open]) .fl3-collapsed>small span{display:block}
-/* 直飛與「航班」標題使用完全相同的線條飛機，向右旋轉 90 度。 */
+/* 直飛與航段共用航班標題的簡約飛機：順時針 90 度、細線條，沒有虛線。 */
 .fl3-route-center svg.fl3-direct-plane{
   width:27px;
   height:27px;
   transform:rotate(90deg);
   transform-origin:center;
+  stroke-width:1.2;
 }
+.fl3-route-center svg.fl3-direct-plane path{stroke-width:1.2}
 
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
@@ -5305,8 +5306,7 @@ const FLIGHT_PASS_LABELS={TR892:'12/18 酷航 TR892',FD243:'12/27 泰國亞航 F
 // 電子機票風格：完整資訊收於獨立去程／回程面板，機票 QR Code 始終個人本機保存。
 const FL3_LEG_STATE={'taipei-out':true,'taipei-return':false,'xiamen-out':true,'xiamen-return':false};
 const fl3Clock='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3.2 1.9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
-const fl3Plane='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3 8.7 15.3M21 3l-7.2 18-4.3-9.5L0 7.2 21 3Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"/></svg>';
-const fl3DirectPlane='<svg class="fl3-direct-plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.9 0 1.3.9 1.3 1.7v7l7.7 5V18l-7.7-2.5v4l2.1 1.5V23L12 21.7 8.6 23v-2l2.1-1.5v-4L3 18v-2.3l7.7-5v-7C10.7 2.9 11.1 2 12 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const fl3DirectPlane='<svg class="fl3-direct-plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.9 0 1.3.9 1.3 1.7v7l7.7 5V18l-7.7-2.5v4l2.1 1.5V23L12 21.7 8.6 23v-2l2.1-1.5v-4L3 18v-2.3l7.7-5v-7C10.7 2.9 11.1 2 12 2z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const fl3Arrow='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>';
 const fl3Image='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="9" r="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m5 18 4.7-5.2 3.2 3 3.4-3.2 3.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
 const FL3_ROUTES={
@@ -5323,7 +5323,7 @@ const fl3Ticket=(flightNo)=>{
  const bagView=bag?'<details class="fl3-baggage"><summary>'+iconSvg('suitcase')+'<span>隨身 <b>'+esc(bag.carry)+'</b>　｜　托運 <b>'+esc(bag.checked)+'</b></span>'+iconSvg('chevron')+'</summary><div class="fl3-baggage-body">'+bag.detail.map(x=>'<div><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join('')+'<small>依訂單資料整理，實際依航空公司最新確認額度為準。</small></div></details>':'';
  const pass=FLIGHT_OUTBOUND_IDS.has(flightNo)?'<div class="fl2-pass-inline fl3-pass"><div class="fl3-pass-row"><div class="fl2-pass-preview" data-flight-preview="'+esc(flightNo)+'" aria-label="已上傳的登機證縮圖"></div><button type="button" class="fl2-pass-button" data-a="flight-pass-open" data-flight-id="'+esc(flightNo)+'" aria-label="上傳或管理 '+esc(flightNo)+' 登機證">'+fl3Image+'<span>登機證／QR Code<small>只存在自己的手機</small></span><span class="fl2-pass-count" aria-hidden="true"></span><b class="fl3-pass-action">上傳 ＋</b></button></div></div>':'';
  return '<article class="fl3-ticket" data-flight-no="'+esc(flightNo)+'"><div class="fl3-ticket-header"><div class="fl3-airline"><b>'+esc(f.company)+'</b><span>'+esc(flightNo)+'</span></div><div class="fl3-flight-duration">'+fl3Clock+' '+esc(f.duration)+'</div></div>'+ 
- '<div class="fl3-route"><div class="fl3-place"><strong>'+esc(f.d)+'</strong><b>'+esc(f.dc)+'</b><span>'+esc(f.dep)+'</span></div><div class="fl3-route-center">'+(f.direct?fl3DirectPlane:fl3Plane)+'<i></i><small>'+(f.direct?'直飛':'航段')+'</small></div><div class="fl3-place fl3-place-end"><strong>'+esc(f.a)+'</strong><b>'+esc(f.ac)+'</b><span>'+esc(f.arr)+'</span></div></div>'+bagView+pass+
+ '<div class="fl3-route"><div class="fl3-place"><strong>'+esc(f.d)+'</strong><b>'+esc(f.dc)+'</b><span>'+esc(f.dep)+'</span></div><div class="fl3-route-center">'+fl3DirectPlane+'<small>'+(f.direct?'直飛':'航段')+'</small></div><div class="fl3-place fl3-place-end"><strong>'+esc(f.a)+'</strong><b>'+esc(f.ac)+'</b><span>'+esc(f.arr)+'</span></div></div>'+bagView+pass+
  '<footer class="fl3-ticket-footer"><span>航班時間為當地時間</span><b>'+esc(flightNo)+' · 2026</b></footer></article>';
 };
 const fl3Transfer=(duration)=>'<div class="fl3-transfer">'+iconSvg('route')+'<div><b>東京成田轉機 · '+esc(duration)+'</b><small>需重新託運行李，請預留辦理手續時間</small></div></div>';
