@@ -3058,6 +3058,54 @@ dialog#dlg.ticket-list-editor form.ticket-edit-form input[type="time"]::-webkit-
 dialog#dlg.ticket-list-editor form.ticket-edit-form input[type="date"]::-webkit-datetime-edit{min-width:0!important;max-width:100%;padding:0 2px;}
 dialog#dlg.ticket-list-editor form.ticket-edit-form input[type="time"]::-webkit-calendar-picker-indicator{margin:0 0 0 1px;flex-shrink:0;}
 
+
+/* 2026-11-22｜已訂票券：日期與單一時間全寬，時間區間比照餐廳訂位並排等寬。 */
+dialog#dlg.ticket-list-editor form.ticket-edit-form>.ticket-date-field,
+dialog#dlg.ticket-list-editor form.ticket-edit-form>.ticket-time-row{
+  width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-time-row{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:10px!important;align-items:start!important;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-time-row:has(.ticket-end-time[hidden]){
+  grid-template-columns:minmax(0,1fr)!important;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-time-row>.home-edit-field{
+  min-width:0!important;max-width:100%!important;width:100%!important;margin:0 0 12px!important;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-end-time[hidden]{display:none!important;}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-picker{
+  display:flex;align-items:center;justify-content:space-between;position:relative;gap:5px;
+  width:100%;height:48px;min-height:48px;min-width:0;max-width:100%;
+  margin-top:6px;padding:10px 10px 10px 11px;box-sizing:border-box;
+  background:#f9fbff;border:1px solid #dce4f0;border-radius:12px;color:#2f435d;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-picker strong{
+  display:block;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-size:13px;line-height:1.4;font-weight:750;font-variant-numeric:tabular-nums;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-picker svg{
+  display:block;width:16px;height:16px;flex:0 0 16px;fill:none;
+  stroke:currentColor;stroke-width:1.7;color:#7186a4;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-picker input[type="date"],
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-picker input[type="time"]{
+  position:absolute!important;inset:0!important;display:block!important;z-index:2!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  height:100%!important;min-height:0!important;margin:0!important;padding:0!important;
+  opacity:0!important;box-sizing:border-box!important;border:0!important;
+  cursor:pointer!important;touch-action:manipulation;-webkit-appearance:auto!important;appearance:auto!important;
+}
+dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-picker:focus-within{
+  outline:2px solid #b2c7d6;outline-offset:1px;
+}
+@media(max-width:375px){
+ dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-time-row{column-gap:8px!important;}
+ dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-picker{padding:9px 8px!important;}
+ dialog#dlg.ticket-list-editor form.ticket-edit-form .ticket-picker strong{font-size:12px;}
+}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -5440,14 +5488,28 @@ function editTicket(index){
  dlg.classList.add('home-list-editor','ticket-list-editor');
  dlg.innerHTML='<form class="home-edit-form ticket-edit-form"><h3>'+(adding?'新增':'編輯')+'已訂票券</h3><p class="home-edit-hint">使用日期與時間都可留空，照片可點擊放大（照片保存在上傳的手機）。</p>'+
  '<label class="home-edit-field">名稱<input name="name" type="text" maxlength="180" required placeholder="例如：天狗山纜車票券" value="'+esc(current.name||'')+'"></label>'+
- '<label class="home-edit-field">使用日期（選填）<input name="date" type="date" value="'+esc(current.date||'')+'"></label>'+
+ '<label class="home-edit-field ticket-date-field">使用日期（選填）<span class="ticket-picker"><strong data-ticket-value="date">'+esc(current.date?current.date.replace(/-/g,'/'):'選擇日期')+'</strong>'+iconSvg('calendar')+'<input name="date" type="date" value="'+esc(current.date||'')+'" aria-label="使用日期"></span></label>'+
  '<div class="home-edit-field ticket-time-mode"><span>時間類型</span><div class="ticket-time-options"><label><input type="radio" name="timeMode" value="single"'+(mode==='single'?' checked':'')+'><span>單一時間</span></label><label><input type="radio" name="timeMode" value="range"'+(mode==='range'?' checked':'')+'><span>時間區間</span></label></div></div>'+
- '<div class="ticket-time-row"><label class="home-edit-field">'+(mode==='range'?'開始時間':'使用時間')+'<input name="startTime" type="time" value="'+esc(current.startTime||'')+'"></label><label class="home-edit-field ticket-end-time"'+(mode==='range'?'':' hidden')+'>結束時間<input name="endTime" type="time" value="'+esc(current.endTime||'')+'"></label></div>'+
+ '<div class="ticket-time-row"><label class="home-edit-field ticket-start-time">'+(mode==='range'?'開始時間':'使用時間')+'<span class="ticket-picker"><strong data-ticket-value="startTime">'+esc(current.startTime||'選擇時間')+'</strong>'+iconSvg('clock')+'<input name="startTime" type="time" value="'+esc(current.startTime||'')+'" aria-label="使用或開始時間"></span></label><label class="home-edit-field ticket-end-time"'+(mode==='range'?'':' hidden')+'>結束時間<span class="ticket-picker"><strong data-ticket-value="endTime">'+esc(current.endTime||'選擇時間')+'</strong>'+iconSvg('clock')+'<input name="endTime" type="time" value="'+esc(current.endTime||'')+'" aria-label="結束時間"></span></label></div>'+
  '<label class="home-edit-field">備註<textarea name="note" rows="5" placeholder="票券使用方式、兌換資訊、注意事項…">'+esc(current.note||'')+'</textarea></label>'+
  '<div class="home-edit-field"><span>票券照片</span><div id="ticket-photo-preview" class="ticket-photo-preview"></div><div class="ticket-photo-footer"><label class="ticket-upload-label" for="ticket-photo-file">＋ 上傳照片</label><small id="ticket-photo-hint"></small></div><input type="file" accept="image/*,.heic,.heif" id="ticket-photo-file" multiple hidden></div>'+
  '<div class="fb"><button type="button" data-a="cx">取消</button><button type="submit" class="pri">儲存</button></div></form>';
  const form=dlg.querySelector('form'),start=form.elements.startTime,end=form.elements.endTime;
- function refreshTimeMode(){const range=form.elements.timeMode.value==='range';dlg.querySelector('.ticket-end-time').hidden=!range;dlg.querySelector('.ticket-time-row>label:first-child').childNodes[0].textContent=range?'開始時間':'使用時間';if(!range)end.value='';}
+ function ticketPickerValue(key){
+  const input=form.elements[key],out=form.querySelector('[data-ticket-value="'+key+'"]');
+  if(!input||!out)return;
+  out.textContent=input.value?(key==='date'?input.value.replace(/-/g,'/'):input.value):(key==='date'?'選擇日期':'選擇時間');
+ }
+ ['date','startTime','endTime'].forEach(key=>{
+  form.elements[key].addEventListener('change',()=>ticketPickerValue(key));
+  form.elements[key].addEventListener('input',()=>ticketPickerValue(key));
+ });
+ function refreshTimeMode(){
+  const range=form.elements.timeMode.value==='range';
+  dlg.querySelector('.ticket-end-time').hidden=!range;
+  dlg.querySelector('.ticket-start-time').childNodes[0].textContent=range?'開始時間':'使用時間';
+  if(!range){end.value='';ticketPickerValue('endTime');}
+ }
  form.querySelectorAll('[name="timeMode"]').forEach(input=>input.addEventListener('change',refreshTimeMode));
  dlg.querySelector('#ticket-photo-file').addEventListener('change',e=>{ticketReadPhotos(e.target.files);e.target.value='';});
  ticketPhotoPreview();
