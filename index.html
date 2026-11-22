@@ -2870,6 +2870,42 @@ body.ld-ledger-overlay-open main.ledger-layered-main>.ld-subpage.ld-ledger-overl
 @keyframes todoItemPress{0%{transform:scale(1);background:transparent}22%{transform:scale(.989);background:#edf3fa}65%{transform:scale(.996);background:#f5f8fc}100%{transform:scale(1);background:transparent}}
 @keyframes todoCheckBounce{0%{transform:scale(.88)}35%{transform:scale(1.22);filter:drop-shadow(0 0 5px #86a9cf75)}68%{transform:scale(.95)}100%{transform:scale(1);filter:none}}
 @media(prefers-reduced-motion:reduce){.td.todo-press-feedback .swipe-face,.td.todo-press-feedback input[data-a="tg"]{animation:none}.td .todo-body>span::after{transition-duration:.01ms}}
+
+/* 2026.11.22｜記帳子頁：底部分頁維持首頁五欄 Liquid Glass 版型 */
+body.ld-ledger-overlay-open .bottom-nav,
+body.ld-tax-fullscreen-open .bottom-nav{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  align-items:stretch!important;
+  gap:0!important;
+}
+body.ld-ledger-overlay-open .bottom-nav{z-index:1201!important}
+body.ld-ledger-overlay-open main.ledger-layered-main>.ld-ledger-overlay{
+  padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))!important;
+}
+/* 從「我的退稅」開啟明細時，也完整保留退稅頁目前捲動到的位置。 */
+body.ld-ledger-overlay-open main.ledger-layered-main>.ld-preserved-underlay .ld-tax-screen{
+  position:fixed!important;
+  inset:0!important;
+  width:100%!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:100dvh!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch;
+}
+/* 沿用實際上一頁 DOM：保留內部清單與整個網頁當下的捲動位置。 */
+main.ledger-layered-main>.ld-preserved-underlay{
+  position:relative!important;
+  width:100%!important;
+  min-height:100dvh!important;
+  overflow:visible!important;
+  pointer-events:none!important;
+}
+main.ledger-layered-main>.ld-preserved-underlay .ld-tax-screen{
+  pointer-events:none!important;
+}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -3720,7 +3756,7 @@ if(savedFx&&savedFx.rates&&LEDGER_CURRENCIES.every(k=>Number.isFinite(savedFx.ra
  fxInfo.rates=savedFx.rates;fxInfo.updated=String(savedFx.updated||'');
 }
 function ledgerRemember(old){
- try{localStorage.setItem('hk26v2_ledgerV1',JSON.stringify(ledger));return true}
+ try{localStorage.setItem('hk26v2_ledgerV1',JSON.stringify(ledger));if(ledgerView!=='main')ledgerUnderlayDirty=true;return true}
  catch(err){if(old)ledger=old;alert('記帳資料無法儲存，可能是手機瀏覽器空間不足。請先下載 JSON 備份或減少照片大小。');return false}
 }
 function ledgerChoices(values){return [...new Set(values.map(v=>String(v||'').trim()).filter(Boolean))];}
@@ -3959,10 +3995,12 @@ function ledgerDetailUpdateNet(e){
  else if(next)section.insertAdjacentHTML('beforebegin',next);
 }
 function ledgerDetailRefresh(){
- const page=document.querySelector('[data-ledger-subpage="detail"]');if(!page)return;
- const y=window.scrollY;
+ const page=document.querySelector('main > [data-ledger-subpage="detail"]');if(!page)return;
+ // 子頁是固定的獨立捲動容器，不應拿上一頁的 window.scrollY 當成詳情位置。
+ const y=page.scrollTop;
  page.outerHTML=ledgerDetailPage();
- requestAnimationFrame(()=>window.scrollTo(0,y));
+ const refreshed=document.querySelector('main > [data-ledger-subpage="detail"]');
+ if(refreshed)refreshed.scrollTop=y;
 }
 function ledgerInlineCommit(control){
  if(!control||!control.isConnected||ledgerView!=='detail')return;
@@ -4050,13 +4088,45 @@ function ledgerDetailPage(){
  '<div class="ld-photo-detail-actions"><label class="ld-detail-add-photo" for="ld-detail-photo-file">'+(e.photo?'更換照片':'＋ 上傳明細照片')+'</label><input id="ld-detail-photo-file" type="file" accept="image/*,.heic,.heif" data-ledger-detail-photo="'+esc(e.id)+'" hidden>'+(e.photo?'<button type="button" class="ld-detail-remove-photo" data-a="ledger-detail-photo-remove" data-id="'+esc(e.id)+'">移除照片</button>':'')+'</div>'+
  '<button type="button" class="ld-detail-delete" data-a="ledger-delete" data-id="'+esc(e.id)+'">刪除此筆記帳</button></div>';
 }
+// 子頁開啟時保留「實際顯示中的」上一頁 DOM 與捲動狀態，
+// 避免重建一份從頂端開始的記帳頁，造成右滑返回時底下畫面錯位。
+let ledgerUnderlayDirty=false;
+function ledgerMountLiveSubpage(view){
+ const main=app.querySelector('main');
+ if(!main)return false;
+ // 重新掛到容器時，iOS/Safari 可能將可捲動區的 scrollTop 歸零：先逐一記住。
+ const scrolledNodes=[main,...main.querySelectorAll('*')]
+  .filter(node=>node.scrollTop||node.scrollLeft)
+  .map(node=>({node,top:node.scrollTop,left:node.scrollLeft}));
+ const preserved=document.createElement('div');
+ preserved.className='ld-return-underlay ld-preserved-underlay';
+ preserved.setAttribute('aria-hidden','true');
+ preserved.inert=true;
+ while(main.firstChild)preserved.appendChild(main.firstChild);
+ main.appendChild(preserved);
+ main.classList.add('ledger-layered-main');
+ main.insertAdjacentHTML('beforeend',view==='stats'?ledgerStatPage():ledgerDetailPage());
+ document.body.classList.add('ld-ledger-overlay-open');
+ // 若上一層是退稅，保留它原來的全螢幕及已捲動的位置。
+ if(main.querySelector('.ld-preserved-underlay .ld-tax-screen'))document.body.classList.add('ld-tax-fullscreen-open');
+ // CSS 改為覆蓋模式後再恢復 scrollTop，避免瀏覽器在重新掛載時清零。
+ for(const {node,top,left} of scrolledNodes){if(node.isConnected){node.scrollTop=top;node.scrollLeft=left}}
+ if(view==='stats')ledgerSyncStatLens(true);
+ return true;
+}
 function ledgerOpenView(view,id=''){
  if(ledgerView===view&&ledgerDetailId===id)return;
- ledgerNavStack.push({view:ledgerView,id:ledgerDetailId,scroll:window.scrollY||0});
+ const main=app.querySelector('main');
+ const previousPanel=main?.querySelector(':scope > [data-ledger-subpage]');
+ ledgerNavStack.push({view:ledgerView,id:ledgerDetailId,scroll:window.scrollY||0,
+  listScroll:main?.querySelector('#ld-entry-list')?.scrollTop||0,
+  subScroll:previousPanel?.scrollTop||0});
  ledgerView=view;ledgerDetailId=view==='detail'?id:null;
+ // 明細與統計保留上一頁的真實 DOM，滑出時才能露出相同的捲動位置。
+ if((view==='detail'||view==='stats')&&ledgerMountLiveSubpage(view))return;
  render();if(view!=='tax')window.scrollTo(0,0);
 }
-// 子頁滑動時保留真正的上一層畫面，讓手勢往右移時不會露出空白背景。
+// 初次載入缺少上一頁 DOM 時的相容回退；正常使用走 ledgerMountLiveSubpage。
 function ledgerReturnUnderlay(){
  const previous=ledgerNavStack.length?ledgerNavStack[ledgerNavStack.length-1].view:'main';
  const content=previous==='tax'?ledgerTaxPageView():previous==='stats'?ledgerStatPage():ledgerPage();
@@ -4064,12 +4134,34 @@ function ledgerReturnUnderlay(){
 }
 function ledgerBack(){
  if(ledgerView==='main')return;
- const panel=document.querySelector('main > [data-ledger-subpage="'+ledgerView+'"]');
+ const main=app.querySelector('main');
+ const panel=main?.querySelector(':scope > [data-ledger-subpage="'+ledgerView+'"]');
  if(panel?.classList.contains('ld-exiting'))return;
  const goBack=()=>{
-  const previous=ledgerNavStack.pop()||{view:'main',id:null,scroll:0};
+  const previous=ledgerNavStack.pop()||{view:'main',id:null,scroll:0,listScroll:0,subScroll:0};
+  const underlay=main?.querySelector(':scope > .ld-preserved-underlay');
+  const hasLivePage=!!(panel&&panel.isConnected&&underlay);
   ledgerView=previous.view;ledgerDetailId=previous.id;
-  render();requestAnimationFrame(()=>window.scrollTo(0,previous.scroll||0));
+  if(hasLivePage){
+   panel.remove();
+   while(underlay.firstChild)main.insertBefore(underlay.firstChild,underlay);
+   underlay.remove();
+   const hasOverlay=previous.view==='detail'||previous.view==='stats';
+   main.classList.toggle('ledger-layered-main',hasOverlay);
+   document.body.classList.toggle('ld-ledger-overlay-open',hasOverlay);
+   document.body.classList.toggle('ld-tax-fullscreen-open',previous.view==='tax'||!!main.querySelector('.ld-tax-screen'));
+   if(ledgerUnderlayDirty){
+    ledgerUnderlayDirty=false;
+    render();
+   }
+   const list=app.querySelector('#ld-entry-list');
+   if(list)list.scrollTop=previous.listScroll||0;
+   const sub=app.querySelector('main > [data-ledger-subpage]');
+   if(sub)sub.scrollTop=previous.subScroll||0;
+   requestAnimationFrame(()=>window.scrollTo(0,previous.scroll||0));
+  }else{
+   render();requestAnimationFrame(()=>window.scrollTo(0,previous.scroll||0));
+  }
  };
  if(panel){
   panel.classList.add('ld-exiting');
@@ -5024,6 +5116,20 @@ dlg.addEventListener('close',()=>{
 });
 
 function render(){
+  // 明細詳情 / 統計的重繪不能取代下方的上一頁：保留真實捲動位置與 DOM。
+  if(st.tab==='ledger'&&(ledgerView==='detail'||ledgerView==='stats')){
+   const liveMain=app.querySelector('main.ledger-layered-main');
+   const preserved=liveMain?.querySelector(':scope > .ld-preserved-underlay');
+   const visible=liveMain?.querySelector(':scope > [data-ledger-subpage]');
+   if(preserved&&visible){
+    const top=visible.scrollTop;
+    visible.outerHTML=ledgerView==='detail'?ledgerDetailPage():ledgerStatPage();
+    const refreshed=liveMain.querySelector(':scope > [data-ledger-subpage]');
+    if(refreshed)refreshed.scrollTop=top;
+    if(ledgerView==='stats')ledgerSyncStatLens(true);
+    return;
+   }
+  }
   document.body.classList.toggle('ld-tax-fullscreen-open',st.tab==='ledger'&&ledgerView==='tax');
   document.body.classList.toggle('ld-ledger-overlay-open',st.tab==='ledger'&&(ledgerView==='detail'||ledgerView==='stats'));
   const ledgerListBefore=app.querySelector('#ld-entry-list');
