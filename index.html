@@ -2940,7 +2940,7 @@ dialog#dlg.ticket-list-editor .ticket-photo-footer{display:flex;align-items:cent
 dialog#dlg.ticket-list-editor .ticket-upload-label{font-size:12px;font-weight:750;color:#557292;background:#e4ecf7;border-radius:10px;padding:10px 13px;cursor:pointer}
 dialog#dlg.ticket-list-editor .ticket-photo-footer small{font-size:11px;color:#8a9cb4}
 /* 支出明細清單維持不顯示照片，詳情有照片時完整顯示 */
-.ld-detail-photo.ld-photo-visible{display:block!important;width:100%;margin:8px 0 14px}
+.ld-detail-photo.ld-photo-visible{display:block!important;flex:0 0 auto!important;align-self:stretch!important;width:100%;height:auto!important;min-height:1px!important;margin:8px 0 14px}
 .ld-detail-photo.ld-photo-visible img{display:block!important;width:100%;height:auto;max-height:390px;object-fit:contain}
 #dlg.ld-dialog #ld-editor input:focus,#dlg.ld-dialog #ld-editor textarea:focus,#dlg.ld-dialog #ld-editor select:focus{outline-color:#b9cada!important;border-color:#b8c9de!important;box-shadow:0 0 0 2px rgba(158,179,206,.15)!important}
 </style></head><body><div id="app"></div>
@@ -3470,8 +3470,24 @@ const DEFAULT_DINING=[
  {id:'meal_2026_0',name:'小樽倉庫 No.1 啤酒釀造所',date:'2026-12-19',time:'17:30',note:'4 位成人。晚餐後搭 JR 返回札幌。',mapUrl:SEARCH('Otaru Soko No.1 Otaru')},
  {id:'meal_2026_1',name:'寺田壽司 Sushi Terada',date:'2026-12-21',time:'20:30',note:'4 位成人；Terada 季節全套餐：¥18,000／人（含稅），約 2 小時；前菜五道、壽司十三貫、湯品、甜點。',mapUrl:SEARCH('寺田 寿司 狸小路 札幌')}
 ];
+// 12/22 JR 指定席：QR／取票碼不可直接放入可能公開的 GitHub Pages 原始碼。
+// 票券文字資訊可共用，QR 截圖須在本人手機內透過「上傳照片」保存。
+const JR_SUZURAN_TICKET={
+ id:'ticket_jr_suzuran6_2026_12_22',
+ name:'JR すずらん6号｜札幌 → 登別（指定席）',
+ date:'2026-12-22',timeMode:'range',startTime:'13:46',endTime:'15:03',
+ note:'JR すずらん6号（特急）\n札幌 13:46 → 登別 15:03\n4 位成人・指定席\n4 號車：5C、5D、6C、6D\n乘車券記載有效期間：2 日\n取票 QR 畫面請在這台手機上傳照片，避免將取票憑證公開在 GitHub Pages。',
+ photos:[]
+};
+const matchesSuzuranTicket=x=>!!x&&(x.id===JR_SUZURAN_TICKET.id||
+ (x.date==='2026-12-22'&&/すずらん\s*6|suzuran\s*6|札幌.*登別.*指定席/i.test(String(x.name||'')+' '+String(x.note||''))));
 let stays=LS('stays',null),dining=LS('dining',null),tickets=LS('tickets',[]);
 if(!Array.isArray(tickets))tickets=[];
+// 只在首次升級時新增一次；之後使用者刪除，不應重新補回。
+if(!LS('jrSuzuranTicketSeeded',false)){
+ if(!tickets.some(matchesSuzuranTicket))tickets.push({...JR_SUZURAN_TICKET,photos:[]});
+ SV('tickets',tickets);SV('jrSuzuranTicketSeeded',true);
+}
 if(!Array.isArray(stays))stays=DEFAULT_STAYS.map(x=>({...x}));
 if(!Array.isArray(dining))dining=DEFAULT_DINING.map(x=>({...x}));
 // 舊版住宿清單的末晚飯店仍是「待補」：只替換該筆舊範本，不動旅伴已編輯的真實飯店。
@@ -4099,9 +4115,17 @@ async function ledgerDetailPhoto(file,id){
   if(ledgerRemember(old)){ledgerDetailRefresh();showSavedToast()}
  }catch(_){alert('無法讀取照片，請選擇 JPG 或 PNG 格式')}finally{URL.revokeObjectURL(url)}
 }
+function ledgerEntryPhotoSource(e){
+ if(!e)return '';
+ const photo=[e.photo,e.image,e.photoData,e.imageData,e.receiptImage,
+  ...(Array.isArray(e.photos)?e.photos:[])].find(v=>typeof v==='string'&&v.trim());
+ if(!photo)return '';
+ return /^(data:image\/|https?:\/\/|blob:)/i.test(photo.trim())?photo.trim():'';
+}
 function ledgerDetailPage(){
  const e=ledger.entries.find(x=>x.id===ledgerDetailId);
  if(!e){ledgerView='main';ledgerDetailId=null;return ledgerPage()}
+ const detailPhoto=ledgerEntryPhotoSource(e);
  const inp=(field,label,kind='text')=>{
   const value=e[field]??'';
   let content;
@@ -4129,11 +4153,11 @@ function ledgerDetailPage(){
   rows.push(choice('refundMethod','退款方式',LEDGER_REFUND_METHODS),choice('refundStatus','退稅進度',LEDGER_REFUND_STATES),inp('refundAmount','實際退款 JPY','number'));
  }
  return '<div class="ld-page ld-subpage ld-ledger-overlay" data-ledger-subpage="detail">'+ledgerSubHeader('明細詳情','點選欄位直接修改，離開後儲存 · 向右滑動返回')+
- ((e.photo||e.image)?'<section class="ld-detail-photo ld-photo-visible"><button type="button" data-a="ledger-photo-view" data-id="'+esc(e.id)+'" aria-label="放大支出照片"><img src="'+esc(e.photo||e.image)+'" alt="'+esc(e.name)+' 的照片" loading="eager"></button></section>':'')+
+ (detailPhoto?'<section class="ld-detail-photo ld-photo-visible"><button type="button" data-a="ledger-photo-view" data-id="'+esc(e.id)+'" aria-label="放大支出照片"><img src="'+esc(detailPhoto)+'" alt="'+esc(e.name)+' 的照片" loading="eager" decoding="async"></button></section>':'')+
  '<section class="ld-panel"><div class="ld-section-head"><h3>收支資訊</h3><span class="ld-inline-save-hint">修改後自動儲存</span></div>'+
  ledgerNetSummary(e)+
  '<div class="ld-detail-fields">'+rows.join('')+'</div></section>'+
- '<div class="ld-photo-detail-actions"><label class="ld-detail-add-photo" for="ld-detail-photo-file">'+(e.photo?'更換照片':'＋ 上傳明細照片')+'</label><input id="ld-detail-photo-file" type="file" accept="image/*,.heic,.heif" data-ledger-detail-photo="'+esc(e.id)+'" hidden>'+(e.photo?'<button type="button" class="ld-detail-remove-photo" data-a="ledger-detail-photo-remove" data-id="'+esc(e.id)+'">移除照片</button>':'')+'</div>'+
+ '<div class="ld-photo-detail-actions"><label class="ld-detail-add-photo" for="ld-detail-photo-file">'+(detailPhoto?'更換照片':'＋ 上傳明細照片')+'</label><input id="ld-detail-photo-file" type="file" accept="image/*,.heic,.heif" data-ledger-detail-photo="'+esc(e.id)+'" hidden>'+(detailPhoto?'<button type="button" class="ld-detail-remove-photo" data-a="ledger-detail-photo-remove" data-id="'+esc(e.id)+'">移除照片</button>':'')+'</div>'+
  '<button type="button" class="ld-detail-delete" data-a="ledger-delete" data-id="'+esc(e.id)+'">刪除此筆記帳</button></div>';
 }
 // 子頁開啟時保留「實際顯示中的」上一頁 DOM 與捲動狀態，
@@ -4567,8 +4591,8 @@ async function ledgerClick(action,data){
   if(row&&confirm('確定刪除「'+row.name+'」這筆記帳嗎？')){const old=structuredClone(ledger);ledger.entries=ledger.entries.filter(x=>x.id!==data.id);if(ledgerDetailId===data.id){ledgerView='main';ledgerDetailId=null;}ledgerPersistAfterChange(old)}
  }else if(action==='ledger-cancel'){dismissDialogDown()}
  else if(action==='ledger-photo-remove'){ledgerPhotoTemp='';ledgerUpdatePhotoPreview();const f=dlg.querySelector('#ld-photo-file');if(f)f.value=''}
- else if(action==='ledger-photo-view'){const x=ledger.entries.find(x=>x.id===data.id);if(x?.photo||x?.image)shopShowImage(x.photo||x.image,x.name)}
- else if(action==='ledger-detail-photo-remove'){const x=ledger.entries.find(x=>x.id===data.id);if(x&&confirm('移除這張明細照片嗎？')){const old=structuredClone(ledger);x.photo='';if(ledgerRemember(old))ledgerDetailRefresh();}}
+ else if(action==='ledger-photo-view'){const x=ledger.entries.find(x=>x.id===data.id);const src=ledgerEntryPhotoSource(x);if(src)shopShowImage(src,x.name)}
+ else if(action==='ledger-detail-photo-remove'){const x=ledger.entries.find(x=>x.id===data.id);if(x&&confirm('移除這張明細照片嗎？')){const old=structuredClone(ledger);x.photo='';x.image='';x.photoData='';x.imageData='';x.receiptImage='';x.photos=[];if(ledgerRemember(old))ledgerDetailRefresh();}}
  else if(action==='ledger-day'){ledgerDay=data.v;render()}
  else if(action==='ledger-tax-filter'){ledgerTaxOnly=data.v==='tax';render()}
  else if(action==='ledger-sort-toggle'){ledgerSort=ledgerSort==='asc'?'desc':'asc';SV('ledgerSortV1',ledgerSort);ledgerRefreshEntryList();const b=document.querySelector('.ld-sort-btn');if(b){const label=ledgerSort==='asc'?'時間由早到晚，點擊改為由晚到早':'時間由晚到早，點擊改為由早到晚';b.setAttribute('aria-label',label);b.title=label;b.classList.toggle('is-desc',ledgerSort==='desc')}}
@@ -6034,6 +6058,14 @@ function makeCloudSync(){
           const hotelTitleUpdated=upgradeLegacyFinalHotelDay(clone);
           if(transportAdded||spotAdded||hotelTitleUpdated)patch[key]=clone;
         }
+        // 一次性補入 12/22 JR 指定席文字資訊：不覆蓋既有票券、不上傳 QR／照片。
+        // 雲端標記避免使用者日後刪除票券時被自動新增回來。
+        if(remote.jrSuzuranTicketSeeded!==true){
+          const existing=Array.isArray(remote.tickets)?remote.tickets.map(x=>({...x})):[];
+          if(!existing.some(matchesSuzuranTicket))existing.push({...JR_SUZURAN_TICKET,photos:[]});
+          patch.tickets=existing.map(x=>{const copy={...x};delete copy.photos;return copy});
+          patch.jrSuzuranTicketSeeded=true;
+        }
         // 升級雲端舊版『新千歲機場附近飯店（待補）』，不改動其他已編輯的住宿。
         if(Array.isArray(remote.stays)){
           const upgraded=remote.stays.map(item=>({...item}));
@@ -6066,7 +6098,7 @@ function makeCloudSync(){
       exists.itinerary=snap.exists();
       applyItinerarySnapshot(snap);
       connected=true;
-      if(snap.exists()&&(hasSharedTravelDurationsToBackfill(snap.data())||
+      if(snap.exists()&&(snap.data()?.jrSuzuranTicketSeeded!==true||hasSharedTravelDurationsToBackfill(snap.data())||
         (Array.isArray(snap.data()?.stays)&&snap.data().stays.some(isLegacyFinalHotel))||
         (snap.data()?.day_26 && upgradeLegacyFinalHotelDay({...snap.data().day_26})))){
         // 先接收使用者最新資料，再以交易補上真正缺少的交通時間或景點預留時間。
