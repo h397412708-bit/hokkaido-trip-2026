@@ -3556,28 +3556,39 @@ body.ld-ledger-overlay-open main.ledger-layered-main>.ld-preserved-underlay>.ld-
   background:linear-gradient(150deg,#f6f8fc,#edf3fa 74%,#f6f3fa)!important;
   pointer-events:none!important;
 }
-</style><style id="hokkaido-retro-os">
-/* HOKKAIDO OS — Poolside-inspired retro desktop skin */
-:root{--navy:#29354a!important;--ink:#20293a!important;--muted:#647087!important;--pale:#EEFAFC!important;--line:#8890a0!important;--blue:#81B0DC!important;--shadow:7px 7px 0 #64758e!important;color-scheme:light}
-html{background:#81B0DC!important}body{background:#81B0DC!important;color:#20293a!important;font-family:"Courier New","Noto Sans TC","PingFang TC",monospace!important}
-body:before{content:'▧  Hokkaido OS   v1.0       File    Edit    View    Travel    Help';display:block;position:sticky;top:0;z-index:1200;height:30px;padding:4px 12px;background:#eefaff;border-bottom:2px solid #29354a;font:12px/20px "Courier New",monospace;white-space:nowrap;overflow:hidden}
-#app{width:min(100%,720px)!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;min-height:100svh!important;padding:18px 12px 30px!important}
-main{padding:12px 6px 120px!important;background:transparent!important}
-.hero{height:auto!important;min-height:175px!important;background:#EEFAFC!important;border:2px solid #29354a!important;border-radius:0!important;box-shadow:7px 7px 0 #64758e!important;margin:10px 4px 20px!important;overflow:hidden!important;color:#20293a!important}
-.hero:before{content:'▣  Hokkaido.exe';display:block!important;background:linear-gradient(90deg,#617eaa,#a9c8e8)!important;color:white!important;border-bottom:2px solid #29354a!important;padding:7px 12px!important;font:bold 15px/1.4 "Courier New",monospace!important}
-.hero:after{content:'□   ×';position:absolute;right:12px;top:7px;color:#fff;font:bold 16px "Courier New",monospace}
-.hero .topline,.hero .eb,.hero .ht1{display:none!important}.hero .hc{position:relative!important;inset:auto!important;transform:none!important;padding:22px 18px!important;background:#EEFAFC!important;text-align:left!important}.hero .hs{font-size:clamp(24px,6vw,37px)!important;font-weight:900!important;letter-spacing:1px!important;color:#20293a!important;text-shadow:none!important}.hero .hm{color:#29354a!important;font:12px/1.7 "Courier New",monospace!important;margin-top:8px!important}.hero *{text-shadow:none!important}
-.bottom-nav{position:sticky!important;top:30px!important;bottom:auto!important;left:auto!important;right:auto!important;transform:none!important;z-index:1100!important;width:min(100% - 20px,700px)!important;margin:10px auto 0!important;padding:0!important;display:flex!important;gap:0!important;background:#fff!important;border:2px solid #29354a!important;border-radius:0!important;box-shadow:5px 5px 0 #64758e!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;min-height:49px!important}
-.bottom-nav button{flex:1!important;min-width:0!important;min-height:46px!important;border:0!important;border-right:2px solid #29354a!important;border-radius:0!important;background:#fff!important;color:#20293a!important;padding:8px 2px!important;font-weight:800!important;font-size:13px!important;box-shadow:none!important;transform:none!important}
-.bottom-nav button:last-child{border-right:0!important}.bottom-nav button[aria-selected="true"],.bottom-nav button.active,.bottom-nav button.is-active{background:#EEFAFC!important}.bottom-nav button svg,.bottom-nav button i,.nav-glass-indicator{display:none!important}.bottom-nav button:before{display:none!important}
-#app section,#app article,#app details,#app .card,#app [class*="card"],#app [class*="panel"],#app [class*="tile"]{border-radius:0!important}
-#app .card,#app [class*="card"],#app [class*="panel"]{box-shadow:5px 5px 0 #64758e!important;border-color:#8890a0!important}
-#app button,#app input,#app textarea,#app select{border-radius:0!important}
-#app input,#app textarea,#app select{background-color:#fff!important;border-color:#8890a0!important}
-#app [class*="gradient"],#app [class*="terminal"]{background:#EEFAFC!important}
-#app h1,#app h2,#app h3{letter-spacing:.02em!important}
-@media(max-width:480px){#app{padding:10px 8px 30px!important}.bottom-nav{width:calc(100% - 16px)!important}.bottom-nav button{font-size:12px!important}.hero{margin:10px 3px 18px!important}.hero .hc{padding:18px 12px!important}}
-</style></head><body><div id="app"></div>
+</style><style id="hokkaido-retro-theme">
+/* HOKKAIDO RETRO DESKTOP THEME — presentation only; original application logic retained */
+:root{--navy:#8890a0!important;--ink:#263342!important;--muted:#687583!important;--pale:#d4e0e8!important;--line:#8890a0!important;--blue:#8890a0!important;--shadow:7px 7px 0 #8890a0!important;color-scheme:light}
+html{background:#8890a0}body{background:#8890a0!important;color:#263342!important;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans TC','PingFang TC',sans-serif!important}
+#app{background:#8890a0!important;box-shadow:none!important;overflow:visible!important;min-height:100svh!important;padding-top:120px!important}
+#app main{background:#8890a0!important;padding:14px 16px 55px!important}
+#app .hero{display:none!important}
+#retro-desktop-head{position:fixed;z-index:900;top:0;left:50%;transform:translateX(-50%);width:min(100%,640px);background:#8890a0;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;border-bottom:2px solid #263342;box-shadow:0 3px 0 #687583}
+.retro-title{height:43px;background:#d4e0e8;border:2px solid #263342;display:flex;align-items:center;gap:10px;padding:0 12px;font:700 18px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;box-shadow:4px 4px 0 #687583}
+.retro-map{font-size:22px;color:#8890a0}.retro-sync{margin-left:auto;font:12px ui-monospace,SFMono-Regular,monospace;white-space:nowrap;cursor:pointer;border:1.5px solid #263342;padding:4px 7px;background:#fff}
+.bottom-nav{position:fixed!important;z-index:901!important;top:calc(57px + env(safe-area-inset-top,0px))!important;bottom:auto!important;left:50%!important;transform:translateX(-50%)!important;width:min(calc(100% - 24px),616px)!important;max-width:616px!important;height:45px!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.bottom-nav .nav-glass-indicator,.bottom-nav .nav-lens-core,.bottom-nav svg{display:none!important}
+.bottom-nav button{position:relative!important;inset:auto!important;transform:none!important;width:100%!important;min-width:0!important;height:42px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#fff!important;border:2px solid #263342!important;border-radius:0!important;box-shadow:3px 3px 0 #687583!important;color:#263342!important;padding:0!important;opacity:1!important}
+.bottom-nav button span{display:block!important;font-weight:800!important;font-size:13px!important;color:#263342!important}
+.bottom-nav button.active,.bottom-nav button[aria-current="page"],.bottom-nav button.is-active,.bottom-nav button.retro-selected{background:#d4e0e8!important}
+#app main > *,#app main section,#app main article,#app main details{border-radius:0!important}
+#app main .card,#app main .panel,#app main .section-card,#app main .info-card,#app main .overview-card,#app main .flight-card,#app main .hotel-card,#app main .todo-card,#app main .shop-card,#app main .expense-card{background:#fff!important;border:2px solid #263342!important;border-radius:0!important;box-shadow:7px 7px 0 #687583!important}
+#app main [class*="card"],#app main [class*="panel"],#app main [class*="box"],#app main details{border-radius:0!important}
+#app main input,#app main select,#app main textarea,#app main button{border-radius:0!important}
+#app main input[type="checkbox"]{appearance:auto!important;accent-color:#8890a0!important;border-radius:0!important}
+#app main input:checked + label,#app main .done,#app main .completed{text-decoration-color:#8890a0;color:#8b93a0}
+#app main .timeline,#app main [class*="timeline"]{border-color:#8890a0!important}
+#app main [class*="terminal"],#app main [class*="flight"],#app main [class*="total"]{border-radius:0!important}
+#app main [class*="flight"]:not(button),#app main [class*="total"]:not(button){background-color:#d4e0e8}
+#app main .browser-shell{background:#fff;border:2px solid #263342;box-shadow:7px 7px 0 #687583;margin-bottom:22px}
+.retro-browser-tools{background:#8890a0;border-bottom:2px solid #263342;padding:8px;display:flex;align-items:center;gap:7px}
+.retro-browser-tools .arrow{background:#fff;border:2px solid #263342;width:30px;height:30px;display:grid;place-items:center;font:700 19px monospace}
+.retro-browser-tools .url{min-width:0;flex:1;background:#fff;border:2px solid #263342;padding:5px 8px;font:11px/18px ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.retro-browser-content{padding:18px;background:#fff}.retro-browser-content h1{font-size:clamp(21px,6vw,31px);margin:0 0 6px;letter-spacing:.03em}.retro-browser-content p{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;margin:0;color:#536070}
+#hk-cloud-toggle{position:fixed!important;bottom:calc(8px + env(safe-area-inset-bottom,0px))!important;top:auto!important;right:12px!important;left:auto!important;border-radius:0!important;border:2px solid #263342!important;background:#d4e0e8!important;box-shadow:3px 3px 0 #687583!important;z-index:920!important;font:11px monospace!important}
+#app main time,#app main [class*="time"],#app main [class*="date"]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+@media(max-width:390px){.retro-title{font-size:16px}.retro-sync{font-size:10px}.bottom-nav button span{font-size:12px}.retro-browser-content{padding:14px}}
+</style></head><body><header id="retro-desktop-head"><div class="retro-title"><span class="retro-map" aria-hidden="true">▰</span><span>Hokkaido</span><button type="button" class="retro-sync" onclick="document.getElementById('hk-cloud-toggle')?.click()">［同步］</button></div></header><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
@@ -7212,10 +7223,4 @@ save();render();
  cloudSync=makeCloudSync();
  cloudSync.start();
 })();
-</script><script id="retro-os-nav">(function(){
-function setup(){const nav=document.querySelector('.bottom-nav'),app=document.querySelector('#app');if(!nav||!app)return;if(nav.nextElementSibling!==app)document.body.insertBefore(nav,app);
-const names=['總覽','行程','待辦','購物','記帳'];nav.querySelectorAll('button[data-a="tab"]').forEach((b,i)=>{if(i<5){b.setAttribute('aria-label',names[i]);let label=b.querySelector('.retro-label');if(!label){label=document.createElement('span');label.className='retro-label';b.appendChild(label)}label.textContent=names[i]}});
-const update=()=>{const active=nav.querySelector('button.active,button[aria-selected="true"],button.is-active');nav.querySelectorAll('button[data-a="tab"]').forEach(b=>{const selected=active?b===active:b.dataset.v===(window.st?.tab||'home');b.style.backgroundColor=selected?'#EEFAFC':'#fff'})};update();
-new MutationObserver(update).observe(nav,{attributes:true,subtree:true,attributeFilter:['class','aria-selected']});}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
-})();</script></body></html>
+</script><script id="retro-theme-script">(()=>{const urls={home:'overview',plan:'itinerary',todo:'todo',shop:'shopping',ledger:'expenses'};const app=document.getElementById('app');function decorate(){const main=app?.querySelector('main');if(!main)return;const tab=document.querySelector('.bottom-nav button.active, .bottom-nav button[aria-current="page"], .bottom-nav button.is-active')?.dataset.v||document.querySelector('.bottom-nav button[style*="background"]')?.dataset.v||'home';const slug=urls[tab]||'overview';let shell=main.querySelector(':scope > .browser-shell');if(!shell){shell=document.createElement('div');shell.className='browser-shell';shell.innerHTML='<div class="retro-browser-tools"><span class="arrow">←</span><span class="arrow">→</span><span class="url"></span></div><div class="retro-browser-content"><h1>北海道冬日旅誌</h1><p>HOKKAIDO · 2026.12.18 — 12.27</p></div>';main.prepend(shell)}shell.querySelector('.url').textContent='http://hokkaido.local/'+slug;document.querySelectorAll('.bottom-nav button').forEach(b=>{b.classList.toggle('retro-selected',b.dataset.v===tab)});}const obs=new MutationObserver(()=>{if(!app.querySelector('main > .browser-shell'))decorate()});obs.observe(app,{childList:true,subtree:false});document.querySelectorAll('.bottom-nav button').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>{decorate();document.querySelectorAll('.bottom-nav button').forEach(x=>x.classList.toggle('retro-selected',x===b))},50)));decorate();})();</script></body></html>
