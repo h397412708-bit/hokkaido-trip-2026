@@ -4230,6 +4230,18 @@ const displayStartTime=value=>{
  const m=String(value||'').match(/(\d{1,2}):(\d{2})/);
  return m?String(m[1]).padStart(2,'0')+':'+m[2]:'—';
 };
+// 交通與景點移動日期後，依開始時間排序；未填時間的項目置底，時間相同時保留原順序。
+const itineraryStartMinutes=item=>{
+ const m=String(item?.time||'').match(/(?:^|\D)([01]?\d|2[0-3]):([0-5]\d)/);
+ return m?Number(m[1])*60+Number(m[2]):Number.POSITIVE_INFINITY;
+};
+function sortItineraryItems(day){
+ if(!Array.isArray(day?.items))return;
+ // Array#sort in modern browsers is stable; use original position as an explicit tiebreaker.
+ day.items=day.items.map((item,index)=>({item,index})).sort((a,b)=>
+   itineraryStartMinutes(a.item)-itineraryStartMinutes(b.item)||a.index-b.index
+ ).map(entry=>entry.item);
+}
 const durationFor=a=>{
  const travel=a.kind==='交通';
  const explicit=String(travel?a.transportDuration||'':a.spotDuration||'').trim();
@@ -6418,6 +6430,9 @@ function editDayItem(n,selectedKind){
  const timeValue=displayStartTime(a.time)==='—'?'':displayStartTime(a.time);
  const clockField='<label class="itinerary-edit-field itinerary-clock-field">'+(transport?'開始時間':'時間')+'<span class="itinerary-clock-picker"><span class="itinerary-clock-value">'+esc(timeValue||'選擇時間')+'</span><input name="time" type="time" aria-label="'+(transport?'開始時間':'時間')+'" value="'+esc(timeValue)+'"></span></label>';
  const titleField=f('title',transport?'交通名稱 *':'行程名稱 *',false,transport?'例如：JR 札幌 → 小樽':'例如：小樽運河散步');
+ const itineraryDayField='<label class="itinerary-edit-field itinerary-date-field">行程日期<select name="itineraryDay" aria-label="行程日期">'+
+   days.map((day,index)=>'<option value="'+index+'"'+(index===st.day?' selected':'')+'>12/'+esc(day.d)+'（週'+esc(day.week)+'）</option>').join('')+
+   '</select></label>';
  const firstRow='<div class="itinerary-form-row itinerary-time-title">'+clockField+titleField+'</div>';
  const modeField='<label class="itinerary-edit-field">交通工具（選填）<select name="transportMode"><option value=""'+(adding||!transportModeFor(a)?' selected':'')+'>不設定</option>'+TRANSPORT_MODE_NAMES.map(mode=>'<option value="'+mode+'"'+(!adding&&transportModeFor(a)===mode?' selected':'')+'>'+mode+'</option>').join('')+'</select></label>';
  const transportLength=f('transportDuration','交通時間（選填）',false,'例如：35 分鐘');
@@ -6426,7 +6441,7 @@ function editDayItem(n,selectedKind){
  const topFields=transport?
     firstRow+secondRow+f('hours','時刻／備註（選填）',true)+booking+f('desc','行程細節',true,'例如：乘車地點、轉車及搭乘資訊')+f('cost','預估費用（選填）',true,'例：約 ¥1,200／人'):
     firstRow+secondRow+f('desc','行程細節',true,'當日安排與注意事項')+f('hours','營業時間（選填）')+f('cost','預估費用（選填）',true,'例如：纜車票 ¥1,800');
- dlg.innerHTML='<form class="itinerary-edit-form itinerary-edit-v2'+(transport?' transport-form':' scenic-form')+'" id="itinerary-edit-form"><h3>'+(adding?(transport?'添加交通':'添加行程'):(transport?'編輯交通':'編輯行程'))+'</h3><p class="form-sub">12/'+esc(days[st.day].d)+' · '+(transport?'交通資訊':'景點與活動資訊')+'</p>'+topFields+
+ dlg.innerHTML='<form class="itinerary-edit-form itinerary-edit-v2'+(transport?' transport-form':' scenic-form')+'" id="itinerary-edit-form"><h3>'+(adding?(transport?'添加交通':'添加行程'):(transport?'編輯交通':'編輯行程'))+'</h3><p class="form-sub">選擇日期後，儲存即移至該日並依開始時間排序。</p>'+itineraryDayField+topFields+
  (transport?'':'<div class="itinerary-photo-section"><b>景點照片 <span id="itinerary-photo-count" style="float:right;color:#9aacc0;font-weight:500">0 / 4 張</span></b><div id="itinerary-photo-grid" class="itinerary-photo-grid"></div><label class="itinerary-photo-upload" for="itinerary-photo-file">＋ 上傳景點照片<input id="itinerary-photo-file" type="file" accept="image/*" multiple data-a="itinerary-photo"></label><p class="itinerary-photo-help">最多 4 張，上傳的照片僅儲存在目前裝置。</p></div>'+f('photoIntro','景點介紹',true,'介紹景點特色、推薦看點或體驗')+f('webUrl','Google Maps／網頁連結（選填，可清空刪除）',false,'https://...'))+
  '<div class="fb"><button type="button" data-a="cx">取消</button><button type="submit" class="pri">'+(adding?'新增':'儲存')+'</button></div></form>';
  if(!transport)updateItineraryPhotoPreview();
@@ -6446,9 +6461,29 @@ function editDayItem(n,selectedKind){
      const url=String(fd.get('webUrl')||'').trim();if(url&&!safeLink(url)){alert('網頁連結請輸入 http:// 或 https:// 網址');return;}candidate.webUrl=url;
      if(itineraryPhotoChanged){candidate.photos=itineraryPhotoTemp.map(ph=>({...ph,alt:title}));candidate.userPhotos=itineraryPhotoTemp.length>0;if(!itineraryPhotoTemp.length)delete candidate.photos;}
    }
-   if(adding){candidate.bookingKey=matchBookingKey(days[st.day],candidate);L.push(candidate)}else L[n]=candidate;
+   const targetIndex=Number(fd.get('itineraryDay'));
+   if(!Number.isInteger(targetIndex)||targetIndex<0||targetIndex>=days.length){alert('請選擇有效的行程日期');return}
+   const sourceIndex=st.day;
+   const sourceItems=days[sourceIndex].items.slice();
+   const targetItems=targetIndex===sourceIndex?null:days[targetIndex].items.slice();
+   if(adding){
+     candidate.bookingKey=matchBookingKey(days[targetIndex],candidate);
+     days[targetIndex].items.push(candidate);
+   }else{
+     // 先從原日期移除，再插入新日期；保留原 id、訂位狀態、照片及附加資料。
+     days[sourceIndex].items.splice(n,1);
+     days[targetIndex].items.push(candidate);
+   }
+   sortItineraryItems(days[targetIndex]);
+   if(targetIndex!==sourceIndex)sortItineraryItems(days[sourceIndex]);
    try{localStorage.setItem('hk26v2_days',JSON.stringify(days))}
-   catch(error){if(adding)L.pop();else L[n]=old;alert('儲存失敗：瀏覽器儲存空間不足。請減少照片數量再試一次。');return}
+   catch(error){
+     days[sourceIndex].items=sourceItems;
+     if(targetItems)days[targetIndex].items=targetItems;
+     alert('儲存失敗：瀏覽器儲存空間不足。請減少照片數量再試一次。');return;
+   }
+   // 儲存完成後切換至新日期，讓使用者直接看到已移動、排序後的項目。
+   st.day=targetIndex;SV('day',st.day);
    dlg.close();ov.add(candidate.id);save();render();showSavedToast();
  };
  openEditorDialogNoKeyboard();
@@ -6878,7 +6913,7 @@ function makeCloudSync(){
     connected=false;verified=false;cloudError='';liveEpoch++;
   }
   // 同步文件的文字資料，但保留同一台手機上使用者自行上傳的照片。
-  function applyIncomingDay(key,remoteDay){
+  function applyIncomingDay(key,remoteDay,localPhotosById){
     if(!remoteDay||typeof remoteDay!=='object'||!Array.isArray(remoteDay.items))return;
     const currentIndex=days.findIndex(x=>dayKey(x)===key);
     if(currentIndex<0)return;
@@ -6886,6 +6921,7 @@ function makeCloudSync(){
     const copied={...remoteDay,items:remoteDay.items.map(item=>{
       const fresh={...item};
       const existing=(prior.items||[]).find(a=>a.id===item.id)
+        ||(item.id&&localPhotosById?.get(item.id))
         ||(prior.items||[]).find(a=>a.title===item.title&&a.time===item.time);
       if(existing?.userPhotos&&Array.isArray(existing.photos)&&existing.photos.length){
         fresh.photos=existing.photos;fresh.userPhotos=true;
@@ -6917,6 +6953,12 @@ function makeCloudSync(){
     const remote=snap.data()||{};
     if(!snap.exists())return;
     let changed=false;
+    // 在逐日套用遠端內容前先備份所有本機照片，避免跨日移動時先移除原卡片。
+    const localPhotosById=new Map();
+    for(const day of days)for(const item of day.items||[]){
+      if(item?.id&&item.userPhotos&&Array.isArray(item.photos)&&item.photos.length)
+        localPhotosById.set(item.id,item);
+    }
     for(const [key,day] of Object.entries(remote)){
       if(!/^day_\d{1,2}$/.test(key)||!day||!Array.isArray(day.items))continue;
       const serialized=json(day);
@@ -6927,7 +6969,7 @@ function makeCloudSync(){
         else continue; // 本機尚未寫入的修改暫時不能被遠端覆蓋
       }
       if(local&&json(shareDay(local))!==serialized){
-        preserveLocalBackup();applyIncomingDay(key,day);changed=true;
+        preserveLocalBackup();applyIncomingDay(key,day,localPhotosById);changed=true;
       }
     }
     // 空陣列也是合法的遠端清單：使用者刪掉全部住宿／餐廳不會自動恢復預設值。
