@@ -3594,6 +3594,104 @@ dialog::backdrop{background:rgba(61,50,52,.46)}
 #hk-cloud-toggle{border-radius:0!important;background:#705c5e!important;color:#fff!important}
 @media(max-width:420px){main{margin:9px 8px 12px!important;padding:12px 9px calc(96px + var(--sb))!important}.top{padding-left:9px!important;padding-right:9px!important}.card,.row,.overview-panel,.ld-panel{box-shadow:4px 4px 0 #705c5e!important}}
 
+
+/* SYSTEM LOGBOOK — full-layout visual system */
+:root{--navy:#705c5e;--ink:#625b5d;--muted:#817b7d;--pale:#e3f6f5;--line:#71696b;--blue:#705c5e;--shadow:6px 6px 0 #705c5e;color-scheme:light}
+html,body{background:#fff!important;color:var(--ink)!important}
+#app{background:#fff!important;box-shadow:none!important;overflow:visible!important;max-width:640px;padding:18px 12px 35px;min-height:100svh}
+.retro-head{background:#705c5e;color:white;min-height:66px;padding:17px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;box-shadow:6px 6px 0 #705c5e;margin:0 6px 30px 0;letter-spacing:1.3px;font-weight:800;font-size:clamp(12px,3.6vw,17px)}
+.retro-toggle{border:0;background:transparent;color:white;font-weight:700;white-space:nowrap;font-size:12px;padding:6px 0}
+.retro-tabs{display:flex;overflow-x:auto;scrollbar-width:none;border:2px solid #71696b;border-bottom:0;background:#fff;min-height:55px}
+.retro-tabs::-webkit-scrollbar{display:none}
+.retro-tabs button{flex:1 0 auto;min-width:64px;background:white;border:0;border-right:2px solid #71696b;color:#625b5d;border-radius:0;font-weight:800;font-size:14px;padding:14px 10px;letter-spacing:1px}
+.retro-tabs button:last-child{border-right:0}.retro-tabs button.selected{background:#705c5e;color:white}
+#app>main{border:2px solid #71696b;background:#e3f6f5!important;padding:22px 15px 40px!important;min-height:65vh;position:relative}
+#app>.hero{display:none!important}
+.bottom-nav{display:none!important}
+/* cards and content sections */
+#app main :is(.card,.sec,.section,.panel,.home-list-card,.shop-card,.sh-card,.flight-card,.wx-card,.ld-card,.overview-card,.flight-board,.dh,.ph,.tlw>.item,.tlw>.event){border-radius:0!important;border:1.5px solid #71696b!important;background:#fff!important;box-shadow:6px 6px 0 #705c5e!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#app main :is(.card,.sec,.panel,.dh,.ph){margin-bottom:20px!important}
+#app main :is(.card,.sec,.panel){overflow:visible}
+#app main :is(.ph,.dh){padding:16px!important}
+#app main :is(.kicker,.eyebrow,.sec-title,.section-title,.sh-heading .kicker){color:#705c5e!important;letter-spacing:1px}
+#app main :is(h1,h2,h3,h4){color:#625b5d!important}
+#app main :is(.days,.cats){border-radius:0!important;gap:0!important;box-shadow:none!important;background:transparent!important;margin-bottom:18px!important}
+#app main .days button{border-radius:0!important;border:1.5px solid #71696b!important;background:#fff!important;color:#625b5d!important;box-shadow:none!important}
+#app main .days button.on{background:#705c5e!important;color:white!important}
+#app main :is(button,.add,.pill,.chip,.tag,.ct){border-radius:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#app main :is(input:not([type=checkbox]),select,textarea){border-radius:0!important;border:1.5px solid #71696b!important;background:#fff!important;color:#625b5d!important;box-shadow:none!important}
+#app main input[type=checkbox],dialog input[type=checkbox]{accent-color:#705c5e;border-radius:0!important}
+#app main :is(.badge,.tag,.kicker){border-radius:0!important}
+#app main :is(.pk,.td,.home-list-item,.sh-item,.shop-item){border-radius:0!important;border:1px solid #9d9697!important;background:#fff!important}
+#app main .td:not(.dn){background:#e3f6f5!important}
+#app main :is(.tl button,.shop-glass-add,.home-add-btn,.add){border:1.5px solid #71696b!important;border-radius:0!important;background:#e3f6f5!important;color:#625b5d!important;box-shadow:3px 3px 0 #705c5e!important}
+#app main :is(.home-add-quick-menu,.plan-add-quick-menu){border-radius:0!important}
+#app main :is(.fl3-flights,.flight-panel,.home-list-body){background:transparent!important}
+#app main .ph:before,#app main .card:before{border-radius:0!important}
+#app main :is(.ld-page,.ld-panel,.ld-stat-card,.ld-summary-card,.ld-overview-card,.ld-entry,.ld-row,.ld-box){border-radius:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#app main :is(.ld-panel,.ld-stat-card,.ld-summary-card,.ld-overview-card){border:1.5px solid #71696b!important;box-shadow:5px 5px 0 #705c5e!important;background:white!important}
+#app main .ld-entry{border:1px solid #71696b!important;background:white!important}
+#app main :is(.sh-filters,.shop-tabs,.ld-tabs){border-radius:0!important}
+#app main :is(.home-list-item,.td,.pk){margin-bottom:10px}
+#app main a{color:#705c5e}
+#app main .hero{display:none}
+#dlg,dialog{border-radius:0!important;border:2px solid #71696b!important;box-shadow:7px 7px 0 #705c5e!important}
+#dlg :is(input,select,textarea,button){border-radius:0!important}
+#hk-cloud-toggle{border-radius:0!important;background:#705c5e!important;color:#fff!important;bottom:15px!important}
+@media(min-width:720px){#app{padding:24px 22px 50px}.retro-head{min-height:74px}.retro-tabs button{font-size:16px}#app>main{padding:30px 24px 45px!important}}
+@media(max-width:380px){#app{padding-left:8px;padding-right:8px}.retro-head{padding:13px 10px}.retro-toggle{font-size:10px}#app>main{padding:16px 10px 30px!important}.retro-tabs button{min-width:60px;padding:12px 8px}}
+
+/* Retro browser rebuild — every primary page has its own old-desktop window */
+#app>main{padding-top:22px!important;}
+.retro-browser-chrome{display:flex;align-items:center;gap:12px;min-height:58px;padding:11px 13px;background:#e3f6f5;border:2px solid #71696b;margin:0 0 0;position:relative;z-index:1}
+.retro-browser-controls{display:flex;gap:6px;flex-shrink:0}
+.retro-browser-controls i{display:block;width:11px;height:11px;background:white;border:2px solid #71696b}
+.retro-browser-address{border:2px solid #71696b;background:#fff;padding:6px 11px;min-width:0;flex:1;color:#8c8788;font:12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.2px}
+#app>main>.retro-browser-chrome+*{margin-top:0!important}
+/* Main content now reads as the browser's white document, with a distinct outer mint frame. */
+#app>main[data-retro-page]{background:#e3f6f5!important}
+#app>main[data-retro-page]>.retro-browser-chrome{box-shadow:0 0 0 0 #fff}
+#app>main[data-retro-page]>.retro-browser-chrome~:is(.card,.sec,.section,.panel,.overview-panel,.home-list-card,.flight-card,.weather-overview,.ld-panel,.sh-card){border-top:0!important}
+/* Independent framed browser-like cards, square title labels and hard-offset edges. */
+#app main :is(.card,.sec,.section,.panel,.overview-panel,.home-list-card,.flight-card,.sh-card,.ld-panel,.ld-stat-card,.ld-summary-card,.ld-overview-card){position:relative}
+#app main :is(.card,.sec,.section,.panel,.overview-panel,.home-list-card,.flight-card,.sh-card,.ld-panel,.ld-stat-card,.ld-summary-card,.ld-overview-card) :is(h2,h3,.sec-title,.section-title){letter-spacing:.5px}
+#app main :is(.card,.sec,.section,.panel,.overview-panel,.home-list-card,.flight-card,.sh-card,.ld-panel) :is(.sec-title,.section-title){display:inline-block;background:#705c5e!important;color:#fff!important;padding:5px 11px;margin-bottom:10px}
+#app main :is(.home-list-card,.flight-card,.sh-card,.ld-panel,.card,.sec,.panel){border:2px solid #71696b!important;box-shadow:6px 6px 0 #705c5e!important}
+#app main :is(.home-list-card,.flight-card,.sh-card,.ld-panel,.card,.sec,.panel):before{border-radius:0!important}
+#app main :is(.shop-card,.sh-card,.home-list-card,.ld-panel,.card,.sec,.panel) :is(button,input,select,textarea){border-radius:0!important}
+#app main :is(.home-list-card,.sh-card,.ld-panel,.card,.sec,.panel) input[type=checkbox]{appearance:none;width:18px;height:18px;min-width:18px;border:2px solid #71696b!important;background:white;vertical-align:middle;position:relative}
+#app main :is(.home-list-card,.sh-card,.ld-panel,.card,.sec,.panel) input[type=checkbox]:checked{background:#e3f6f5}
+#app main :is(.home-list-card,.sh-card,.ld-panel,.card,.sec,.panel) input[type=checkbox]:checked:after{content:'✓';position:absolute;inset:-5px 0 0 1px;color:#705c5e;font-weight:900;font-size:18px}
+#app main :is(.home-list-card,.sh-card,.ld-panel,.card,.sec,.panel) details>summary{border-radius:0!important}
+#app main .retro-browser-chrome+ .days{margin-top:18px!important}
+#app main .retro-browser-chrome+ .ld-page{margin-top:18px!important}
+@media(max-width:420px){.retro-browser-chrome{min-height:51px;padding:9px 8px;gap:8px}.retro-browser-controls{gap:4px}.retro-browser-controls i{width:10px;height:10px}.retro-browser-address{font-size:11px;padding:6px 7px}#app>main{padding-top:13px!important}}
+
+/* COMPLETE RETRO CARD RELAYOUT */
+:root{--retro-brown:#705c5e;--retro-border:#71696b;--retro-mint:#e3f6f5}
+#app main.retro-rebuilt{background:var(--retro-mint)!important;border-left:2px solid var(--retro-border);border-right:2px solid var(--retro-border);min-height:70vh}
+.retro-page-heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:16px 0 20px}
+.retro-title-tag{display:inline-block;background:var(--retro-brown);color:#fff;padding:7px 12px;font-weight:800;letter-spacing:.7px;border:2px solid var(--retro-brown)}
+.retro-system-id{font:10px ui-monospace,monospace;color:var(--retro-brown);letter-spacing:.5px}
+#app main .retro-card-frame{background:#fff!important;border:2px solid var(--retro-border)!important;border-radius:0!important;box-shadow:7px 7px 0 var(--retro-brown)!important;margin-bottom:23px!important;overflow:visible!important;transform:none!important}
+#app main .retro-card-frame:before,#app main .retro-card-frame:after{border-radius:0!important}
+.retro-mini-chrome{display:flex;align-items:center;gap:10px;padding:9px 11px!important;min-height:42px;background:var(--retro-mint)!important;border-bottom:2px solid var(--retro-border);margin:0 0 13px!important;border-radius:0!important;box-sizing:border-box}
+.retro-mini-squares{display:flex;gap:5px;flex-shrink:0}
+.retro-mini-squares i{width:10px;height:10px;display:block;background:#fff;border:1.5px solid var(--retro-border)}
+.retro-mini-address{display:block;min-width:0;flex:1;padding:4px 7px;border:1.5px solid var(--retro-border);background:#fff;color:#827b7e;font:11px/1.4 ui-monospace,SFMono-Regular,monospace;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#app main.retro-rebuilt :is(.ph,.sh-heading,.ld-heading){background:#fff!important;border:2px solid var(--retro-border)!important;box-shadow:6px 6px 0 var(--retro-brown)!important;border-radius:0!important;padding:16px!important;margin:0 0 24px!important}
+#app main.retro-rebuilt :is(.ph,.sh-heading,.ld-heading) h2{color:var(--retro-brown)!important}
+#app main.retro-rebuilt :is(.days,.cats,.sh-filters){border-radius:0!important;scrollbar-width:thin}
+#app main.retro-rebuilt :is(.days,.cats,.sh-filters) button{border-radius:0!important;border:1.5px solid var(--retro-border)!important;background:#fff!important;color:var(--retro-brown)!important;box-shadow:none!important}
+#app main.retro-rebuilt :is(.days,.cats,.sh-filters) button.on,#app main.retro-rebuilt :is(.days,.cats,.sh-filters) button.active{background:var(--retro-brown)!important;color:#fff!important}
+#app main.retro-rebuilt :is(.pk,.retro-list-entry){border-radius:0!important}
+#app main.retro-rebuilt :is(.todo-item,.sh-item,.shop-item,.home-list-row){border:1.5px solid var(--retro-border)!important;background:var(--retro-mint)!important;margin-bottom:9px!important;padding:10px!important;box-shadow:none!important}
+#app main.retro-rebuilt :is(.card,.sec,.panel,.retro-card-frame) :is(.sec-title,.section-title){border-radius:0!important}
+#app main.retro-rebuilt :is(.card,.sec,.panel,.retro-card-frame) :is(input:not([type=checkbox]),textarea,select){border-radius:0!important;border:1.5px solid var(--retro-border)!important;background:#fff!important}
+#app main.retro-rebuilt :is(.card,.sec,.panel,.retro-card-frame) button:not(.icon-btn){border-radius:0!important}
+#app main.retro-rebuilt details,#app main.retro-rebuilt summary{border-radius:0!important}
+#app main.retro-rebuilt :is(.ld-page,.sh-page,.plan-page){min-width:0}
+@media(max-width:480px){#app main.retro-rebuilt{padding-left:12px!important;padding-right:12px!important}.retro-page-heading{padding:12px 0 16px}.retro-system-id{font-size:9px}.retro-mini-chrome{padding:8px!important}.retro-mini-address{font-size:10px}#app main .retro-card-frame{box-shadow:5px 5px 0 var(--retro-brown)!important;margin-right:5px!important}}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -6108,6 +6206,42 @@ async function viewFlightPassPreview(flightId,index){
  }catch(err){alert('無法讀取這台手機的登機證：'+(err.message||err));}
 }
 
+function rebuildRetroCardLayouts(){
+ const main=app.querySelector('main');if(!main)return;
+ const page=st.tab;
+ const titles={home:'日常 / TRAVEL OVERVIEW',plan:'旅程 / ITINERARY',todo:'待辦 / TASK MANAGER',shop:'購物 / SHOPPING ARCHIVE',ledger:'記帳 / EXPENSE LOG'};
+ main.classList.add('retro-rebuilt');
+ // The original interactive nodes remain in place: only presentation wrappers are added.
+ const heading=document.createElement('div');heading.className='retro-page-heading';heading.innerHTML='<span class="retro-title-tag">'+titles[page]+'</span><span class="retro-system-id">◆ SYSTEM LOGBOOK / 2026</span>';
+ const chrome=main.querySelector(':scope > .retro-browser-chrome');if(chrome)chrome.after(heading);
+ // Every card gets its own classic browser title bar without altering data or handlers.
+ const selectors=['.card','.sec','.panel','.home-list-card','.flight-card','.sh-card','.ld-panel','.ld-stat-card','.ld-summary-card','.ld-overview-card','.weather-overview','.overview-panel'];
+ const found=[...main.querySelectorAll(selectors.join(','))];
+ let count=0;
+ found.forEach(el=>{
+  if(el.closest('.modal,.overlay,.sheet,.dialog,.retro-card-frame'))return;
+  if(el.parentElement&&el.parentElement.closest(selectors.join(',')))return;
+  if(el.classList.contains('retro-browser-chrome'))return;
+  el.classList.add('retro-card-frame');
+  const label=(el.querySelector(':scope > h2,:scope > h3,:scope > .sec-title,:scope > .section-title,:scope > .card-title,:scope > .hd h3,:scope > .hd b')?.textContent||'ARCHIVE '+String(++count).padStart(2,'0')).trim().replace(/\s+/g,' ').slice(0,28);
+  const bar=document.createElement('div');bar.className='retro-mini-chrome';bar.setAttribute('aria-hidden','true');
+  bar.innerHTML='<span class="retro-mini-squares"><i></i><i></i><i></i></span><span class="retro-mini-address">'+page+'.local / '+label.replace(/[&<>"']/g,'')+'</span>';
+  el.insertBefore(bar,el.firstChild);
+ });
+ // Make compact, grouped item cards resemble the reference's framed checklist.
+ main.querySelectorAll('.pk,.todo-item,.sh-item,.shop-item,.ld-entry,.home-list-row').forEach(el=>el.classList.add('retro-list-entry'));
+}
+function installRetroBrowserChrome(){
+ const main=app.querySelector('main');if(!main)return;
+ // Decorative chrome is reinserted on full render; do not replace existing app nodes.
+ const names={home:['diary.local/today','日常記錄'],plan:['travel.local/itinerary','旅程行程'],todo:['system.local/tasks','待辦事項'],shop:['archive.local/shopping','購物清單'],ledger:['terminal.local/ledger','旅途記帳']};
+ const pair=names[st.tab]||names.home;
+ let chrome=main.querySelector(':scope > .retro-browser-chrome');
+ if(!chrome){chrome=document.createElement('div');chrome.className='retro-browser-chrome';main.insertBefore(chrome,main.firstChild)}
+ chrome.innerHTML='<div class="retro-browser-controls" aria-hidden="true"><i></i><i></i><i></i></div><div class="retro-browser-address">http://'+pair[0]+'</div>';
+ main.dataset.retroPage=st.tab;
+ main.setAttribute('aria-label',pair[1]);
+}
 function render(){
   // 明細詳情 / 統計的重繪不能取代下方的上一頁：保留真實捲動位置與 DOM。
   if(st.tab==='ledger'&&(ledgerView==='detail'||ledgerView==='stats'||ledgerView==='all')){
@@ -6146,10 +6280,12 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail'||ledgerView==='all')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='all'?ledgerReturnUnderlay()+ledgerAllPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
+    app.innerHTML='<header class="retro-head"><span>◆ HOKKAIDO LOGBOOK</span><button type="button" class="retro-toggle" aria-label="展開或收合內容">[ 展開 / 閉じる ]</button></header><div class="retro-tabs" role="tablist" aria-label="主要功能">'+[['home','總覽'],['plan','行程'],['todo','待辦'],['shop','購物'],['ledger','記帳']].map(([key,label])=>'<button type="button" role="tab" data-retro-tab="'+key+'" aria-selected="'+(st.tab===key)+'" class="'+(st.tab===key?'selected':'')+'">'+label+'</button>').join('')+'</div>'+(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail'||ledgerView==='all')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='all'?ledgerReturnUnderlay()+ledgerAllPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
+  installRetroBrowserChrome();
+  rebuildRetroCardLayouts();
   document.querySelectorAll('.bottom-nav button').forEach(b=>{const active=b.dataset.v===st.tab;b.classList.toggle('on',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
   if(st.tab==='ledger'&&(ledgerView==='main'||ledgerView==='tax')){const scroller=app.querySelector('#ld-entry-list');if(scroller)scroller.scrollTop=ledgerListScrollTop;}
   applySwipeRows();
@@ -7229,4 +7365,4 @@ save();render();
  cloudSync=makeCloudSync();
  cloudSync.start();
 })();
-</script></body></html>
+</script><script>document.addEventListener('click',function(e){const tab=e.target.closest('[data-retro-tab]');if(tab){const target=document.querySelector('.bottom-nav button[data-v="'+tab.dataset.retroTab+'"]');if(target)target.click();return;}const toggle=e.target.closest('.retro-toggle');if(toggle){const main=document.querySelector('#app>main');if(main){main.hidden=!main.hidden;toggle.textContent=main.hidden?'[ 展開 ]':'[ 閉じる ]';}}});</script></body></html>
