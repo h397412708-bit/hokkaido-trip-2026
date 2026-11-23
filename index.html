@@ -3556,6 +3556,27 @@ body.ld-ledger-overlay-open main.ledger-layered-main>.ld-preserved-underlay>.ld-
   background:linear-gradient(150deg,#f6f8fc,#edf3fa 74%,#f6f3fa)!important;
   pointer-events:none!important;
 }
+</style><style id="hokkaido-retro-os">
+/* HOKKAIDO OS — Poolside-inspired retro desktop skin */
+:root{--navy:#29354a!important;--ink:#20293a!important;--muted:#647087!important;--pale:#EEFAFC!important;--line:#8890a0!important;--blue:#81B0DC!important;--shadow:7px 7px 0 #64758e!important;color-scheme:light}
+html{background:#81B0DC!important}body{background:#81B0DC!important;color:#20293a!important;font-family:"Courier New","Noto Sans TC","PingFang TC",monospace!important}
+body:before{content:'▧  Hokkaido OS   v1.0       File    Edit    View    Travel    Help';display:block;position:sticky;top:0;z-index:1200;height:30px;padding:4px 12px;background:#eefaff;border-bottom:2px solid #29354a;font:12px/20px "Courier New",monospace;white-space:nowrap;overflow:hidden}
+#app{width:min(100%,720px)!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;min-height:100svh!important;padding:18px 12px 30px!important}
+main{padding:12px 6px 120px!important;background:transparent!important}
+.hero{height:auto!important;min-height:175px!important;background:#EEFAFC!important;border:2px solid #29354a!important;border-radius:0!important;box-shadow:7px 7px 0 #64758e!important;margin:10px 4px 20px!important;overflow:hidden!important;color:#20293a!important}
+.hero:before{content:'▣  Hokkaido.exe';display:block!important;background:linear-gradient(90deg,#617eaa,#a9c8e8)!important;color:white!important;border-bottom:2px solid #29354a!important;padding:7px 12px!important;font:bold 15px/1.4 "Courier New",monospace!important}
+.hero:after{content:'□   ×';position:absolute;right:12px;top:7px;color:#fff;font:bold 16px "Courier New",monospace}
+.hero .topline,.hero .eb,.hero .ht1{display:none!important}.hero .hc{position:relative!important;inset:auto!important;transform:none!important;padding:22px 18px!important;background:#EEFAFC!important;text-align:left!important}.hero .hs{font-size:clamp(24px,6vw,37px)!important;font-weight:900!important;letter-spacing:1px!important;color:#20293a!important;text-shadow:none!important}.hero .hm{color:#29354a!important;font:12px/1.7 "Courier New",monospace!important;margin-top:8px!important}.hero *{text-shadow:none!important}
+.bottom-nav{position:sticky!important;top:30px!important;bottom:auto!important;left:auto!important;right:auto!important;transform:none!important;z-index:1100!important;width:min(100% - 20px,700px)!important;margin:10px auto 0!important;padding:0!important;display:flex!important;gap:0!important;background:#fff!important;border:2px solid #29354a!important;border-radius:0!important;box-shadow:5px 5px 0 #64758e!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;min-height:49px!important}
+.bottom-nav button{flex:1!important;min-width:0!important;min-height:46px!important;border:0!important;border-right:2px solid #29354a!important;border-radius:0!important;background:#fff!important;color:#20293a!important;padding:8px 2px!important;font-weight:800!important;font-size:13px!important;box-shadow:none!important;transform:none!important}
+.bottom-nav button:last-child{border-right:0!important}.bottom-nav button[aria-selected="true"],.bottom-nav button.active,.bottom-nav button.is-active{background:#EEFAFC!important}.bottom-nav button svg,.bottom-nav button i,.nav-glass-indicator{display:none!important}.bottom-nav button:before{display:none!important}
+#app section,#app article,#app details,#app .card,#app [class*="card"],#app [class*="panel"],#app [class*="tile"]{border-radius:0!important}
+#app .card,#app [class*="card"],#app [class*="panel"]{box-shadow:5px 5px 0 #64758e!important;border-color:#8890a0!important}
+#app button,#app input,#app textarea,#app select{border-radius:0!important}
+#app input,#app textarea,#app select{background-color:#fff!important;border-color:#8890a0!important}
+#app [class*="gradient"],#app [class*="terminal"]{background:#EEFAFC!important}
+#app h1,#app h2,#app h3{letter-spacing:.02em!important}
+@media(max-width:480px){#app{padding:10px 8px 30px!important}.bottom-nav{width:calc(100% - 16px)!important}.bottom-nav button{font-size:12px!important}.hero{margin:10px 3px 18px!important}.hero .hc{padding:18px 12px!important}}
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -7191,4 +7212,10 @@ save();render();
  cloudSync=makeCloudSync();
  cloudSync.start();
 })();
-</script></body></html>
+</script><script id="retro-os-nav">(function(){
+function setup(){const nav=document.querySelector('.bottom-nav'),app=document.querySelector('#app');if(!nav||!app)return;if(nav.nextElementSibling!==app)document.body.insertBefore(nav,app);
+const names=['總覽','行程','待辦','購物','記帳'];nav.querySelectorAll('button[data-a="tab"]').forEach((b,i)=>{if(i<5){b.setAttribute('aria-label',names[i]);let label=b.querySelector('.retro-label');if(!label){label=document.createElement('span');label.className='retro-label';b.appendChild(label)}label.textContent=names[i]}});
+const update=()=>{const active=nav.querySelector('button.active,button[aria-selected="true"],button.is-active');nav.querySelectorAll('button[data-a="tab"]').forEach(b=>{const selected=active?b===active:b.dataset.v===(window.st?.tab||'home');b.style.backgroundColor=selected?'#EEFAFC':'#fff'})};update();
+new MutationObserver(update).observe(nav,{attributes:true,subtree:true,attributeFilter:['class','aria-selected']});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
+})();</script></body></html>
