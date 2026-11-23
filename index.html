@@ -3556,6 +3556,44 @@ body.ld-ledger-overlay-open main.ledger-layered-main>.ld-preserved-underlay>.ld-
   background:linear-gradient(150deg,#f6f8fc,#edf3fa 74%,#f6f3fa)!important;
   pointer-events:none!important;
 }
+
+/* Japanese Retro System Logbook — visual-only theme; preserve application logic */
+:root{--navy:#705c5e!important;--ink:#62595b!important;--muted:#82797a!important;--pale:#e3f6f5!important;--line:#706466!important;--blue:#705c5e!important;--shadow:5px 5px 0 #705c5e!important;color-scheme:light}
+html{background:#f7f7f7}body{background:#f7f7f7!important;color:#62595b;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans TC','Noto Sans JP','PingFang TC',sans-serif}
+#app{background:#fff!important;box-shadow:none!important;border-left:1px solid #d8d1d1;border-right:1px solid #d8d1d1}
+main{background:#e3f6f5!important;border:2px solid #706466!important;margin:12px 12px 18px!important;padding:17px 12px calc(106px + var(--sb))!important;min-height:65svh}
+.top{background:#fff!important;padding:calc(15px + env(safe-area-inset-top,0px)) 12px 12px!important}
+.card,.row,.overview-panel,.weather-overview.card,.ld-panel,.ld-full-ledger-panel,.ld-sub-panel,.ld-card,.sh-card{border:1.5px solid #706466!important;border-radius:0!important;background:#fff!important;box-shadow:5px 5px 0 #705c5e!important}
+.card,.overview-panel,.weather-overview.card,.ld-panel{margin-bottom:17px!important}
+button,input,select,textarea,dialog{border-radius:0!important}
+input,select,textarea{border-color:#807273!important;background-color:#fff;color:#62595b}
+button{transition:background-color .12s,color .12s!important}
+button:active{filter:brightness(.94);transform:none!important}
+.bottom-nav{background:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-top:2px solid #705c5e!important;border-radius:0!important;box-shadow:none!important;padding:0 0 var(--sb)!important;width:min(100%,640px)!important;height:calc(66px + var(--sb))!important;left:50%!important;transform:translateX(-50%)!important;gap:0!important;grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.bottom-nav::before,.nav-glass-indicator,.nav-lens-core{display:none!important}
+.bottom-nav button{background:#fff!important;border-right:1px solid #705c5e!important;border-radius:0!important;color:#705c5e!important;gap:2px!important;padding:7px 1px 5px!important;box-shadow:none!important}
+.bottom-nav button:last-of-type{border-right:0!important}
+.bottom-nav button.on{background:#705c5e!important;color:#fff!important}
+.bottom-nav button.on::after{display:none!important}
+.bottom-nav button svg{width:20px!important;height:20px!important;stroke-width:1.7!important}
+.bottom-nav button span{font-size:10px!important;font-weight:700!important}
+#app :is(.pill,.chip,.tag,.badge,.btn,.seg button,.filter button){border-radius:0!important}
+#app :is(.card,.row,.overview-panel,.ld-panel) :is(summary,button){border-radius:0!important}
+#app :is(.card,.row,.overview-panel,.ld-panel) :is(h2,h3,h4){color:#705c5e}
+#app :is(.card,.row,.overview-panel,.ld-panel) :is(input,select,textarea){border-radius:0!important}
+#app :is(.fab,.add-fab,.floating-add,.sh-fab){background:#705c5e!important;color:white!important;border:1.5px solid #705c5e!important;box-shadow:3px 3px 0 #c2b6b7!important}
+#app .hero{border-radius:0!important;box-shadow:none!important}
+#app .hero:after{border-radius:0!important}
+#app .overview-panel>summary,#app .weather-overview>summary{border-radius:0!important}
+#app details[open]>summary{border-bottom-color:#706466}
+#app .ld-panel{background:#fff!important}
+#app .ld-grand,#app .ld-result{color:#705c5e!important}
+#app .ld-all-screen,#app .ld-tax-screen{background:#e3f6f5!important}
+dialog{border:2px solid #706466!important;background:#fff!important;box-shadow:7px 7px 0 #705c5e!important;max-width:calc(100vw - 30px)}
+dialog::backdrop{background:rgba(61,50,52,.46)}
+#hk-cloud-toggle{border-radius:0!important;background:#705c5e!important;color:#fff!important}
+@media(max-width:420px){main{margin:9px 8px 12px!important;padding:12px 9px calc(96px + var(--sb))!important}.top{padding-left:9px!important;padding-right:9px!important}.card,.row,.overview-panel,.ld-panel{box-shadow:4px 4px 0 #705c5e!important}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
