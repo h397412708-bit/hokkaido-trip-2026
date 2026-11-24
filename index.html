@@ -4427,7 +4427,28 @@ body .main-browser-tabs.bottom-nav button.on{color:#41586e!important;font-weight
 body .main-browser-tabs.bottom-nav button::before,body .main-browser-tabs.bottom-nav button::after{display:none!important}
 #app.season-page-enter{animation:season-page-in 220ms ease-out both}@keyframes season-page-in{from{opacity:.55;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){body .main-browser-tabs.bottom-nav .nav-glass-indicator{transition:none!important}#app.season-page-enter{animation:none!important}}
-</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［同步］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
+</style>
+<style id="rounded-main-tabs">
+body .main-browser-tabs.bottom-nav{width:min(calc(100% - 16px),624px)!important;padding:3px 0 0!important;background:transparent!important;border:0!important;margin:0 auto!important;}
+body .main-browser-tabs.bottom-nav button,body .main-browser-tabs.bottom-nav button.on{background:#e5edf3!important;border-radius:14px 14px 0 0!important;}
+body .main-browser-tabs.bottom-nav button.on{background:#f8fafb!important;}
+body .main-browser-tabs.bottom-nav .nav-glass-indicator{background:#f8fafb!important;border-radius:14px 14px 0 0!important;z-index:2!important;}
+body .main-browser-tabs.bottom-nav button span{position:relative;z-index:3;}
+body .main-browser-tabs.bottom-nav button{z-index:auto!important;}
+body #app{width:min(calc(100% - 16px),624px)!important;border:1px solid #b7c8d5!important;border-radius:0 0 14px 14px!important;background:#f8fafb!important;box-sizing:border-box;box-shadow:none!important;margin-top:-1px!important;}
+.winter-browser-bar #hk-cloud-toggle .winter-cloud-text{letter-spacing:.04em!important;}
+
+body .main-browser-tabs.bottom-nav button,body .main-browser-tabs.bottom-nav .nav-glass-indicator{clip-path:none!important;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 36' preserveAspectRatio='none'%3E%3Cpath d='M0 36 Q5 35 7 28 L15 6 Q17 0 24 0 H76 Q83 0 85 6 L93 28 Q95 35 100 36 Z' fill='black'/%3E%3C/svg%3E");-webkit-mask-size:100% 100%;mask-size:100% 100%;}
+body .main-browser-tabs.bottom-nav .nav-glass-indicator{z-index:0!important;}
+body .main-browser-tabs.bottom-nav button.on{background:transparent!important;}
+body .main-browser-tabs.bottom-nav button{z-index:1!important;}
+</style><style id="compact-sliding-main-tabs">
+body .main-browser-tabs.bottom-nav{height:30px!important;min-height:30px!important;padding:0!important;gap:0!important;background:#E5EDF3!important;border-radius:0!important;isolation:isolate;}
+body .main-browser-tabs.bottom-nav button,body .main-browser-tabs.bottom-nav button.on{height:30px!important;min-height:30px!important;background:transparent!important;border-radius:0!important;clip-path:none!important;-webkit-mask-image:none!important;mask-image:none!important;z-index:1!important;}
+body .main-browser-tabs.bottom-nav .nav-glass-indicator{top:0!important;bottom:0!important;height:30px!important;background:#F8FAFB!important;z-index:0!important;transition:transform 320ms cubic-bezier(.22,.8,.25,1),width 320ms cubic-bezier(.22,.8,.25,1)!important;}
+body .main-browser-tabs.bottom-nav .nav-glass-indicator.nav-no-motion{transition:none!important;}
+@media(prefers-reduced-motion:reduce){body .main-browser-tabs.bottom-nav .nav-glass-indicator{transition:none!important;}}
+</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
 <nav class="bottom-nav main-browser-tabs" aria-label="主要功能分頁">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
