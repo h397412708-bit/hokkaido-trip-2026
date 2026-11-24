@@ -4424,6 +4424,17 @@ body.ld-ledger-overlay-open main.ledger-layered-main > .ld-all-return-snapshot{p
 #app main:has(> .plan-day-heading) .tlw>details.row[open] .transport-details b{margin:0 0 4px!important;}
 #app main:has(> .plan-day-heading) .tlw>details.row[open] .transport-details p{margin:0 0 10px!important;}
 #app main:has(> .plan-day-heading) .tlw>details.row[open] .transport-details p:last-child{margin-bottom:0!important;}
+
+/* Identical itinerary surface in both states; no color jump. */
+#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv){background:#FDFEFE!important;border-color:#CBD9E4!important;box-shadow:none!important;}
+#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary.swipe-host,#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary.swipe-host>.swipe-face{background:transparent!important;box-shadow:none!important;}
+#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>.bd{background:transparent!important;}
+.ld-return-chrome{z-index:1000!important;box-shadow:none!important;animation:none!important;transition:none!important;}
+.ld-return-chrome.winter-address-row{display:block!important;background:#E5EDF3!important;}
+.ld-return-chrome.bottom-nav{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));background:#E5EDF3!important;padding:0!important;border:0!important;}
+.ld-return-chrome.bottom-nav button svg{display:none!important;}
+.ld-return-chrome.bottom-nav button{background:transparent!important;border:0!important;}
+body.ld-ledger-overlay-open main.ledger-layered-main>.ld-subpage.ld-ledger-overlay.ld-exiting{will-change:transform;opacity:1!important;}
 </style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
 <div class="winter-address-row"><div class="winter-address-field" id="winter-address-field" aria-label="旅程標題"><span class="winter-trip-heading">北海道冬日旅誌</span><span class="winter-trip-subheading">12.18-12.27 札幌・小樽・登別・洞爺湖</span></div></div>
 <nav class="bottom-nav" aria-label="頂部主分頁">
@@ -5916,7 +5927,7 @@ function ledgerDetailPage(){
   if(e.refundProvider==='其他服務商')rows.push(inp('refundProviderCustom','服務商名稱'));
   rows.push(choice('refundMethod','退款方式',LEDGER_REFUND_METHODS),choice('refundStatus','退稅進度',LEDGER_REFUND_STATES),inp('refundAmount','實際退款 JPY','number'));
  }
- return '<div class="ld-page ld-subpage ld-ledger-overlay" data-ledger-subpage="detail">'+ledgerSubHeader('明細詳情','點選欄位直接修改，離開後儲存 · 向右滑動返回')+
+ return '<div class="ld-page ld-subpage ld-ledger-overlay" data-ledger-subpage="detail">'+
  (detailPhoto?'<section class="ld-detail-photo ld-photo-visible"><button type="button" data-a="ledger-photo-view" data-id="'+esc(e.id)+'" aria-label="放大支出照片"><img src="'+esc(detailPhoto)+'" alt="'+esc(e.name)+' 的照片" loading="eager" decoding="async"></button></section>':'')+
  '<section class="ld-panel"><div class="ld-section-head"><h3>收支資訊</h3><span class="ld-inline-save-hint">修改後自動儲存</span></div>'+
  ledgerNetSummary(e)+
@@ -5935,6 +5946,18 @@ function ledgerMountLiveSubpage(view){
   .filter(node=>node.scrollTop||node.scrollLeft)
   .map(node=>({node,top:node.scrollTop,left:node.scrollLeft}));
  const previousWindowY=window.scrollY||0;
+ const chrome=[];
+ if(ledgerNavStack.at(-1)?.view==='main'){
+  for(const el of document.querySelectorAll('body > .winter-browser-bar, body > .winter-address-row, body > nav.bottom-nav')){
+   const r=el.getBoundingClientRect(); if(r.bottom<=0||r.top>=innerHeight)continue;
+   const copy=el.cloneNode(true);copy.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));copy.removeAttribute('id');
+   copy.inert=true;copy.setAttribute('aria-hidden','true');copy.classList.add('ld-return-chrome');
+   for(const [k,v] of Object.entries({position:'fixed',top:r.top+'px',left:r.left+'px',width:r.width+'px',height:r.height+'px',margin:'0',transform:'none',visibility:'visible',pointerEvents:'none'}))copy.style.setProperty(k.replace(/[A-Z]/g,m=>'-'+m.toLowerCase()),v,'important');
+   copy.querySelectorAll('.winter-browser-controls i').forEach(n=>n.style.display='block');copy.querySelector('.winter-browser-controls button')?.remove();
+   chrome.push(copy);
+  }
+ }
+
  const previousMainRect=main.getBoundingClientRect();
  const previousMainTop=previousMainRect.top;
  const previousMainStyle=Object.fromEntries(['Top','Right','Bottom','Left'].map(side=>['padding'+side,getComputedStyle(main)['padding'+side]]));
@@ -5953,6 +5976,7 @@ function ledgerMountLiveSubpage(view){
   node.id='ld-preserved-'+layer+'-'+node.id;
  });
  main.appendChild(preserved);
+ chrome.forEach(node=>preserved.appendChild(node));
  if(view==='all'&&ledgerNavStack.at(-1)?.view==='main'){preserved.classList.add('ld-all-return-snapshot');preserved.style.setProperty('--ld-return-top',previousMainTop+'px');preserved.style.setProperty('--ld-return-scroll',previousWindowY+'px');preserved.style.setProperty('--ld-return-left',previousMainRect.left+'px');preserved.style.setProperty('--ld-return-width',previousMainRect.width+'px');for(const side of ['Top','Right','Bottom','Left'])preserved.style.setProperty('padding-'+side.toLowerCase(),previousMainStyle['padding'+side]);}
  main.classList.add('ledger-layered-main');
  main.insertAdjacentHTML('beforeend',view==='all'?ledgerAllPage():view==='stats'?ledgerStatPage():ledgerDetailPage());
@@ -5987,7 +6011,7 @@ function ledgerReturnUnderlay(){
 function ledgerHeaderMotion(transform,transition){
  const bar=document.querySelector('.winter-browser-bar:not(.winter-browser-underlay)');
  if(!bar)return;
- if(!document.querySelector('.winter-browser-underlay')){
+ if(!document.querySelector('.winter-browser-underlay')&&!app.querySelector('main > .ld-preserved-underlay > .ld-return-chrome.winter-browser-bar')){
   const clone=bar.cloneNode(true);clone.classList.add('winter-browser-underlay');clone.inert=true;clone.setAttribute('aria-hidden','true');
   const previous=ledgerNavStack[ledgerNavStack.length-1]?.view||'main';
   clone.classList.toggle('winter-ledger-subpage',previous!=='main');
@@ -6022,6 +6046,7 @@ function ledgerBack(){
     node.id=node.dataset.ledgerStoredId;
     delete node.dataset.ledgerStoredId;delete node.dataset.ledgerStoredLayer;
    });
+   underlay.querySelectorAll(':scope > .ld-return-chrome').forEach(n=>n.remove());
    while(underlay.firstChild)main.insertBefore(underlay.firstChild,underlay);
    underlay.remove();
    const hasOverlay=previous.view==='detail'||previous.view==='stats'||previous.view==='all';
@@ -6047,9 +6072,10 @@ function ledgerBack(){
  if(panel){
   panel.classList.add('ld-exiting');
   panel.style.animation='none';
-  const exitDuration=ledgerView==='all'?150:240;
-  panel.style.transition='transform '+exitDuration+'ms ease-out';
-  ledgerHeaderMotion('translate3d(105vw,0,0)','transform '+exitDuration+'ms ease-out');
+  const exitDuration=200;
+  panel.getBoundingClientRect();
+  panel.style.setProperty('transition','transform '+exitDuration+'ms cubic-bezier(.22,.7,.3,1)','important');
+  ledgerHeaderMotion('translate3d(105vw,0,0)','transform '+exitDuration+'ms cubic-bezier(.22,.7,.3,1)');
   panel.style.transform='translate3d(105vw,0,0)';panel.style.opacity='1';
   setTimeout(goBack,exitDuration+10);
  }else goBack();
