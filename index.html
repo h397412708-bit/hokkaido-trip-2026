@@ -4530,25 +4530,32 @@ function hkValidPrecloudBackup(value){
   ['days','todos','packs','shopping','stays','dining','tickets'].every(key=>Array.isArray(value[key]));
 }
 async function hkEnsurePrecloudBackup(){
+ hkPrecloudBackupVerified=false;
  const original=await hkDbGet('precloud_backup');
- if(original!==undefined&&original!==null){
-  if(!hkValidPrecloudBackup(original))
-   throw Error('既有雲端遷移前備份格式不完整；已保留原備份，停止雲端套用以避免覆寫資料');
-  // 原先可能「確實寫入成功」但因比對可變物件而沒記錄成功。
+ if(hkValidPrecloudBackup(original)){
   hkPrecloudBackupVerified=true;
-  SV('cloud_backup_created', original.backedUpAt||new Date().toISOString());
+  SV('cloud_backup_created',original.backedUpAt||new Date().toISOString());
   return;
  }
- const snapshot=structuredClone({
-  days,todos,packs,shopping,stays,dining,tickets,shopHints,ledgerV1:ledger,
-  backedUpAt:new Date().toISOString()
- });
+ // 舊備份原封不動保留；新版快照使用獨立鍵，不將舊欄位混入現行資料。
+ const key=original==null?'precloud_backup':'precloud_backup_recovery_v2';
+ const prior=await hkDbGet(key);
+ if(key!=='precloud_backup'&&hkValidPrecloudBackup(prior)){
+  hkPrecloudBackupVerified=true;
+  SV('cloud_backup_created',prior.backedUpAt||new Date().toISOString());
+  return;
+ }
+ if(key!=='precloud_backup'&&prior!=null)throw Error('新版復原備份格式異常；已保留所有備份並暫停雲端同步');
+ const snapshot=structuredClone({days,todos,packs,shopping,stays,dining,tickets,shopHints,ledgerV1:ledger,backedUpAt:new Date().toISOString()});
  const expected=JSON.stringify(snapshot);
- if(!hkValidPrecloudBackup(snapshot)||!expected)throw Error('無法建立本機資料的完整備份快照');
- await hkDbPut('precloud_backup',snapshot);
- const verified=await hkDbGet('precloud_backup');
- if(!hkValidPrecloudBackup(verified)||JSON.stringify(verified)!==expected)
-  throw Error('雲端遷移前的本機備份驗證失敗；保留原資料且暫停雲端同步');
+ if(!hkValidPrecloudBackup(snapshot))throw Error('無法建立完整本機備份');
+ // 確認目前本機資料已實際寫入，才允許建立復原備份。
+ for(const field of ['days','todos','packs','shopping','stays','dining','tickets','shopHints','ledgerV1']){
+  if(JSON.stringify(await hkDbGet(field))!==JSON.stringify(snapshot[field]))throw Error('本機資料驗證失敗：'+field);
+ }
+ await hkDbPut(key,snapshot);
+ const verified=await hkDbGet(key);
+ if(!hkValidPrecloudBackup(verified)||JSON.stringify(verified)!==expected)throw Error('復原備份驗證失敗；已暫停雲端同步');
  hkPrecloudBackupVerified=true;
  SV('cloud_backup_created',snapshot.backedUpAt);
 }
