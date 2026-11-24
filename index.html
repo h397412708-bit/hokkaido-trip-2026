@@ -4435,6 +4435,11 @@ body.ld-ledger-overlay-open main.ledger-layered-main > .ld-all-return-snapshot{p
 .ld-return-chrome.bottom-nav button svg{display:none!important;}
 .ld-return-chrome.bottom-nav button{background:transparent!important;border:0!important;}
 body.ld-ledger-overlay-open main.ledger-layered-main>.ld-subpage.ld-ledger-overlay.ld-exiting{will-change:transform;opacity:1!important;}
+
+/* Continuous itinerary surface and stable journal return */
+#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv),#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)[open]{background:linear-gradient(155deg,#FDFEFE 0%,#F0F5F9 100%)!important;}
+#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary.swipe-host,#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary.swipe-host>.swipe-face,#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>.bd,#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv) .spot-intro{background:transparent!important;border-top:0!important;border-bottom:0!important;box-shadow:none!important;}
+body.ld-ledger-overlay-open main.ledger-layered-main > .ld-all-return-snapshot{inset:auto!important;top:var(--ld-return-top)!important;left:var(--ld-return-left)!important;width:var(--ld-return-width)!important;max-width:var(--ld-return-width)!important;min-height:0!important;overflow:visible!important;transform:none!important;}
 </style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
 <div class="winter-address-row"><div class="winter-address-field" id="winter-address-field" aria-label="旅程標題"><span class="winter-trip-heading">北海道冬日旅誌</span><span class="winter-trip-subheading">12.18-12.27 札幌・小樽・登別・洞爺湖</span></div></div>
 <nav class="bottom-nav" aria-label="頂部主分頁">
@@ -5997,9 +6002,8 @@ function ledgerOpenView(view,id=''){
   listScroll:(previousPanel||main)?.querySelector('#ld-entry-list')?.scrollTop||0,
   subScroll:previousPanel?.scrollTop||0});
  ledgerView=view;ledgerDetailId=view==='detail'?id:null;
- syncWinterPage();
  // 明細與統計保留上一頁的真實 DOM，滑出時才能露出相同的捲動位置。
- if((view==='detail'||view==='stats'||view==='all')&&ledgerMountLiveSubpage(view))return;
+ if((view==='detail'||view==='stats'||view==='all')&&ledgerMountLiveSubpage(view)){syncWinterPage();return;}
  render();if(view!=='tax')window.scrollTo(0,0);
 }
 // 初次載入缺少上一頁 DOM 時的相容回退；正常使用走 ledgerMountLiveSubpage。
@@ -6064,9 +6068,9 @@ function ledgerBack(){
    if(list)list.scrollTop=previous.listScroll||0;
    const sub=app.querySelector('main > [data-ledger-subpage]');
    if(sub)sub.scrollTop=previous.subScroll||0;
-   requestAnimationFrame(()=>window.scrollTo(0,previous.scroll||0));
+   window.scrollTo({top:previous.scroll||0,left:0,behavior:'instant'});
   }else{
-   render();requestAnimationFrame(()=>window.scrollTo(0,previous.scroll||0));
+   render();window.scrollTo({top:previous.scroll||0,left:0,behavior:'instant'});
   }
  };
  if(panel){
