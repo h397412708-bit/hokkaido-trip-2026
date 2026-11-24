@@ -3556,6 +3556,57 @@ body.ld-ledger-overlay-open main.ledger-layered-main>.ld-preserved-underlay>.ld-
   background:linear-gradient(150deg,#f6f8fc,#edf3fa 74%,#f6f3fa)!important;
   pointer-events:none!important;
 }
+/* 2026-11-24｜每日行程純文字重排：移除日期下方的彩色行程摘要圖，保留原本每張行程卡的互動 */
+main.top:has(> .plan-date-switcher){padding-top:calc(13px + env(safe-area-inset-top,0px));}
+main > .plan-date-switcher.days:not(.cats){
+  gap:7px;margin:0 -16px 19px;padding:2px 16px 8px;
+  scroll-snap-type:x proximity;scroll-padding:16px;
+}
+main > .plan-date-switcher.days:not(.cats) button{
+  min-width:58px;min-height:67px;padding:10px 8px 9px;
+  border:1px solid #dbe3ed;border-radius:14px;background:rgba(255,255,255,.78);
+  box-shadow:none;color:#8794a8;scroll-snap-align:start;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;
+  transition:background .18s,border-color .18s,transform .18s;
+}
+main > .plan-date-switcher.days:not(.cats) button b{font-size:20px;line-height:1.08;font-weight:760;letter-spacing:-.035em;color:#52627d;}
+main > .plan-date-switcher.days:not(.cats) button small{font-size:10px;line-height:1.2;font-weight:700;color:#8795a9;}
+main > .plan-date-switcher.days:not(.cats) button.on{
+  border-color:#607b9c;background:#607b9c;box-shadow:0 4px 12px #607b9c22;transform:none;
+}
+main > .plan-date-switcher.days:not(.cats) button.on b,
+main > .plan-date-switcher.days:not(.cats) button.on small{color:#fff;}
+.plan-day-heading{margin:0 0 13px;padding:0 2px 15px;border-bottom:1px solid #cfd9e7;background:none;}
+.plan-day-overline{display:flex;align-items:center;gap:8px;color:#788da9;font-size:10px;font-weight:800;letter-spacing:.13em;line-height:1.5;}
+.plan-day-overline-mark{height:14px;width:3px;border-radius:3px;background:#8fa8c3;}
+.plan-day-overline-divider{color:#bbc6d5;}
+.plan-day-heading h2{margin:7px 0 6px;color:#344c67;font-size:26px;line-height:1.3;font-weight:800;letter-spacing:-.035em;overflow-wrap:anywhere;}
+.plan-day-heading-footer{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:11px;color:#8392a8;font-weight:600;line-height:1.5;}
+.plan-day-dot{width:3px;height:3px;border-radius:50%;background:#b4c0d0;flex:none;}
+.plan-weather-fold{border:1px solid #dce5ef;border-radius:13px;background:rgba(255,255,255,.67);margin:0 0 22px;box-shadow:none;overflow:hidden;}
+.plan-weather-fold>summary{display:flex;align-items:center;gap:10px;min-height:49px;padding:11px 13px;color:#647e9e;font-size:12px;font-weight:750;}
+.plan-weather-fold>summary>svg:first-child{width:19px;height:19px;flex:none;stroke:currentColor;fill:none;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;}
+.plan-weather-name{display:inline-flex;align-items:baseline;gap:7px;flex:1;min-width:0;}
+.plan-weather-name small{font-size:10px;font-weight:600;color:#8d9aaf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.plan-weather-brief{font-size:11px;color:#8194ae;font-weight:700;white-space:nowrap;}
+.plan-weather-chevron{width:14px;height:14px;flex:none;fill:none;stroke:#95a4b8;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;}
+.plan-weather-fold[open] .plan-weather-chevron{transform:rotate(180deg);}
+.plan-weather-content{padding:0 10px 10px;}
+.plan-weather-content .weather-card{margin:0;border-radius:11px;box-shadow:none;background:#f7f9fc;padding:11px 12px;}
+.plan-weather-content .weather-card:after{opacity:.4;}
+.plan-list-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:0 2px 12px;}
+.plan-list-heading>span{font-size:14px;font-weight:820;color:#465c78;letter-spacing:-.01em;}
+.plan-list-heading>small{font-size:10px;font-weight:650;color:#94a3b8;}
+main:has(> .plan-day-heading) .tlw{margin-top:0!important;padding-bottom:8px;}
+main:has(> .plan-day-heading) .tlw::before{background:#cad5e5!important;}
+main:has(> .plan-day-heading) .tlw>details.row:not(.mv){background:#fff;border:1px solid #dae2ee;box-shadow:0 3px 12px rgba(55,79,117,.04);border-radius:15px;}
+main:has(> .plan-day-heading) .tlw>details.row[open]{border-color:#b7cbe3!important;}
+main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary.swipe-host>.swipe-face{min-height:65px;}
+main:has(> .plan-day-heading) .tlw>details.row .row-summary-title{color:#40536e;}
+main:has(> .plan-day-heading) .tlw>details.row .row-inline-clock{color:#6f87a6;}
+main:has(> .plan-day-heading) .tlw>details.row.mv{background:transparent!important;}
+@media(max-width:360px){.plan-day-heading h2{font-size:24px}.plan-weather-name{gap:4px}main > .plan-date-switcher.days:not(.cats) button{min-width:56px;}}
+
 </style></head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -4598,7 +4649,10 @@ const sub=snowBooked?d.sub.replace('雪地摩托車','雪地摩托車（已訂�
 let note=d.note;
 if(String(d.d)==='22'&&itemBooked('jr22'))note=note.replace('JR 車票還沒買。','JR 行程已標記為已訂，請確認實際車票。');
 if(String(d.d)==='24'&&itemBooked('jr24'))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 行程已標記為已訂。');
-return '<div class="days">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+'</div><section class="dh '+(d.tone||(DAYS[st.day]||{}).tone||'')+'"><small>DAY '+(st.day+1)+' · 12/'+esc(d.d)+' · '+esc(d.city)+'</small><h2>'+esc(d.title)+'</h2><p>'+esc(sub)+'</p><div>🛏 '+esc(d.sleep)+'</div></section>'+wxCard(st.day)+'<div class="tlw">'+d.items.map((a,i)=>row(a,i,d)).join('')+'</div><div class="itinerary-add-area"><div class="home-add-quick-menu plan-add-quick-menu" id="plan-add-quick-menu" aria-hidden="true"><button type="button" data-a="plan-add-kind" data-kind="交通" tabindex="-1" aria-label="新增交通" title="新增交通"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 12h16M8 16h.01M16 16h.01M7 19l-1 2m11-2 1 2"/></svg></button><button type="button" data-a="plan-add-kind" data-kind="觀光" tabindex="-1" aria-label="新增行程" title="新增行程">'+iconSvg('pin')+'</button></div><button type="button" class="shop-glass-add itinerary-add-trigger" data-a="add-choose" aria-label="新增交通或行程" aria-expanded="false" aria-controls="plan-add-quick-menu" title="新增交通或行程"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
+return '<div class="days plan-date-switcher" role="group" aria-label="切換每日行程">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'" aria-label="12月'+esc(x.d)+'日 星期'+esc(x.week)+'" aria-pressed="'+(i===st.day?'true':'false')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+
+'</div><section class="plan-day-heading" aria-label="當日日期與地點"><div class="plan-day-overline"><span class="plan-day-overline-mark"></span><span>DAY '+String(st.day+1).padStart(2,'0')+'</span><span class="plan-day-overline-divider">/</span><span>2026.12.'+esc(d.d)+'</span></div><h2>'+esc(d.city)+'</h2><div class="plan-day-heading-footer"><span>'+esc(d.title)+'</span><span class="plan-day-dot" aria-hidden="true"></span><span>'+d.items.length+' 個行程</span></div></section>'+
+'<details class="plan-weather-fold" data-k="planWeather"'+(ov.has('planWeather')?' open':'')+'><summary>'+iconSvg('weather')+'<span class="plan-weather-name">當地天氣 <small>'+esc(WX_LOCATION[WX_KEYS[st.day]]?.label||d.city)+'</small></span><span class="plan-weather-brief">'+(wxRecord(st.day)?esc(Math.round(wxRecord(st.day).max))+'° / '+esc(Math.round(wxRecord(st.day).min))+'°':'查看預報')+'</span><svg class="plan-weather-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="plan-weather-content">'+wxCard(st.day)+'</div></details>'+
+'<div class="plan-list-heading"><span>當日行程</span><small>依時間排列</small></div><div class="tlw">'+d.items.map((a,i)=>row(a,i,d)).join('')+'</div><div class="itinerary-add-area"><div class="home-add-quick-menu plan-add-quick-menu" id="plan-add-quick-menu" aria-hidden="true"><button type="button" data-a="plan-add-kind" data-kind="交通" tabindex="-1" aria-label="新增交通" title="新增交通"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 12h16M8 16h.01M16 16h.01M7 19l-1 2m11-2 1 2"/></svg></button><button type="button" data-a="plan-add-kind" data-kind="觀光" tabindex="-1" aria-label="新增行程" title="新增行程">'+iconSvg('pin')+'</button></div><button type="button" class="shop-glass-add itinerary-add-trigger" data-a="add-choose" aria-label="新增交通或行程" aria-expanded="false" aria-controls="plan-add-quick-menu" title="新增交通或行程"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
 
 // 購物清單以相同的 hk26v2_ 儲存空間保存。圖像會縮小為 JPEG，僅儲存在目前瀏覽器。
 let shopping=LS('shopping',[]);
