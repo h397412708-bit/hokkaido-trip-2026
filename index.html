@@ -4518,12 +4518,16 @@ function hkValidPrecloudBackup(value){
 async function hkEnsurePrecloudBackup(){
  const original=await hkDbGet('precloud_backup');
  if(original!==undefined&&original!==null){
-  if(!hkValidPrecloudBackup(original))
-   throw Error('既有雲端遷移前備份格式不完整；已保留原備份，停止雲端套用以避免覆寫資料');
-  // 原先可能「確實寫入成功」但因比對可變物件而沒記錄成功。
-  hkPrecloudBackupVerified=true;
-  SV('cloud_backup_created', original.backedUpAt||new Date().toISOString());
-  return;
+  if(hkValidPrecloudBackup(original)){
+   hkPrecloudBackupVerified=true;
+   SV('cloud_backup_created', original.backedUpAt||new Date().toISOString());
+   return;
+  }
+  // 保留不相容的舊備份原貌，驗證成功後才允許建立新的完整快照。
+  const archive='archive_precloud_legacy_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+  await hkDbPut(archive,original);
+  if(JSON.stringify(await hkDbGet(archive))!==JSON.stringify(original))
+   throw Error('舊備份封存驗證失敗；已停止雲端同步');
  }
  const snapshot=structuredClone({
   days,todos,packs,shopping,stays,dining,tickets,shopHints,ledgerV1:ledger,
@@ -8217,7 +8221,9 @@ async function hkStartJournal(){
   // 一旦成功啟動，當前經正規化的資料再寫回 IndexedDB。
   await Promise.all([SV('days',days),SV('todos',todos),SV('packs',packs),SV('stays',stays),SV('dining',dining),SV('tickets',tickets),SV('shopping',shopping),SV('shopHints',shopHints),SV('ledgerV1',ledger)]);
   // 等本機完整備份成功後才允許啟動雲端；避免傳入資料與備份互相競爭。
-  await hkEnsurePrecloudBackup();
+  try{await hkEnsurePrecloudBackup()}catch(error){
+   hkNotifySaveFailure(error);render();return;
+  }
  }catch(error){
   hkNotifySaveFailure(error);
   // IDB 無法寫入時不得刪除舊資料、也不得以空預設資料覆蓋 Firebase。
