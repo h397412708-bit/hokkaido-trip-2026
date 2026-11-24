@@ -4343,8 +4343,24 @@ body > .winter-address-row{background:#E5EDF3!important;}
 #app>.winter-trip-summary{margin-top:0!important;}
 /* Restore original winter gradient on finance subpages, not the underlying ledger. */
 #app .ld-page.ld-tax-screen,#app .ld-page.ld-all-screen,#app .ld-page.ld-stat-screen,#app .ld-page.ld-ledger-overlay{background:linear-gradient(165deg,#f4f8fb 0%,#edf3f8 54%,#f8fafc 100%)!important;}
-</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
-<div class="winter-address-row"><div class="winter-address-field" id="winter-address-field" aria-label="裝飾用網址">http://hokkaido.locat/overview</div></div>
+
+/* Restore stacked overview sections and finance header spacing. */
+.winter-browser-page{text-transform:none!important;}
+.winter-address-field{font-size:clamp(9px,2.7vw,12px);letter-spacing:0;justify-content:center;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:0;height:auto;min-height:26px;white-space:normal;overflow:visible;text-overflow:clip;text-align:center;line-height:1.5;}
+body.ld-tax-fullscreen-open #app .ld-tax-screen,
+body.ld-ledger-overlay-open main.ledger-layered-main > .ld-subpage.ld-ledger-overlay,
+body.ld-ledger-overlay-open main.ledger-layered-main > .ld-preserved-underlay .ld-tax-screen,
+body.ld-ledger-overlay-open main.ledger-layered-main > .ld-preserved-underlay > .ld-all-screen{top:calc(60px + env(safe-area-inset-top,0px))!important;height:calc(100dvh - 60px - env(safe-area-inset-top,0px))!important;max-height:calc(100dvh - 60px - env(safe-area-inset-top,0px))!important;padding-top:14px!important;}
+#app:has(>.winter-trip-summary)>main{padding-top:0!important;background:#F8FAFB!important;}
+#app:has(>.winter-trip-summary)>main>.overview-panel{margin:0 0 10px!important;}
+</style><style id="winter-trip-title-left">
+body > .winter-address-row{padding:8px 16px 10px!important;background:#E5EDF3!important;}
+.winter-address-field{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;text-align:left!important;gap:3px;min-height:0!important;height:auto!important;padding:0!important;border:0!important;background:transparent!important;}
+.winter-trip-heading{font-size:17px;font-weight:650;line-height:1.35;color:#405770;}
+.winter-trip-subheading{font-size:12px;font-weight:400;line-height:1.5;color:#657B8D;}
+</style>
+</head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
+<div class="winter-address-row"><div class="winter-address-field" id="winter-address-field" aria-label="旅程標題"><span class="winter-trip-heading">北海道冬日旅誌</span><span class="winter-trip-subheading">12.18-12.27 札幌・小樽 • 登別・洞爺湖</span></div></div>
 <nav class="bottom-nav" aria-label="頂部主分頁">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
@@ -5905,7 +5921,7 @@ function ledgerHeaderMotion(transform,transition){
   const clone=bar.cloneNode(true);clone.classList.add('winter-browser-underlay');clone.inert=true;clone.setAttribute('aria-hidden','true');
   const previous=ledgerNavStack[ledgerNavStack.length-1]?.view||'main';
   clone.classList.toggle('winter-ledger-subpage',previous!=='main');
-  clone.querySelector('.winter-browser-page').textContent='HOKKAIDO / '+({main:'記帳',all:'完整收支明細',tax:'退稅',detail:'明細詳情',stats:'支出統計'}[previous]||'記帳');
+  clone.querySelector('.winter-browser-page').textContent='HOKKAIDO';
   clone.querySelector('#winter-ledger-back').hidden=previous==='main';
   clone.querySelectorAll('[id]').forEach(el=>{el.id='underlay-'+el.id});
   bar.after(clone);
@@ -6504,7 +6520,7 @@ const travelLinksPanel=()=>{
 let homeCategory='useful';
 const homeCategories=[['useful','常用網站'],['f','航班'],['h','住宿'],['r','餐廳'],['k','票券'],['p','行李']];
 function homeCategoryStrip(){return '<nav class="home-category-strip" aria-label="總覽欄目">'+homeCategories.map(([k,t])=>'<button type="button" data-a="home-category" data-v="'+k+'" class="'+(homeCategory===k?'on':'')+'" aria-pressed="'+(homeCategory===k)+'">'+t+'</button>').join('')+'</nav>'}
-function syncHomeCategory(){if(st.tab!=='home')return;app.querySelectorAll('.overview-panel').forEach(el=>{el.hidden=el.dataset.k!==homeCategory;if(!el.hidden&&!el.open)el.open=true;});}
+function syncHomeCategory(){if(st.tab!=='home')return;app.querySelectorAll('.overview-panel').forEach(el=>{el.hidden=false;});}
 function home(){const n=packs.filter(p=>p.done).length;
  const totalNights=stays.reduce((sum,item)=>sum+nightsBetween(item.checkin,item.checkout),0);
  return travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程', '<div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div>')
@@ -7075,9 +7091,9 @@ function syncWinterPage(){
   const winterPageName=document.getElementById('winter-browser-page');
   const sub=st.tab==='ledger'&&ledgerView!=='main';
   const title=st.tab==='ledger'?({main:'記帳',all:'完整收支明細',tax:'退稅',detail:'明細詳情',stats:'支出統計'}[ledgerView]||'記帳'):({home:'總覽',plan:'行程',todo:'待辦',shop:'購物'}[st.tab]||'冬日旅誌');
-  if(winterPageName)winterPageName.textContent='HOKKAIDO / '+title;
+  if(winterPageName)winterPageName.textContent='HOKKAIDO';
   const address=document.getElementById('winter-address-field');
-  if(address)address.textContent='http://hokkaido.locat/'+({home:'overview',plan:'itinerary',todo:'todo',shop:'shopping',ledger:'ledger'}[st.tab]||'overview');
+  // Fixed trip title is rendered in HTML and remains unchanged on tab switches.
   const bar=document.querySelector('.winter-browser-bar');
   if(bar)bar.classList.toggle('winter-ledger-subpage',sub);
   const back=document.getElementById('winter-ledger-back');
@@ -7122,7 +7138,7 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero()+homeCategoryStrip():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail'||ledgerView==='all')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='all'?ledgerReturnUnderlay()+ledgerAllPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
+    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail'||ledgerView==='all')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='all'?ledgerReturnUnderlay()+ledgerAllPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
