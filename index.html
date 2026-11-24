@@ -3827,7 +3827,94 @@ main > .plan-date-switcher.days:not(.cats) button small{
   main > .plan-date-switcher.days:not(.cats) button{min-width:47px;}
 }
 
-</style></head><body><div id="app"></div>
+
+/* ── 2026-11 冬日旅誌 / 霧白 × 冰藍灰視覺版 ── */
+:root{--navy:#3b536a;--ink:#34475b;--muted:#8293a5;--pale:#edf3f7;--line:#dce5ed;--blue:#7995af;--shadow:0 9px 26px rgba(45,69,91,.055)}
+body{background:#d7e0e7;color:#34485d}
+#app{background:linear-gradient(180deg,#e5edf3 0%,#eff4f7 350px,#f5f7f8 100%)}
+/* 每一頁都有固定在頂部的復古瀏覽器標題列；使用原本 Firebase 按鈕，不新增登入狀態 */
+.winter-browser-bar{box-sizing:border-box;position:sticky;top:0;left:0;z-index:1800;display:grid;grid-template-columns:43px minmax(0,1fr) 102px;align-items:center;gap:7px;width:min(100%,640px);height:calc(48px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 13px 0;margin:auto;background:rgba(248,250,251,.96);border-bottom:1px solid #d5e0e8;box-shadow:0 2px 13px rgba(52,73,94,.045);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.winter-browser-controls{display:flex;gap:5px;align-items:center;height:28px}
+.winter-browser-controls i{display:block;flex:none;width:7px;height:7px;border-radius:50%;border:1px solid #a9bac7;background:#e4ecf1}
+.winter-browser-controls i:nth-child(2){background:#d9e4ec}.winter-browser-controls i:nth-child(3){background:#cbdbe6}
+.winter-browser-page{min-width:0;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#71869b;font-size:10px;font-weight:650;letter-spacing:.13em}
+.winter-browser-bar #hk-cloud-toggle{position:relative!important;inset:auto!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;z-index:1!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;width:102px!important;max-width:102px!important;min-width:0!important;height:30px!important;min-height:30px!important;max-height:30px!important;box-shadow:none!important;border:1px solid #d5e1e9!important;border-radius:7px!important;background:#f3f7f9!important;color:#5e788f!important;padding:0 8px!important;font-size:10.5px!important;font-weight:650!important;line-height:1.3!important;white-space:nowrap!important;cursor:pointer}
+.winter-browser-bar #hk-cloud-toggle .cloud-led{flex:0 0 6px!important;width:6px!important;height:6px!important}
+.winter-cloud-text{display:inline!important;font-size:10.5px;white-space:nowrap;letter-spacing:.01em}
+.winter-cloud-live{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+body.ld-tax-fullscreen-open .winter-browser-bar #hk-cloud-toggle{display:inline-flex!important}
+.winter-browser-bar #hk-cloud-toggle:active{background:#e6eef3!important}
+main.top{padding-top:18px}
+/* 封面：只留下旅誌、日期，並保留原有雪景影像及雪花動畫 */
+#app .winter-hero{height:273px;color:#fff;background-position:center center}
+#app .winter-hero::after{background:linear-gradient(180deg,rgba(23,37,53,.17) 0%,rgba(22,38,56,.06) 52%,rgba(229,237,244,.34) 78%,#e5edf3 100%)}
+#app .winter-hero .hc{padding:55px 26px 0;position:relative;z-index:3}
+#app .winter-hero .eb{color:#eef4f6;font-size:9.5px;font-weight:600;letter-spacing:.24em;opacity:.92}
+#app .winter-hero .ht1{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:clamp(47px,11vw,62px);line-height:1.03;letter-spacing:-.06em;margin:13px 0 15px;color:#fff;text-shadow:0 2px 13px rgba(21,42,65,.15)}
+#app .winter-hero .hs{color:#f8fafc;font-size:12px;font-weight:600;letter-spacing:.21em;text-shadow:0 2px 8px #27394a60}
+#app .winter-hero .hm{margin-top:11px;color:#eef3f6;font-size:11px;font-weight:450;letter-spacing:.11em;text-shadow:0 2px 9px #27394a66}
+#app .winter-trip-summary{margin:-24px 17px 23px;padding:13px 4px;border:1px solid #e1e9ef;border-radius:13px;background:rgba(253,254,255,.93);box-shadow:0 6px 20px rgba(54,79,108,.065)}
+#app .winter-trip-summary strong{font-size:12px;font-weight:720;color:#475d72}
+#app .winter-trip-summary span{font-size:9px;letter-spacing:.06em;color:#98a6b3}
+#app .winter-trip-summary>div{border-right-color:#e1e7ec}
+/* 總覽：卡片與展開內容都使用同一套霧白、細線與冰藍灰 */
+#app .overview-panel{border:1px solid #dbe4ec;border-radius:14px;background:linear-gradient(140deg,rgba(255,255,255,.98),rgba(241,246,249,.91));box-shadow:0 3px 15px rgba(47,76,103,.04);margin-bottom:12px}
+#app .overview-panel>summary{padding:14px 13px;gap:11px;background:transparent}
+#app .overview-panel>summary>.sum-ic{width:37px;height:37px;border:1px solid #d9e5ec;border-radius:10px;background:#edf3f7;color:#8098b0}
+#app .overview-panel>summary>.sum-ic svg{height:19px;width:19px;stroke:#738ba3;stroke-width:1.55;fill:none}
+#app .overview-panel>summary b{font-size:13px;font-weight:690;letter-spacing:.01em;color:#405770;line-height:1.3}
+#app .overview-panel>summary small{font-size:10px;line-height:1.3;margin-top:2px;color:#98a6b4;font-weight:450}
+#app .overview-panel .bd{background:rgba(248,251,252,.55);border-top:1px solid #ecf1f4;padding-top:9px;font-size:11.5px;color:#687f92}
+#app .overview-panel .fl3-flights,#app .overview-panel .home-entry{color:#536c84}
+#app .overview-panel .fl3-leg,#app .overview-panel .flight-card{background:#f9fbfc;border:1px solid #e0e9ee;box-shadow:none;border-radius:11px}
+#app .overview-panel .lk a,#app .overview-panel .home-map-link{color:#5b7791;background:#f0f5f8;border:1px solid #dce6ec}
+#app .overview-panel .ht,#app .overview-panel .rs,#app .overview-panel .pk{border-color:#e4ebf0}
+#app .overview-panel .home-entry-info b{color:#41586e;font-weight:680;font-size:12px}
+/* 待辦／購物共同的編輯介面、狀態列、卡片 */
+#app .sh-heading.ph{margin:5px 2px 18px}
+#app .sh-heading.ph .kicker{color:#899fb2;letter-spacing:.16em;font-size:9px;font-weight:630}
+#app .sh-heading.ph h2{font-size:20px;line-height:1.3;font-weight:660;letter-spacing:.015em;color:#3f566c;margin:7px 0 5px}
+#app .sh-heading.ph p{font-size:10.5px;line-height:1.55;color:#93a2b1}
+#app .sh-filters.days.cats button{font-size:10.5px!important;font-weight:600!important;border-radius:9px!important;border:1px solid #dce5eb!important;background:rgba(255,255,255,.75)!important;color:#778da1!important;box-shadow:none!important;padding:8px 13px!important}
+#app .sh-filters.days.cats button.on{background:#748da4!important;color:#fff!important;border-color:#748da4!important;box-shadow:none!important}
+#app .sh-filters.days.cats button small{font-size:9px!important}
+#app .todo-heading ~ .card.pad,#app .sh-list.sh-flat.card.pad{border:1px solid #dce6ed!important;border-radius:14px!important;background:linear-gradient(145deg,#fefefe,#f8fafb)!important;box-shadow:0 3px 15px rgba(47,76,103,.035)!important;padding-left:13px!important;padding-right:13px!important}
+#app .td,#app .sh-product{border-color:#e5edf1!important}
+#app .td .todo-body>span{color:#536a7e;font-size:12px;line-height:1.55}
+#app .td .ct,#app .sh-tag{font-size:9.5px!important;font-weight:620!important;border-radius:6px!important;background:#eaf1f5!important;color:#6b8297!important;border:1px solid #dbe5ec!important}
+#app .sh-product-name{color:#43596e;font-size:12px;font-weight:680}
+#app .sh-flat .sh-image{background:#eef4f7;border:1px solid #dce6ed;border-radius:10px}
+#app .sh-link{color:#68839a}
+#app .sh-note{color:#8799a9;font-size:10.5px}
+#app .sh-qty-label{font-size:10px;color:#8d9eb0}
+#app .shop-glass-add{border-color:#cedfe8!important;background:rgba(244,249,251,.9)!important;color:#7891a7!important;box-shadow:0 4px 14px rgba(53,81,105,.08)!important}
+/* 行程：包含展開後的細節、照片、交通與景點介紹 */
+#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv){border:1px solid #dae5ec;border-radius:13px;background:#fdfefe;box-shadow:0 3px 12px rgba(49,77,102,.035)}
+#app main:has(> .plan-day-heading) .tlw>details.row[open]{background:linear-gradient(155deg,#fff 0%,#f5f9fb 100%)!important;border-color:#c8d9e5!important;box-shadow:0 4px 17px rgba(60,83,108,.065)!important}
+#app .tlw>details.row[open]>summary{border-bottom:1px solid #e5edf1}
+#app .tlw>details.row[open]>summary .swipe-face{background:transparent!important}
+#app .tlw>details.row .bd{color:#61788e;font-size:11px;line-height:1.7}
+#app .tlw>details.row[open] .bd{padding:10px 12px 14px;background:linear-gradient(180deg,#fafcfd,#f5f9fb);border-radius:0 0 13px 13px}
+#app .tlw>details.row .bd>p{color:#61778c;margin:5px 0 9px}
+#app .tlw>details.row .ld-itin-detail-value{color:#6e8397;font-size:10.5px}
+#app .tlw>details.row .ld-itin-detail-icon{opacity:.77}
+#app .tlw>details.row .spot-card{border:1px solid #dce7ed;border-radius:10px;background:#f9fbfc;box-shadow:none;margin:11px 0 0}
+#app .tlw>details.row .spot-carousel-slide{background:#e9f0f4}
+#app .tlw>details.row .spot-intro{background:#f7fafb;padding:13px 13px 15px;color:#6b8296;font-size:10.5px;line-height:1.75}
+#app .tlw>details.row .spot-intro small{font-size:9px;letter-spacing:.13em;color:#90a6b6;font-weight:630}
+#app .tlw>details.row .spot-intro b{font-size:12px;font-weight:690;color:#475f75;margin-top:6px}
+#app .tlw>details.row .spot-intro p{font-size:10.5px;color:#74899a;line-height:1.75}
+#app .tlw>details.row .itinerary-web-expanded{border-color:#d9e6ed!important;background:#f0f5f8!important;color:#647f97!important;font-size:10px}
+#app .tlw>details.row .row-summary-title{font-size:12px;font-weight:650;color:#425a72}
+#app .tlw>details.row .row-inline-clock{font-size:10px;color:#8299ad}
+#app .tlw>details.row.mv{background:transparent!important;border:0!important;box-shadow:none!important}
+#app .tlw>details.row.mv[open] .bd{padding:8px 7px 12px;background:rgba(246,250,252,.72);border:1px solid #e2eaf0;border-radius:9px}
+/* 記帳與所有頁面也沿用相同的外層底色、語意配色，不修改計算或表單。 */
+#app main.top .ph .kicker{color:#8b9faf}
+#app main.top .ph h2{color:#3f566e}
+@media(max-width:370px){.winter-browser-bar{grid-template-columns:38px minmax(0,1fr) 97px;gap:3px;padding-left:9px;padding-right:9px}.winter-browser-page{font-size:9px;letter-spacing:.08em}.winter-browser-bar #hk-cloud-toggle{width:97px!important;max-width:97px!important}.winter-browser-controls i{width:6px;height:6px}}
+
+</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls" aria-hidden="true"><i></i><i></i><i></i></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">雲端同步</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
@@ -3838,7 +3925,7 @@ main > .plan-date-switcher.days:not(.cats) button small{
  </nav><dialog id="dlg"></dialog>
 <div id="journal-save-toast" role="status" aria-live="polite" aria-atomic="true" aria-hidden="true">✓ 已儲存</div>
 
-<button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led"></span><span id="hk-cloud-label">雲端連線中</span></button>
+
 <dialog id="hk-cloud-dialog" aria-label="北海道行程雲端同步設定">
   <div class="hk-cloud-title"><h3 tabindex="-1">共用行程同步</h3><button id="hk-cloud-close" type="button" class="hk-cloud-x" aria-label="關閉">×</button></div>
   <p class="hk-cloud-sub">每日行程、住宿、餐廳與票券文字資料同步給旅伴；票券照片與待辦、行李、購物、記帳資料各自在自己的手機儲存。</p>
@@ -5966,7 +6053,7 @@ function home(){const n=packs.filter(p=>p.done).length;
  +sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'" data-pack-index="'+i+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><button type="button" class="pack-drag-handle" data-a="pack-drag" data-i="'+i+'" aria-label="長按拖曳「'+esc(p.t)+'」排序；鍵盤 Alt 加上下鍵調整" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join(''))
  +'<button class="add ghost" data-a="rs">還原預設內容</button>'+
  '<div class="home-add-quick-menu" id="home-add-quick-menu" aria-hidden="true"><button type="button" data-a="home-add-kind" data-kind="stays" tabindex="-1" aria-label="新增住宿" title="新增住宿">'+iconSvg('hotel')+'</button><button type="button" data-a="home-add-kind" data-kind="dining" tabindex="-1" aria-label="新增已訂餐廳" title="新增已訂餐廳">'+iconSvg('utensils')+'</button><button type="button" data-a="home-add-kind" data-kind="tickets" tabindex="-1" aria-label="新增已訂票券" title="新增已訂票券">'+iconSvg('ticket')+'</button><button type="button" data-a="home-add-kind" data-kind="packs" tabindex="-1" aria-label="新增行李清單" title="新增行李清單">'+iconSvg('bag')+'</button></div><button type="button" class="shop-glass-add home-add-fab" data-a="home-add-choose" aria-expanded="false" aria-controls="home-add-quick-menu" aria-label="新增總覽項目" title="新增總覽項目"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>'}
-const hero=()=>'<header class="hero"><div class="topline"><div class="brand">'+iconSvg('snowflake')+' HOKKAIDO / 2026</div><div class="pill">WINTER JOURNAL</div></div><div class="hc"><div class="eb">WINTER TRAVEL NOTES • JAPAN</div><h1 class="ht1">A winter<br>to remember.</h1><div class="hs">北海道冬日旅誌</div><div class="hm">12.18 — 12.27 ✦ 札幌 · 小樽 · 登別 · 洞爺湖</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><div class="summary"><div><strong>10 天 9 夜</strong><span>旅程天數</span></div><div><strong>4 位旅伴</strong><span>一同出發</span></div><div><strong>12/18–27</strong><span>2026・北海道</span></div></div>';
+const hero=()=>'<header class="hero winter-hero"><div class="hc"><div class="eb">2026 · WINTER JOURNAL</div><h1 class="ht1">Hokkaido.</h1><div class="hs">北海道冬日旅誌</div><div class="hm">12.18 — 12.27</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><div class="summary winter-trip-summary"><div><strong>10 天 9 夜</strong><span>旅程</span></div><div><strong>4 位旅伴</strong><span>同行</span></div><div><strong>12/18–27</strong><span>2026</span></div></div>';
 // Never replace the date-strip element when switching days: keeping the same
 // element also preserves touch momentum, horizontal scroll, and keyboard focus.
 let planDayScrollLeft=0;
@@ -6524,6 +6611,8 @@ async function viewFlightPassPreview(flightId,index){
 }
 
 function render(){
+  const winterPageName=document.getElementById('winter-browser-page');
+  if(winterPageName)winterPageName.textContent='HOKKAIDO / '+({home:'總覽',plan:'行程',todo:'待辦',shop:'購物',ledger:'記帳'}[st.tab]||'冬日旅誌');
   // 明細詳情 / 統計的重繪不能取代下方的上一頁：保留真實捲動位置與 DOM。
   if(st.tab==='ledger'&&(ledgerView==='detail'||ledgerView==='stats'||ledgerView==='all')){
    const liveMain=app.querySelector('main.ledger-layered-main');
