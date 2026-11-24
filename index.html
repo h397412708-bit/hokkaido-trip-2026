@@ -5,7 +5,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#f8fafb">
+<meta name="theme-color" content="#7897b1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="北海道冬日旅誌">
@@ -3833,7 +3833,7 @@ main > .plan-date-switcher.days:not(.cats) button small{
 body{background:#d7e0e7;color:#34485d}
 #app{background:linear-gradient(180deg,#e5edf3 0%,#eff4f7 350px,#f5f7f8 100%)}
 /* 每一頁都有固定在頂部的復古瀏覽器標題列；使用原本 Firebase 按鈕，不新增登入狀態 */
-.winter-browser-bar{box-sizing:border-box;position:sticky;top:0;left:0;z-index:1800;display:grid;grid-template-columns:43px minmax(0,1fr) 102px;align-items:center;gap:7px;width:min(100%,640px);height:calc(48px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 13px 0;margin:auto;background:#f8fafb;border-bottom:1px solid #d5e0e8;box-shadow:0 2px 13px rgba(52,73,94,.045);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.winter-browser-bar{box-sizing:border-box;position:sticky;top:0;left:0;z-index:1800;display:grid;grid-template-columns:43px minmax(0,1fr) 102px;align-items:center;gap:7px;width:min(100%,640px);height:calc(48px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 13px 0;margin:auto;background:rgba(248,250,251,.96);border-bottom:1px solid #d5e0e8;box-shadow:0 2px 13px rgba(52,73,94,.045);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .winter-browser-controls{display:flex;gap:5px;align-items:center;height:28px}
 .winter-browser-controls i{display:block;flex:none;width:7px;height:7px;border-radius:50%;border:1px solid #a9bac7;background:#e4ecf1}
 .winter-browser-controls i:nth-child(2){background:#d9e4ec}.winter-browser-controls i:nth-child(3){background:#cbdbe6}
@@ -4252,211 +4252,15 @@ body.ld-ledger-overlay-open main.ledger-layered-main > .ld-preserved-underlay > 
  min-height:0!important;max-height:calc(100dvh - 48px - env(safe-area-inset-top,0px))!important;
  padding-top:12px!important;padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))!important;
 }
-</style><style>
-/* Compact headings and folder categories */
-#app .ph.sh-heading.todo-heading,#app .ph.sh-heading.ld-heading{height:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:visible!important}
-#app .todo-browser-tabs.days.cats{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px!important;overflow:visible!important;margin:8px 0 0!important;padding:0 3px!important;border-bottom:1px solid #a9bac8!important;align-items:end}
-#app .todo-browser-tabs.days.cats button{position:relative;display:flex!important;flex-direction:row;align-items:center;justify-content:center;gap:3px!important;min-width:0!important;min-height:35px;padding:7px 2px!important;border:1px solid #b7c8d5!important;border-bottom:0!important;border-radius:8px 8px 0 0!important;background:#e0e8ee!important;color:#647e94!important;box-shadow:none!important;font-size:11px!important;white-space:nowrap}
-#app .todo-browser-tabs.days.cats button.on{background:#fcfdfe!important;color:#3f607a!important;border-color:#a9bac8!important;min-height:40px;z-index:1;font-weight:700}
-#app .todo-browser-tabs.days.cats button.on:after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#fcfdfe}
-#app .todo-browser-tabs button small{position:static!important;font-size:9px!important;background:#d0dde7!important;color:#536e84!important;border-radius:4px!important;padding:0 3px!important}
-#app .todo-browser-tabs.days.cats + .card.pad{margin-top:0!important;border-top:0!important;border-radius:0 0 12px 12px!important;background:#fcfdfe!important}
-
-#app .overview-p .pk>span,#app .overview-p .pk>.swipe-face>span{position:relative;display:inline-block;flex:0 1 auto;text-decoration:none!important;transition:color .3s ease}
-#app .overview-p .pk>span::after,#app .overview-p .pk>.swipe-face>span::after{content:"";position:absolute;left:0;right:0;top:51%;height:1.5px;background:#8193aa;transform:scaleX(0);transform-origin:left center;transition:transform .38s cubic-bezier(.18,.7,.2,1);pointer-events:none}
-#app .overview-p .pk.dn>span::after,#app .overview-p .pk.dn>.swipe-face>span::after{transform:scaleX(1)}
-@media(prefers-reduced-motion:reduce){#app .overview-p .pk span::after{transition:none!important}}
-
-/* Unified browser tabs and itinerary canvas */
-html,body{background:#f8fafb!important;}
-#app{background:#f8fafb!important;}
-#app main:has(> .plan-day-heading),#app main:has(> .todo-heading){background:transparent!important;}
-#app .todo-browser-tabs.days.cats{gap:3px!important;padding:0!important;margin:8px 0 0!important;border:0!important;position:relative;z-index:1;}
-#app .todo-browser-tabs.days.cats button{border-color:#b7c8d5!important;border-radius:8px 8px 0 0!important;background:#dce6ed!important;}
-#app .todo-browser-tabs.days.cats button.on{background:#fcfdfe!important;border-color:#b7c8d5!important;}
-#app .todo-browser-tabs.days.cats button.on:after{left:0;right:0;bottom:-2px;height:3px;background:#fcfdfe;}
-#app .todo-heading ~ .todo-browser-tabs.days.cats + .card.pad{margin:0!important;border:1px solid #b7c8d5!important;border-radius:0 0 12px 12px!important;background:#fcfdfe!important;box-shadow:none!important;padding:10px 13px 13px!important;}
-</style>
-<style>
-#app .shop-browser-tabs.days.cats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-#app .shop-browser-tabs + :is(.sh-list,.sh-empty){margin:0!important;border:1px solid #b7c8d5!important;border-radius:0 0 12px 12px!important;background:#fcfdfe!important;box-shadow:none!important;padding:10px 13px 13px!important}
-#app .sh-product-name{color:#536a7e!important;font-size:12px!important;line-height:1.55!important;font-weight:inherit!important}
-#app .sh-product-detail{font-weight:400;color:#536a7e}
-#app .sh-product.done .sh-product-name{color:#8193aa!important}
-#app .ld-all-screen .ld-all-tabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px!important;padding:0!important;margin:8px 0 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;align-items:end;min-height:40px!important;overflow:visible!important;position:relative;z-index:1}
-#app .ld-all-screen .ld-all-tabs>button{position:relative;min-height:35px!important;height:35px!important;border:1px solid #b7c8d5!important;border-bottom:0!important;border-radius:8px 8px 0 0!important;background:#dce6ed!important;color:#647e94!important;font-size:11px!important;font-weight:600!important;box-shadow:none!important;padding:7px 2px!important}
-#app .ld-all-screen .ld-all-tabs>button.on{height:40px!important;background:#fcfdfe!important;color:#3f607a!important;font-weight:700!important}
-#app .ld-all-screen .ld-all-tabs>button.on:after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:3px;background:#fcfdfe}
-#app .ld-all-screen .ld-all-tabs .ld-tax-tab-indicator{display:none!important}
-#app .ld-all-screen #ld-all-tab-body{margin-top:0!important;border:1px solid #b7c8d5!important;border-radius:0 0 12px 12px!important;background:#fcfdfe!important;padding:10px 13px 13px!important}
-#app .ld-all-screen #ld-all-tab-body>.ld-all-panel{margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important}
-#app .ld-all-screen{gap:0!important}
-#winter-ledger-back{pointer-events:auto!important;touch-action:manipulation;cursor:pointer;position:relative;z-index:2}
-.winter-browser-bar.winter-ledger-subpage{touch-action:pan-y}
-</style>
-<style id="hk-compact-list-tabs">
-/* Match shopping tab widths to the five-column to-do strip. */
-#app .shop-browser-tabs.days.cats{grid-template-columns:repeat(5,minmax(0,1fr))!important;justify-content:start!important;}
-/* Opaque matching surface keeps swipe actions concealed until revealed. */
-#app .todo-browser-tabs.days.cats + .card.pad .td,
-#app .shop-browser-tabs.days.cats + .sh-list .sh-product{background-color:#fcfdfe!important;}
-#app .todo-browser-tabs.days.cats + .card.pad .td > .swipe-face,
-#app .shop-browser-tabs.days.cats + .sh-list .sh-product > .swipe-face{background:#fcfdfe!important;box-shadow:none!important;}
-</style>
-<style id="hk-final-unified-tabs">
-#app .shop-browser-tabs + :is(.sh-list,.sh-empty),#app .ld-all-screen #ld-all-tab-body,#app .ld-tax-screen #ld-tax-tab-body{border-radius:0 12px 12px 12px!important}
-#app .sh-product .sh-link{margin-bottom:0!important;padding-bottom:0!important}
-#app .sh-flat .sh-product-footer{margin-top:1px!important}
-#app .ld-all-screen .ld-all-tabs,#app .ld-tax-screen .ld-tax-tabs{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important;padding:0!important;margin:8px 0 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;align-items:end!important;min-height:40px!important;overflow:visible!important;position:relative;z-index:1}
-#app .ld-tax-screen .ld-tax-tabs>button{position:relative;min-height:35px!important;height:35px!important;align-self:end!important;border:1px solid #b7c8d5!important;border-bottom:0!important;border-radius:8px 8px 0 0!important;background:#dce6ed!important;color:#647e94!important;font-size:11px!important;font-weight:600!important;padding:7px 2px!important;box-shadow:none!important}
-#app .ld-tax-screen .ld-tax-tabs>button.on{height:40px!important;background:#fcfdfe!important;color:#3f607a!important;font-weight:700!important}
-#app .ld-tax-screen .ld-tax-tabs>button.on:after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:3px;background:#fcfdfe}
-#app .ld-tax-screen .ld-tax-tab-indicator{display:none!important}
-#app .ld-tax-screen{gap:0!important}
-#app .ld-tax-screen #ld-tax-tab-body{margin:0!important;border:1px solid #b7c8d5!important;background:#fcfdfe!important;padding:10px 13px 13px!important}
-#app .home-browser-tabs{display:flex;align-items:end;gap:3px;overflow-x:auto;scrollbar-width:none;margin:8px 0 0;position:relative;z-index:1}
-#app .home-browser-tabs button{flex:1 0 auto;position:relative;min-height:35px;padding:7px 5px;border:1px solid #b7c8d5;border-bottom:0;border-radius:8px 8px 0 0;background:#dce6ed;color:#647e94;font-size:11px;font-weight:600;white-space:nowrap}
-#app .home-browser-tabs button.on{min-height:40px;background:#fcfdfe;color:#3f607a;font-weight:700}
-#app .home-tab-body{border:1px solid #b7c8d5;border-radius:0 0 12px 12px;background:#fcfdfe;padding:10px 13px 13px;margin-top:-1px}
-#app .home-tab-body>.overview-panel{margin:0!important;border:0!important;box-shadow:none!important;background:transparent!important}
-#app .home-tab-body>.overview-panel[hidden]{display:none!important}
-#app .home-tab-body>.overview-panel>summary{pointer-events:none;padding:5px 0 10px!important}
-#app .home-tab-body>.overview-panel>summary:after{display:none!important}
-#app .home-tab-body>.overview-panel>.bd{background:transparent!important;padding-left:0!important;padding-right:0!important}
-</style>
-<style>
-/* Overview: compact overlapping browser tabs and trip profile */
-#app .home-browser-tabs{justify-content:flex-start;gap:0;isolation:isolate;padding-right:5px}
-#app .home-browser-tabs button{flex:0 0 auto;padding:7px 12px;min-height:35px;margin-left:-5px;z-index:1;border-radius:9px 9px 0 0}
-#app .home-browser-tabs button:first-child{margin-left:0}
-#app .home-browser-tabs button.on{z-index:3;min-height:39px}
-#app .home-tab-body{border-top-right-radius:12px}
-#app .basic-trip-card{overflow:hidden;border:1px solid #d5e0e8;border-radius:12px;background:#f8fafb;margin:0 0 18px}
-#app .basic-trip-cover.hero{height:155px;min-height:0;margin:0;border-radius:0;background-position:center 48%;background-size:cover;box-shadow:none}
-#app .basic-trip-cover.hero::before,#app .basic-trip-cover.hero::after{display:none}
-#app .basic-trip-info{padding:14px}
-#app .basic-trip-kicker{font-size:9px;letter-spacing:.16em;color:#8295a7}
-#app .basic-trip-info h2{font-size:20px;line-height:1.4;margin:4px 0;color:#475d72}
-#app .basic-trip-date{font-size:12px;color:#71869a}
-#app .basic-trip-facts{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:6px;border-top:1px solid #dce5eb;margin-top:13px;padding-top:12px}
-#app .basic-trip-facts div{display:flex;flex-direction:column;gap:3px;min-width:0}
-#app .basic-trip-facts span{font-size:10px;color:#8295a7}
-#app .basic-trip-facts strong{font-size:12px;color:#475d72;white-space:nowrap}
-#app .basic-links-title{font-size:13px;color:#536e84;margin:12px 0 5px}
-#app .overview-p .pk{padding:2px 0!important;min-height:36px;gap:7px}
-#app .overview-p .pk.swipe-host{min-height:0;padding:0!important;margin:0!important}
-#app .overview-p .pk.swipe-host>.swipe-face{min-height:36px;padding:2px 0!important;gap:7px}
-#app .overview-p .pk .pack-drag-handle{margin-left:auto;margin-right:0;order:10;height:30px;flex:0 0 28px}
-#app .overview-p .pk .tl{margin-left:0}
-</style>
-<style id="hk-overview-layered-headers">
-#app .home-browser-tabs button:nth-child(1){z-index:6!important}
-#app .home-browser-tabs button:nth-child(2){z-index:5!important}
-#app .home-browser-tabs button:nth-child(3){z-index:4!important}
-#app .home-browser-tabs button:nth-child(4){z-index:3!important}
-#app .home-browser-tabs button:nth-child(5){z-index:2!important}
-#app .home-browser-tabs button:nth-child(6){z-index:1!important}
-.winter-browser-bar{grid-template-columns:43px minmax(0,1fr) 58px!important}
-.winter-browser-bar #hk-cloud-toggle{width:58px!important;max-width:58px!important;padding:0 5px!important}
-@media(max-width:370px){.winter-browser-bar{grid-template-columns:38px minmax(0,1fr) 58px!important}}
-#app .home-tab-body>.overview-panel>summary{display:flex!important;justify-content:flex-start!important;align-items:center!important;text-align:left!important;background:#E5EDF3!important;border:0!important;border-radius:8px!important;padding:10px 12px!important;margin:0 0 8px!important;gap:0!important}
-#app .home-tab-body>.overview-panel>summary>.sum-ic{display:none!important}
-#app .home-tab-body>.overview-panel>summary>div{width:100%;text-align:left!important}
-#app .home-tab-body>.overview-panel>summary b,#app .home-tab-body>.overview-panel>summary small{color:#fff!important;text-align:left!important;text-shadow:0 1px 2px #71869b,0 0 3px #71869b;}
-</style>
-<style id="hk-compact-overview-labels">
-.winter-browser-bar #hk-cloud-toggle{border:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:0!important;border-radius:0!important;gap:0!important}
-.winter-browser-bar #hk-cloud-toggle .cloud-led{display:none!important}
-.winter-browser-bar #hk-cloud-toggle .winter-cloud-text{white-space:nowrap;color:#41586E!important}
-#app .home-browser-tabs button{padding-left:17px!important;padding-right:17px!important;flex-shrink:0!important}
-#app .home-tab-body>.overview-panel>summary{background:transparent!important;padding:5px 0 8px!important;border-radius:0!important}
-#app .home-tab-body>.overview-panel>summary>div{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important}
-#app .home-tab-body>.overview-panel>summary b{display:inline-block!important;width:auto!important;max-width:100%;background:#41586E!important;color:#fff!important;padding:5px 10px!important;border-radius:5px!important;text-shadow:none!important;line-height:1.4!important}
-#app .home-tab-body>.overview-panel>summary small{display:block!important;background:transparent!important;color:#71869a!important;text-shadow:none!important;margin:0!important;padding:0!important}
-</style>
-<style id="hk-overview-refined">
-#app .home-browser-tabs{padding-right:0; padding-bottom:1px;margin-bottom:-2px;}
-#app .home-browser-tabs button.on{background:#fcfdfe!important;}
-#app .home-browser-tabs button.on:after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#fcfdfe;pointer-events:none}
-#app .home-tab-body{margin-top:0!important;}
-#app .home-browser-tabs:has(button:last-child.on)+.home-tab-body{border-top-right-radius:0!important;}
-#app .home-tab-body>.overview-p>.bd{border-top:0!important;padding-top:0!important;}
-#app .home-tab-body>.overview-useful>.bd,#app .home-tab-body>.overview-f>.bd{border-top:0!important;padding-top:0!important;}
-#app .basic-trip-card{background:#f8fafb!important;margin:0 0 16px;}
-#app .basic-trip-info{padding:18px 15px;}
-#app .basic-trip-info h2{font-size:15px;line-height:1.5;font-weight:650;letter-spacing:.06em;margin:3px 0 5px;}
-#app .basic-trip-info{padding:15px 14px;}
-#app .basic-trip-kicker{font-size:9px;letter-spacing:.13em;}
-#app .basic-trip-date{font-size:12px;line-height:1.5;}
-#app .basic-trip-facts{margin-top:12px!important;padding-top:10px!important;}
-#app .basic-trip-facts strong{font-size:14px!important;font-weight:600;}
-#app .basic-trip-date{font-variant-numeric:tabular-nums;letter-spacing:.06em;}
-#app .basic-trip-facts{grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;padding-top:13px;}
-#app .basic-trip-facts strong{font-size:16px;}
-#app .basic-links-title{display:table;background:#41586E;color:#fff!important;padding:5px 10px;border-radius:5px;font-size:13px;line-height:1.4;text-shadow:none;margin:0 0 10px;}
-
-/* Overview: independent cards and browser-style top tabs */
-#app main:has(>.home-browser-tabs){padding-top:0!important}
-#app .home-browser-tabs{margin:0 -16px 14px!important;padding:8px 16px 0!important;background:#f8fafb;border-bottom:1px solid #b7c8d5;gap:4px!important;align-items:end;}
-#app .home-browser-tabs button{margin-left:0!important;padding:7px 15px!important;min-height:35px!important;border-radius:8px 8px 0 0!important;}
-#app .home-browser-tabs button.on{background:#fff!important;color:#41586e!important;}
-#app .home-browser-tabs button.on:after{display:none!important}
-#app .home-tab-body{border:0!important;background:transparent!important;padding:0!important;margin:0!important;border-radius:0!important}
-#app .home-tab-body>.overview-panel{border:1px solid #d5e0e8!important;border-radius:12px!important;background:#fcfdfe!important;padding:12px 13px!important;margin:0 0 12px!important}
-#app .home-tab-body>.overview-useful{border:0!important;background:transparent!important;padding:0!important}
-#app .basic-trip-card{background:#fcfdfe!important;margin-bottom:12px!important}
-#app .basic-links-card{border:1px solid #d5e0e8;border-radius:12px;background:#fcfdfe;padding:12px 13px;}
-.winter-browser-bar #hk-cloud-toggle .winter-cloud-text{color:#71869b!important}
-</style><style>
-body .main-browser-tabs.bottom-nav{position:sticky!important;top:calc(48px + env(safe-area-inset-top,0px))!important;bottom:auto!important;left:auto!important;right:auto!important;transform:none!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));width:min(100%,640px)!important;max-width:640px!important;height:39px!important;margin:0 auto!important;padding:5px 12px 0!important;gap:3px!important;background:#f8fafb!important;border:0!important;border-bottom:1px solid #b7c8d5!important;border-radius:0!important;box-shadow:none!important;z-index:1799!important;backdrop-filter:none!important;overflow:visible!important;box-sizing:border-box}
-body .main-browser-tabs.bottom-nav .nav-glass-indicator{display:none!important}
-body .main-browser-tabs.bottom-nav button{width:auto!important;min-width:0!important;height:34px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;border:1px solid #b7c8d5!important;border-radius:8px 8px 0 0!important;background:#e5edf3!important;color:#71869b!important;box-shadow:none!important;transform:none!important}
-body .main-browser-tabs.bottom-nav button.on{background:#fff!important;color:#41586e!important;border-bottom-color:#fff!important;font-weight:700!important}
-body .main-browser-tabs.bottom-nav button svg{display:none!important}body .main-browser-tabs.bottom-nav button span{font-size:12px!important;color:inherit!important;line-height:1!important}
-#app .home-browser-tabs{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px!important;margin:10px 0 12px!important;padding:0!important;border:0!important;background:transparent!important;overflow:visible!important;align-items:stretch!important}
-#app .home-browser-tabs button{margin:0!important;padding:8px 2px!important;min-height:34px!important;width:100%!important;white-space:nowrap;font-size:11px!important;border:1px solid #c5d3df!important;border-radius:5px!important;background:#e5edf3!important;color:#71869b!important;box-shadow:none!important;transform:none!important}
-#app .home-browser-tabs button.on{background:#41586e!important;color:white!important;border-color:#41586e!important}
-#app .home-tab-body{margin-top:0!important}#app .home-tab-body .overview-panel{border-radius:12px!important}
-</style><style id="season-navigation">
-body .main-browser-tabs.bottom-nav{gap:0!important;padding:3px 12px 0!important;height:39px!important;border-bottom:1px solid #d5e0e8!important;isolation:isolate;}
-body .main-browser-tabs.bottom-nav .nav-glass-indicator{display:block!important;position:absolute!important;left:0!important;top:3px!important;bottom:0!important;height:36px!important;margin:0!important;border:0!important;border-radius:0!important;background:#e5edf3!important;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%);box-shadow:none!important;backdrop-filter:none!important;pointer-events:none;z-index:0!important;transition:transform 280ms cubic-bezier(.22,.8,.25,1),width 280ms ease!important;}
-body .main-browser-tabs.bottom-nav .nav-glass-indicator.nav-no-motion{transition:none!important}
-body .main-browser-tabs.bottom-nav .nav-glass-indicator::before,body .main-browser-tabs.bottom-nav .nav-glass-indicator::after,body .main-browser-tabs.bottom-nav .nav-lens-core{display:none!important}
-body .main-browser-tabs.bottom-nav button,body .main-browser-tabs.bottom-nav button.on{position:relative!important;z-index:1!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;height:36px!important;color:#8295a7!important;font-weight:500!important;transition:color 220ms ease!important;}
-body .main-browser-tabs.bottom-nav button.on{color:#41586e!important;font-weight:700!important}
-body .main-browser-tabs.bottom-nav button::before,body .main-browser-tabs.bottom-nav button::after{display:none!important}
-#app.season-page-enter{animation:season-page-in 220ms ease-out both}@keyframes season-page-in{from{opacity:.55;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-@media(prefers-reduced-motion:reduce){body .main-browser-tabs.bottom-nav .nav-glass-indicator{transition:none!important}#app.season-page-enter{animation:none!important}}
-</style>
-<style id="rounded-main-tabs">
-body .main-browser-tabs.bottom-nav{width:min(calc(100% - 16px),624px)!important;padding:3px 0 0!important;background:transparent!important;border:0!important;margin:0 auto!important;}
-body .main-browser-tabs.bottom-nav button,body .main-browser-tabs.bottom-nav button.on{background:#e5edf3!important;border-radius:14px 14px 0 0!important;}
-body .main-browser-tabs.bottom-nav button.on{background:#f8fafb!important;}
-body .main-browser-tabs.bottom-nav .nav-glass-indicator{background:#f8fafb!important;border-radius:14px 14px 0 0!important;z-index:2!important;}
-body .main-browser-tabs.bottom-nav button span{position:relative;z-index:3;}
-body .main-browser-tabs.bottom-nav button{z-index:auto!important;}
-body #app{width:min(calc(100% - 16px),624px)!important;border:1px solid #b7c8d5!important;border-radius:0 0 14px 14px!important;background:#f8fafb!important;box-sizing:border-box;box-shadow:none!important;margin-top:-1px!important;}
-.winter-browser-bar #hk-cloud-toggle .winter-cloud-text{letter-spacing:.04em!important;}
-
-body .main-browser-tabs.bottom-nav button,body .main-browser-tabs.bottom-nav .nav-glass-indicator{clip-path:none!important;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 36' preserveAspectRatio='none'%3E%3Cpath d='M0 36 Q5 35 7 28 L15 6 Q17 0 24 0 H76 Q83 0 85 6 L93 28 Q95 35 100 36 Z' fill='black'/%3E%3C/svg%3E");-webkit-mask-size:100% 100%;mask-size:100% 100%;}
-body .main-browser-tabs.bottom-nav .nav-glass-indicator{z-index:0!important;}
-body .main-browser-tabs.bottom-nav button.on{background:transparent!important;}
-body .main-browser-tabs.bottom-nav button{z-index:1!important;}
-</style><style id="compact-sliding-main-tabs">
-body .main-browser-tabs.bottom-nav{height:30px!important;min-height:30px!important;padding:0!important;gap:0!important;background:#E5EDF3!important;border-radius:0!important;isolation:isolate;}
-body .main-browser-tabs.bottom-nav button,body .main-browser-tabs.bottom-nav button.on{height:30px!important;min-height:30px!important;background:transparent!important;border-radius:0!important;clip-path:none!important;-webkit-mask-image:none!important;mask-image:none!important;z-index:1!important;}
-body .main-browser-tabs.bottom-nav .nav-glass-indicator{top:0!important;bottom:0!important;height:30px!important;background:#F8FAFB!important;z-index:0!important;transition:transform 320ms cubic-bezier(.22,.8,.25,1),width 320ms cubic-bezier(.22,.8,.25,1)!important;}
-body .main-browser-tabs.bottom-nav .nav-glass-indicator.nav-no-motion{transition:none!important;}
-@media(prefers-reduced-motion:reduce){body .main-browser-tabs.bottom-nav .nav-glass-indicator{transition:none!important;}}
-</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
-<nav class="bottom-nav main-browser-tabs" aria-label="主要功能分頁">
+</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" onclick="ledgerBack()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">雲端同步</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
+<nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
   <button type="button" data-a="tab" data-v="plan" aria-label="行程"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.1" width="17.6" height="15.6" rx="2.7"/><path d="M7.4 3.2v4.2M16.6 3.2v4.2M3.2 10.2h17.6"/><path d="M7.8 14.1h2.3M13.4 14.1h2.4M7.8 17.3h2.3"/></svg><span>行程</span></button>
   <button type="button" data-a="tab" data-v="todo" aria-label="待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.2" y="3.5" width="15.6" height="17" rx="2.6"/><path d="m7.5 9.1 1.5 1.5 2.4-2.6M13.6 9.5h3M7.5 15.4l1.5 1.5 2.4-2.6M13.6 15.8h3"/></svg><span>待辦</span></button>
   <button type="button" data-a="tab" data-v="shop" aria-label="購物"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.4 8h15.2l-1 12.1H5.4L4.4 8Z"/><path d="M8.5 9V6.8a3.5 3.5 0 0 1 7 0V9"/></svg><span>購物</span></button>
   <button type="button" data-a="tab" data-v="ledger" aria-label="記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2.4"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>記帳</span></button>
- </nav><div id="app"></div><dialog id="dlg"></dialog>
+ </nav><dialog id="dlg"></dialog>
 <div id="journal-save-toast" role="status" aria-live="polite" aria-atomic="true" aria-hidden="true">✓ 已儲存</div>
 
 
@@ -4712,32 +4516,25 @@ function hkValidPrecloudBackup(value){
   ['days','todos','packs','shopping','stays','dining','tickets'].every(key=>Array.isArray(value[key]));
 }
 async function hkEnsurePrecloudBackup(){
- hkPrecloudBackupVerified=false;
  const original=await hkDbGet('precloud_backup');
- if(hkValidPrecloudBackup(original)){
+ if(original!==undefined&&original!==null){
+  if(!hkValidPrecloudBackup(original))
+   throw Error('既有雲端遷移前備份格式不完整；已保留原備份，停止雲端套用以避免覆寫資料');
+  // 原先可能「確實寫入成功」但因比對可變物件而沒記錄成功。
   hkPrecloudBackupVerified=true;
-  SV('cloud_backup_created',original.backedUpAt||new Date().toISOString());
+  SV('cloud_backup_created', original.backedUpAt||new Date().toISOString());
   return;
  }
- // 舊備份原封不動保留；新版快照使用獨立鍵，不將舊欄位混入現行資料。
- const key=original==null?'precloud_backup':'precloud_backup_recovery_v2';
- const prior=await hkDbGet(key);
- if(key!=='precloud_backup'&&hkValidPrecloudBackup(prior)){
-  hkPrecloudBackupVerified=true;
-  SV('cloud_backup_created',prior.backedUpAt||new Date().toISOString());
-  return;
- }
- if(key!=='precloud_backup'&&prior!=null)throw Error('新版復原備份格式異常；已保留所有備份並暫停雲端同步');
- const snapshot=structuredClone({days,todos,packs,shopping,stays,dining,tickets,shopHints,ledgerV1:ledger,backedUpAt:new Date().toISOString()});
+ const snapshot=structuredClone({
+  days,todos,packs,shopping,stays,dining,tickets,shopHints,ledgerV1:ledger,
+  backedUpAt:new Date().toISOString()
+ });
  const expected=JSON.stringify(snapshot);
- if(!hkValidPrecloudBackup(snapshot))throw Error('無法建立完整本機備份');
- // 確認目前本機資料已實際寫入，才允許建立復原備份。
- for(const field of ['days','todos','packs','shopping','stays','dining','tickets','shopHints','ledgerV1']){
-  if(JSON.stringify(await hkDbGet(field))!==JSON.stringify(snapshot[field]))throw Error('本機資料驗證失敗：'+field);
- }
- await hkDbPut(key,snapshot);
- const verified=await hkDbGet(key);
- if(!hkValidPrecloudBackup(verified)||JSON.stringify(verified)!==expected)throw Error('復原備份驗證失敗；已暫停雲端同步');
+ if(!hkValidPrecloudBackup(snapshot)||!expected)throw Error('無法建立本機資料的完整備份快照');
+ await hkDbPut('precloud_backup',snapshot);
+ const verified=await hkDbGet('precloud_backup');
+ if(!hkValidPrecloudBackup(verified)||JSON.stringify(verified)!==expected)
+  throw Error('雲端遷移前的本機備份驗證失敗；保留原資料且暫停雲端同步');
  hkPrecloudBackupVerified=true;
  SV('cloud_backup_created',snapshot.backedUpAt);
 }
@@ -5171,7 +4968,6 @@ function bookedText(a,status){
  return String(a.desc||'');
 }
 
-let homeTab='useful';
 const ov=new Set(['useful']),app=document.getElementById('app'),dlg=document.getElementById('dlg');
 let cloudSync=null;
 const save=()=>{SV('days',days);SV('todos',todos);SV('packs',packs);if(cloudSync)cloudSync.onLocalChange()};
@@ -6012,7 +5808,6 @@ function ledgerBack(){
  const panel=main?.querySelector(':scope > [data-ledger-subpage="'+ledgerView+'"]');
  if(panel?.classList.contains('ld-exiting'))return;
  const goBack=()=>{
-  ledgerHeaderMotion(null);
   const previous=ledgerNavStack.pop()||{view:'main',id:null,scroll:0,listScroll:0,subScroll:0};
   const underlay=main?.querySelector(':scope > .ld-preserved-underlay');
   const hasLivePage=!!(panel&&panel.isConnected&&underlay);
@@ -6052,7 +5847,6 @@ function ledgerBack(){
   panel.style.animation='none';
   panel.style.transition='transform .24s cubic-bezier(.18,.7,.2,1), opacity .24s ease';
   panel.style.transform='translate3d(105vw,0,0)';panel.style.opacity='1';
-  ledgerHeaderMotion(innerWidth*1.05,'transform .24s cubic-bezier(.18,.7,.2,1)');
   setTimeout(goBack,245);
  }else goBack();
 }
@@ -6187,7 +5981,7 @@ function ledgerPage(){
  const expenseEntries=ledger.entries.filter(ledgerIsExpense),incomeEntries=ledger.entries.filter(e=>ledgerType(e)==='income'),transferEntries=ledger.entries.filter(e=>ledgerType(e)==='transfer');
  const total=ledgerSum(expenseEntries,ledger.currency),taxRecords=expenseEntries.filter(x=>x.taxfree),taxPending=taxRecords.filter(x=>(x.refundStatus||'待海關確認')!=='已退款'&&(x.refundStatus||'')!=='不申請');
  const fxRate=ledgerHasRate()?'<span>臺銀即期中間價 · ¥1 ≈ NT$'+fxInfo.rates.TWD.toFixed(4)+' · CN¥'+fxInfo.rates.CNY.toFixed(4)+'</span>':'<span>尚無臺銀匯率，請更新後換算</span>';
- return '<div class="ld-page"><div class="ph sh-heading ld-heading"><button type="button" class="shop-glass-add" data-a="ledger-new" aria-label="新增記帳" title="新增記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
+ return '<div class="ld-page"><div class="ph sh-heading ld-heading"><div class="kicker">Expense Journal</div><h2>旅途記帳</h2><p>行前採購・12/18–12/27 旅途支出</p><button type="button" class="shop-glass-add" data-a="ledger-new" aria-label="新增記帳" title="新增記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
  '<section class="ld-total"><div class="ld-total-top"><span class="ld-total-label">整趟行程總消費</span><div class="ld-total-actions"><details class="ld-currency-picker"><summary aria-label="選擇顯示幣別"><span>'+({JPY:'¥',TWD:'NT$',CNY:'CN¥'}[ledger.currency])+'</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="ld-currency-menu">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="ledger-currency" data-v="'+code+'" class="'+(code===ledger.currency?'on':'')+'">'+LEDGER_CURRENCY_LABEL[code]+'</button>').join('')+'</div></details><button type="button" class="ld-tax-entry" data-a="ledger-tax-open" title="退稅" aria-label="開啟退稅：我的退稅、離境檢查、退稅資訊">'+iconSvg('receipt')+'</button></div></div><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div><p>支出 '+expenseEntries.length+' 筆 · 收入 '+incomeEntries.length+' 筆 · 轉帳 '+transferEntries.length+' 筆 · '+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+'<br>跨幣別以參考匯率估算，非刷卡結算金額</p></section>'+
 
  '<section class="ld-panel"><div class="ld-section-head"><h3>匯率換算</h3><button type="button" class="ld-mini-link" data-a="ledger-fx-refresh">'+(fxInfo.loading?'更新中…':'⟳ 更新匯率')+'</button></div><div class="ld-rate-line">'+fxRate+'</div><div class="ld-calculator"><label>金額<span class="ld-fx-input-frame"><input type="number" id="ld-fx-amount" min="0" step="any" inputmode="decimal" value="'+esc(fxCalc.amount)+'"></span></label><label>原幣<select id="ld-fx-from">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.from===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label><label>換算<select id="ld-fx-to">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.to===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label></div><div class="ld-convert-row"><button type="button" data-a="ledger-convert" class="ld-convert-btn">按最新匯率換算</button><strong class="ld-result">'+(fxCalc.result||'—')+'</strong></div><p class="ld-hint">'+(fxInfo.error?esc(fxInfo.error)+' · ':'')+'資料來源：<a href="https://rate.bot.com.tw/xrt" target="_blank" rel="noopener noreferrer">臺灣銀行牌告匯率</a>（<a href="https://haotool.org/ratewise/open-data/" target="_blank" rel="noopener noreferrer">公開資料鏡像</a>）；以即期買賣均價估算，更新時間見上方，非銀行實際刷卡或現鈔成交價。</p></section>'+
@@ -6459,9 +6253,9 @@ function shopPage(){
        '<div class="sh-product-footer"><span class="sh-qty-label">數量 × '+qty+'</span>'+'<button type="button" class="shop-drag-handle" data-a="shop-drag" data-id="'+id+'" aria-label="長按拖曳「'+esc(p.name)+'」排序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>'+'<div class="sh-mini-actions"><button type="button" data-a="shop-edit" data-id="'+id+'">編輯</button><button type="button" data-a="shop-delete" data-id="'+id+'">刪除</button></div></div></div></article>';
    }).join('')+'</div>';
  }
- return '<div class="ph sh-heading todo-heading">'+
+ return '<div class="ph sh-heading todo-heading"><div class="kicker">Shopping list</div><h2>購物清單</h2><p>還有 '+pending+' 項待購買・已購買的會自動移到最下方</p>'+
  '<button type="button" class="shop-glass-add" data-a="shop-add" aria-label="新增商品" title="新增商品"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
- '<div class="days cats sh-filters todo-browser-tabs shop-browser-tabs">'+tab('all','全部',total)+tab('pending','待購買',pending)+tab('bought','已購買',bought)+'</div>'+
+ '<div class="days cats sh-filters">'+tab('all','全部',total)+tab('pending','待購買',pending)+tab('bought','已購買',bought)+'</div>'+
  body+
  '<p class="sh-footnote">購物清單與圖片儲存在這台裝置的瀏覽器，不會自動同步至其他裝置，請勿清除網站資料。</p>';
 }
@@ -6514,7 +6308,7 @@ async function shopReadPhoto(file){
 
 let todoCompletionRenderTimer=0;
 function todo(){const cats=['全部','預約','訂位','票券','其他'];const L=todos.map((t,i)=>({t:t,i:i})).filter(x=>st.cat==='全部'||x.t.c===st.cat);const s=L.filter(x=>!x.t.done).concat(L.filter(x=>x.t.done));
-return '<div class="ph sh-heading todo-heading"><button type="button" class="shop-glass-add" data-a="add" data-l="t" aria-label="新增待辦" title="新增待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="days cats sh-filters todo-browser-tabs">'+cats.map(c=>{const pending=todos.filter(t=>!t.done&&(c==='全部'||(t.c||'其他')===c)).length;return filterCountButton('cat',c,c,pending,c===st.cat,c+'，'+pending+' 項未完成')}).join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct" data-todo-category="'+esc(x.t.c||'其他')+'">'+esc(x.t.c||'其他')+'</i>'+todoLinks(x.t)+'</div>'+'<button type="button" class="todo-drag-handle" data-a="todo-drag" data-i="'+x.i+'" aria-label="長按拖曳「'+esc(x.t.t)+'」排序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>'+'<div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div>'}
+return '<div class="ph sh-heading todo-heading"><div class="kicker">To-do</div><h2>待辦清單</h2><p>還有 '+todos.filter(t=>!t.done).length+' 項待處理・完成的會自動移到最下方</p><button type="button" class="shop-glass-add" data-a="add" data-l="t" aria-label="新增待辦" title="新增待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="days cats sh-filters">'+cats.map(c=>{const pending=todos.filter(t=>!t.done&&(c==='全部'||(t.c||'其他')===c)).length;return filterCountButton('cat',c,c,pending,c===st.cat,c+'，'+pending+' 項未完成')}).join('')+'</div><div class="card pad">'+(s.map(x=>'<div class="td'+(x.t.done?' dn':'')+'"><input type="checkbox" data-a="tg" data-l="t" data-i="'+x.i+'"'+(x.t.done?' checked':'')+'><div class="todo-body"><span>'+esc(x.t.t)+'</span><i class="ct" data-todo-category="'+esc(x.t.c||'其他')+'">'+esc(x.t.c||'其他')+'</i>'+todoLinks(x.t)+'</div>'+'<button type="button" class="todo-drag-handle" data-a="todo-drag" data-i="'+x.i+'" aria-label="長按拖曳「'+esc(x.t.t)+'」排序" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>'+'<div class="tl">'+tool('t',x.i)+'</div></div>').join('')||'<p class="fn">沒有項目</p>')+'</div>'}
 const FLIGHT_BAGGAGE={
  TR892:{carry:'10 kg',checked:'每人 20 kg',detail:[['個人物品','每人 1 件，40 × 30 × 10 cm'],['手提行李','每人 1 件，54 × 38 × 23 cm'],['托運行李','每人 1 件，每件 20 kg']]},
  FD243:{carry:'7 kg',checked:'總共 20 kg',detail:[['個人物品','每人 1 件，40 × 30 × 10 cm'],['手提行李','每人 1 件，56 × 23 × 36 cm'],['托運行李','訂單標示共 20 kg；件數、尺寸以航空公司確認為準']]}
@@ -6562,7 +6356,7 @@ const alternateFlightBoard=()=>fl3Group('廈門出發 · 廈門返程','成田�
 const primaryFlightBoard=()=>fl3Group('台北出發 · 台北返程','直飛',[
  fl3Leg('taipei-out','去程','台北 → 札幌','12:15 TPE → CTS 17:00',['TR892'],'',null),
  fl3Leg('taipei-return','回程','札幌 → 台北','14:00 CTS → TPE 17:55',['FD243'],'',null)]);
- const sec=(k,ic,t,sub,body)=>'<details class="card overview-panel overview-'+k+'" data-k="'+k+'"'+' open'+(homeTab===k?'':' hidden')+'><summary><span class="sum-ic">'+ic+'</span><div><b>'+t+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</div></summary><div class="bd">'+body+'</div></details>';
+ const sec=(k,ic,t,sub,body)=>'<details class="card overview-panel overview-'+k+'" data-k="'+k+'"'+(ov.has(k)?' open':'')+'><summary><span class="sum-ic">'+ic+'</span><div><b>'+t+'</b><small>'+sub+'</small></div></summary><div class="bd">'+body+'</div></details>';
 
 const TRIP_WEBS=[
  {group:'交通・班次',hint:'下雪天先查運行情況',links:[
@@ -6584,23 +6378,22 @@ const TRIP_WEBS=[
 ];
 const travelLinksPanel=()=>{
  const card=(x)=>'<a class="trip-web-link" href="'+esc(safeLink(x.url))+'" target="_blank" rel="noopener noreferrer" aria-label="開啟 '+esc(x.name)+'"><span class="trip-web-link-top"><b>'+esc(x.name)+'</b><span class="trip-web-desc">'+esc(x.desc)+'</span></span>'+iconSvg('externalLink')+'</a>';
- const body=
+ const body='<p class="trip-web-intro">依旅程整理的常用網站；點選分類展開，點擊網站列可直接開啟。</p>'+
  TRIP_WEBS.map((g,i)=>'<details class="trip-web-group" data-k="trip-web-group-'+i+'"'+(ov.has('trip-web-group-'+i)?' open':'')+'><summary class="trip-web-group-title"><b>'+esc(g.group)+'</b><small>'+esc(g.hint)+'</small></summary><div class="trip-web-grid">'+g.links.map(card).join('')+'</div></details>').join('')+
  '<p class="trip-web-footer">'+iconSvg('externalLink')+'冬季班次及營業情況可能臨時變更，以各網站當日公告為準。</p>';
- return sec('useful',iconSvg('externalLink'),'基本資訊','',hero()+'<section class="basic-links-card"><h3 class="basic-links-title">旅途中常用網站</h3>'+body+'</section>');
+ return sec('useful',iconSvg('externalLink'),'旅途中常用網站','交通・景點・入境',body);
 };
 
 function home(){const n=packs.filter(p=>p.done).length;
  const totalNights=stays.reduce((sum,item)=>sum+nightsBetween(item.checkin,item.checkout),0);
- const tabs=[['useful','基本資訊'],['f','航班'],['h','住宿'],['r','餐廳'],['k','票券'],['p','行李清單']];
- return '<nav class="home-browser-tabs" aria-label="總覽分類">'+tabs.map(([id,label])=>'<button type="button" data-a="home-tab" data-v="'+id+'" class="'+(homeTab===id?'on':'')+'" aria-pressed="'+(homeTab===id)+'">'+label+'</button>').join('')+'</nav><div class="home-tab-body">'+travelLinksPanel()+sec('f',iconSvg('plane'),'航班','', '<div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div>')
+ return travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程', '<div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div>')
  +sec('h',iconSvg('hotel'),'住宿一覽',stays.length+' 間・共 '+totalNights+' 晚',homeListBody('stays'))
  +sec('r',iconSvg('utensils'),'已訂餐廳',dining.length+' 間・訂位資料',homeListBody('dining'))
  +sec('k',iconSvg('ticket'),'已訂票券',tickets.length+' 筆・票券資料',homeListBody('tickets'))
  +sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'" data-pack-index="'+i+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><button type="button" class="pack-drag-handle" data-a="pack-drag" data-i="'+i+'" aria-label="長按拖曳「'+esc(p.t)+'」排序；鍵盤 Alt 加上下鍵調整" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join(''))
- +'</div><button class="add ghost" data-a="rs">還原預設內容</button>'+
+ +'<button class="add ghost" data-a="rs">還原預設內容</button>'+
  '<div class="home-add-quick-menu" id="home-add-quick-menu" aria-hidden="true"><button type="button" data-a="home-add-kind" data-kind="stays" tabindex="-1" aria-label="新增住宿" title="新增住宿">'+iconSvg('hotel')+'</button><button type="button" data-a="home-add-kind" data-kind="dining" tabindex="-1" aria-label="新增已訂餐廳" title="新增已訂餐廳">'+iconSvg('utensils')+'</button><button type="button" data-a="home-add-kind" data-kind="tickets" tabindex="-1" aria-label="新增已訂票券" title="新增已訂票券">'+iconSvg('ticket')+'</button><button type="button" data-a="home-add-kind" data-kind="packs" tabindex="-1" aria-label="新增行李清單" title="新增行李清單">'+iconSvg('bag')+'</button></div><button type="button" class="shop-glass-add home-add-fab" data-a="home-add-choose" aria-expanded="false" aria-controls="home-add-quick-menu" aria-label="新增總覽項目" title="新增總覽項目"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>'}
-const hero=()=>'<section class="basic-trip-card"><div class="basic-trip-info"><div class="basic-trip-kicker">HOKKAIDO · WINTER 2026</div><h2>北海道冬日旅誌</h2><div class="basic-trip-date">2026.12.18 — 12.27</div><div class="basic-trip-facts"><div><span>旅程天數</span><strong>10 天 9 夜</strong></div><div><span>同行人數</span><strong>4 位旅伴</strong></div></div></div></section>';
+const hero=()=>'<header class="hero winter-hero"><div class="hc"><div class="eb">2026 · WINTER JOURNAL</div><h1 class="ht1">Hokkaido.</h1><div class="hs">北海道冬日旅誌</div><div class="hm">12.18 — 12.27</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><div class="summary winter-trip-summary"><div><strong>10 天 9 夜</strong><span>旅程</span></div><div><strong>4 位旅伴</strong><span>同行</span></div><div><strong>12/18–27</strong><span>2026</span></div></div>';
 // Never replace the date-strip element when switching days: keeping the same
 // element also preserves touch momentum, horizontal scroll, and keyboard focus.
 let planDayScrollLeft=0;
@@ -6889,7 +6682,7 @@ document.addEventListener('keydown',e=>{
 // 統計／詳情頁：水平滑動時畫面跟隨手指向右移，離場後再恢復主畫面。
 let ledgerSubSwipe=null;
 document.addEventListener('touchstart',e=>{
- const sub=e.target.closest?.('[data-ledger-subpage]')||(e.target.closest?.('.winter-browser-bar.winter-ledger-subpage')?app.querySelector('main > [data-ledger-subpage]'):null);
+ const sub=e.target.closest?.('[data-ledger-subpage]');
  if(!sub||e.touches.length!==1||e.target.closest('input,select,textarea'))return;
  ledgerSubSwipe={x:e.touches[0].clientX,y:e.touches[0].clientY,sub,active:false};
 },{passive:true});
@@ -6899,16 +6692,16 @@ document.addEventListener('touchmove',e=>{
  if(!t.active&&dx>9&&dx>Math.abs(dy)*1.25)t.active=true;
  if(!t.active)return;
  if(e.cancelable)e.preventDefault();
- t.sub.style.animation='none';t.sub.style.transition='none';t.sub.style.transform='translate3d('+Math.min(innerWidth,Math.max(0,dx))+'px,0,0)';ledgerHeaderMotion(Math.min(innerWidth,Math.max(0,dx)));
+ t.sub.style.animation='none';t.sub.style.transition='none';t.sub.style.transform='translate3d('+Math.min(innerWidth,Math.max(0,dx))+'px,0,0)';
 },{passive:false});
 document.addEventListener('touchend',e=>{
  const t=ledgerSubSwipe;ledgerSubSwipe=null;
  if(!t||!t.sub.isConnected||e.changedTouches.length!==1)return;
  const dx=e.changedTouches[0].clientX-t.x,dy=e.changedTouches[0].clientY-t.y;
  if(t.active&&dx>=85&&dx>Math.abs(dy)*1.25&&st.tab==='ledger'&&ledgerView!=='main')ledgerBack();
- else if(t.active){t.sub.style.transition='transform .22s ease';t.sub.style.transform='translate3d(0,0,0)';ledgerHeaderMotion(0,'transform .22s ease');}
+ else if(t.active){t.sub.style.transition='transform .22s ease';t.sub.style.transform='translate3d(0,0,0)';}
 },{passive:true});
-document.addEventListener('touchcancel',()=>{const t=ledgerSubSwipe;ledgerSubSwipe=null;if(t?.sub?.isConnected){t.sub.style.transition='transform .22s ease';t.sub.style.transform='translate3d(0,0,0)';ledgerHeaderMotion(0,'transform .22s ease');}},{passive:true});
+document.addEventListener('touchcancel',()=>{const t=ledgerSubSwipe;ledgerSubSwipe=null;if(t?.sub?.isConnected){t.sub.style.transition='transform .22s ease';t.sub.style.transform='translate3d(0,0,0)';}},{passive:true});
 document.addEventListener('keydown',e=>{
  const host=e.target.closest?.('.swipe-host');
  if(!host||!['ArrowLeft','ArrowRight'].includes(e.key))return;
@@ -7157,11 +6950,6 @@ async function viewFlightPassPreview(flightId,index){
  }catch(err){alert('無法讀取這台手機的登機證：'+(err.message||err));}
 }
 
-document.getElementById('winter-ledger-back').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();ledgerBack();});
-function ledgerHeaderMotion(x,transition='none'){
- const bar=document.querySelector('.winter-browser-bar');if(!bar)return;
- bar.style.transition=transition;bar.style.transform=x===null?'':`translate3d(${x}px,0,0)`;
-}
 function syncWinterPage(){
   const winterPageName=document.getElementById('winter-browser-page');
   const sub=st.tab==='ledger'&&ledgerView!=='main';
@@ -7211,7 +6999,7 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML='<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail'||ledgerView==='all')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='all'?ledgerReturnUnderlay()+ledgerAllPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
+    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail'||ledgerView==='all')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='all'?ledgerReturnUnderlay()+ledgerAllPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
@@ -7312,7 +7100,7 @@ function editTicket(index){
   if(adding)tickets.push({id:uid(),...result});else tickets[index]=result;
   SV('tickets',tickets);
   if(cloudSync)cloudSync.onHomeChange('tickets');
-  homeTab='k';ov.add('k');dlg.close();dlg.classList.remove('home-list-editor','ticket-list-editor');render();showSavedToast();
+  ov.add('k');dlg.close();dlg.classList.remove('home-list-editor','ticket-list-editor');render();showSavedToast();
  };
  useAddBottomSheet();openEditorDialogNoKeyboard();
 }
@@ -7437,7 +7225,7 @@ function editHomeList(kind,index){
   if(isStay&&!nightsBetween(values.checkin,values.checkout)){alert('請從日曆選擇有效的入住與退房日期');return;}
   if(values.mapUrl&&!safeLink(values.mapUrl)){alert('地址連結請輸入 http:// 或 https:// 網址');return;}
   if(adding)list.push({id:uid(),...values});else Object.assign(current,values);
-  persistHomeList(kind);homeTab=isStay?'h':'r';ov.add(homeTab);
+  persistHomeList(kind);ov.add(isStay?'h':'r');
   dlg.close();dlg.classList.remove('home-list-editor');render();showSavedToast();
  };
  useAddBottomSheet();openEditorDialogNoKeyboard();
@@ -7550,14 +7338,14 @@ function editDayItem(n,selectedKind){
    SV('days',days)
    // 儲存完成後切換至新日期，讓使用者直接看到已移動、排序後的項目。
    st.day=targetIndex;SV('day',st.day);
-   dlg.close();homeTab=candidate.id;ov.add(candidate.id);save();render();showSavedToast();
+   dlg.close();ov.add(candidate.id);save();render();showSavedToast();
  };
  openEditorDialogNoKeyboard();
 }
 function edit(l,n){const add=n<0;
 if(l==='d'){return editDayItem(n)}
 else if(l==='t'){const a=add?{t:'',c:'預約',done:false,url:'',urlLabel:''}:todos[n];form(add?'新增待辦':'編輯待辦',[['t','待辦事項'],['c','類別','sel',['預約','訂位','票券','其他']],['url','相關網址（選填，https://）'],['urlLabel','網址顯示名稱（選填）']],a,o=>{if(!o.t)return;if(o.url&&!safeLink(o.url)){alert('網址必須以 https:// 或 http:// 開頭');return}Object.assign(a,o);if(add)todos.unshift(a);save();render();showSavedToast()})}
-else{const a=add?{t:'',done:false}:packs[n];form(add?'新增物品':'編輯物品',[['t','物品名稱']],a,o=>{if(!o.t)return;a.t=o.t;if(add)packs.push(a);homeTab='p';ov.add('p');save();render();showSavedToast()})}}
+else{const a=add?{t:'',done:false}:packs[n];form(add?'新增物品':'編輯物品',[['t','物品名稱']],a,o=>{if(!o.t)return;a.t=o.t;if(add)packs.push(a);ov.add('p');save();render();showSavedToast()})}}
 function move(L,i,d,l){const same=l==='t'?x=>x.done===L[i].done:()=>true;let j=i+d;while(L[j]&&!same(L[j]))j+=d;if(L[j]){const t=L[i];L[i]=L[j];L[j]=t}}
 // 按鈕觸感以獨立暫時圖層呈現：點擊若立即開啟編輯視窗或移動項目，回饋也不會消失。
 const TAP_ACTIONS=new Set(['ed','rm','mv','shop-edit','shop-delete']);
@@ -7796,14 +7584,13 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const D=b.dataset,a=D.a,n=+D.i,L=D.l==='d'?days[st.day].items:D.l==='t'?todos:packs;
 if(a.startsWith('ledger-')){e.preventDefault();ledgerClick(a,D);return;}
 if(a==='drag'||a==='pack-drag'||a==='todo-drag'||a==='shop-drag'||a==='home-drag'){e.preventDefault();e.stopPropagation();return;}
-if(a==='tab'){const changedMainTab=st.tab!==D.v;st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;ledgerNavStack=[];}if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0);if(changedMainTab){app.classList.remove('season-page-enter');void app.offsetWidth;app.classList.add('season-page-enter');}}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
+if(a==='tab'){st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;ledgerNavStack=[];}if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
 else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
 else if(a==='add-choose'){togglePlanQuickMenu()}
 else if(a==='plan-add-kind'){closePlanQuickMenu();useAddBottomSheet();editDayItem(-1,D.kind)}
 else if(a==='add-kind'){const kind=D.kind;dlg.close();dlg.classList.remove('itinerary-chooser');useAddBottomSheet();editDayItem(-1,kind)}
 else if(a==='itinerary-photo-remove'){itineraryPhotoTemp.splice(n,1);itineraryPhotoChanged=true;updateItineraryPhotoPreview()}
-else if(a==='home-tab'){const oldTabs=app.querySelector('.home-browser-tabs');const left=oldTabs?oldTabs.scrollLeft:0;homeTab=D.v;render();const newTabs=app.querySelector('.home-browser-tabs');if(newTabs){newTabs.scrollLeft=left;const active=newTabs.querySelector('.on');if(active){const r=active.getBoundingClientRect(),n=newTabs.getBoundingClientRect();if(r.right>n.right)newTabs.scrollLeft+=r.right-n.right;else if(r.left<n.left)newTabs.scrollLeft-=n.left-r.left;}}}
 else if(a==='home-add-choose'){toggleHomeQuickMenu()}
 else if(a==='home-add-kind'){const kind=D.kind;closeHomeQuickMenu();if(dlg.open)dlg.close();dlg.classList.remove('itinerary-chooser','home-add-chooser');if(kind==='packs'){ov.add('p');useAddBottomSheet();edit('p',-1)}else if(['stays','dining','tickets'].includes(kind)){ov.add(kind==='stays'?'h':kind==='dining'?'r':'k');editHomeList(kind,-1)}}
 else if(a==='flight-pass-open'){openFlightPasses(D.flightId)}
@@ -7829,7 +7616,7 @@ else if(a==='shop-hint'){if(D.field==='store'){const f=dlg.querySelector('[name=
 else if(a==='shop-photo-remove'){shopPhotoTemp='';const f=dlg.querySelector('#sh-photo-file');if(f)f.value='';shopPreviewUpdate()}
 else if(a==='shop-cancel'){dismissDialogDown();shopPhotoTemp=''}
 else if(a==='tg'){
- const row=b.closest('.td,.pk'),face=row?.querySelector(':scope > .swipe-face')||row;
+ const row=b.closest('.td'),face=row?.querySelector(':scope > .swipe-face')||row;
  if(!L[n])return;
  L[n].done=!L[n].done;
  save();
@@ -7840,7 +7627,7 @@ else if(a==='tg'){
    row.classList.add('todo-press-feedback');
    // 優先畫出未劃線狀態，下一影格才開始從左到右畫線。
    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-     if(row.isConnected){row.classList.toggle('dn',L[n].done);if(D.l==='p'){const label=row.closest('.overview-p')?.querySelector('summary small');if(label)label.textContent=packs.filter(p=>p.done).length+'／'+packs.length+' 已準備';}}
+     if(row.isConnected){row.classList.toggle('dn',L[n].done);}
    }));
  }
  todoCompletionRenderTimer=window.setTimeout(()=>{if(st.tab==='todo')render();},470);
