@@ -3914,6 +3914,328 @@ main.top{padding-top:18px}
 #app main.top .ph h2{color:#3f566e}
 @media(max-width:370px){.winter-browser-bar{grid-template-columns:38px minmax(0,1fr) 97px;gap:3px;padding-left:9px;padding-right:9px}.winter-browser-page{font-size:9px;letter-spacing:.08em}.winter-browser-bar #hk-cloud-toggle{width:97px!important;max-width:97px!important}.winter-browser-controls i{width:6px;height:6px}}
 
+
+/* ───────────────────────────────────────────────────────────
+   WINTER ATELIER / 2026 · financial, tax, flight & editing UI
+   Visual-only overrides. Keep all data, callbacks and animation state.
+   ─────────────────────────────────────────────────────────── */
+:root{
+ --wa-frost:#f7fafc;
+ --wa-paper:#fbfdfe;
+ --wa-glaze:#f0f6f9;
+ --wa-ice:#e8f0f5;
+ --wa-slate:#4a6278;
+ --wa-blue:#718fa9;
+ --wa-muted:#889bab;
+ --wa-border:#d8e4ed;
+ --wa-shadow:0 7px 25px rgba(58,84,105,.055),0 1px 3px rgba(58,84,105,.025);
+}
+/* FINANCE · shared surface system */
+#app .ld-page,
+#app .ld-subpage{color:var(--wa-slate)}
+#app .ld-page .ph.sh-heading .kicker,
+#app .ld-subpage .ld-sub-header p{
+ font-size:9px;letter-spacing:.08em;color:#8b9eac;font-weight:520;
+}
+#app .ld-page .ph.sh-heading h2,
+#app .ld-subpage .ld-sub-header h2{color:#40586d;font-size:20px;font-weight:660;letter-spacing:-.025em}
+#app .ld-page .ph.sh-heading p{color:#91a3b2;font-size:10px}
+#app .ld-page .ld-panel,
+#app .ld-subpage .ld-panel,
+#app .ld-page .ld-expense-panel,
+#app .ld-page .ld-total{
+ background:linear-gradient(155deg,rgba(255,255,255,.98) 0%,rgba(248,251,253,.97) 100%)!important;
+ border:1px solid var(--wa-border)!important;
+ border-radius:15px!important;
+ box-shadow:var(--wa-shadow)!important;
+ color:var(--wa-slate);
+}
+#app .ld-page .ld-panel,
+#app .ld-subpage .ld-panel{padding:15px 14px!important}
+#app .ld-page .ld-section-head h3,
+#app .ld-subpage .ld-section-head h3{font-size:12.5px;color:#465f75;font-weight:680;letter-spacing:.015em}
+#app .ld-page .ld-section-head .ld-count,
+#app .ld-subpage .ld-section-head .ld-count,
+#app .ld-page .ld-section-head .ld-hint{color:#8a9eae;font-size:9.5px}
+#app .ld-page .ld-hint,
+#app .ld-subpage .ld-hint{color:#8e9fac;font-size:10px;line-height:1.7}
+#app .ld-page .ld-total{
+ background:linear-gradient(130deg,#edf5f9 0%,#f9fcfd 60%,#eaf2f7 100%)!important;
+ padding:17px 16px!important;
+ border-color:#d4e3ec!important;
+}
+#app .ld-total .ld-total-label{font-size:10px;letter-spacing:.075em;color:#70889e}
+#app .ld-total .ld-grand{color:#36546e;letter-spacing:-.04em}
+#app .ld-page .ld-currency-picker>summary,
+#app .ld-page .ld-tax-entry,
+#app .ld-page .ld-mini-link,
+#app .ld-page .ld-all-open{
+ background:rgba(255,255,255,.72)!important;
+ border:1px solid #d6e3ec!important;color:#6e89a0!important;
+ border-radius:9px!important;box-shadow:none!important;
+}
+#app .ld-page .ld-currency-picker .ld-currency-menu,
+#app .ld-page .ld-filter-panel{background:#fbfdfe;border:1px solid #d8e4ed;box-shadow:var(--wa-shadow)}
+#app .ld-page :is(.ld-calculator select,.ld-search-tools select,.ld-search-filters select,.ld-category-date-picker select),
+#app .ld-subpage :is(.ld-calculator select,.ld-search-tools select,.ld-search-filters select,.ld-category-date-picker select),
+#app .ld-page .ld-search-input-clip{
+ background:#f5f9fb!important;border-color:#dce7ef!important;color:#546d83!important;
+ border-radius:9px!important;box-shadow:none!important;
+}
+#app .ld-page :is(.ld-search-tools button,.ld-search-filters button),
+#app .ld-subpage :is(.ld-search-tools button,.ld-search-filters button){
+ background:#f0f6f9!important;border-color:#d9e5ed!important;color:#718da2!important;
+ border-radius:9px!important;box-shadow:none!important;
+}
+#app .ld-page .ld-item,
+#app .ld-page .ld-item-copy,
+#app .ld-page .ld-item-main,
+#app .ld-subpage .ld-item{border-color:#e7edf2;color:#526c80}
+#app .ld-page .ld-item-name,
+#app .ld-page .ld-item-copy b{color:#455c71;font-weight:660}
+#app .ld-page .ld-empty,
+#app .ld-subpage .ld-empty{color:#90a2b0;font-size:11px}
+#app .ld-page .ld-backup-buttons button,
+#app .ld-page .ld-convert-row button{border:1px solid #d6e4ec!important;background:#eff5f9!important;color:#56758d!important;box-shadow:none!important;border-radius:9px!important}
+
+/* FINANCE · nested, swipe-preserving full detail and statistics overlays */
+#app .ld-all-screen,
+#app .ld-stat-screen,
+#app .ld-tax-screen,
+.ld-all-screen.ld-ledger-overlay,
+.ld-tax-screen.ld-subpage{
+ background:linear-gradient(165deg,#f4f8fb 0%,#edf3f8 54%,#f8fafc 100%)!important;
+ color:#51697e;
+}
+#app .ld-subpage .ld-sub-header .ld-back,
+.ld-subpage .ld-sub-header .ld-back{
+ border:1px solid #d9e5ee!important;background:#eef5f8!important;
+ color:#68849a!important;border-radius:11px!important;box-shadow:none!important;
+}
+#app .ld-subpage .ld-sub-header svg{stroke-width:1.55}
+#app .ld-all-screen .ld-all-tabs,
+#app .ld-tax-screen .ld-tax-tabs,
+#app .ld-subpage .ld-stat-tabs,
+#app .ld-tax-screen .ld-departure-switch{
+ background:rgba(224,234,243,.54)!important;
+ border:1px solid #d6e2ec!important;border-radius:12px!important;
+ box-shadow:inset 0 1px 1px #fff9!important;
+}
+#app .ld-all-screen .ld-all-tabs>button,
+#app .ld-tax-screen .ld-tax-tabs>button,
+#app .ld-subpage .ld-stat-tabs>button,
+#app .ld-tax-screen .ld-departure-switch>button{
+ color:#8297aa!important;font-size:11px!important;font-weight:590!important;
+ letter-spacing:.015em;
+}
+#app .ld-all-screen .ld-all-tabs>button.on,
+#app .ld-tax-screen .ld-tax-tabs>button.on,
+#app .ld-subpage .ld-stat-tabs>button.on,
+#app .ld-tax-screen .ld-departure-switch>button.on{
+ color:#496781!important;font-weight:710!important;
+}
+#app :is(.ld-tax-tab-indicator,.ld-stat-slide-indicator,.ld-departure-switch-indicator) .nav-lens-core{
+ background:linear-gradient(150deg,rgba(255,255,255,.97),rgba(238,246,250,.97))!important;
+ border:1px solid #dbe7ee!important;border-radius:9px!important;
+ box-shadow:0 2px 6px rgba(67,97,120,.085)!important;
+}
+#app .ld-all-screen .ld-all-stat-content,
+#app .ld-all-screen #ld-all-tab-body{gap:11px}
+#app .ld-stat-screen .ld-bars,
+#app .ld-all-screen .ld-bars{gap:4px}
+#app .ld-bar-row{border-radius:9px!important;padding:7px 5px!important}
+#app .ld-bar-row.selected{background:#edf5f9!important}
+#app .ld-bar-track{background:#edf3f7!important;border-radius:100px!important}
+#app .ld-bar-fill,
+#app .ld-bar-row.top-day .ld-bar-fill,
+#app .ld-bar-row.selected .ld-bar-fill{
+ background:linear-gradient(90deg,#a5bece,#7598b2)!important;border-radius:100px!important;
+}
+#app .ld-bar-row strong{color:#57738a;font-weight:660}
+#app .ld-bar-row time{color:#718da1}
+#app .ld-pie{background-color:#eaf1f6!important;box-shadow:inset 0 0 0 1px #dbe6ee}
+#app .ld-pie-inner{background:#fbfdfe!important;box-shadow:0 0 0 1px #e2ebf0!important}
+#app .ld-pie-inner small{color:#93a5b4}
+#app .ld-pie-inner strong{color:#48677f}
+#app .ld-pie-key{color:#647f92;border-color:#e5edf2}
+#app .ld-pie-key strong{color:#4f6c83}
+#app .ld-category-date-picker select{background:#f4f9fb!important}
+
+/* TAX · three tabs, two departure modes, 4-page guide, status and checklists */
+#app .ld-tax-screen .ld-tax-counters>*,
+#app .ld-tax-screen :is(.ld-tax-counter,.ld-tax-stat),
+#app .ld-tax-screen .ld-departure-steps,
+#app .ld-tax-screen .ld-departure-wait,
+#app .ld-tax-screen .ld-tax-guide,
+#app .ld-tax-screen .ld-tax-empty{
+ background:linear-gradient(145deg,#fff,#f8fbfd)!important;
+ border:1px solid #dce7ee!important;border-radius:13px!important;
+ box-shadow:0 4px 16px rgba(63,89,113,.045)!important;
+}
+#app .ld-tax-screen .ld-departure-section-head span,
+#app .ld-tax-screen .ld-tax-guide .ld-tax-kicker{color:#8ca4b6;font-size:9px;letter-spacing:.1em}
+#app .ld-tax-screen .ld-departure-section-head strong,
+#app .ld-tax-screen .ld-tax-slide h3,
+#app .ld-tax-screen .ld-tax-guide strong{color:#47627a}
+#app .ld-tax-screen .ld-departure-step,
+#app .ld-tax-screen .ld-tax-step,
+#app .ld-tax-screen .ld-tax-guide .ld-tax-step,
+#app .ld-tax-screen .ld-departure-pending-item{
+ background:#f4f9fb!important;border:1px solid #e2ebf1!important;border-radius:10px!important;
+ color:#667e91;
+}
+#app .ld-tax-screen .ld-departure-steps .ld-departure-step-icon,
+#app .ld-tax-screen .ld-tax-guide .ld-tax-step-icon{
+ background:#e8f1f6!important;color:#7896aa!important;border-radius:9px!important;
+}
+#app .ld-tax-screen .ld-departure-step-copy strong,
+#app .ld-tax-screen .ld-tax-step b,
+#app .ld-tax-screen .ld-departure-wait-title strong{color:#516a80;font-weight:660}
+#app .ld-tax-screen .ld-departure-step-copy p,
+#app .ld-tax-screen .ld-tax-step p,
+#app .ld-tax-screen .ld-departure-wait p{color:#8599a9;line-height:1.65}
+#app .ld-tax-screen .ld-departure-links a,
+#app .ld-tax-screen .ld-tax-source a{color:#617f96!important}
+#app .ld-tax-screen .ld-tax-pagination button{background:#dce7ed!important}
+#app .ld-tax-screen .ld-tax-pagination button.on{background:#7f9db4!important}
+#app .ld-tax-screen .ld-departure-result.good,
+#app .ld-tax-screen .ld-departure-outcome.good{background:#eaf5f0!important;border-color:#d4e9df!important}
+#app .ld-tax-screen .ld-departure-result.bad,
+#app .ld-tax-screen .ld-departure-outcome.bad{background:#fcf0ef!important;border-color:#f1dfdc!important}
+#app .ld-tax-screen .ld-tax-empty button,
+#app .ld-tax-screen .ld-departure-wait button{background:#e7f0f6!important;border:1px solid #d9e5ec!important;color:#638199!important;border-radius:10px!important}
+
+/* AIR · redesigned boarding pass surface, route and QR/passport controls */
+#app .overview-f .fl3-flights{gap:18px!important;padding:6px 1px 7px}
+#app .overview-f .fl3-group-head{margin:1px 1px 10px;gap:9px}
+#app .overview-f .fl3-group-head b{font-size:12px;font-weight:680;letter-spacing:-.005em;color:#425d73}
+#app .overview-f .fl3-group-head small{font-size:9px;color:#95a8b7;letter-spacing:.09em}
+#app .overview-f .fl3-group-kind{background:#edf4f8!important;color:#718ca2!important;border:1px solid #dbe7ee;border-radius:7px;padding:4px 8px;font-size:9px}
+#app .overview-f .fl3-leg{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:13px!important;padding:0!important;margin-bottom:12px!important}
+#app .overview-f .fl3-leg:not([open]){background:linear-gradient(145deg,#fff,#f8fbfd)!important;border:1px solid #dbe5ed!important;padding:4px 10px 11px!important;box-shadow:var(--wa-shadow)!important}
+#app .overview-f .fl3-leg[open]>.fl3-leg-head{border:1px solid #dce7ee;border-radius:10px;background:#f1f7fa;padding:8px 9px;margin-bottom:11px}
+#app .overview-f .fl3-leg-head{gap:7px;min-height:42px}
+#app .overview-f .fl3-direction,
+#app .overview-f .fl3-direction.fl3-return{
+ background:#e5f0f6!important;color:#688aa3!important;border:1px solid #d9e6ed!important;
+ border-radius:7px!important;font-size:9px;font-weight:650;padding:4px 8px;
+}
+#app .overview-f .fl3-leg-head>b{font-size:10px;font-weight:660;color:#48637b}
+#app .overview-f .fl3-leg-route{color:#8097aa;font-size:10px}
+#app .overview-f .fl3-collapsed{border-top-color:#e6edf2}
+#app .overview-f .fl3-collapsed strong{font-size:11px;color:#4f6a7f}
+#app .overview-f .fl3-collapsed span,#app .overview-f .fl3-collapsed small{color:#94a8b8}
+#app .overview-f .fl3-ticket{
+ overflow:hidden;position:relative;min-width:0;
+ background:linear-gradient(160deg,#ffffff 0%,#f9fcfe 58%,#f1f7fa 100%)!important;
+ border:1px solid #d3e2eb!important;border-radius:13px!important;
+ padding:14px 13px 10px!important;
+ box-shadow:0 7px 20px rgba(49,87,120,.07)!important;
+}
+#app .overview-f .fl3-ticket:before,#app .overview-f .fl3-ticket:after{background:#edf4f8!important;border:1px solid #d9e5ed}
+#app .overview-f .winter-ticket-topline{
+ display:flex;justify-content:space-between;gap:10px;align-items:center;
+ padding:0 0 10px;margin:0 0 11px;border-bottom:1px solid #e6edf2;
+ text-transform:uppercase;color:#8b9fad;font-size:8.5px;letter-spacing:.17em;font-weight:650;
+}
+#app .overview-f .winter-ticket-topline b{font-size:8.5px;font-weight:570;color:#9cafbf;letter-spacing:.08em}
+#app .overview-f .fl3-ticket-header{gap:7px;align-items:center}
+#app .overview-f .fl3-airline b{font-size:11px;color:#486178;font-weight:690}
+#app .overview-f .fl3-airline span{font-size:9px;color:#829aad;font-weight:590;letter-spacing:.09em}
+#app .overview-f .fl3-flight-duration{font-size:9px;color:#8ba3b5;font-weight:590}
+#app .overview-f .fl3-flight-duration svg{color:#8aa7bc;stroke-width:1.45}
+#app .overview-f .fl3-route{grid-template-columns:minmax(0,1fr) 51px minmax(0,1fr);gap:3px;padding:19px 1px 17px;align-items:center}
+#app .overview-f .fl3-place strong{font-size:24px;font-weight:680;color:#38546b;letter-spacing:-.045em;line-height:1.02}
+#app .overview-f .fl3-place b{font-size:12px;font-weight:710;color:#6c8da6;letter-spacing:.11em;margin-top:8px}
+#app .overview-f .fl3-place span{font-size:9px;color:#94a8b6;margin-top:4px}
+#app .overview-f .fl3-route-center{padding-top:4px;color:#789ab4}
+#app .overview-f .fl3-route-center svg{width:20px;height:20px;stroke-width:1.15}
+#app .overview-f .fl3-route-center small{font-size:9px;color:#8da6b8;margin-top:6px}
+#app .overview-f .fl3-baggage{border:1px solid #dfeaf0!important;background:#f3f8fa!important;border-radius:9px}
+#app .overview-f .fl3-baggage>summary{color:#6f879c;font-size:10px;padding:8px 10px}
+#app .overview-f .fl3-baggage>summary svg{color:#839fb3;stroke-width:1.5}
+#app .overview-f .fl3-baggage>summary b{color:#54768e}
+#app .overview-f .fl3-baggage-body{border-top-color:#dfe9ee}
+#app .overview-f .fl3-pass{border-top-color:#e5ecf1}
+#app .overview-f .fl3-pass .fl2-pass-button{color:#718ea5;padding:9px 0 6px}
+#app .overview-f .fl3-pass .fl2-pass-button>svg{
+ width:23px;height:23px;padding:5px;border:1px solid #d9e7ef!important;
+ background:#ebf4f8!important;border-radius:8px;stroke-width:1.45;
+}
+#app .overview-f .fl3-pass .fl2-pass-button>span:first-of-type{font-size:10px;color:#637f96;font-weight:650}
+#app .overview-f .fl3-pass .fl2-pass-button>b{background:#e8f2f7!important;color:#63849a!important;border:1px solid #d9e6ee;border-radius:8px;font-size:9.5px;font-weight:650}
+#app .overview-f .fl3-ticket-footer{border-top:1px solid #e4ecf1;padding-top:10px;margin-top:4px;color:#96a9b9;font-size:8.5px;letter-spacing:.02em}
+#app .overview-f .fl3-ticket-footer b{color:#7a97ae;font-weight:630}
+#app .overview-f .fl3-transfer{background:#edf5f8!important;border:1px solid #dbe7ef!important;color:#5d7b91!important;border-radius:10px}
+#app .overview-f .fl3-transfer svg{color:#7898b0;stroke-width:1.5}
+
+/* EDITOR · all add/edit dialogs, including transport, shopping, tickets, finance, flights */
+dialog#dlg,
+dialog#dlg.bottom-sheet,
+dialog#dlg.itinerary-editor,
+dialog#dlg.home-list-editor,
+dialog#dlg.ticket-list-editor,
+dialog#dlg.sh-dialog,
+dialog#dlg.ld-dialog,
+dialog#dlg.fl2-pass-dialog{
+ background:linear-gradient(165deg,#fff 0%,#f6fafc 80%,#f0f6f9 100%)!important;
+ border:1px solid #d8e5ed!important;color:#526c81!important;
+ box-shadow:0 -12px 45px rgba(32,60,82,.13)!important;
+}
+dialog#dlg.bottom-sheet{border-radius:22px 22px 0 0!important}
+dialog#dlg:not(.bottom-sheet){border-radius:17px!important}
+dialog#dlg::backdrop{background:rgba(29,46,65,.31)!important}
+dialog#dlg .sheet-grabber span{background:#b8cad8!important;height:4px;border-radius:9px}
+dialog#dlg h3{color:#3f5c73!important;letter-spacing:-.02em;font-weight:690!important;font-size:18px!important;line-height:1.38}
+dialog#dlg :is(.form-sub,.ld-editor-sub,.sh-caption,.home-edit-hint,.itinerary-choice-sub,.fl2-pass-privacy){color:#8b9faf!important;font-size:10.5px!important;line-height:1.65}
+dialog#dlg form label,
+dialog#dlg form .ld-field,
+dialog#dlg form .home-edit-field,
+dialog#dlg form .itinerary-form-label{color:#667f95!important;font-weight:600}
+dialog#dlg form :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),select,textarea),
+dialog#dlg .home-range-trigger,
+dialog#dlg .home-meal-picker,
+dialog#dlg .ticket-picker,
+dialog#dlg .ld-amount-combo{
+ background:#f7fafc!important;border:1px solid #dce7ef!important;color:#4d667d!important;
+ box-shadow:none!important;border-radius:10px!important;
+}
+dialog#dlg :is(input,select,textarea)::placeholder{color:#a4b2bf!important;opacity:1}
+dialog#dlg form :is(input,select,textarea):focus-visible{outline:2px solid #c9dce9!important;outline-offset:0}
+dialog#dlg .ld-ios-small-field,
+dialog#dlg .ld-date-center-wrap,
+dialog#dlg .ld-fx-input-frame{background:#f7fafc!important;border-color:#dce7ef!important;box-shadow:none!important}
+dialog#dlg form :is(button[type="submit"],.home-edit-save,.sh-submit,.ld-save),
+dialog#dlg .fl2-pass-form .fl2-pass-save{
+ background:#6687a2!important;border:1px solid #6687a2!important;color:#fff!important;
+ border-radius:10px!important;box-shadow:0 4px 11px rgba(71,104,131,.13)!important;
+ font-weight:650!important;
+}
+dialog#dlg form :is(button[type="button"],button[type="reset"]):not(.home-calendar-confirm):not(.itinerary-photo-remove),
+dialog#dlg .itinerary-choice-cancel{
+ border-color:#dce7ef!important;color:#6d889e!important;
+}
+dialog#dlg .itinerary-type-option,
+dialog#dlg .ld-tax-editor,
+dialog#dlg .home-edit-info,
+dialog#dlg .itinerary-photo-drop,
+dialog#dlg .sh-photo-upload,
+dialog#dlg .fl2-pass-form .fl2-pass-privacy{
+ background:#f0f6f9!important;border:1px solid #dfe9ef!important;
+ border-radius:11px!important;
+}
+dialog#dlg .itinerary-type-icon,
+dialog#dlg .home-calendar-day.on,
+dialog#dlg .ld-editor-segment button.on{background:#e6f1f6!important;color:#567d97!important;border-color:#d6e6ee!important}
+dialog#dlg .home-calendar-popup,
+dialog#dlg .fl2-pass-panel{background:#fbfdfe!important;border-color:#dce7ee!important}
+@media(max-width:370px){
+ #app .ld-subpage .ld-sub-header h2{font-size:18px}
+ #app .overview-f .fl3-route{grid-template-columns:minmax(0,1fr) 43px minmax(0,1fr)}
+ #app .overview-f .fl3-place strong{font-size:21px}
+ #app .overview-f .winter-ticket-topline{font-size:8px;letter-spacing:.10em}
+}
+
 </style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls" aria-hidden="true"><i></i><i></i><i></i></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">雲端同步</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -5996,7 +6318,7 @@ const fl3Ticket=(flightNo)=>{
  const bag=FLIGHT_BAGGAGE[flightNo];
  const bagView=bag?'<details class="fl3-baggage"><summary>'+iconSvg('suitcase')+'<span>隨身 <b>'+esc(bag.carry)+'</b>　｜　托運 <b>'+esc(bag.checked)+'</b></span>'+iconSvg('chevron')+'</summary><div class="fl3-baggage-body">'+bag.detail.map(x=>'<div><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join('')+'<small>依訂單資料整理，實際依航空公司最新確認額度為準。</small></div></details>':'';
  const pass=FLIGHT_OUTBOUND_IDS.has(flightNo)?'<div class="fl2-pass-inline fl3-pass"><div class="fl3-pass-row"><div class="fl2-pass-preview" data-flight-preview="'+esc(flightNo)+'" aria-label="已上傳的登機證縮圖"></div><button type="button" class="fl2-pass-button" data-a="flight-pass-open" data-flight-id="'+esc(flightNo)+'" aria-label="上傳或管理 '+esc(flightNo)+' 登機證">'+fl3QrCode+'<span>登機證／QR Code</span><span class="fl2-pass-count" aria-hidden="true"></span><b class="fl3-pass-action">+ 新增</b></button></div></div>':'';
- return '<article class="fl3-ticket" data-flight-no="'+esc(flightNo)+'"><div class="fl3-ticket-header"><div class="fl3-airline"><b>'+esc(f.company)+'</b><span>'+esc(flightNo)+'</span></div><div class="fl3-flight-duration">'+fl3Clock+' '+esc(f.duration)+'</div></div>'+ 
+ return '<article class="fl3-ticket" data-flight-no="'+esc(flightNo)+'"><div class="winter-ticket-topline"><span>HOKKAIDO · AIR PASS</span><b>DECEMBER 2026</b></div><div class="fl3-ticket-header"><div class="fl3-airline"><b>'+esc(f.company)+'</b><span>'+esc(flightNo)+'</span></div><div class="fl3-flight-duration">'+fl3Clock+' '+esc(f.duration)+'</div></div>'+ 
  '<div class="fl3-route"><div class="fl3-place"><strong>'+esc(f.d)+'</strong><b>'+esc(f.dc)+'</b><span>'+esc(f.dep)+'</span></div><div class="fl3-route-center">'+fl3DirectPlane+'<small>'+(f.direct?'直飛':'航段')+'</small></div><div class="fl3-place fl3-place-end"><strong>'+esc(f.a)+'</strong><b>'+esc(f.ac)+'</b><span>'+esc(f.arr)+'</span></div></div>'+bagView+pass+
  '<footer class="fl3-ticket-footer"><span>航班時間為當地時間</span><b>'+esc(flightNo)+' · 2026</b></footer></article>';
 };
