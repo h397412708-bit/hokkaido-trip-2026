@@ -4303,7 +4303,28 @@ html,body{background:#f8fafb!important;}
 #app .todo-browser-tabs.days.cats + .card.pad .td > .swipe-face,
 #app .shop-browser-tabs.days.cats + .sh-list .sh-product > .swipe-face{background:#fcfdfe!important;box-shadow:none!important;}
 </style>
-</head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">雲端同步</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
+<style id="hk-final-unified-tabs">
+#app .shop-browser-tabs + :is(.sh-list,.sh-empty),#app .ld-all-screen #ld-all-tab-body,#app .ld-tax-screen #ld-tax-tab-body{border-radius:0 12px 12px 12px!important}
+#app .sh-product .sh-link{margin-bottom:0!important;padding-bottom:0!important}
+#app .sh-flat .sh-product-footer{margin-top:1px!important}
+#app .ld-all-screen .ld-all-tabs,#app .ld-tax-screen .ld-tax-tabs{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important;padding:0!important;margin:8px 0 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;align-items:end!important;min-height:40px!important;overflow:visible!important;position:relative;z-index:1}
+#app .ld-tax-screen .ld-tax-tabs>button{position:relative;min-height:35px!important;height:35px!important;align-self:end!important;border:1px solid #b7c8d5!important;border-bottom:0!important;border-radius:8px 8px 0 0!important;background:#dce6ed!important;color:#647e94!important;font-size:11px!important;font-weight:600!important;padding:7px 2px!important;box-shadow:none!important}
+#app .ld-tax-screen .ld-tax-tabs>button.on{height:40px!important;background:#fcfdfe!important;color:#3f607a!important;font-weight:700!important}
+#app .ld-tax-screen .ld-tax-tabs>button.on:after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:3px;background:#fcfdfe}
+#app .ld-tax-screen .ld-tax-tab-indicator{display:none!important}
+#app .ld-tax-screen{gap:0!important}
+#app .ld-tax-screen #ld-tax-tab-body{margin:0!important;border:1px solid #b7c8d5!important;background:#fcfdfe!important;padding:10px 13px 13px!important}
+#app .home-browser-tabs{display:flex;align-items:end;gap:3px;overflow-x:auto;scrollbar-width:none;margin:8px 0 0;position:relative;z-index:1}
+#app .home-browser-tabs button{flex:1 0 auto;position:relative;min-height:35px;padding:7px 5px;border:1px solid #b7c8d5;border-bottom:0;border-radius:8px 8px 0 0;background:#dce6ed;color:#647e94;font-size:11px;font-weight:600;white-space:nowrap}
+#app .home-browser-tabs button.on{min-height:40px;background:#fcfdfe;color:#3f607a;font-weight:700}
+#app .home-tab-body{border:1px solid #b7c8d5;border-radius:0 0 12px 12px;background:#fcfdfe;padding:10px 13px 13px;margin-top:-1px}
+#app .home-tab-body>.overview-panel{margin:0!important;border:0!important;box-shadow:none!important;background:transparent!important}
+#app .home-tab-body>.overview-panel[hidden]{display:none!important}
+#app .home-tab-body>.overview-panel>summary{pointer-events:none;padding:5px 0 10px!important}
+#app .home-tab-body>.overview-panel>summary:after{display:none!important}
+#app .home-tab-body>.overview-panel>.bd{background:transparent!important;padding-left:0!important;padding-right:0!important}
+</style>
+</head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">同步</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
@@ -5026,6 +5047,7 @@ function bookedText(a,status){
  return String(a.desc||'');
 }
 
+let homeTab='useful';
 const ov=new Set(['useful']),app=document.getElementById('app'),dlg=document.getElementById('dlg');
 let cloudSync=null;
 const save=()=>{SV('days',days);SV('todos',todos);SV('packs',packs);if(cloudSync)cloudSync.onLocalChange()};
@@ -6416,7 +6438,7 @@ const alternateFlightBoard=()=>fl3Group('廈門出發 · 廈門返程','成田�
 const primaryFlightBoard=()=>fl3Group('台北出發 · 台北返程','直飛',[
  fl3Leg('taipei-out','去程','台北 → 札幌','12:15 TPE → CTS 17:00',['TR892'],'',null),
  fl3Leg('taipei-return','回程','札幌 → 台北','14:00 CTS → TPE 17:55',['FD243'],'',null)]);
- const sec=(k,ic,t,sub,body)=>'<details class="card overview-panel overview-'+k+'" data-k="'+k+'"'+(ov.has(k)?' open':'')+'><summary><span class="sum-ic">'+ic+'</span><div><b>'+t+'</b><small>'+sub+'</small></div></summary><div class="bd">'+body+'</div></details>';
+ const sec=(k,ic,t,sub,body)=>'<details class="card overview-panel overview-'+k+'" data-k="'+k+'"'+' open'+(homeTab===k?'':' hidden')+'><summary><span class="sum-ic">'+ic+'</span><div><b>'+t+'</b><small>'+sub+'</small></div></summary><div class="bd">'+body+'</div></details>';
 
 const TRIP_WEBS=[
  {group:'交通・班次',hint:'下雪天先查運行情況',links:[
@@ -6446,12 +6468,13 @@ const travelLinksPanel=()=>{
 
 function home(){const n=packs.filter(p=>p.done).length;
  const totalNights=stays.reduce((sum,item)=>sum+nightsBetween(item.checkin,item.checkout),0);
- return travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程', '<div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div>')
+ const tabs=[['useful','常用網站'],['f','航班'],['h','住宿'],['r','餐廳'],['k','票券'],['p','行李清單']];
+ return '<nav class="home-browser-tabs" aria-label="總覽分類">'+tabs.map(([id,label])=>'<button type="button" data-a="home-tab" data-v="'+id+'" class="'+(homeTab===id?'on':'')+'" aria-pressed="'+(homeTab===id)+'">'+label+'</button>').join('')+'</nav><div class="home-tab-body">'+travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程', '<div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div>')
  +sec('h',iconSvg('hotel'),'住宿一覽',stays.length+' 間・共 '+totalNights+' 晚',homeListBody('stays'))
  +sec('r',iconSvg('utensils'),'已訂餐廳',dining.length+' 間・訂位資料',homeListBody('dining'))
  +sec('k',iconSvg('ticket'),'已訂票券',tickets.length+' 筆・票券資料',homeListBody('tickets'))
  +sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'" data-pack-index="'+i+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><button type="button" class="pack-drag-handle" data-a="pack-drag" data-i="'+i+'" aria-label="長按拖曳「'+esc(p.t)+'」排序；鍵盤 Alt 加上下鍵調整" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join(''))
- +'<button class="add ghost" data-a="rs">還原預設內容</button>'+
+ +'</div><button class="add ghost" data-a="rs">還原預設內容</button>'+
  '<div class="home-add-quick-menu" id="home-add-quick-menu" aria-hidden="true"><button type="button" data-a="home-add-kind" data-kind="stays" tabindex="-1" aria-label="新增住宿" title="新增住宿">'+iconSvg('hotel')+'</button><button type="button" data-a="home-add-kind" data-kind="dining" tabindex="-1" aria-label="新增已訂餐廳" title="新增已訂餐廳">'+iconSvg('utensils')+'</button><button type="button" data-a="home-add-kind" data-kind="tickets" tabindex="-1" aria-label="新增已訂票券" title="新增已訂票券">'+iconSvg('ticket')+'</button><button type="button" data-a="home-add-kind" data-kind="packs" tabindex="-1" aria-label="新增行李清單" title="新增行李清單">'+iconSvg('bag')+'</button></div><button type="button" class="shop-glass-add home-add-fab" data-a="home-add-choose" aria-expanded="false" aria-controls="home-add-quick-menu" aria-label="新增總覽項目" title="新增總覽項目"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>'}
 const hero=()=>'<header class="hero winter-hero"><div class="hc"><div class="eb">2026 · WINTER JOURNAL</div><h1 class="ht1">Hokkaido.</h1><div class="hs">北海道冬日旅誌</div><div class="hm">12.18 — 12.27</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><div class="summary winter-trip-summary"><div><strong>10 天 9 夜</strong><span>旅程</span></div><div><strong>4 位旅伴</strong><span>同行</span></div><div><strong>12/18–27</strong><span>2026</span></div></div>';
 // Never replace the date-strip element when switching days: keeping the same
@@ -7165,7 +7188,7 @@ function editTicket(index){
   if(adding)tickets.push({id:uid(),...result});else tickets[index]=result;
   SV('tickets',tickets);
   if(cloudSync)cloudSync.onHomeChange('tickets');
-  ov.add('k');dlg.close();dlg.classList.remove('home-list-editor','ticket-list-editor');render();showSavedToast();
+  homeTab='k';ov.add('k');dlg.close();dlg.classList.remove('home-list-editor','ticket-list-editor');render();showSavedToast();
  };
  useAddBottomSheet();openEditorDialogNoKeyboard();
 }
@@ -7290,7 +7313,7 @@ function editHomeList(kind,index){
   if(isStay&&!nightsBetween(values.checkin,values.checkout)){alert('請從日曆選擇有效的入住與退房日期');return;}
   if(values.mapUrl&&!safeLink(values.mapUrl)){alert('地址連結請輸入 http:// 或 https:// 網址');return;}
   if(adding)list.push({id:uid(),...values});else Object.assign(current,values);
-  persistHomeList(kind);ov.add(isStay?'h':'r');
+  persistHomeList(kind);homeTab=isStay?'h':'r';ov.add(homeTab);
   dlg.close();dlg.classList.remove('home-list-editor');render();showSavedToast();
  };
  useAddBottomSheet();openEditorDialogNoKeyboard();
@@ -7403,14 +7426,14 @@ function editDayItem(n,selectedKind){
    SV('days',days)
    // 儲存完成後切換至新日期，讓使用者直接看到已移動、排序後的項目。
    st.day=targetIndex;SV('day',st.day);
-   dlg.close();ov.add(candidate.id);save();render();showSavedToast();
+   dlg.close();homeTab=candidate.id;ov.add(candidate.id);save();render();showSavedToast();
  };
  openEditorDialogNoKeyboard();
 }
 function edit(l,n){const add=n<0;
 if(l==='d'){return editDayItem(n)}
 else if(l==='t'){const a=add?{t:'',c:'預約',done:false,url:'',urlLabel:''}:todos[n];form(add?'新增待辦':'編輯待辦',[['t','待辦事項'],['c','類別','sel',['預約','訂位','票券','其他']],['url','相關網址（選填，https://）'],['urlLabel','網址顯示名稱（選填）']],a,o=>{if(!o.t)return;if(o.url&&!safeLink(o.url)){alert('網址必須以 https:// 或 http:// 開頭');return}Object.assign(a,o);if(add)todos.unshift(a);save();render();showSavedToast()})}
-else{const a=add?{t:'',done:false}:packs[n];form(add?'新增物品':'編輯物品',[['t','物品名稱']],a,o=>{if(!o.t)return;a.t=o.t;if(add)packs.push(a);ov.add('p');save();render();showSavedToast()})}}
+else{const a=add?{t:'',done:false}:packs[n];form(add?'新增物品':'編輯物品',[['t','物品名稱']],a,o=>{if(!o.t)return;a.t=o.t;if(add)packs.push(a);homeTab='p';ov.add('p');save();render();showSavedToast()})}}
 function move(L,i,d,l){const same=l==='t'?x=>x.done===L[i].done:()=>true;let j=i+d;while(L[j]&&!same(L[j]))j+=d;if(L[j]){const t=L[i];L[i]=L[j];L[j]=t}}
 // 按鈕觸感以獨立暫時圖層呈現：點擊若立即開啟編輯視窗或移動項目，回饋也不會消失。
 const TAP_ACTIONS=new Set(['ed','rm','mv','shop-edit','shop-delete']);
@@ -7656,6 +7679,7 @@ else if(a==='add-choose'){togglePlanQuickMenu()}
 else if(a==='plan-add-kind'){closePlanQuickMenu();useAddBottomSheet();editDayItem(-1,D.kind)}
 else if(a==='add-kind'){const kind=D.kind;dlg.close();dlg.classList.remove('itinerary-chooser');useAddBottomSheet();editDayItem(-1,kind)}
 else if(a==='itinerary-photo-remove'){itineraryPhotoTemp.splice(n,1);itineraryPhotoChanged=true;updateItineraryPhotoPreview()}
+else if(a==='home-tab'){homeTab=D.v;render()}
 else if(a==='home-add-choose'){toggleHomeQuickMenu()}
 else if(a==='home-add-kind'){const kind=D.kind;closeHomeQuickMenu();if(dlg.open)dlg.close();dlg.classList.remove('itinerary-chooser','home-add-chooser');if(kind==='packs'){ov.add('p');useAddBottomSheet();edit('p',-1)}else if(['stays','dining','tickets'].includes(kind)){ov.add(kind==='stays'?'h':kind==='dining'?'r':'k');editHomeList(kind,-1)}}
 else if(a==='flight-pass-open'){openFlightPasses(D.flightId)}
