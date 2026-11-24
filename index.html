@@ -4259,6 +4259,38 @@ body{background:linear-gradient(to bottom,#F8FAFB 0,#F8FAFB calc(48px + env(safe
 .winter-browser-bar{background:#F8FAFB!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:visible;padding-top:env(safe-area-inset-top,0px)!important;height:calc(48px + env(safe-area-inset-top,0px))!important;}
 .winter-browser-bar::before{content:"";position:absolute;bottom:100%;left:0;right:0;height:100px;background:#f8fafb;pointer-events:none}
 .winter-browser-underlay{position:fixed!important;top:0!important;left:50%!important;transform:translateX(-50%);margin:0!important;z-index:1799!important;pointer-events:none!important}
+
+/* Rounded browser-style tabs; only the selection indicator moves. */
+.bottom-nav .nav-lens-core{border:0!important;box-shadow:none!important;border-radius:0!important;background:#F8FAFB!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50' preserveAspectRatio='none'%3E%3Cpath d='M0 50 Q7 50 11 39 L21 10 Q25 0 36 0 H64 Q75 0 79 10 L89 39 Q93 50 100 50 Z' fill='black'/%3E%3C/svg%3E") center/100% 100% no-repeat;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50' preserveAspectRatio='none'%3E%3Cpath d='M0 50 Q7 50 11 39 L21 10 Q25 0 36 0 H64 Q75 0 79 10 L89 39 Q93 50 100 50 Z' fill='black'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.bottom-nav .nav-lens-core::before,.bottom-nav .nav-lens-core::after{display:none!important}
+.bottom-nav .nav-glass-indicator .nav-lens-core{animation:none!important}
+.bottom-nav .nav-glass-indicator{transition:transform 340ms cubic-bezier(.22,.75,.25,1),width 220ms ease!important}
+.bottom-nav .nav-glass-indicator.nav-no-motion{transition:none!important}
+#app>main,#app>.winter-hero,#app>.winter-trip-summary{animation:none!important;transition:none!important}
+.home-category-strip{display:flex;overflow-x:auto;scrollbar-width:none;gap:2px;padding:7px 8px 0;background:#e5edf3;position:relative}
+.home-category-strip::-webkit-scrollbar{display:none}
+.home-category-strip button{flex:1 0 auto;min-width:55px;position:relative;isolation:isolate;border:0;background:transparent;color:#71869b;font-size:11px;padding:12px 10px;white-space:nowrap}
+.home-category-strip button::before{content:'';position:absolute;inset:0 2px;z-index:-1;background:#dbe6ee;border-radius:14px 14px 5px 5px;transform:perspective(65px) rotateX(14deg);transform-origin:bottom}
+.home-category-strip button.on::before{background:#F8FAFB}.home-category-strip button.on{color:#405770;font-weight:700}
+#app .overview-panel[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){.bottom-nav .nav-glass-indicator{transition:none!important}}
+
+/* Overview: season-style category tabs directly attached to the information area. */
+#app:has(>.home-category-strip){overflow:clip}
+#app>.home-category-strip{position:sticky;top:calc(48px + env(safe-area-inset-top,0px));z-index:30;background:#E5EDF3;padding:0 12px;gap:0;isolation:isolate;}
+#app>.home-category-strip button{flex:1 0 auto;min-width:48px;padding:12px 8px 11px;font-size:12px;color:#8395a5;}
+#app>.home-category-strip button::before{inset:0;background:transparent;transform:none;border-radius:0;}
+#app>.home-category-strip button.on::before{background:#F8FAFB;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50' preserveAspectRatio='none'%3E%3Cpath d='M0 50 Q9 50 14 35 L23 10 Q27 0 39 0 H61 Q73 0 77 10 L86 35 Q91 50 100 50 Z'/%3E%3C/svg%3E") center/100% 100% no-repeat;}
+#app>.home-category-strip button.on{color:#405770;font-weight:700;}
+#app>.home-category-strip+main{background:#F8FAFB;padding-top:10px;animation:none!important;transition:none!important;}
+#app>.home-category-strip+main>.overview-panel{background:transparent!important;border:0!important;box-shadow:none!important;margin-top:0!important;animation:none!important;transition:none!important;}
+
+/* Overview categories: first element immediately below the browser header. */
+#app>.home-category-strip{position:sticky;top:calc(48px + env(safe-area-inset-top,0px));z-index:100;background:#E5EDF3;padding:5px 8px 0;gap:0;}
+#app>.home-category-strip button{flex:1 0 auto;min-width:44px;padding:11px 8px;font-size:12px;}
+#app>.home-category-strip button.on::before{background:#F8FAFB;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50' preserveAspectRatio='none'%3E%3Cpath d='M0 50 Q9 50 14 35 L23 10 Q27 0 39 0 H61 Q73 0 77 10 L86 35 Q91 50 100 50 Z'/%3E%3C/svg%3E") center/100% 100% no-repeat;}
+#app:has(>.home-category-strip)>main{background:#F8FAFB;padding-top:10px;animation:none!important;transition:none!important;}
+#app:has(>.home-category-strip)>main>.overview-panel{background:transparent!important;border:0!important;box-shadow:none!important;margin-top:0!important;}
 </style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">雲端同步</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -6416,6 +6448,10 @@ const travelLinksPanel=()=>{
  return sec('useful',iconSvg('externalLink'),'旅途中常用網站','交通・景點・入境',body);
 };
 
+let homeCategory='useful';
+const homeCategories=[['useful','常用網站'],['f','航班'],['h','住宿'],['r','餐廳'],['k','票券'],['p','行李']];
+function homeCategoryStrip(){return '<nav class="home-category-strip" aria-label="總覽欄目">'+homeCategories.map(([k,t])=>'<button type="button" data-a="home-category" data-v="'+k+'" class="'+(homeCategory===k?'on':'')+'" aria-pressed="'+(homeCategory===k)+'">'+t+'</button>').join('')+'</nav>'}
+function syncHomeCategory(){if(st.tab!=='home')return;app.querySelectorAll('.overview-panel').forEach(el=>{el.hidden=el.dataset.k!==homeCategory;if(!el.hidden&&!el.open)el.open=true;});}
 function home(){const n=packs.filter(p=>p.done).length;
  const totalNights=stays.reduce((sum,item)=>sum+nightsBetween(item.checkin,item.checkout),0);
  return travelLinksPanel()+sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程', '<div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div>')
@@ -7031,7 +7067,7 @@ function render(){
       button.setAttribute('aria-pressed',String(selected));
     });
   }else{
-    app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail'||ledgerView==='all')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='all'?ledgerReturnUnderlay()+ledgerAllPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
+    app.innerHTML=(st.tab==='home'?homeCategoryStrip()+hero():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail'||ledgerView==='all')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='all'?ledgerReturnUnderlay()+ledgerAllPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
     if(newDayStrip) newDayStrip.scrollLeft=planDayScrollLeft;
   }
@@ -7039,6 +7075,7 @@ function render(){
   if(st.tab==='ledger'&&(ledgerView==='main'||ledgerView==='tax')){const scroller=app.querySelector('#ld-entry-list');if(scroller)scroller.scrollTop=ledgerListScrollTop;}
   applySwipeRows();
   syncNavGlass();
+  syncHomeCategory();
    if(st.tab==='ledger'&&(ledgerView==='stats'||(ledgerView==='all'&&ledgerAllTab==='stats')))ledgerSyncStatLens(true);
    if(st.tab==='ledger'&&ledgerView==='all')ledgerSyncAllLens(true);
   if(st.tab==='ledger'&&ledgerView==='tax'){ledgerSyncTaxLens(true);if(ledgerTaxTab==='check')ledgerSyncDepartureLens(true);}
@@ -7616,7 +7653,8 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const D=b.dataset,a=D.a,n=+D.i,L=D.l==='d'?days[st.day].items:D.l==='t'?todos:packs;
 if(a.startsWith('ledger-')){e.preventDefault();ledgerClick(a,D);return;}
 if(a==='drag'||a==='pack-drag'||a==='todo-drag'||a==='shop-drag'||a==='home-drag'){e.preventDefault();e.stopPropagation();return;}
-if(a==='tab'){st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;ledgerNavStack=[];}if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
+if(a==='home-category'){homeCategory=D.v;const strip=app.querySelector('.home-category-strip');strip.querySelectorAll('button').forEach(b=>{b.classList.toggle('on',b.dataset.v===homeCategory);b.setAttribute('aria-pressed',String(b.dataset.v===homeCategory));});syncHomeCategory();return;}
+if(a==='tab'){st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;ledgerNavStack=[];}pendingItineraryEntrance=false;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
 else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
 else if(a==='add-choose'){togglePlanQuickMenu()}
@@ -7624,7 +7662,7 @@ else if(a==='plan-add-kind'){closePlanQuickMenu();useAddBottomSheet();editDayIte
 else if(a==='add-kind'){const kind=D.kind;dlg.close();dlg.classList.remove('itinerary-chooser');useAddBottomSheet();editDayItem(-1,kind)}
 else if(a==='itinerary-photo-remove'){itineraryPhotoTemp.splice(n,1);itineraryPhotoChanged=true;updateItineraryPhotoPreview()}
 else if(a==='home-add-choose'){toggleHomeQuickMenu()}
-else if(a==='home-add-kind'){const kind=D.kind;closeHomeQuickMenu();if(dlg.open)dlg.close();dlg.classList.remove('itinerary-chooser','home-add-chooser');if(kind==='packs'){ov.add('p');useAddBottomSheet();edit('p',-1)}else if(['stays','dining','tickets'].includes(kind)){ov.add(kind==='stays'?'h':kind==='dining'?'r':'k');editHomeList(kind,-1)}}
+else if(a==='home-add-kind'){const kind=D.kind;homeCategory=({stays:'h',dining:'r',tickets:'k',packs:'p'})[kind]||homeCategory;closeHomeQuickMenu();if(dlg.open)dlg.close();dlg.classList.remove('itinerary-chooser','home-add-chooser');if(kind==='packs'){ov.add('p');useAddBottomSheet();edit('p',-1)}else if(['stays','dining','tickets'].includes(kind)){ov.add(kind==='stays'?'h':kind==='dining'?'r':'k');editHomeList(kind,-1)}}
 else if(a==='flight-pass-open'){openFlightPasses(D.flightId)}
 else if(a==='flight-pass-quick-view'){viewFlightPassPreview(D.flightId,D.i)}
 else if(a==='flight-pass-remove'){removeFlightPass(D.i)}
