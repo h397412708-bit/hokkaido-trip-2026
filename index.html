@@ -4353,6 +4353,8 @@ body.ld-ledger-overlay-open main.ledger-layered-main > .ld-preserved-underlay .l
 body.ld-ledger-overlay-open main.ledger-layered-main > .ld-preserved-underlay > .ld-all-screen{top:calc(60px + env(safe-area-inset-top,0px))!important;height:calc(100dvh - 60px - env(safe-area-inset-top,0px))!important;max-height:calc(100dvh - 60px - env(safe-area-inset-top,0px))!important;padding-top:14px!important;}
 #app:has(>.winter-trip-summary)>main{padding-top:0!important;background:#F8FAFB!important;}
 #app:has(>.winter-trip-summary)>main>.overview-panel{margin:0 0 10px!important;}
+
+#app > .winter-photo-frame,#app > .winter-trip-summary,#app > .winter-photo-frame img{touch-action:pan-y pinch-zoom;-webkit-user-drag:none;}
 </style><style id="winter-trip-title-left">
 body > .winter-address-row{padding:8px 16px 10px!important;background:#E5EDF3!important;}
 .winter-address-field{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;text-align:left!important;gap:3px;min-height:0!important;height:auto!important;padding:0!important;border:0!important;background:transparent!important;}
@@ -4482,7 +4484,7 @@ body.ld-tax-fullscreen-open #app main > .ld-tax-previous{visibility:hidden!impor
 body.ld-tax-fullscreen-open #app main{background:#F8FAFB!important;box-shadow:none!important;border:0!important;}
 body.ld-tax-fullscreen-open #app main::before,body.ld-tax-fullscreen-open #app main::after{display:none!important;}
 </style><style>
-#app .trip-web-group[data-k="trip-web-group-0"] > .trip-web-grid{padding-top:18px!important;}
+#app .trip-web-group[data-k="trip-web-group-0"] > .trip-web-grid{padding-top:38px!important;}
 </style>
 </head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
 <div class="winter-address-row"><div class="winter-address-field" id="winter-address-field" aria-label="旅程標題"><span class="winter-trip-heading">北海道冬日旅誌</span><span class="winter-trip-subheading">12.18-12.27 札幌・小樽・登別・洞爺湖</span></div></div>
@@ -6970,18 +6972,18 @@ let winterTabSwipe=null;
 const winterTabOrder=['home','plan','todo','shop','ledger'];
 document.addEventListener('touchstart',e=>{
  const target=e.target; if(e.touches.length!==1||dlg.open||(st.tab==='ledger'&&ledgerView!=='main')||!target.closest?.('#app,body > nav.bottom-nav')||target.closest('input,textarea,select,a,[contenteditable],.swipe-host,.spot-carousel,.days,.route-legs,[class*="drag-handle"],dialog,[data-ledger-subpage]'))return;
- for(let el=target;el&&el!==app&&el!==document.body;el=el.parentElement){if(el.scrollWidth>el.clientWidth+4&&/auto|scroll/.test(getComputedStyle(el).overflowX))return;}
+ for(let el=target;el&&el!==app&&el!==document.body;el=el.parentElement){if(target.closest('.winter-photo-frame,.winter-trip-summary'))break;if(el.scrollWidth>el.clientWidth+4&&/auto|scroll/.test(getComputedStyle(el).overflowX))return;}
  const nav=document.querySelector('body > nav.bottom-nav'),lens=nav?.querySelector('.nav-glass-indicator'),button=nav?.querySelector('button.on');if(!lens||!button)return;
- winterTabSwipe={x:e.touches[0].clientX,y:e.touches[0].clientY,lens,button,index:winterTabOrder.indexOf(st.tab),active:false,main:app.querySelector('main')};
+ winterTabSwipe={x:e.touches[0].clientX,y:e.touches[0].clientY,lens,button,index:winterTabOrder.indexOf(st.tab),active:false,main:app.querySelector('main'),cover:st.tab==='home'?[...app.querySelectorAll(':scope > .winter-photo-frame, :scope > .winter-trip-summary')]:[]};
 },{passive:true});
 document.addEventListener('touchmove',e=>{
  const t=winterTabSwipe;if(!t||e.touches.length!==1)return;const dx=e.touches[0].clientX-t.x,dy=e.touches[0].clientY-t.y;
  if(!t.active){if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){winterTabSwipe=null;return;}if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.4)return;t.active=true;}
- if(e.cancelable)e.preventDefault();const next=t.index+(dx<0?1:-1);if(t.main){t.main.style.transition='none';t.main.style.transform='translate3d('+(winterTabOrder[next]?dx:dx*.15)+'px,0,0)';}const b=document.querySelector('body > nav.bottom-nav button[data-v="'+winterTabOrder[next]+'"]');const ratio=Math.min(1,Math.abs(dx)/Math.max(1,innerWidth*.65));t.lens.style.setProperty('transition','none','important');t.lens.style.transform='translate3d('+(t.button.offsetLeft+(b?(b.offsetLeft-t.button.offsetLeft)*ratio:0))+'px,0,0)';
+ if(e.cancelable)e.preventDefault();const next=t.index+(dx<0?1:-1);for(const el of t.cover){el.style.transition='none';el.style.transform='translate3d('+(winterTabOrder[next]?dx:dx*.15)+'px,0,0)';}if(t.main){t.main.style.transition='none';t.main.style.transform='translate3d('+(winterTabOrder[next]?dx:dx*.15)+'px,0,0)';}const b=document.querySelector('body > nav.bottom-nav button[data-v="'+winterTabOrder[next]+'"]');const ratio=Math.min(1,Math.abs(dx)/Math.max(1,innerWidth*.65));t.lens.style.setProperty('transition','none','important');t.lens.style.transform='translate3d('+(t.button.offsetLeft+(b?(b.offsetLeft-t.button.offsetLeft)*ratio:0))+'px,0,0)';
 },{passive:false});
 function winterFinishTabSwipe(e,cancel=false){
  const t=winterTabSwipe;winterTabSwipe=null;if(!t?.active)return;
- t.lens.style.removeProperty('transition');const dx=(e.changedTouches[0]?.clientX??t.x)-t.x;const next=t.index+(dx<0?1:-1);
+ for(const el of t.cover){const from=el.style.transform;el.style.removeProperty('transition');el.style.removeProperty('transform');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)el.animate([{transform:from},{transform:'translate3d(0,0,0)'}],{duration:180,easing:'ease-out'});} t.lens.style.removeProperty('transition');const dx=(e.changedTouches[0]?.clientX??t.x)-t.x;const next=t.index+(dx<0?1:-1);
  if(!cancel&&Math.abs(dx)>=55&&winterTabOrder[next]){
   if(t.main){t.main.style.removeProperty('transform');t.main.style.removeProperty('transition');}
   document.querySelector('body > nav.bottom-nav button[data-v="'+winterTabOrder[next]+'"]')?.click();
