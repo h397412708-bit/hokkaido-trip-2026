@@ -4475,13 +4475,15 @@ body:has(#app main > [data-ledger-subpage="all"]) #app main.ledger-layered-main:
 body > .winter-browser-bar:not(.winter-browser-underlay){position:sticky!important;top:0!important;box-shadow:0 3px 9px rgba(52,73,94,.16)!important;}
 body > .winter-address-row{position:sticky!important;top:calc(60px + env(safe-area-inset-top,0px))!important;z-index:1795;display:flex;align-items:center;gap:8px;padding:8px 13px!important;background:#E5EDF3!important;}
 body > .winter-address-row .winter-address-field{flex:1;min-width:0;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;height:30px!important;padding:0 10px!important;border:1px solid #D5E0E8!important;border-radius:5px!important;background:#F8FAFB!important;font-size:12px;}
-.winter-address-arrow{border:0;background:transparent;color:#657B8D;font-size:20px;line-height:30px;padding:0 4px;}.winter-address-arrow:disabled{opacity:.35;}
+.winter-address-arrow{border:0;background:transparent;color:#657B8D;font-size:15px;line-height:30px;padding:0 4px;}.winter-address-arrow:disabled{opacity:.35;}
 body > nav.bottom-nav{top:calc(106px + env(safe-area-inset-top,0px))!important;}
 #app main:has(> .plan-day-heading) .tlw>details.row.mv[open]:not(:has(.row-summary-duration))>.bd{margin-top:0!important;}
 body:has(#app main > [data-ledger-subpage]) > .winter-browser-bar{box-shadow:none!important;}
 
 body > .winter-address-row > .winter-address-arrow{color:#5e788f!important;align-self:center!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;height:30px!important;line-height:1!important;margin:0!important;opacity:1!important;}
 #app .overview-useful > .bd > .trip-web-group[data-k="trip-web-group-0"]{margin-top:10px!important;}
+
+body:has(#app main > [data-ledger-subpage="all"]) > .winter-browser-bar:not(.winter-browser-underlay),body:has(#app main > [data-ledger-subpage="tax"]) > .winter-browser-bar:not(.winter-browser-underlay){box-shadow:0 3px 9px rgba(52,73,94,.16)!important;}
 </style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
 <div class="winter-address-row"><button type="button" class="winter-address-arrow" id="winter-address-prev" aria-label="上一個分頁">&lt;</button><button type="button" class="winter-address-arrow" id="winter-address-next" aria-label="下一個分頁">&gt;</button><div class="winter-address-field" id="winter-address-field" aria-label="網址欄">http://hokkaido.locat/overview</div></div>
 <nav class="bottom-nav" aria-label="頂部主分頁">
@@ -6036,6 +6038,23 @@ function ledgerMountLiveSubpage(view){
  if(view==='all')ledgerSyncAllLens(true);
  return true;
 }
+function ledgerAnimateEntry(view){
+ if(view!=='all'&&view!=='tax')return;
+ const panel=app.querySelector('main > [data-ledger-subpage="'+view+'"]');
+ const bar=document.querySelector('body > .winter-browser-bar:not(.winter-browser-underlay)');
+ if(!panel)return;
+ const timing='transform 300ms cubic-bezier(.22,.7,.3,1)';
+ for(const el of [panel,bar].filter(Boolean)){
+ el.style.setProperty('animation','none','important');
+ el.style.setProperty('transition','none','important');
+ el.style.transform='translate3d(100vw,0,0)';
+ }
+ panel.getBoundingClientRect();
+ for(const el of [panel,bar].filter(Boolean)){
+ el.style.setProperty('transition',timing,'important');el.style.transform='translate3d(0,0,0)';
+ }
+ setTimeout(()=>{for(const el of [panel,bar].filter(Boolean)){if(el.style.transform==='translate3d(0px, 0px, 0px)'||el.style.transform==='translate3d(0,0,0)'){el.style.removeProperty('transition');el.style.removeProperty('transform');}}},310);
+}
 function ledgerOpenView(view,id=''){
  if(ledgerView===view&&ledgerDetailId===id)return;
  const main=app.querySelector('main');
@@ -6045,8 +6064,8 @@ function ledgerOpenView(view,id=''){
   subScroll:previousPanel?.scrollTop||0});
  ledgerView=view;ledgerDetailId=view==='detail'?id:null;
  // 明細與統計保留上一頁的真實 DOM，滑出時才能露出相同的捲動位置。
- if((view==='detail'||view==='stats'||view==='all')&&ledgerMountLiveSubpage(view)){syncWinterPage();return;}
- render();if(view!=='tax')window.scrollTo(0,0);
+ if((view==='detail'||view==='stats'||view==='all')&&ledgerMountLiveSubpage(view)){syncWinterPage();ledgerAnimateEntry(view);return;}
+ render();if(view!=='tax')window.scrollTo(0,0);ledgerAnimateEntry(view);
 }
 // 初次載入缺少上一頁 DOM 時的相容回退；正常使用走 ledgerMountLiveSubpage。
 function ledgerReturnUnderlay(){
@@ -6066,11 +6085,11 @@ function ledgerHeaderMotion(transform,transition){
   clone.querySelectorAll('[id]').forEach(el=>{el.id='underlay-'+el.id});
   bar.after(clone);
  }
- bar.style.transition=transition;bar.style.transform=transform;
+ bar.style.setProperty('transition',transition,'important');bar.style.transform=transform;
 }
 function ledgerHeaderReset(){
  const bar=document.querySelector('.winter-browser-bar:not(.winter-browser-underlay)');
- if(bar){bar.style.transition='none';bar.style.transform='';}
+ if(bar){bar.style.setProperty('transition','none','important');bar.style.transform='';}
  document.querySelector('.winter-browser-underlay')?.remove();
 }
 function ledgerBack(){
@@ -6118,7 +6137,7 @@ function ledgerBack(){
  if(panel){
   panel.classList.add('ld-exiting');
   panel.style.animation='none';
-  const exitDuration=200;
+  const exitDuration=300;
   panel.getBoundingClientRect();
   panel.style.setProperty('transition','transform '+exitDuration+'ms cubic-bezier(.22,.7,.3,1)','important');
   ledgerHeaderMotion('translate3d(105vw,0,0)','transform '+exitDuration+'ms cubic-bezier(.22,.7,.3,1)');
@@ -7253,7 +7272,8 @@ function syncWinterPage(){
   const title=st.tab==='ledger'?({main:'記帳',all:'完整收支明細',tax:'退稅',detail:'明細詳情',stats:'支出統計'}[ledgerView]||'記帳'):({home:'總覽',plan:'行程',todo:'待辦',shop:'購物'}[st.tab]||'冬日旅誌');
   if(winterPageName)winterPageName.textContent='HOKKAIDO';
   const address=document.getElementById('winter-address-field');
-  // Fixed trip title is rendered in HTML and remains unchanged on tab switches.
+  const addressPath=({home:'overview',plan:'itinerary',todo:'todo',shop:'shopping',ledger:'expenses'}[st.tab]||'overview');
+  if(address)address.textContent='http://hokkaido.locat/'+addressPath;
   const bar=document.querySelector('.winter-browser-bar');
   if(bar)bar.classList.toggle('winter-ledger-subpage',sub);
   const back=document.getElementById('winter-ledger-back');
