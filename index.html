@@ -5,7 +5,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#7897b1">
+<meta name="theme-color" content="#f8fafb">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="北海道冬日旅誌">
@@ -3833,7 +3833,7 @@ main > .plan-date-switcher.days:not(.cats) button small{
 body{background:#d7e0e7;color:#34485d}
 #app{background:linear-gradient(180deg,#e5edf3 0%,#eff4f7 350px,#f5f7f8 100%)}
 /* 每一頁都有固定在頂部的復古瀏覽器標題列；使用原本 Firebase 按鈕，不新增登入狀態 */
-.winter-browser-bar{box-sizing:border-box;position:sticky;top:0;left:0;z-index:1800;display:grid;grid-template-columns:43px minmax(0,1fr) 102px;align-items:center;gap:7px;width:min(100%,640px);height:calc(48px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 13px 0;margin:auto;background:rgba(248,250,251,.96);border-bottom:1px solid #d5e0e8;box-shadow:0 2px 13px rgba(52,73,94,.045);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.winter-browser-bar{box-sizing:border-box;position:sticky;top:0;left:0;z-index:1800;display:grid;grid-template-columns:43px minmax(0,1fr) 102px;align-items:center;gap:7px;width:min(100%,640px);height:calc(48px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 13px 0;margin:auto;background:#f8fafb;border-bottom:1px solid #d5e0e8;box-shadow:0 2px 13px rgba(52,73,94,.045);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .winter-browser-controls{display:flex;gap:5px;align-items:center;height:28px}
 .winter-browser-controls i{display:block;flex:none;width:7px;height:7px;border-radius:50%;border:1px solid #a9bac7;background:#e4ecf1}
 .winter-browser-controls i:nth-child(2){background:#d9e4ec}.winter-browser-controls i:nth-child(3){background:#cbdbe6}
@@ -4268,8 +4268,8 @@ body.ld-ledger-overlay-open main.ledger-layered-main > .ld-preserved-underlay > 
 @media(prefers-reduced-motion:reduce){#app .overview-p .pk span::after{transition:none!important}}
 
 /* Unified browser tabs and itinerary canvas */
-html,body{background:#e5edf3!important;}
-#app{background:#e5edf3!important;}
+html,body{background:#f8fafb!important;}
+#app{background:#f8fafb!important;}
 #app main:has(> .plan-day-heading),#app main:has(> .todo-heading){background:transparent!important;}
 #app .todo-browser-tabs.days.cats{gap:3px!important;padding:0!important;margin:8px 0 0!important;border:0!important;position:relative;z-index:1;}
 #app .todo-browser-tabs.days.cats button{border-color:#b7c8d5!important;border-radius:8px 8px 0 0!important;background:#dce6ed!important;}
