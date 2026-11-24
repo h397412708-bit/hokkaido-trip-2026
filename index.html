@@ -4394,15 +4394,48 @@ html,body{background:#f8fafb!important;}
 #app .basic-trip-facts{grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;padding-top:13px;}
 #app .basic-trip-facts strong{font-size:16px;}
 #app .basic-links-title{display:table;background:#41586E;color:#fff!important;padding:5px 10px;border-radius:5px;font-size:13px;line-height:1.4;text-shadow:none;margin:0 0 10px;}
-</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［同步］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
-<nav class="bottom-nav" aria-label="底部功能選單">
+
+/* Overview: independent cards and browser-style top tabs */
+#app main:has(>.home-browser-tabs){padding-top:0!important}
+#app .home-browser-tabs{margin:0 -16px 14px!important;padding:8px 16px 0!important;background:#f8fafb;border-bottom:1px solid #b7c8d5;gap:4px!important;align-items:end;}
+#app .home-browser-tabs button{margin-left:0!important;padding:7px 15px!important;min-height:35px!important;border-radius:8px 8px 0 0!important;}
+#app .home-browser-tabs button.on{background:#fff!important;color:#41586e!important;}
+#app .home-browser-tabs button.on:after{display:none!important}
+#app .home-tab-body{border:0!important;background:transparent!important;padding:0!important;margin:0!important;border-radius:0!important}
+#app .home-tab-body>.overview-panel{border:1px solid #d5e0e8!important;border-radius:12px!important;background:#fcfdfe!important;padding:12px 13px!important;margin:0 0 12px!important}
+#app .home-tab-body>.overview-useful{border:0!important;background:transparent!important;padding:0!important}
+#app .basic-trip-card{background:#fcfdfe!important;margin-bottom:12px!important}
+#app .basic-links-card{border:1px solid #d5e0e8;border-radius:12px;background:#fcfdfe;padding:12px 13px;}
+.winter-browser-bar #hk-cloud-toggle .winter-cloud-text{color:#71869b!important}
+</style><style>
+body .main-browser-tabs.bottom-nav{position:sticky!important;top:calc(48px + env(safe-area-inset-top,0px))!important;bottom:auto!important;left:auto!important;right:auto!important;transform:none!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));width:min(100%,640px)!important;max-width:640px!important;height:39px!important;margin:0 auto!important;padding:5px 12px 0!important;gap:3px!important;background:#f8fafb!important;border:0!important;border-bottom:1px solid #b7c8d5!important;border-radius:0!important;box-shadow:none!important;z-index:1799!important;backdrop-filter:none!important;overflow:visible!important;box-sizing:border-box}
+body .main-browser-tabs.bottom-nav .nav-glass-indicator{display:none!important}
+body .main-browser-tabs.bottom-nav button{width:auto!important;min-width:0!important;height:34px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;border:1px solid #b7c8d5!important;border-radius:8px 8px 0 0!important;background:#e5edf3!important;color:#71869b!important;box-shadow:none!important;transform:none!important}
+body .main-browser-tabs.bottom-nav button.on{background:#fff!important;color:#41586e!important;border-bottom-color:#fff!important;font-weight:700!important}
+body .main-browser-tabs.bottom-nav button svg{display:none!important}body .main-browser-tabs.bottom-nav button span{font-size:12px!important;color:inherit!important;line-height:1!important}
+#app .home-browser-tabs{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px!important;margin:10px 0 12px!important;padding:0!important;border:0!important;background:transparent!important;overflow:visible!important;align-items:stretch!important}
+#app .home-browser-tabs button{margin:0!important;padding:8px 2px!important;min-height:34px!important;width:100%!important;white-space:nowrap;font-size:11px!important;border:1px solid #c5d3df!important;border-radius:5px!important;background:#e5edf3!important;color:#71869b!important;box-shadow:none!important;transform:none!important}
+#app .home-browser-tabs button.on{background:#41586e!important;color:white!important;border-color:#41586e!important}
+#app .home-tab-body{margin-top:0!important}#app .home-tab-body .overview-panel{border-radius:12px!important}
+</style><style id="season-navigation">
+body .main-browser-tabs.bottom-nav{gap:0!important;padding:3px 12px 0!important;height:39px!important;border-bottom:1px solid #d5e0e8!important;isolation:isolate;}
+body .main-browser-tabs.bottom-nav .nav-glass-indicator{display:block!important;position:absolute!important;left:0!important;top:3px!important;bottom:0!important;height:36px!important;margin:0!important;border:0!important;border-radius:0!important;background:#e5edf3!important;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%);box-shadow:none!important;backdrop-filter:none!important;pointer-events:none;z-index:0!important;transition:transform 280ms cubic-bezier(.22,.8,.25,1),width 280ms ease!important;}
+body .main-browser-tabs.bottom-nav .nav-glass-indicator.nav-no-motion{transition:none!important}
+body .main-browser-tabs.bottom-nav .nav-glass-indicator::before,body .main-browser-tabs.bottom-nav .nav-glass-indicator::after,body .main-browser-tabs.bottom-nav .nav-lens-core{display:none!important}
+body .main-browser-tabs.bottom-nav button,body .main-browser-tabs.bottom-nav button.on{position:relative!important;z-index:1!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;height:36px!important;color:#8295a7!important;font-weight:500!important;transition:color 220ms ease!important;}
+body .main-browser-tabs.bottom-nav button.on{color:#41586e!important;font-weight:700!important}
+body .main-browser-tabs.bottom-nav button::before,body .main-browser-tabs.bottom-nav button::after{display:none!important}
+#app.season-page-enter{animation:season-page-in 220ms ease-out both}@keyframes season-page-in{from{opacity:.55;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){body .main-browser-tabs.bottom-nav .nav-glass-indicator{transition:none!important}#app.season-page-enter{animation:none!important}}
+</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［同步］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
+<nav class="bottom-nav main-browser-tabs" aria-label="主要功能分頁">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
   <button type="button" data-a="tab" data-v="plan" aria-label="行程"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.1" width="17.6" height="15.6" rx="2.7"/><path d="M7.4 3.2v4.2M16.6 3.2v4.2M3.2 10.2h17.6"/><path d="M7.8 14.1h2.3M13.4 14.1h2.4M7.8 17.3h2.3"/></svg><span>行程</span></button>
   <button type="button" data-a="tab" data-v="todo" aria-label="待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.2" y="3.5" width="15.6" height="17" rx="2.6"/><path d="m7.5 9.1 1.5 1.5 2.4-2.6M13.6 9.5h3M7.5 15.4l1.5 1.5 2.4-2.6M13.6 15.8h3"/></svg><span>待辦</span></button>
   <button type="button" data-a="tab" data-v="shop" aria-label="購物"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.4 8h15.2l-1 12.1H5.4L4.4 8Z"/><path d="M8.5 9V6.8a3.5 3.5 0 0 1 7 0V9"/></svg><span>購物</span></button>
   <button type="button" data-a="tab" data-v="ledger" aria-label="記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2.4"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>記帳</span></button>
- </nav><dialog id="dlg"></dialog>
+ </nav><div id="app"></div><dialog id="dlg"></dialog>
 <div id="journal-save-toast" role="status" aria-live="polite" aria-atomic="true" aria-hidden="true">✓ 已儲存</div>
 
 
@@ -6533,7 +6566,7 @@ const travelLinksPanel=()=>{
  const body=
  TRIP_WEBS.map((g,i)=>'<details class="trip-web-group" data-k="trip-web-group-'+i+'"'+(ov.has('trip-web-group-'+i)?' open':'')+'><summary class="trip-web-group-title"><b>'+esc(g.group)+'</b><small>'+esc(g.hint)+'</small></summary><div class="trip-web-grid">'+g.links.map(card).join('')+'</div></details>').join('')+
  '<p class="trip-web-footer">'+iconSvg('externalLink')+'冬季班次及營業情況可能臨時變更，以各網站當日公告為準。</p>';
- return sec('useful',iconSvg('externalLink'),'基本資訊','',hero()+'<h3 class="basic-links-title">旅途中常用網站</h3>'+body);
+ return sec('useful',iconSvg('externalLink'),'基本資訊','',hero()+'<section class="basic-links-card"><h3 class="basic-links-title">旅途中常用網站</h3>'+body+'</section>');
 };
 
 function home(){const n=packs.filter(p=>p.done).length;
@@ -7742,7 +7775,7 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const D=b.dataset,a=D.a,n=+D.i,L=D.l==='d'?days[st.day].items:D.l==='t'?todos:packs;
 if(a.startsWith('ledger-')){e.preventDefault();ledgerClick(a,D);return;}
 if(a==='drag'||a==='pack-drag'||a==='todo-drag'||a==='shop-drag'||a==='home-drag'){e.preventDefault();e.stopPropagation();return;}
-if(a==='tab'){st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;ledgerNavStack=[];}if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
+if(a==='tab'){const changedMainTab=st.tab!==D.v;st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;ledgerNavStack=[];}if(st.tab==='plan')pendingItineraryEntrance=true;render();window.scrollTo(0,0);if(changedMainTab){app.classList.remove('season-page-enter');void app.offsetWidth;app.classList.add('season-page-enter');}}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
 else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
 else if(a==='add-choose'){togglePlanQuickMenu()}
