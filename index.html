@@ -3734,7 +3734,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 const HK_LARGE_KEYS=['days','todos','packs','stays','dining','tickets','shopping','shopHints','ledgerV1','precloud_backup'];
 const HK_LARGE_SET=new Set(HK_LARGE_KEYS);
 const HK_DB_NAME='hk26_journal_local_v3';
-let hkStoreReady=false,hkDatabasePromise=null;
+let hkStoreReady=false,hkDatabasePromise=null,hkPrecloudBackupVerified=false;
 const hkSaveQueues=new Map();
 function hkOpenDb(){
  if(!hkDatabasePromise)hkDatabasePromise=new Promise((resolve,reject)=>{
@@ -3809,6 +3809,39 @@ async function hkMigrateOne(key,fallback){
  await hkDbPut(key,fallback);
  if(JSON.stringify(await hkDbGet(key))!==JSON.stringify(fallback))throw Error('初始化驗證失敗：'+key);
  return fallback;
+}
+/**
+ * 在啟動 Firebase 監聽之前，完成並驗證一次本機原始資料的快照。
+ * 舊版的「存好後與仍會變動的 days 引用比較」可能誤判：遠端快照
+ * 在 IDB 交易期間修改 days，就會與已成功寫入的版本不同。
+ * 只比對固定快照，絕不覆寫現有的雲端遷移前備份。
+ */
+function hkValidPrecloudBackup(value){
+ return !!value && typeof value==='object' &&
+  ['days','todos','packs','shopping','stays','dining','tickets'].every(key=>Array.isArray(value[key]));
+}
+async function hkEnsurePrecloudBackup(){
+ const original=await hkDbGet('precloud_backup');
+ if(original!==undefined&&original!==null){
+  if(!hkValidPrecloudBackup(original))
+   throw Error('既有雲端遷移前備份格式不完整；已保留原備份，停止雲端套用以避免覆寫資料');
+  // 原先可能「確實寫入成功」但因比對可變物件而沒記錄成功。
+  hkPrecloudBackupVerified=true;
+  SV('cloud_backup_created', original.backedUpAt||new Date().toISOString());
+  return;
+ }
+ const snapshot=structuredClone({
+  days,todos,packs,shopping,stays,dining,tickets,shopHints,ledgerV1:ledger,
+  backedUpAt:new Date().toISOString()
+ });
+ const expected=JSON.stringify(snapshot);
+ if(!hkValidPrecloudBackup(snapshot)||!expected)throw Error('無法建立本機資料的完整備份快照');
+ await hkDbPut('precloud_backup',snapshot);
+ const verified=await hkDbGet('precloud_backup');
+ if(!hkValidPrecloudBackup(verified)||JSON.stringify(verified)!==expected)
+  throw Error('雲端遷移前的本機備份驗證失敗；保留原資料且暫停雲端同步');
+ hkPrecloudBackupVerified=true;
+ SV('cloud_backup_created',snapshot.backedUpAt);
 }
 function hkPhotoSize(src){return Math.floor(Math.max(0,String(src).split(',')[1]?.length||0)*.75)}
 async function hkCompressPhoto(file,purpose){
@@ -6986,17 +7019,11 @@ function makeCloudSync(){
     days[currentIndex]=copied;
     if(seeded)itineraryBaseline[key]=json(shareDay(copied));
   }
-  let cloudBackupSaving=false;
   function preserveLocalBackup(){
-    if(LS('cloud_backup_created',false)||cloudBackupSaving)return;
-    cloudBackupSaving=true;
-    const content={days,todos,packs,shopping,stays,dining,tickets,backedUpAt:new Date().toISOString()};
-    // 先等待 IndexedDB 交易完成，再記錄本機備份已建立。
-    SV('precloud_backup',content).then(async()=>{
-      const stored=await hkDbGet('precloud_backup');
-      if(JSON.stringify(stored)!==JSON.stringify(content))throw Error('雲端遷移前的本機備份驗證失敗');
-      SV('cloud_backup_created',new Date().toISOString());
-    }).catch(hkNotifySaveFailure).finally(()=>{cloudBackupSaving=false});
+    // 啟動 Firebase 前 hkEnsurePrecloudBackup() 已經完成並驗證。
+    // 若沒有通過，必須禁止用雲端內容覆寫本機資料。
+    if(!hkPrecloudBackupVerified)
+      throw Error('尚未驗證原本的本機備份；已停止雲端資料覆寫');
   }
   function applyItinerarySnapshot(snap){
     // 別在編輯視窗開啟時替換行程物件，否則使用者按儲存可能寫入舊陣列。
@@ -7382,6 +7409,8 @@ async function hkStartJournal(){
   hkStoreReady=true;
   // 一旦成功啟動，當前經正規化的資料再寫回 IndexedDB。
   await Promise.all([SV('days',days),SV('todos',todos),SV('packs',packs),SV('stays',stays),SV('dining',dining),SV('tickets',tickets),SV('shopping',shopping),SV('shopHints',shopHints),SV('ledgerV1',ledger)]);
+  // 等本機完整備份成功後才允許啟動雲端；避免傳入資料與備份互相競爭。
+  await hkEnsurePrecloudBackup();
  }catch(error){
   hkNotifySaveFailure(error);
   // IDB 無法寫入時不得刪除舊資料、也不得以空預設資料覆蓋 Firebase。
