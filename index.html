@@ -4459,6 +4459,18 @@ body:has(#app main > [data-ledger-subpage="all"]) #app main.ledger-layered-main 
 body:has(#app main > [data-ledger-subpage="all"]) > .winter-browser-underlay{display:none!important;}
 body:has(#app main > [data-ledger-subpage="all"]) #app main.ledger-layered-main > .ld-return-underlay .ld-return-chrome{display:none!important;}
 body:has(#app main > [data-ledger-subpage="all"]) #app{background:#F8FAFB!important;}
+
+/* Sticky primary navigation and refined spacing */
+body > nav.bottom-nav{position:sticky!important;top:env(safe-area-inset-top,0px)!important;z-index:1790!important;}
+body > nav.bottom-nav .nav-lens-core{background:linear-gradient(165deg,#FFFFFF 0%,#F8FAFB 75%,#F8FAFB 100%)!important;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M0 30 C10 30 12 23 16 15 C20 5 24 0 36 0 H64 C76 0 80 5 84 15 C88 23 90 30 100 30Z'/%3E%3C/svg%3E") center/100% 100% no-repeat!important;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M0 30 C10 30 12 23 16 15 C20 5 24 0 36 0 H64 C76 0 80 5 84 15 C88 23 90 30 100 30Z'/%3E%3C/svg%3E") center/100% 100% no-repeat!important;}
+#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>.bd>p:not(.c):not(.h):has(+p.c){margin-bottom:2px!important;}
+#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>.bd>p:not(.c):not(.h)+p.c{margin-top:2px!important;}
+#app .overview-panel[open]>.bd{padding-top:0!important;}
+#app .overview-panel[open]>.bd>:first-child{margin-top:0!important;}
+#app .overview-p .pk.swipe-host>.swipe-face{min-height:38px!important;padding-top:2px!important;padding-bottom:2px!important;}
+#app .overview-p .pk:not(.swipe-host){min-height:36px!important;padding-top:4px!important;padding-bottom:4px!important;}
+body:has(#app main > [data-ledger-subpage="all"]) #app main.ledger-layered-main,body:has(#app main > [data-ledger-subpage="all"]) #app,body:has(#app main > [data-ledger-subpage="all"]) #app main > [data-ledger-subpage="all"],body:has(#app main > [data-ledger-subpage="all"]) > .winter-browser-bar{box-shadow:none!important;outline:0!important;border:0!important;}
+body:has(#app main > [data-ledger-subpage="all"]) #app main.ledger-layered-main::before,body:has(#app main > [data-ledger-subpage="all"]) #app main.ledger-layered-main::after{display:none!important;}
 </style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
 <div class="winter-address-row"><div class="winter-address-field" id="winter-address-field" aria-label="旅程標題"><span class="winter-trip-heading">北海道冬日旅誌</span><span class="winter-trip-subheading">12.18-12.27 札幌・小樽・登別・洞爺湖</span></div></div>
 <nav class="bottom-nav" aria-label="頂部主分頁">
