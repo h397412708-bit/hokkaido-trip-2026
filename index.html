@@ -4266,6 +4266,16 @@ body.ld-ledger-overlay-open main.ledger-layered-main > .ld-preserved-underlay > 
 #app .overview-p .pk>span::after,#app .overview-p .pk>.swipe-face>span::after{content:"";position:absolute;left:0;right:0;top:51%;height:1.5px;background:#8193aa;transform:scaleX(0);transform-origin:left center;transition:transform .38s cubic-bezier(.18,.7,.2,1);pointer-events:none}
 #app .overview-p .pk.dn>span::after,#app .overview-p .pk.dn>.swipe-face>span::after{transform:scaleX(1)}
 @media(prefers-reduced-motion:reduce){#app .overview-p .pk span::after{transition:none!important}}
+
+/* Unified browser tabs and itinerary canvas */
+html,body{background:#e5edf3!important;}
+#app{background:#e5edf3!important;}
+#app main:has(> .plan-day-heading),#app main:has(> .todo-heading){background:transparent!important;}
+#app .todo-browser-tabs.days.cats{gap:3px!important;padding:0!important;margin:8px 0 0!important;border:0!important;position:relative;z-index:1;}
+#app .todo-browser-tabs.days.cats button{border-color:#b7c8d5!important;border-radius:8px 8px 0 0!important;background:#dce6ed!important;}
+#app .todo-browser-tabs.days.cats button.on{background:#fcfdfe!important;border-color:#b7c8d5!important;}
+#app .todo-browser-tabs.days.cats button.on:after{left:0;right:0;bottom:-2px;height:3px;background:#fcfdfe;}
+#app .todo-heading ~ .todo-browser-tabs.days.cats + .card.pad{margin:0!important;border:1px solid #b7c8d5!important;border-radius:0 0 12px 12px!important;background:#fcfdfe!important;box-shadow:none!important;padding:10px 13px 13px!important;}
 </style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" onclick="ledgerBack()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">雲端同步</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
