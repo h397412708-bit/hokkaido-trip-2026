@@ -4349,6 +4349,21 @@ html,body{background:#f8fafb!important;}
 #app .overview-p .pk .pack-drag-handle{margin-left:auto;margin-right:0;order:10;height:30px;flex:0 0 28px}
 #app .overview-p .pk .tl{margin-left:0}
 </style>
+<style id="hk-overview-layered-headers">
+#app .home-browser-tabs button:nth-child(1){z-index:6!important}
+#app .home-browser-tabs button:nth-child(2){z-index:5!important}
+#app .home-browser-tabs button:nth-child(3){z-index:4!important}
+#app .home-browser-tabs button:nth-child(4){z-index:3!important}
+#app .home-browser-tabs button:nth-child(5){z-index:2!important}
+#app .home-browser-tabs button:nth-child(6){z-index:1!important}
+.winter-browser-bar{grid-template-columns:43px minmax(0,1fr) 58px!important}
+.winter-browser-bar #hk-cloud-toggle{width:58px!important;max-width:58px!important;padding:0 5px!important}
+@media(max-width:370px){.winter-browser-bar{grid-template-columns:38px minmax(0,1fr) 58px!important}}
+#app .home-tab-body>.overview-panel>summary{display:flex!important;justify-content:flex-start!important;align-items:center!important;text-align:left!important;background:#E5EDF3!important;border:0!important;border-radius:8px!important;padding:10px 12px!important;margin:0 0 8px!important;gap:0!important}
+#app .home-tab-body>.overview-panel>summary>.sum-ic{display:none!important}
+#app .home-tab-body>.overview-panel>summary>div{width:100%;text-align:left!important}
+#app .home-tab-body>.overview-panel>summary b,#app .home-tab-body>.overview-panel>summary small{color:#fff!important;text-align:left!important;text-shadow:0 1px 2px #71869b,0 0 3px #71869b;}
+</style>
 </head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">同步</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
