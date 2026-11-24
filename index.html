@@ -4236,7 +4236,23 @@ dialog#dlg .fl2-pass-panel{background:#fbfdfe!important;border-color:#dce7ee!imp
  #app .overview-f .winter-ticket-topline{font-size:8px;letter-spacing:.10em}
 }
 
-</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls" aria-hidden="true"><i></i><i></i><i></i></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">雲端同步</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
+
+/* Finance subpages: reserve the browser header and keep one title only. */
+.winter-browser-controls #winter-ledger-back[hidden]{display:none!important}
+.winter-ledger-subpage .winter-browser-controls i{display:none}
+#winter-ledger-back{display:grid;place-items:center;width:30px;height:30px;padding:0;border:1px solid #d5e1e9;border-radius:7px;background:#f3f7f9;color:#68849a}
+#winter-ledger-back svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.winter-ledger-subpage .winter-browser-page{letter-spacing:.04em;font-size:11px}
+body.ld-tax-fullscreen-open #app .ld-tax-screen,
+body.ld-ledger-overlay-open main.ledger-layered-main > .ld-subpage.ld-ledger-overlay,
+body.ld-ledger-overlay-open main.ledger-layered-main > .ld-preserved-underlay .ld-tax-screen,
+body.ld-ledger-overlay-open main.ledger-layered-main > .ld-preserved-underlay > .ld-all-screen{
+ top:calc(48px + env(safe-area-inset-top,0px))!important;
+ bottom:0!important;height:calc(100dvh - 48px - env(safe-area-inset-top,0px))!important;
+ min-height:0!important;max-height:calc(100dvh - 48px - env(safe-area-inset-top,0px))!important;
+ padding-top:12px!important;padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))!important;
+}
+</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" onclick="ledgerBack()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO / 總覽</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">雲端同步</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
@@ -5775,6 +5791,7 @@ function ledgerOpenView(view,id=''){
   listScroll:(previousPanel||main)?.querySelector('#ld-entry-list')?.scrollTop||0,
   subScroll:previousPanel?.scrollTop||0});
  ledgerView=view;ledgerDetailId=view==='detail'?id:null;
+ syncWinterPage();
  // 明細與統計保留上一頁的真實 DOM，滑出時才能露出相同的捲動位置。
  if((view==='detail'||view==='stats'||view==='all')&&ledgerMountLiveSubpage(view))return;
  render();if(view!=='tax')window.scrollTo(0,0);
@@ -5795,6 +5812,7 @@ function ledgerBack(){
   const underlay=main?.querySelector(':scope > .ld-preserved-underlay');
   const hasLivePage=!!(panel&&panel.isConnected&&underlay);
   ledgerView=previous.view;ledgerDetailId=previous.id;
+  syncWinterPage();
   if(hasLivePage){
    panel.remove();
    const layer=underlay.dataset.ledgerLayer;
@@ -5934,7 +5952,7 @@ function ledgerTaxBody(){
 }
 function ledgerTaxPageView(){
  const tabs=[['mine','我的退稅'],['check','離境檢查'],['guide','退稅資訊']];
- return '<div class="ld-page ld-subpage ld-tax-screen" data-ledger-subpage="tax">'+ledgerSubHeader('退稅','2026 日本新制 · 免稅紀錄與離境提醒')+
+ return '<div class="ld-page ld-subpage ld-tax-screen" data-ledger-subpage="tax">'+
  '<nav class="ld-tax-tabs" aria-label="退稅分頁"><div class="ld-tax-tab-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>'+tabs.map(([id,label])=>'<button type="button" class="'+(ledgerTaxTab===id?'on':'')+'" data-a="ledger-tax-tab" data-v="'+id+'" aria-pressed="'+(ledgerTaxTab===id)+'">'+label+'</button>').join('')+'</nav>'+
  '<div id="ld-tax-tab-body">'+ledgerTaxBody()+'</div></div>';
 }
@@ -5981,7 +5999,7 @@ function ledgerAllBody(){
 }
 function ledgerAllPage(){
  const tabs=[['entries','收支明細'],['stats','支出統計']];
- return '<div class="ld-page ld-subpage ld-all-screen ld-ledger-overlay" data-ledger-subpage="all">'+ledgerSubHeader('完整收支明細','收支明細與支出統計 · 向右滑動返回')+
+ return '<div class="ld-page ld-subpage ld-all-screen ld-ledger-overlay" data-ledger-subpage="all">'+
  '<nav class="ld-tax-tabs ld-all-tabs" aria-label="完整收支明細欄目"><div class="ld-tax-tab-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>'+tabs.map(([id,label])=>'<button type="button" data-a="ledger-all-tab" data-v="'+id+'" class="'+(ledgerAllTab===id?'on':'')+'" aria-pressed="'+(ledgerAllTab===id)+'">'+label+'</button>').join('')+'</nav>'+
  '<div id="ld-all-tab-body">'+ledgerAllBody()+'</div></div>';
 }
@@ -6932,9 +6950,18 @@ async function viewFlightPassPreview(flightId,index){
  }catch(err){alert('無法讀取這台手機的登機證：'+(err.message||err));}
 }
 
-function render(){
+function syncWinterPage(){
   const winterPageName=document.getElementById('winter-browser-page');
-  if(winterPageName)winterPageName.textContent='HOKKAIDO / '+({home:'總覽',plan:'行程',todo:'待辦',shop:'購物',ledger:'記帳'}[st.tab]||'冬日旅誌');
+  const sub=st.tab==='ledger'&&ledgerView!=='main';
+  const title=st.tab==='ledger'?({main:'記帳',all:'完整收支明細',tax:'退稅',detail:'明細詳情',stats:'支出統計'}[ledgerView]||'記帳'):({home:'總覽',plan:'行程',todo:'待辦',shop:'購物'}[st.tab]||'冬日旅誌');
+  if(winterPageName)winterPageName.textContent='HOKKAIDO / '+title;
+  const bar=document.querySelector('.winter-browser-bar');
+  if(bar)bar.classList.toggle('winter-ledger-subpage',sub);
+  const back=document.getElementById('winter-ledger-back');
+  if(back)back.hidden=!sub;
+}
+function render(){
+  syncWinterPage();
   // 明細詳情 / 統計的重繪不能取代下方的上一頁：保留真實捲動位置與 DOM。
   if(st.tab==='ledger'&&(ledgerView==='detail'||ledgerView==='stats'||ledgerView==='all')){
    const liveMain=app.querySelector('main.ledger-layered-main');
