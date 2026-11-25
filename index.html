@@ -4566,7 +4566,23 @@ body > nav.bottom-nav button[data-v].on,body > nav.bottom-nav button[data-v][ari
 body > nav.bottom-nav button[data-v].on::before,body > nav.bottom-nav button[data-v][aria-current="page"]::before{content:""!important;display:block!important;position:absolute!important;left:-4px!important;right:auto!important;width:6px!important;top:0!important;bottom:0!important;height:auto!important;background:#F8FAFB!important;border:0!important;box-shadow:none!important;z-index:1!important;}
 body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app main > [data-ledger-subpage])) > #app{background:#F8FAFB!important;}
 body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app main > [data-ledger-subpage])) > #app > main{background:#F8FAFB!important;}
-</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
+</style>
+<style id="folder-inner-scroll-layout">
+:root{--folder-width:35px;--folder-top:calc(62px + env(safe-area-inset-top,0px));--folder-bottom:calc(50px + env(safe-area-inset-bottom,0px));--folder-edge:max(0px,calc((100vw - 640px)/2));}
+html,body{height:100%;overflow:hidden!important;overscroll-behavior:none;}
+body > .winter-browser-bar:not(.winter-browser-underlay):not(.winter-ledger-subpage){position:fixed!important;top:0!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:min(100%,640px)!important;margin:0!important;}
+body > nav.bottom-nav{position:fixed!important;top:var(--folder-top)!important;width:var(--folder-width)!important;min-width:var(--folder-width)!important;max-width:var(--folder-width)!important;}
+body > nav.bottom-nav button[data-v]{width:var(--folder-width)!important;min-width:var(--folder-width)!important;max-width:var(--folder-width)!important;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app main > [data-ledger-subpage])) > #app{position:fixed!important;top:var(--folder-top)!important;bottom:var(--folder-bottom)!important;left:calc(var(--folder-edge) + 5px)!important;right:calc(var(--folder-edge) + 34px)!important;width:auto!important;height:auto!important;min-height:0!important;max-height:none!important;margin:0!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+#app::-webkit-scrollbar{display:none;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open) #app>main{min-height:0!important;padding-bottom:70px!important;}
+#folder-chat-frame{position:fixed;left:calc(var(--folder-edge) + 5px);right:calc(var(--folder-edge) + 5px);bottom:calc(5px + env(safe-area-inset-bottom,0px));height:40px;border:1px solid #cbd9e4;border-radius:22px;background:rgba(248,250,251,.82);box-shadow:inset 0 1px 1px #fff;backdrop-filter:blur(12px);pointer-events:none;}
+body.ld-ledger-overlay-open #folder-chat-frame,body.ld-tax-fullscreen-open #folder-chat-frame,body:has(#app main > [data-ledger-subpage]) #folder-chat-frame{display:none;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open) #app .shop-glass-add{bottom:calc(var(--folder-bottom) + 10px)!important;right:calc(var(--folder-edge) + 46px)!important;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open) #app .home-add-quick-menu{bottom:calc(var(--folder-bottom) + 70px)!important;right:calc(var(--folder-edge) + 48px)!important;}
+#winter-scroll-top{bottom:calc(var(--folder-bottom) + 66px)!important;right:calc(var(--folder-edge) + 59px)!important;}
+</style>
+</head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
 
 <nav class="bottom-nav" aria-label="右側主分頁">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -4575,7 +4591,7 @@ body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app mai
   <button type="button" data-a="tab" data-v="todo" aria-label="待辦"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.2" y="3.5" width="15.6" height="17" rx="2.6"/><path d="m7.5 9.1 1.5 1.5 2.4-2.6M13.6 9.5h3M7.5 15.4l1.5 1.5 2.4-2.6M13.6 15.8h3"/></svg><span>待辦</span></button>
   <button type="button" data-a="tab" data-v="shop" aria-label="購物"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.4 8h15.2l-1 12.1H5.4L4.4 8Z"/><path d="M8.5 9V6.8a3.5 3.5 0 0 1 7 0V9"/></svg><span>購物</span></button>
   <button type="button" data-a="tab" data-v="ledger" aria-label="記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2.4"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>記帳</span></button>
- </nav><div id="app"></div><dialog id="dlg"></dialog>
+ </nav><div id="app"></div><div id="folder-chat-frame" aria-hidden="true"></div><dialog id="dlg"></dialog>
 <div id="journal-save-toast" role="status" aria-live="polite" aria-atomic="true" aria-hidden="true">✓ 已儲存</div>
 
 
@@ -5972,7 +5988,7 @@ function ledgerDetailUpdateNet(e){
 }
 function ledgerDetailRefresh(){
  const page=document.querySelector('main > [data-ledger-subpage="detail"]');if(!page)return;
- // 子頁是固定的獨立捲動容器，不應拿上一頁的 window.scrollY 當成詳情位置。
+ // 子頁是固定的獨立捲動容器，不應拿上一頁的 (document.getElementById("app")?.scrollTop||0) 當成詳情位置。
  const y=page.scrollTop;
  page.outerHTML=ledgerDetailPage();
  const refreshed=document.querySelector('main > [data-ledger-subpage="detail"]');
@@ -6076,7 +6092,7 @@ function ledgerMountLiveSubpage(view){
  const scrolledNodes=[main,...main.querySelectorAll('*')]
   .filter(node=>node.scrollTop||node.scrollLeft)
   .map(node=>({node,top:node.scrollTop,left:node.scrollLeft}));
- const previousWindowY=window.scrollY||0;
+ const previousWindowY=(document.getElementById("app")?.scrollTop||0)||0;
  const chrome=[];
  if(ledgerNavStack.at(-1)?.view==='main'){
   for(const el of document.querySelectorAll('body > .winter-browser-bar, body > .winter-address-row, body > nav.bottom-nav')){
@@ -6141,13 +6157,13 @@ function ledgerOpenView(view,id=''){
  if(ledgerView===view&&ledgerDetailId===id)return;
  const main=app.querySelector('main');
  const previousPanel=main?.querySelector(':scope > [data-ledger-subpage]');
- ledgerNavStack.push({view:ledgerView,id:ledgerDetailId,scroll:window.scrollY||0,
+ ledgerNavStack.push({view:ledgerView,id:ledgerDetailId,scroll:(document.getElementById("app")?.scrollTop||0)||0,
   listScroll:(previousPanel||main)?.querySelector('#ld-entry-list')?.scrollTop||0,
   subScroll:previousPanel?.scrollTop||0});
  ledgerView=view;ledgerDetailId=view==='detail'?id:null;
  // 明細與統計保留上一頁的真實 DOM，滑出時才能露出相同的捲動位置。
  if((view==='detail'||view==='stats'||view==='all')&&ledgerMountLiveSubpage(view)){syncWinterPage();ledgerAnimateEntry(view);return;}
- render();if(view!=='tax')window.scrollTo(0,0);ledgerAnimateEntry(view);
+ render();if(view!=='tax')document.getElementById("app").scrollTo(0,0);ledgerAnimateEntry(view);
 }
 // 初次載入缺少上一頁 DOM 時的相容回退；正常使用走 ledgerMountLiveSubpage。
 function ledgerReturnUnderlay(){
@@ -6211,9 +6227,9 @@ function ledgerBack(){
    if(list)list.scrollTop=previous.listScroll||0;
    const sub=app.querySelector('main > [data-ledger-subpage]');
    if(sub)sub.scrollTop=previous.subScroll||0;
-   window.scrollTo({top:previous.scroll||0,left:0,behavior:'instant'});
+   document.getElementById("app").scrollTo({top:previous.scroll||0,left:0,behavior:'instant'});
   }else{
-   render();window.scrollTo({top:previous.scroll||0,left:0,behavior:'instant'});
+   render();document.getElementById("app").scrollTo({top:previous.scroll||0,left:0,behavior:'instant'});
   }
  };
  if(panel){
@@ -7987,9 +8003,9 @@ document.addEventListener('click',e=>{
 if(a.startsWith('ledger-')){e.preventDefault();ledgerClick(a,D);return;}
 if(a==='drag'||a==='pack-drag'||a==='todo-drag'||a==='shop-drag'||a==='home-drag'){e.preventDefault();e.stopPropagation();return;}
 if(a==='home-category'){homeCategory=D.v;const strip=app.querySelector('.home-category-strip');strip.querySelectorAll('button').forEach(b=>{b.classList.toggle('on',b.dataset.v===homeCategory);b.setAttribute('aria-pressed',String(b.dataset.v===homeCategory));});syncHomeCategory();return;}
-if(a==='tab'){st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;ledgerNavStack=[];}pendingItineraryEntrance=false;render();window.scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
+if(a==='tab'){st.tab=D.v;if(st.tab==='ledger'){ledgerView='main';ledgerDetailId=null;ledgerNavStack=[];}pendingItineraryEntrance=false;render();document.getElementById("app").scrollTo(0,0)}else if(a==='day'){st.day=+D.v;SV('day',st.day);pendingItineraryEntrance=true;render()}else if(a==='cat'){st.cat=D.v;render()}
 else if(a==='mv'){move(L,n,+D.d,D.l);save();render()}else if(a==='rm'){if(confirm('確定刪除？')){L.splice(n,1);save();render()}}
-else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();window.scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
+else if(a==='weather-day'){st.day=+D.i;SV('day',st.day);st.tab='plan';pendingItineraryEntrance=true;render();document.getElementById("app").scrollTo(0,0)}else if(a==='weather-refresh'){WX_INFO.attempted=0;getWxForecast(true);render()}
 else if(a==='add-choose'){togglePlanQuickMenu()}
 else if(a==='plan-add-kind'){closePlanQuickMenu();useAddBottomSheet();editDayItem(-1,D.kind)}
 else if(a==='add-kind'){const kind=D.kind;dlg.close();dlg.classList.remove('itinerary-chooser');useAddBottomSheet();editDayItem(-1,kind)}
@@ -8633,7 +8649,7 @@ async function hkStartJournal(){
 hkStartJournal();
 })();
 </script><script>
-(()=>{const b=document.createElement('button');b.id='winter-scroll-top';b.type='button';b.hidden=true;b.setAttribute('aria-label','回到頂部');b.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>';document.body.appendChild(b);const app=document.getElementById('app');function update(){const add=app.querySelector('.shop-glass-add');b.hidden=window.scrollY<=400||!add||!add.getClientRects().length||!!app.querySelector('.home-add-quick-menu.is-open')||document.body.classList.contains('ld-ledger-overlay-open')||document.body.classList.contains('ld-tax-fullscreen-open')||!!document.querySelector('dialog[open]');}window.addEventListener('scroll',update,{passive:true});new MutationObserver(update).observe(app,{childList:true,subtree:true,attributes:true,attributeFilter:['class','aria-expanded']});new MutationObserver(update).observe(document.body,{attributes:true,attributeFilter:['class']});b.addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'});update()});update();})();
+(()=>{const b=document.createElement('button');b.id='winter-scroll-top';b.type='button';b.hidden=true;b.setAttribute('aria-label','回到頂部');b.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>';document.body.appendChild(b);const app=document.getElementById('app');function update(){const add=app.querySelector('.shop-glass-add');b.hidden=(document.getElementById("app")?.scrollTop||0)<=400||!add||!add.getClientRects().length||!!app.querySelector('.home-add-quick-menu.is-open')||document.body.classList.contains('ld-ledger-overlay-open')||document.body.classList.contains('ld-tax-fullscreen-open')||!!document.querySelector('dialog[open]');}app.addEventListener('scroll',update,{passive:true});new MutationObserver(update).observe(app,{childList:true,subtree:true,attributes:true,attributeFilter:['class','aria-expanded']});new MutationObserver(update).observe(document.body,{attributes:true,attributeFilter:['class']});b.addEventListener('click',()=>{document.getElementById("app").scrollTo({top:0,behavior:'smooth'});update()});update();})();
 </script><script>
 (()=>{const root=document.getElementById('app');if(!root)return;function align(){root.querySelectorAll('.tlw details.row.mv[open]').forEach(card=>{const heading=card.querySelector('.row-summary-main');const bd=card.querySelector('.bd');if(heading&&bd){const x=heading.getBoundingClientRect().left-bd.getBoundingClientRect().left;if(x>=0&&x<200)card.style.setProperty('--transport-detail-left',x+'px');}});}root.addEventListener('toggle',()=>requestAnimationFrame(align),true);new MutationObserver(()=>requestAnimationFrame(align)).observe(root,{childList:true,subtree:true});window.addEventListener('resize',align);align();})();
 </script><script>(()=>{const order=['home','plan','todo','shop','ledger'];for(const [id,delta] of [['winter-address-prev',-1],['winter-address-next',1]]){document.getElementById(id)?.addEventListener('click',()=>{const buttons=[...document.querySelectorAll('body > nav.bottom-nav button[data-v]')];const current=buttons.find(b=>b.classList.contains('on')||b.classList.contains('active')||b.getAttribute('aria-current')==='page');const index=order.indexOf(current?.dataset.v);const target=order[index+delta];if(target)buttons.find(b=>b.dataset.v===target)?.click();});}})();</script></body></html>
