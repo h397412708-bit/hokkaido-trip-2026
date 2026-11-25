@@ -7028,7 +7028,7 @@ function homeCategoryStrip(){return '<nav class="home-category-strip" aria-label
 function syncHomeCategory(){if(st.tab!=='home')return;app.querySelectorAll('.overview-panel').forEach(el=>{el.hidden=false;});}
 function home(){const n=packs.filter(p=>p.done).length;
  const totalNights=stays.reduce((sum,item)=>sum+nightsBetween(item.checkin,item.checkout),0);
- return sec('f',iconSvg('plane'),'航班','12/18 去程・12/27 回程', '<div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div>')
+ return '<details class="card overview-panel overview-f hk-ticket-stub" data-k="f"'+(ov.has('f')?' open':'')+'><summary><div class="hk-stub-main"><small>BOARDING PASS · 航班資訊</small><b>HOKKAIDO</b><span>12.18 — 12.27</span></div><div class="hk-stub-end">'+iconSvg('plane')+'<small>查看航班</small>'+fl3Arrow+'</div></summary><div class="bd"><div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div></div></details>'
  +sec('h',iconSvg('hotel'),'住宿一覽',stays.length+' 間・共 '+totalNights+' 晚',homeListBody('stays'))
  +sec('r',iconSvg('utensils'),'已訂餐廳',dining.length+' 間・訂位資料',homeListBody('dining'))
  +sec('k',iconSvg('ticket'),'已訂票券',tickets.length+' 筆・票券資料',homeListBody('tickets'))
@@ -9051,5 +9051,18 @@ html body #app#app .overview-f .fl3-route{padding:9px 0!important;}
 html body #app#app .overview-f .fl3-place strong{font-size:19px!important;}
 html body #app#app .overview-f .fl3-transfer{background:transparent!important;box-shadow:none!important;border:0!important;padding:8px 0!important;}
 html body #app#app .overview-f .fl2-pass-button{background:transparent!important;box-shadow:none!important;border:1px dashed #d5dfe6!important;}
+</style>
+<style id="hk-ticket-stub-v1">
+html body #app#app main details.hk-ticket-stub{position:relative!important;overflow:visible!important;background:#fff!important;border:0!important;border-radius:15px!important;box-shadow:0 4px 16px rgba(55,78,99,.075),0 1px 3px rgba(55,78,99,.035)!important;padding:0!important;}
+html body #app#app main details.hk-ticket-stub>summary{display:flex!important;align-items:stretch!important;gap:0!important;padding:0!important;min-height:96px!important;position:relative!important;background:transparent!important;border:0!important;}
+html body #app#app main details.hk-ticket-stub>summary:after{display:none!important;}
+.hk-stub-main{flex:1;min-width:0;padding:14px 18px;display:flex;flex-direction:column;gap:3px;color:#34495b;}.hk-stub-main small{font-size:10px!important;letter-spacing:.08em;color:#748898;}.hk-stub-main b{font-size:21px!important;letter-spacing:.09em;font-weight:650;line-height:1.2;}.hk-stub-main span{font-size:11px;color:#748898;}
+.hk-stub-end{position:relative;flex:0 0 86px;border-left:1px dashed #cbd7df;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#71889b;}.hk-stub-end svg{width:19px;height:19px;}.hk-stub-end svg:last-child{width:13px;height:13px;transition:transform .4s ease;}.hk-stub-end small{font-size:10px!important;}.hk-ticket-stub[open] .hk-stub-end svg:last-child{transform:rotate(180deg);}.hk-stub-end:before,.hk-stub-end:after{content:'';position:absolute;left:-7px;width:14px;height:14px;border-radius:50%;background:#F8FAFB;}.hk-stub-end:before{top:-7px;}.hk-stub-end:after{bottom:-7px;}
+html body #app#app main details.hk-ticket-stub>.bd{position:relative;padding:16px 16px 18px!important;border-top:1px dashed #cbd7df!important;margin:0!important;background:#fff!important;border-radius:0 0 15px 15px!important;}
+.hk-ticket-stub[open]>.bd:before,.hk-ticket-stub[open]>.bd:after{content:'';position:absolute;top:-7px;width:14px;height:14px;background:#F8FAFB;border-radius:50%;}.hk-ticket-stub[open]>.bd:before{left:-7px;}.hk-ticket-stub[open]>.bd:after{right:-7px;}
+html body #app#app main details.hk-ticket-stub[open]>.bd{animation:hk-stub-reveal 400ms ease both!important;}@keyframes hk-stub-reveal{from{opacity:0}to{opacity:1}}
+@supports(interpolate-size:allow-keywords){html body #app#app main details.hk-ticket-stub::details-content{transition:block-size 400ms cubic-bezier(.2,.7,.2,1),content-visibility 400ms allow-discrete!important;}}
+html body #app#app .hk-ticket-stub .fl3-pass{border-top:1px dashed #d5dfe6!important;padding-top:10px!important;margin-top:8px!important;}html body #app#app .hk-ticket-stub .fl2-pass-button{border:0!important;background:#f3f7fa!important;border-radius:9px!important;}
+@media(prefers-reduced-motion:reduce){html body #app#app main details.hk-ticket-stub[open]>.bd{animation:none!important;}html body #app#app main details.hk-ticket-stub::details-content{transition:none!important;}}
 </style>
 </body></html>
