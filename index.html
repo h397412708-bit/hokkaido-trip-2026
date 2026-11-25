@@ -4695,7 +4695,12 @@ body > nav.bottom-nav button[data-v].on span{max-width:24px!important;margin-lef
 #app .winter-trip-summary span{font-size:11px!important;letter-spacing:.12em!important;}
 #app .winter-trip-summary strong{font-size:13px!important;white-space:normal!important;}
 </style>
-</head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
+<style id="latest-nav-header-adjustments">
+body > .winter-browser-bar:not(.winter-browser-underlay):not(.winter-ledger-subpage){position:sticky!important;top:0!important;left:auto!important;right:auto!important;bottom:auto!important;z-index:120!important;}
+#folder-add-options,#folder-add-options > button,#folder-add-options > button > span{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+#folder-add-options > button::before,#folder-add-options > button::after{background:none!important;box-shadow:none!important;border:0!important;}
+body > nav.bottom-nav{padding-left:10px!important;padding-right:10px!important;}
+</style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
 
 <nav class="bottom-nav" aria-label="底部主分頁">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -6061,8 +6066,8 @@ function ledgerSyncStatLens(force=false){
  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
  const instant=first||force||reduce;
  if(instant)lens.classList.add('nav-no-motion');
- lens.style.width=button.offsetWidth+'px';
- lens.style.transform='translate3d('+button.offsetLeft+'px,0,0)';
+ lens.style.width=(button.offsetWidth+10)+'px';
+ lens.style.transform='translate3d('+(button.offsetLeft-5)+'px,0,0)';
  if(changed&&!instant){
   clearTimeout(ledgerStatLensTimer);lens.classList.remove('nav-moving');void lens.offsetWidth;
   lens.classList.add('nav-moving');ledgerStatLensTimer=setTimeout(()=>lens.classList.remove('nav-moving'),550);
@@ -6949,8 +6954,8 @@ function syncNavGlass(force=false){
   const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const instant=first||force||reduce;
   if(instant)lens.classList.add('nav-no-motion');
-  lens.style.width=button.offsetWidth+'px';
-  lens.style.transform='translate3d('+button.offsetLeft+'px,0,0)';
+  lens.style.width=(button.offsetWidth+10)+'px';
+  lens.style.transform='translate3d('+(button.offsetLeft-5)+'px,0,0)';
   if(changed&&!instant){
     window.clearTimeout(navGlassTimer);
     lens.classList.remove('nav-moving');
