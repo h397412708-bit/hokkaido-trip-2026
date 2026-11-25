@@ -7028,7 +7028,7 @@ function homeCategoryStrip(){return '<nav class="home-category-strip" aria-label
 function syncHomeCategory(){if(st.tab!=='home')return;app.querySelectorAll('.overview-panel').forEach(el=>{el.hidden=false;});}
 function home(){const n=packs.filter(p=>p.done).length;
  const totalNights=stays.reduce((sum,item)=>sum+nightsBetween(item.checkin,item.checkout),0);
- return '<details class="card overview-panel overview-f hk-ticket-stub" data-k="f"'+(ov.has('f')?' open':'')+'><summary><div class="hk-stub-main"><small>BOARDING PASS · 航班資訊</small><b>HOKKAIDO</b><span>12.18 — 12.27</span></div><div class="hk-stub-end">'+iconSvg('plane')+'<small>查看航班</small>'+fl3Arrow+'</div></summary><div class="bd"><div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div></div></details>'
+ return '<details class="card overview-panel overview-f hk-ticket-stub" data-k="f"'+(ov.has('f')?' open':'')+'><summary aria-label="航班資訊"><span class="hk-mini-ticket"><svg viewBox="0 0 38 26" fill="none" aria-hidden="true"><path d="M2 3H36V9C30 9 30 17 36 17V23H2V17C8 17 8 9 2 9Z" fill="#fff" stroke="#91a5b5" stroke-width="1.2"/><path d="M26 4V22" stroke="#a5b6c3" stroke-dasharray="2 2"/><path d="M10 13H21M16 8L19 13L16 18M11 10L13 13L11 16" stroke="#738ba3" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><div class="bd"><div class="fl3-flights">'+primaryFlightBoard()+alternateFlightBoard()+'</div></div></details>'
  +sec('h',iconSvg('hotel'),'住宿一覽',stays.length+' 間・共 '+totalNights+' 晚',homeListBody('stays'))
  +sec('r',iconSvg('utensils'),'已訂餐廳',dining.length+' 間・訂位資料',homeListBody('dining'))
  +sec('k',iconSvg('ticket'),'已訂票券',tickets.length+' 筆・票券資料',homeListBody('tickets'))
@@ -9063,6 +9063,18 @@ html body #app#app main details.hk-ticket-stub>.bd{position:relative;padding:16p
 html body #app#app main details.hk-ticket-stub[open]>.bd{animation:hk-stub-reveal 400ms ease both!important;}@keyframes hk-stub-reveal{from{opacity:0}to{opacity:1}}
 @supports(interpolate-size:allow-keywords){html body #app#app main details.hk-ticket-stub::details-content{transition:block-size 400ms cubic-bezier(.2,.7,.2,1),content-visibility 400ms allow-discrete!important;}}
 html body #app#app .hk-ticket-stub .fl3-pass{border-top:1px dashed #d5dfe6!important;padding-top:10px!important;margin-top:8px!important;}html body #app#app .hk-ticket-stub .fl2-pass-button{border:0!important;background:#f3f7fa!important;border-radius:9px!important;}
+@media(prefers-reduced-motion:reduce){html body #app#app main details.hk-ticket-stub[open]>.bd{animation:none!important;}html body #app#app main details.hk-ticket-stub::details-content{transition:none!important;}}
+</style>
+<style id="hk-mini-ticket-row-v2">
+html body #app#app main details.hk-ticket-stub,html body #app#app main details.hk-ticket-stub[open]{background:transparent!important;box-shadow:none!important;border:0!important;border-radius:0!important;transform:none!important;scale:1!important;overflow:visible!important;}
+html body #app#app main details.hk-ticket-stub>summary{display:flex!important;justify-content:flex-start!important;align-items:center!important;width:100%!important;min-height:42px!important;height:42px!important;padding:0 12px!important;margin:0!important;box-shadow:none!important;background:transparent!important;transform:none!important;scale:1!important;}
+html body #app#app main details.hk-ticket-stub>summary:before,html body #app#app main details.hk-ticket-stub>summary:after{display:none!important;}
+.hk-mini-ticket{display:grid;place-items:center;width:37px;height:37px;flex:none;}.hk-mini-ticket svg{width:35px!important;height:24px!important;filter:drop-shadow(0 2px 3px rgba(55,78,99,.12));}
+html body #app#app main details.hk-ticket-stub>.bd{margin:0 0 8px!important;padding:15px!important;border:0!important;border-radius:14px!important;background:#fff!important;box-shadow:0 4px 16px rgba(55,78,99,.075),0 1px 3px rgba(55,78,99,.035)!important;}
+html body #app#app main details.hk-ticket-stub>.bd:before,html body #app#app main details.hk-ticket-stub>.bd:after{top:48px!important;}
+html body #app#app main details.hk-ticket-stub[open]>.bd{animation:hk-mini-unfold 400ms cubic-bezier(.2,.7,.2,1) both!important;transform-origin:19px 0;}
+@keyframes hk-mini-unfold{from{opacity:0;clip-path:inset(0 85% 95% 0 round 14px)}to{opacity:1;clip-path:inset(0 0 0 0 round 14px)}}
+@supports(interpolate-size:allow-keywords){html body #app#app main details.hk-ticket-stub{interpolate-size:allow-keywords;}html body #app#app main details.hk-ticket-stub::details-content{block-size:0;overflow:clip;transition:block-size 400ms cubic-bezier(.2,.7,.2,1),content-visibility 400ms allow-discrete!important;}html body #app#app main details.hk-ticket-stub[open]::details-content{block-size:auto;}}
 @media(prefers-reduced-motion:reduce){html body #app#app main details.hk-ticket-stub[open]>.bd{animation:none!important;}html body #app#app main details.hk-ticket-stub::details-content{transition:none!important;}}
 </style>
 </body></html>
