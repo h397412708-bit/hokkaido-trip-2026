@@ -9021,4 +9021,22 @@ html body #app#app .overview-f .fl3-route-center svg{background:#fff!important;c
 html body #app#app .overview-f .fl3-baggage{background:#f5f8fa!important;color:#65798a!important;}
 html body #app#app .overview-f .fl3-ticket-header,html body #app#app .overview-f .fl3-ticket-footer{border-color:#dce5eb!important;}
 </style>
+<style id="hk-calm-overview-minimal-flight">
+html body #app#app main details.overview-panel,html body #app#app main details.overview-panel[open],html body #app#app main details.overview-panel:has(>summary:active){scale:1!important;transform:none!important;animation:none!important;transition:box-shadow 240ms ease!important;box-shadow:0 5px 18px rgba(48,70,90,.12),0 1px 4px rgba(48,70,90,.055)!important;}
+html body #app#app main details.overview-panel>summary,html body #app#app main details.overview-panel>summary:active{scale:1!important;transform:none!important;animation:none!important;}
+html body #app#app main details.overview-panel[open]>.bd{animation:hk-calm-reveal 280ms ease both!important;transform:none!important;}
+@keyframes hk-calm-reveal{from{opacity:0}to{opacity:1}}
+@supports (interpolate-size:allow-keywords){html body #app#app main details.overview-panel{interpolate-size:allow-keywords;}html body #app#app main details.overview-panel::details-content{block-size:0;overflow:clip;transition:block-size 300ms ease,content-visibility 300ms allow-discrete!important;}html body #app#app main details.overview-panel[open]::details-content{block-size:auto;}}
+html body #app#app .overview-f .fl3-leg>summary,html body #app#app .overview-f .fl3-leg:has(.fl3-return)>summary{background:transparent!important;border:0!important;border-radius:0!important;padding:7px 0!important;margin:0!important;box-shadow:none!important;}
+html body #app#app .overview-f .fl3-direction,html body #app#app .overview-f .fl3-direction.fl3-return{background:none!important;padding:0!important;font-size:13px!important;color:#34495b!important;}
+html body #app#app .overview-f .fl3-ticket{background:white!important;padding:12px 0!important;border:0!important;box-shadow:none!important;}
+html body #app#app .overview-f .fl3-ticket-header{border:0!important;padding:0!important;}
+html body #app#app .overview-f .fl3-route{padding:12px 0!important;grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr)!important;}
+html body #app#app .overview-f .fl3-place strong{font-size:20px!important;font-weight:650!important;}
+html body #app#app .overview-f .fl3-place b{font-size:12px!important;letter-spacing:.04em!important;}
+html body #app#app .overview-f .fl3-baggage{background:transparent!important;border:0!important;padding:4px 0!important;box-shadow:none!important;}
+html body #app#app .overview-f .fl3-ticket-footer{border:0!important;padding-top:6px!important;}
+html body #app#app .overview-f .fl3-collapsed{background:transparent!important;border:0!important;box-shadow:none!important;}
+@media(prefers-reduced-motion:reduce){html body #app#app main details.overview-panel[open]>.bd{animation:none!important;}html body #app#app main details.overview-panel::details-content{transition:none!important;}}
+</style>
 </body></html>
