@@ -3585,7 +3585,27 @@ dialog#dlg.bottom-sheet .sheet-grabber{background:rgba(248,250,251,.85)!importan
 #dlg :is(input:not([type=checkbox]):not([type=file]):not([type=radio]),textarea,select):not(.ld-type-native){border-color:rgba(180,199,213,.55)!important;background-color:rgba(255,255,255,.54)!important}
 #app .ld-subpage{background:radial-gradient(ellipse at 95% 25%,#d6e4ee,transparent 65%),linear-gradient(145deg,#F8FAFB,#E5EDF3)!important}
 
-</style></head><body><div id="app"></div>
+</style>
+<style id="matte-unified-final">
+:root{--glass:rgba(229,237,243,.48);--glass-edge:rgba(255,255,255,.95)}
+html,body,#app,#app main,#app .ld-subpage{background:#F8FAFB!important;background-image:none!important}
+#app :is(.card,.weather-card,.weather-overview,.spot-card,.sh-group,.sh-flat,.sh-empty,.ld-panel,.fl3-leg,.fl3-ticket,.route-map-card),#app .tlw>details.row:not(.mv){background:var(--glass)!important}
+#app .swipe-host:not(.swiping)>.swipe-face,#app .tlw>details.row.mv>summary.swipe-host:not(.swiping)>.swipe-face,#app :is(.card,.weather-overview,.spot-card,.sh-group,.sh-flat,.ld-panel) > summary,#app :is(.card,.weather-overview,.spot-card,.sh-group,.sh-flat,.ld-panel) :is(.sum-ic,.sh-group-mark,.home-entry,.pk,.ld-item){background:transparent!important;box-shadow:none!important}
+#app .swipe-host.swiping>.swipe-face{background:#edf2f5!important}
+#app :is(.fl3-baggage,.fl3-transfer,.ld-filter-panel,.ld-stat-tabs,.ld-tax-tabs,.sh-qty,.sh-tag){background:transparent!important}
+#app .hero{height:auto;aspect-ratio:16/9;background-position:center 58%;}
+#app .hero:before{background:rgba(37,57,70,.12)}
+#app .hero:after{background:none!important}
+#app .hero .topline{padding:18px 22px 0}
+#app .cover-summary{display:block;margin:-24px 16px 0;padding:20px 18px 16px;background:rgba(239,245,248,.88)!important;border:1px solid rgba(255,255,255,.95);box-shadow:0 5px 20px rgba(65,91,111,.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:19px;color:#304653}
+#app .cover-summary>div{border:0;text-align:center}
+.cover-heading h1{font-size:25px;font-weight:650;letter-spacing:.13em;margin:0;line-height:1.45}
+.cover-heading p{font-size:12px;letter-spacing:.12em;color:#667d8c;margin:5px 0 15px}
+.cover-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding-top:14px;border-top:1px solid rgba(125,151,169,.18)!important}
+.cover-stats>div+div{border-left:1px solid rgba(125,151,169,.18)}
+.cover-stats strong{font-size:14px;letter-spacing:.01em}.cover-stats span{font-size:10px}
+</style>
+</head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
@@ -5721,7 +5741,7 @@ function home(){const n=packs.filter(p=>p.done).length;
  +sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'" data-pack-index="'+i+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><button type="button" class="pack-drag-handle" data-a="pack-drag" data-i="'+i+'" aria-label="長按拖曳「'+esc(p.t)+'」排序；鍵盤 Alt 加上下鍵調整" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join(''))
  +'<button class="add ghost" data-a="rs">還原預設內容</button>'+
  '<div class="home-add-quick-menu" id="home-add-quick-menu" aria-hidden="true"><button type="button" data-a="home-add-kind" data-kind="stays" tabindex="-1" aria-label="新增住宿" title="新增住宿">'+iconSvg('hotel')+'</button><button type="button" data-a="home-add-kind" data-kind="dining" tabindex="-1" aria-label="新增已訂餐廳" title="新增已訂餐廳">'+iconSvg('utensils')+'</button><button type="button" data-a="home-add-kind" data-kind="tickets" tabindex="-1" aria-label="新增已訂票券" title="新增已訂票券">'+iconSvg('ticket')+'</button><button type="button" data-a="home-add-kind" data-kind="packs" tabindex="-1" aria-label="新增行李清單" title="新增行李清單">'+iconSvg('bag')+'</button></div><button type="button" class="shop-glass-add home-add-fab" data-a="home-add-choose" aria-expanded="false" aria-controls="home-add-quick-menu" aria-label="新增總覽項目" title="新增總覽項目"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>'}
-const hero=()=>'<header class="hero"><div class="topline"><div class="brand">'+iconSvg('snowflake')+' HOKKAIDO / 2026</div><div class="pill">WINTER JOURNAL</div></div><div class="hc"><div class="eb">WINTER TRAVEL NOTES • JAPAN</div><h1 class="ht1">A winter<br>to remember.</h1><div class="hs">北海道冬日旅誌</div><div class="hm">12.18 — 12.27 ✦ 札幌 · 小樽 · 登別 · 洞爺湖</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><div class="summary"><div><strong>10 天 9 夜</strong><span>旅程天數</span></div><div><strong>4 位旅伴</strong><span>一同出發</span></div><div><strong>12/18–27</strong><span>2026・北海道</span></div></div>';
+const hero=()=>'<header class="hero"><div class="topline"><div class="brand">'+iconSvg('snowflake')+' HOKKAIDO / 2026</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><section class="summary cover-summary"><div class="cover-heading"><h1>北海道冬日旅誌</h1><p>札幌・小樽・登別・洞爺湖</p></div><div class="cover-stats"><div><strong>10 天 9 夜</strong><span>旅程天數</span></div><div><strong>4 位旅伴</strong><span>一同出發</span></div><div><strong>12/18–27</strong><span>2026・北海道</span></div></div></section>';
 // Never replace the date-strip element when switching days: keeping the same
 // element also preserves touch momentum, horizontal scroll, and keyboard focus.
 let planDayScrollLeft=0;
