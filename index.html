@@ -4797,6 +4797,36 @@ html body #folder-add-dock button:active{scale:.93;box-shadow:inset 0 1px 5px rg
 html body > .winter-browser-bar:not(.winter-browser-underlay):not(.winter-ledger-subpage){background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;border:0!important;outline:0!important;}
 html body > .winter-browser-bar:not(.winter-browser-underlay):not(.winter-ledger-subpage)::before,html body > .winter-browser-bar:not(.winter-browser-underlay):not(.winter-ledger-subpage)::after{background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
 </style>
+<style id="hk-overview-elevation-aircard">
+html body #app#app main details.card.overview-panel,html body #app#app main details.card.overview-panel[open]{background:#fff!important;border:0!important;border-radius:16px!important;box-shadow:0 5px 18px rgba(48,70,90,.12),0 1px 4px rgba(48,70,90,.055)!important;transition:box-shadow 320ms ease,scale 180ms ease!important;overflow:visible!important;}
+html body #app#app main details.card.overview-panel[open]{box-shadow:0 8px 24px rgba(48,70,90,.13),0 2px 5px rgba(48,70,90,.05)!important;}
+html body #app#app main details.card.overview-panel:has(>summary:active){scale:.988;}
+html body #app#app main details.card.overview-panel>summary{border-radius:16px!important;}
+html body #app#app main details.card.overview-panel[open]>.bd{border-radius:0 0 16px 16px!important;animation:hk-overview-reveal 320ms cubic-bezier(.2,.75,.25,1) both;transform-origin:top;}
+@keyframes hk-overview-reveal{from{opacity:0;transform:translateY(-5px);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:translateY(0);clip-path:inset(0 0 0 0)}}
+@supports(interpolate-size:allow-keywords){html body #app#app main details.card.overview-panel{interpolate-size:allow-keywords;}html body #app#app main details.card.overview-panel::details-content{block-size:0;overflow:clip;transition:block-size 320ms cubic-bezier(.2,.75,.25,1),content-visibility 320ms allow-discrete;}html body #app#app main details.card.overview-panel[open]::details-content{block-size:auto;}}
+html body #app#app .overview-f .fl3-group{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0 0 18px!important;}
+html body #app#app .overview-f .fl3-group-head{padding:6px 2px 12px!important;color:#354b5d!important;}
+html body #app#app .overview-f .fl3-group-kind{background:#edf2f5!important;color:#60778a!important;border:0!important;}
+html body #app#app .overview-f .fl3-leg,html body #app#app .overview-f .fl3-leg:has(.fl3-return),html body #app#app .overview-f .fl3-leg:not([open]){background:#f4f7f9!important;border:0!important;border-radius:13px!important;padding:10px!important;margin:0 0 10px!important;}
+html body #app#app .overview-f .fl3-leg>summary,html body #app#app .overview-f .fl3-leg:has(.fl3-return)>summary{background:transparent!important;display:grid!important;grid-template-columns:auto 1fr 18px;gap:5px 8px!important;padding:3px 2px 8px!important;margin:0!important;}
+html body #app#app .overview-f .fl3-direction,html body #app#app .overview-f .fl3-direction.fl3-return{background:#e4ebf0!important;color:#42596b!important;border-radius:6px!important;padding:4px 8px!important;}
+html body #app#app .overview-f .fl3-leg-route{grid-column:1/3;grid-row:2;text-align:left!important;font-size:12px!important;color:#526a7d!important;}
+html body #app#app .overview-f .fl3-chevron{grid-column:3;grid-row:1/3;align-self:center;}
+html body #app#app .overview-f .fl3-ticket{background:#fff!important;border:0!important;border-radius:11px!important;padding:13px 11px!important;margin:6px 0!important;box-shadow:0 2px 7px rgba(50,70,90,.05)!important;}
+html body #app#app .overview-f .fl3-ticket-header{padding:0 0 9px!important;border-bottom:1px dashed #d6e0e7!important;}
+html body #app#app .overview-f .fl3-airline{display:flex!important;flex-direction:column;align-items:flex-start!important;gap:2px!important;}
+html body #app#app .overview-f .fl3-airline b{font-size:12px!important;color:#344b5d!important;}
+html body #app#app .overview-f .fl3-route{grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr)!important;padding:16px 0!important;gap:5px!important;}
+html body #app#app .overview-f .fl3-place strong{font-size:23px!important;color:#304657!important;}
+html body #app#app .overview-f .fl3-place b{font-size:11px!important;letter-spacing:.08em!important;}
+html body #app#app .overview-f .fl3-place span{font-size:10px!important;line-height:1.5!important;}
+html body #app#app .overview-f .fl3-baggage,html body #app#app .overview-f .fl3-transfer{background:#edf2f5!important;border:0!important;color:#526a7d!important;}
+html body #app#app .overview-f .fl2-pass-button{background:#f4f7f9!important;border:1px dashed #b9cbd7!important;border-radius:9px!important;color:#425d71!important;min-height:42px!important;}
+html body #app#app .overview-f .fl3-pass-action{color:#425d71!important;}
+html body #app#app .overview-f .fl3-ticket-footer{border-top:1px dashed #d6e0e7!important;color:#788b99!important;}
+@media(prefers-reduced-motion:reduce){html body #app#app main details.card.overview-panel,html body #app#app main details.card.overview-panel::details-content{transition:none!important;}html body #app#app main details.card.overview-panel[open]>.bd{animation:none!important;}}
+</style>
 </head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">Hokkaido</div><div class="hk-music"><button type="button" class="hk-disc" aria-label="開啟音樂播放器" aria-expanded="false"></button><div class="hk-player" inert><div class="hk-record-window" aria-hidden="true"><span class="hk-disc hk-player-disc"></span></div><div class="hk-track"><strong>Time Machine</strong><small>Mj Apanay · 3:47</small></div><button type="button" class="hk-play" aria-label="播放">▶</button><button type="button" class="hk-close" aria-label="關閉">×</button></div><audio src="./music.mp3" preload="auto" loop></audio></div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
 
 <nav class="bottom-nav" aria-label="底部主分頁">
