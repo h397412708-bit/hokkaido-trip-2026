@@ -4496,9 +4496,79 @@ body:has(#app main > [data-ledger-subpage="tax"]) #app main::before,
 body:has(#app main > [data-ledger-subpage="tax"]) #app main::after{visibility:hidden!important;}
 
 .plan-day-heading[hidden]{display:none!important;}
+
+/* Right-edge folder index */
+body > nav.bottom-nav{position:fixed!important;top:calc(118px + env(safe-area-inset-top,0px))!important;right:max(0px,calc((100vw - 640px)/2))!important;left:auto!important;bottom:auto!important;width:39px!important;min-width:0!important;max-width:39px!important;height:auto!important;min-height:0!important;max-height:none!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:5px!important;padding:0!important;margin:0!important;background:transparent!important;overflow:visible!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+body > nav.bottom-nav .nav-glass-indicator{display:none!important;}
+body > nav.bottom-nav button{position:relative!important;flex:none!important;width:39px!important;height:60px!important;min-height:60px!important;display:flex!important;align-items:center!important;justify-content:center!important;border:1px solid #cbd9e4!important;border-left:0!important;border-radius:0 12px 12px 0!important;background:linear-gradient(120deg,#dce7ef,#eaf1f6)!important;box-shadow:2px 2px 5px #40577012!important;transition:background .22s,box-shadow .22s,transform .22s!important;}
+body > nav.bottom-nav button span{writing-mode:vertical-rl;text-orientation:upright;letter-spacing:3px;font-size:12px!important;line-height:1!important;}
+body > nav.bottom-nav button.on{background:linear-gradient(110deg,#F8FAFB,#fff)!important;color:#405770!important;box-shadow:3px 3px 8px #40577020!important;transform:translateX(-3px)!important;width:42px!important;}
+body > nav.bottom-nav button.on::before{content:'';position:absolute;left:-3px;top:0;bottom:0;width:5px;background:#F8FAFB;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app main > [data-ledger-subpage])) > #app{width:calc(min(100%,640px) - 39px)!important;margin-left:max(0px,calc((100% - 640px)/2))!important;margin-right:auto!important;}
+body:has(#app main > [data-ledger-subpage]) > nav.bottom-nav{visibility:hidden!important;pointer-events:none!important;}
+@media(max-height:530px){body > nav.bottom-nav{top:calc(105px + env(safe-area-inset-top,0px))!important;gap:2px!important;}body > nav.bottom-nav button{height:42px!important;min-height:42px!important;}}
+@media(prefers-reduced-motion:reduce){body > nav.bottom-nav button{transition:none!important;}}
+
+/* Connected right-side folder tabs, compact browser chrome */
+.winter-browser-bar{padding-left:8px!important;padding-right:8px!important;padding-top:calc(env(safe-area-inset-top,0px) + 7px)!important;height:calc(50px + env(safe-area-inset-top,0px))!important;}
+body > nav.bottom-nav{top:calc(66px + env(safe-area-inset-top,0px))!important;width:47px!important;max-width:47px!important;gap:4px!important;}
+body > nav.bottom-nav button{width:47px!important;min-width:47px!important;border-radius:0 13px 13px 0!important;border-left:0!important;clip-path:none!important;}
+body > nav.bottom-nav button.on{width:47px!important;transform:none!important;background:#F8FAFB!important;box-shadow:3px 2px 7px #40577018!important;}
+body > nav.bottom-nav button.on::before{left:-10px!important;width:12px!important;top:-1px!important;bottom:-1px!important;background:#F8FAFB!important;pointer-events:none;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app main > [data-ledger-subpage])) > #app{width:calc(min(100%,640px) - 37px)!important;border-right:1px solid #dce5eb!important;}
+body > nav.bottom-nav button:not(.on){margin-left:10px!important;width:37px!important;min-width:37px!important;}
+@media(max-height:530px){body > nav.bottom-nav{top:calc(55px + env(safe-area-inset-top,0px))!important;}}
+</style>
+<style id="folder-frame-refinement">
+/* Separate browser chrome from the folder sheet. */
+body > nav.bottom-nav button.on{background:#F8FAFB!important;background-image:none!important;}
+body > nav.bottom-nav button.on::before{background:#F8FAFB!important;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app main > [data-ledger-subpage])) > #app{margin-top:12px!important;border:1px solid #cbd9e4!important;border-radius:12px 0 0 12px!important;box-shadow:none!important;}
+body > nav.bottom-nav{top:calc(62px + env(safe-area-inset-top,0px))!important;}
+body > nav.bottom-nav button:first-of-type{border-top:1px solid #cbd9e4!important;}
+body > nav.bottom-nav button.on::before{top:0!important;bottom:0!important;}
+body > .winter-address-row{display:none!important;}
+@media(max-height:530px){body > nav.bottom-nav{top:calc(62px + env(safe-area-inset-top,0px))!important;}}
+</style>
+<style id="folder-tabs-final-fix">
+/* One fixed-width rail; each tab occupies its own non-overlapping row. */
+body > nav.bottom-nav{width:38px!important;min-width:38px!important;max-width:38px!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:6px!important;height:auto!important;min-height:0!important;max-height:none!important;transform:none!important;overflow:visible!important;}
+body > nav.bottom-nav button[data-v]{box-sizing:border-box!important;flex:0 0 60px!important;height:60px!important;min-height:60px!important;max-height:60px!important;width:38px!important;min-width:38px!important;max-width:38px!important;margin:0!important;inset:auto!important;transform:none!important;border:1px solid #cbd9e4!important;border-left:0!important;border-radius:0 12px 12px 0!important;box-shadow:none!important;background:#E5EDF3!important;}
+body > nav.bottom-nav button[data-v].on,body > nav.bottom-nav button[data-v][aria-current="page"]{background:#F8FAFB!important;background-image:none!important;color:#405770!important;}
+body > nav.bottom-nav button[data-v]::before,body > nav.bottom-nav button[data-v]::after{content:none!important;display:none!important;}
+body > nav.bottom-nav button[data-v].on::before,body > nav.bottom-nav button[data-v][aria-current="page"]::before{content:""!important;display:block!important;position:absolute!important;left:-2px!important;right:auto!important;top:0!important;bottom:0!important;width:3px!important;height:auto!important;background:#F8FAFB!important;pointer-events:none!important;transform:none!important;border:0!important;box-shadow:none!important;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app main > [data-ledger-subpage])) > #app{width:calc(min(100%,640px) - 37px)!important;border-radius:14px 0 14px 14px!important;background:#F8FAFB!important;overflow:hidden!important;}
+@media(max-height:530px){body > nav.bottom-nav{gap:4px!important;}body > nav.bottom-nav button[data-v]{flex-basis:42px!important;height:42px!important;min-height:42px!important;max-height:42px!important;}}
+</style>
+<style id="folder-stack-refinement">
+body > nav.bottom-nav{gap:0!important;isolation:isolate;}
+body > nav.bottom-nav button[data-v]{height:63px!important;min-height:63px!important;max-height:63px!important;flex-basis:63px!important;margin:0!important;background:var(--folder-tone)!important;background-image:none!important;z-index:var(--folder-layer);}
+body > nav.bottom-nav button[data-v] ~ button[data-v]{margin-top:-3px!important;}
+body > nav.bottom-nav button[data-v="home"]{--folder-tone:#E5EDF3;--folder-layer:5;}
+body > nav.bottom-nav button[data-v="plan"]{--folder-tone:#DCE6EF;--folder-layer:4;}
+body > nav.bottom-nav button[data-v="todo"]{--folder-tone:#D2DFE9;--folder-layer:3;}
+body > nav.bottom-nav button[data-v="shop"]{--folder-tone:#C8D7E4;--folder-layer:2;}
+body > nav.bottom-nav button[data-v="ledger"]{--folder-tone:#BECEDE;--folder-layer:1;}
+body > nav.bottom-nav button[data-v].on,body > nav.bottom-nav button[data-v][aria-current="page"]{background:#F8FAFB!important;background-image:none!important;z-index:10!important;}
+body > nav.bottom-nav button[data-v].on::before,body > nav.bottom-nav button[data-v][aria-current="page"]::before{left:-3px!important;width:5px!important;background:#F8FAFB!important;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app main > [data-ledger-subpage])) > #app{margin-left:calc(max(0px, (100% - 640px)/2) + 5px)!important;margin-bottom:5px!important;width:calc(min(100%,640px) - 42px)!important;border-radius:14px 0 14px 14px!important;background:#F8FAFB!important;}
+@media(max-height:530px){body > nav.bottom-nav button[data-v]{height:45px!important;min-height:45px!important;max-height:45px!important;flex-basis:45px!important;}}
+</style><style id="folder-scroll-together">
+/* Main browser and folder rail scroll naturally with the document. */
+body > .winter-browser-bar:not(.winter-browser-underlay):not(.winter-ledger-subpage){position:relative!important;top:auto!important;bottom:auto!important;}
+body > .winter-browser-bar:not(.winter-browser-underlay):not(.winter-ledger-subpage)::before{display:none!important;}
+body > nav.bottom-nav{position:absolute!important;top:calc(62px + env(safe-area-inset-top,0px))!important;bottom:auto!important;}
+body{position:relative;}
+</style><style id="folder-active-unified">
+body > nav.bottom-nav{z-index:90!important;isolation:isolate!important;overflow:visible!important;box-shadow:none!important;}
+body > nav.bottom-nav button[data-v]{position:relative!important;z-index:var(--folder-layer)!important;opacity:1!important;}
+body > nav.bottom-nav button[data-v].on,body > nav.bottom-nav button[data-v][aria-current="page"]{z-index:100!important;background:#F8FAFB!important;background-image:none!important;border-left:0!important;box-shadow:none!important;filter:none!important;}
+body > nav.bottom-nav button[data-v].on::before,body > nav.bottom-nav button[data-v][aria-current="page"]::before{content:""!important;display:block!important;position:absolute!important;left:-4px!important;right:auto!important;width:6px!important;top:0!important;bottom:0!important;height:auto!important;background:#F8FAFB!important;border:0!important;box-shadow:none!important;z-index:1!important;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app main > [data-ledger-subpage])) > #app{background:#F8FAFB!important;}
+body:not(.ld-ledger-overlay-open):not(.ld-tax-fullscreen-open):not(:has(#app main > [data-ledger-subpage])) > #app > main{background:#F8FAFB!important;}
 </style></head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">HOKKAIDO</div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
-<div class="winter-address-row"><button type="button" class="winter-address-arrow" id="winter-address-prev" aria-label="上一個分頁">&lt;</button><button type="button" class="winter-address-arrow" id="winter-address-next" aria-label="下一個分頁">&gt;</button><div class="winter-address-field" id="winter-address-field" aria-label="網址欄">http://hokkaido.locat/overview</div></div>
-<nav class="bottom-nav" aria-label="頂部主分頁">
+
+<nav class="bottom-nav" aria-label="右側主分頁">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
   <button type="button" data-a="tab" data-v="home" aria-label="總覽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.8c-2.2-1.5-5.3-2-8.6-1.2v15.2c3.3-.8 6.4-.3 8.6 1.2 2.2-1.5 5.3-2 8.6-1.2V3.6c-3.3-.8-6.4-.3-8.6 1.2Z"/><path d="M12 4.8V20"/></svg><span>總覽</span></button>
   <button type="button" data-a="tab" data-v="plan" aria-label="行程"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.1" width="17.6" height="15.6" rx="2.7"/><path d="M7.4 3.2v4.2M16.6 3.2v4.2M3.2 10.2h17.6"/><path d="M7.8 14.1h2.3M13.4 14.1h2.4M7.8 17.3h2.3"/></svg><span>行程</span></button>
