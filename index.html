@@ -3620,6 +3620,24 @@ html,body,#app,#app main,#app .ld-subpage{background:#F8FAFB!important;backgroun
 #app :is(.days button:not(.on),.sh-views button:not(.on),.shop-glass-add,.ld-back){background:#f8fafb!important;border-color:#dce5eb!important;box-shadow:none!important}
 dialog#dlg.bottom-sheet,dialog#dlg,#hk-cloud-dialog{background:#f8fafb!important;border-color:#dce5eb!important;box-shadow:0 12px 40px rgba(52,73,87,.12)!important}#dlg :is(input:not([type=checkbox]):not([type=file]):not([type=radio]),textarea,select):not(.ld-type-native){background:#edf3f6!important;border-color:#dce5eb!important}
 </style><style>:root{--navy:#687985;--ink:#687985;--muted:#788995;--blue:#8da5b5}html,body{color:#687985}#app .cover-heading h1,#app .cover-stats strong{color:#687985!important}</style>
+
+<style id="refined-winter-typography">
+html body{font-size:13px; font-weight:400;letter-spacing:.015em}
+#app :is(b,strong,h1,h2,h3,h4,button,label,summary),#dlg :is(b,strong,h1,h2,h3,h4,button,label){font-weight:500!important}
+#app :is(h1,h2,h3,h4){letter-spacing:.045em}
+#app h1{font-size:21px!important}#app h2{font-size:17px!important}#app h3{font-size:15px!important}#app h4{font-size:13px!important}
+#app :is(summary b,summary strong,.home-entry b,.pk b,.ld-item b){font-size:13px!important;font-weight:500!important}
+#app .winter-cover{margin:0 16px 0;border:1px solid #e1e9ee;border-radius:15px;overflow:hidden;background:#edf3f6;box-shadow:none}
+#app .winter-cover .hero{aspect-ratio:16/8;height:auto!important;border-radius:0!important;margin:0!important;background-position:center 55%}
+#app .winter-cover .cover-summary{margin:0!important;padding:12px 14px 11px!important;background:#edf3f6!important;border-radius:0!important;display:block!important}
+#app .winter-cover .cover-heading h1{font-size:19px!important;font-weight:400!important;letter-spacing:.09em;line-height:1.45;margin:0!important}
+#app .winter-cover .cover-heading p{font-size:10px!important;letter-spacing:.08em;margin:3px 0 9px!important;line-height:1.5}
+#app .winter-cover .cover-stats{display:flex!important;align-items:center;justify-content:space-between;gap:0;padding-top:8px!important;border-top:1px solid #dce5eb!important}
+#app .winter-cover .cover-stats>div{flex:1;min-width:0;padding:0 8px!important;text-align:center!important;border:0!important;background:transparent!important}
+#app .winter-cover .cover-stats>div+div{border-left:1px solid #dce5eb!important}
+#app .winter-cover .cover-stats strong{font-size:12px!important;font-weight:400!important;letter-spacing:.025em;line-height:1.4}
+#app .winter-cover .cover-stats span{font-size:9px!important;font-weight:400!important;margin-top:2px!important;line-height:1.4}
+</style>
 </head><body><div id="app"></div>
 <nav class="bottom-nav" aria-label="底部功能選單">
   <div class="nav-glass-indicator nav-no-motion" aria-hidden="true"><div class="nav-lens-core"></div></div>
@@ -5756,7 +5774,7 @@ function home(){const n=packs.filter(p=>p.done).length;
  +sec('p',iconSvg('bag'),'行李清單',n+'／'+packs.length+' 已準備',packs.map((p,i)=>'<div class="pk'+(p.done?' dn':'')+'" data-pack-index="'+i+'"><input type="checkbox" data-a="tg" data-l="p" data-i="'+i+'"'+(p.done?' checked':'')+'><span>'+esc(p.t)+'</span><button type="button" class="pack-drag-handle" data-a="pack-drag" data-i="'+i+'" aria-label="長按拖曳「'+esc(p.t)+'」排序；鍵盤 Alt 加上下鍵調整" title="長按拖曳排序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button><div class="tl"><button data-a="ed" data-l="p" data-i="'+i+'">編輯</button><button data-a="rm" data-l="p" data-i="'+i+'">刪除</button></div></div>').join(''))
  +'<button class="add ghost" data-a="rs">還原預設內容</button>'+
  '<div class="home-add-quick-menu" id="home-add-quick-menu" aria-hidden="true"><button type="button" data-a="home-add-kind" data-kind="stays" tabindex="-1" aria-label="新增住宿" title="新增住宿">'+iconSvg('hotel')+'</button><button type="button" data-a="home-add-kind" data-kind="dining" tabindex="-1" aria-label="新增已訂餐廳" title="新增已訂餐廳">'+iconSvg('utensils')+'</button><button type="button" data-a="home-add-kind" data-kind="tickets" tabindex="-1" aria-label="新增已訂票券" title="新增已訂票券">'+iconSvg('ticket')+'</button><button type="button" data-a="home-add-kind" data-kind="packs" tabindex="-1" aria-label="新增行李清單" title="新增行李清單">'+iconSvg('bag')+'</button></div><button type="button" class="shop-glass-add home-add-fab" data-a="home-add-choose" aria-expanded="false" aria-controls="home-add-quick-menu" aria-label="新增總覽項目" title="新增總覽項目"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>'}
-const hero=()=>'<header class="hero"><div class="topline"><div class="brand">'+iconSvg('snowflake')+' HOKKAIDO / 2026</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><section class="summary cover-summary"><div class="cover-heading"><h1>北海道冬日旅誌</h1><p>札幌・小樽・登別・洞爺湖</p></div><div class="cover-stats"><div><strong>10 天 9 夜</strong><span>旅程天數</span></div><div><strong>4 人</strong><span>旅遊人數</span></div><div><strong>12/18–27</strong><span>旅行日期</span></div></div></section>';
+const hero=()=>'<div class="winter-cover"><header class="hero"><div class="topline"><div class="brand">'+iconSvg('snowflake')+' HOKKAIDO / 2026</div></div><div class="sn" aria-hidden="true"><i class="f3"></i><i class="f2"></i><i class="f1"></i></div></header><section class="summary cover-summary"><div class="cover-heading"><h1>北海道冬日旅誌</h1><p>札幌・小樽・登別・洞爺湖</p></div><div class="cover-stats"><div><strong>10 天 9 夜</strong><span>旅程天數</span></div><div><strong>4 人</strong><span>旅遊人數</span></div><div><strong>12/18–27</strong><span>旅行日期</span></div></div></section></div>';
 // Never replace the date-strip element when switching days: keeping the same
 // element also preserves touch momentum, horizontal scroll, and keyboard focus.
 let planDayScrollLeft=0;
