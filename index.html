@@ -4771,6 +4771,28 @@ html body #folder-add-dock button,html body #folder-add-dock #folder-add-options
 #app .overview-panel>summary,#app .overview-panel>.bd{background:#fff!important;}
 #app .overview-panel .fl3-leg:not([open]),#app .overview-panel .flight-card,#app .overview-panel .home-entry,#app .overview-panel .pk.swipe-host,#app .overview-panel .trip-web-group{background:#fff!important;border:0!important;}
 </style>
+<style id="overview-white-items-final">
+#app#app .summary.winter-trip-summary,
+#app#app main .card.overview-panel,
+#app#app main .overview-panel > summary,
+#app#app main .overview-panel > .bd,
+#app#app .overview-panel :is(.home-entry,.pk,.fl3-leg,.fl3-ticket,.flight-card,.trip-web-group,.trip-web-link){background:#FFFFFF!important;border:0!important;outline:0!important;box-shadow:none!important;}
+#app#app .overview-panel :is(.home-entry,.pk) > .swipe-face{background:#FFFFFF!important;border:0!important;box-shadow:none!important;}
+#app#app .overview-panel .fl3-leg > summary,#app#app .overview-panel .trip-web-group > summary{background:#FFFFFF!important;border:0!important;}
+</style>
+<style id="hk-liquid-glass-add-refined">
+html body #folder-add-dock button,html body #folder-add-dock #folder-add-options > button,html body #app .shop-glass-add,html body #app .home-add-quick-menu button,html body #app #plan-add-quick-menu button{
+ border-radius:50%!important;
+ background:radial-gradient(ellipse at 28% 12%,rgba(255,255,255,.78),transparent 52%),linear-gradient(155deg,rgba(255,255,255,.30),rgba(218,233,244,.16) 65%,rgba(255,255,255,.48))!important;
+ -webkit-backdrop-filter:blur(12px) saturate(180%) brightness(1.08)!important;
+ backdrop-filter:blur(12px) saturate(180%) brightness(1.08)!important;
+ border:1px solid rgba(255,255,255,.65)!important;
+ box-shadow:inset 0 1px 2px rgba(255,255,255,.95),inset 1px 0 2px rgba(255,255,255,.65),inset 0 -2px 4px rgba(110,143,170,.18),0 3px 12px rgba(44,65,85,.15)!important;
+ color:#526b80!important;
+ transition:scale .18s ease,box-shadow .18s ease!important;
+}
+html body #folder-add-dock button:active{scale:.93;box-shadow:inset 0 1px 5px rgba(85,115,140,.20),0 1px 5px rgba(44,65,85,.12)!important;}
+</style>
 </head><body><div class="winter-browser-bar" role="banner" aria-label="北海道旅誌頂部導覽"><div class="winter-browser-controls"><i></i><i></i><i></i><button id="winter-ledger-back" type="button" hidden aria-label="返回上一頁" data-a="ledger-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="winter-browser-page" id="winter-browser-page">Hokkaido</div><div class="hk-music"><button type="button" class="hk-disc" aria-label="開啟音樂播放器" aria-expanded="false"></button><div class="hk-player" inert><div class="hk-record-window" aria-hidden="true"><span class="hk-disc hk-player-disc"></span></div><div class="hk-track"><strong>Time Machine</strong><small>Mj Apanay · 3:47</small></div><button type="button" class="hk-play" aria-label="播放">▶</button><button type="button" class="hk-close" aria-label="關閉">×</button></div><audio src="./music.mp3" preload="auto" loop></audio></div><button type="button" id="hk-cloud-toggle" aria-label="Firebase 共用行程、訂位、住宿與餐廳同步" data-state="loading"><span class="cloud-led" aria-hidden="true"></span><span class="winter-cloud-text">［ 同步 ］</span><span id="hk-cloud-label" class="winter-cloud-live">雲端連線中</span></button></div>
 
 <nav class="bottom-nav" aria-label="底部主分頁">
