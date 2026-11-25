@@ -8867,10 +8867,11 @@ hkStartJournal();
 const app=document.getElementById('app'),dock=document.createElement('div');dock.id='folder-add-dock';dock.hidden=true;dock.innerHTML='<div id="folder-add-options" hidden></div><button id="folder-add-button" type="button" aria-label="新增"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>';document.body.appendChild(dock);
 const button=dock.lastElementChild,options=dock.firstElementChild;let source=null,signature='';
 function sync(){source=app.querySelector('.shop-glass-add');const blocked=document.body.matches('.ld-ledger-overlay-open,.ld-tax-fullscreen-open')||!!app.querySelector('main > [data-ledger-subpage]');dock.hidden=!source||blocked;if(document.body.classList.contains('folder-add-ready')===dock.hidden)document.body.classList.toggle('folder-add-ready',!dock.hidden);if(dock.hidden)return;
-button.className=source.classList.contains('home-add-fab')?'home-add-fab':source.classList.contains('itinerary-add-trigger')?'itinerary-add-trigger':'';button.setAttribute('aria-label',source.getAttribute('aria-label')||'新增');const menu=app.querySelector('.home-add-quick-menu.is-open');button.setAttribute('aria-expanded',String(!!menu));options.hidden=!menu;options.className=menu?'home-add-fab itinerary-add-trigger':'';const items=menu?[...menu.querySelectorAll('button')]:[];const key=items.map(b=>b.outerHTML).join('');if(key!==signature){signature=key;options.replaceChildren();items.forEach((b,i)=>{const proxy=document.createElement('button');proxy.type='button';proxy.innerHTML=b.innerHTML;proxy.setAttribute('aria-label',b.getAttribute('aria-label')||'新增');proxy.onclick=()=>app.querySelector('.home-add-quick-menu.is-open')?.querySelectorAll('button')[i]?.click();options.appendChild(proxy);});}}
+button.className=source.classList.contains('home-add-fab')?'home-add-fab':source.classList.contains('itinerary-add-trigger')?'itinerary-add-trigger':'';button.setAttribute('aria-label',source.getAttribute('aria-label')||'新增');const menu=app.querySelector('.home-add-quick-menu.is-open');button.setAttribute('aria-expanded',String(!!menu));options.hidden=!menu;options.className=menu?'home-add-fab itinerary-add-trigger':'';const items=menu?[...menu.querySelectorAll('button')]:[];const key=items.map(b=>b.outerHTML).join('');if(key!==signature){signature=key;options.replaceChildren();items.forEach((b,i)=>{const proxy=document.createElement('button');proxy.type='button';proxy.style.setProperty('--hk-order',String(items.length-1-i));proxy.innerHTML=b.innerHTML;proxy.setAttribute('aria-label',b.getAttribute('aria-label')||'新增');proxy.onclick=()=>app.querySelector('.home-add-quick-menu.is-open')?.querySelectorAll('button')[i]?.click();options.appendChild(proxy);});}}
 button.onclick=()=>{source?.click();sync();};new MutationObserver(sync).observe(app,{subtree:true,childList:true,attributes:true,attributeFilter:['class','aria-expanded']});new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});sync();})();</script><script>(()=>{const m=document.querySelector('.hk-music'),d=m.querySelector('.hk-disc'),p=m.querySelector('.hk-player'),a=m.querySelector('audio'),b=m.querySelector('.hk-play'),t=m.querySelector('.hk-track small');let pending=true, wanted=true;const ms=navigator.mediaSession; if(ms){try{ms.metadata=new MediaMetadata({title:"Time Machine",artist:"Mj Apanay"});}catch(e){} for(const [action,handler] of [["play",()=>{wanted=true;pending=false;play();}],["pause",()=>{wanted=false;pending=false;a.pause();}],["stop",()=>{wanted=false;pending=false;a.pause();}]]){try{ms.setActionHandler(action,handler);}catch(e){}}}function measure(){const h=m.closest('.winter-browser-bar').getBoundingClientRect(),r=m.getBoundingClientRect();m.style.setProperty('--hk-panel-width',Math.max(38,h.width-30)+'px');m.style.setProperty('--hk-panel-right',(r.right-h.right+15)+'px');}window.addEventListener('resize',measure);function open(v){if(v)measure();m.classList.toggle('open',v);d.setAttribute('aria-expanded',String(v));p.inert=!v;}function state(){if(ms){try{ms.playbackState=a.paused?"paused":"playing";}catch(e){}}m.classList.toggle('playing',!a.paused);b.textContent=a.paused?'▶':'Ⅱ';b.setAttribute('aria-label',a.paused?'播放':'暫停');}function play(){if(!wanted||document.hidden)return;a.play().catch(e=>{if(!wanted)return;pending=true;t.textContent=e.name==='NotAllowedError'?'點擊畫面開始播放':'無法播放，請確認 music.mp3 已上傳';});}d.onclick=()=>open(!m.classList.contains('open'));m.querySelector('.hk-close').onclick=()=>open(false);b.onclick=()=>{pending=false;wanted=a.paused;if(wanted)play();else a.pause();};a.onplay=()=>{if(!wanted||document.hidden){a.pause();return;}pending=false;t.textContent='Mj Apanay · 3:47';state();};a.onpause=a.onended=state;a.onerror=()=>{t.textContent='無法載入 music.mp3';state();};document.addEventListener('click',e=>{if(wanted&&pending&&a.paused&&!e.target.closest('.hk-play'))play();},true);document.addEventListener("visibilitychange",()=>{if(document.hidden){a.pause();}else if(wanted){play();}});window.addEventListener("pagehide",()=>a.pause());window.addEventListener("pageshow",()=>{if(wanted&&!document.hidden&&a.paused)play();});a.loop=true;state();play();})();</script>
 <style id="hk-reference-liquid-glass-v8">
 /* Reference layers: 10% white backdrop, 4.7px blur, optical rim, opposing highlights. */
+html body .hk-music .hk-player,
 html body > nav.bottom-nav,
 html body #folder-add-dock button,
 html body #folder-add-dock #folder-add-options > button,
@@ -8890,5 +8891,68 @@ html body > nav.bottom-nav .nav-lens-core {
  box-shadow:inset 1px 2px 4px rgba(255,255,255,.35),inset -1px -2px 4px rgba(255,255,255,.35),inset 0 0 8px rgba(115,140,160,.12),0 2px 7px rgba(45,65,90,.10)!important;
 }
 html body #folder-add-dock button:active {scale:.94;}
+</style>
+<style id="hk-glass-flight-refinement">
+html body #folder-add-dock #folder-add-options > button svg{width:17px!important;height:17px!important;stroke-width:1.25!important;}
+html body #folder-add-dock #folder-add-options > button svg *{stroke-width:1.25!important;}
+#folder-add-dock #folder-add-button{transition:transform 360ms cubic-bezier(.22,1.5,.36,1),scale 180ms ease!important;}
+#folder-add-dock #folder-add-button[aria-expanded=true]{transform:rotate(45deg)!important;}
+#folder-add-options:not([hidden])>button{animation:hk-option-rise 380ms cubic-bezier(.2,1.25,.35,1) both;animation-delay:calc(var(--hk-order,0)*45ms);}
+@keyframes hk-option-rise{from{opacity:0;transform:translateY(18px) scale(.65)}to{opacity:1;transform:translateY(0) scale(1)}}
+#app#app .overview-panel>summary>.sum-ic,#app#app .weather-overview>summary>.sum-ic{border:0!important;outline:0!important;box-shadow:none!important;}
+#app#app .overview-f .fl3-ticket{padding:13px 12px 10px!important;background:#f5f8fa!important;border-radius:14px!important;}
+#app#app .overview-f .fl3-ticket:before,#app#app .overview-f .fl3-ticket:after{display:none!important;}
+#app#app .overview-f .winter-ticket-topline{display:none!important;}
+#app#app .overview-f .fl3-ticket-header{padding:0 0 10px;border-bottom:1px solid #e1e9ef;}
+#app#app .overview-f .fl3-route{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr)!important;padding:14px 0!important;align-items:center;}
+#app#app .overview-f .fl3-place{display:flex;flex-direction:column;gap:4px;}
+#app#app .overview-f .fl3-place b{order:-1;margin:0!important;font-size:11px!important;letter-spacing:.12em;color:#718ba1;}
+#app#app .overview-f .fl3-place strong{font-size:22px!important;font-weight:650!important;}
+#app#app .overview-f .fl3-place span{margin:0!important;white-space:normal!important;overflow-wrap:anywhere;line-height:1.4;font-size:10px!important;}
+#app#app .overview-f .fl3-route-center{position:relative;gap:3px;}
+#app#app .overview-f .fl3-route-center:before{content:'';position:absolute;top:14px;left:0;right:0;border-top:1px dashed #a9bdcc;z-index:0;}
+#app#app .overview-f .fl3-route-center svg{position:relative;background:#f5f8fa;z-index:1;}
+#app#app .overview-f .fl3-baggage{background:#fff!important;border:0!important;}
+#app#app .overview-f .fl3-ticket-footer{font-size:9px!important;}
+@media(prefers-reduced-motion:reduce){#folder-add-options:not([hidden])>button{animation:none!important;}#folder-add-dock #folder-add-button{transition:none!important;}}
+</style>
+<style id="hk-player-add-flight-refinement">
+html body .hk-music .hk-player {
+ background:rgba(255,255,255,.10)!important;
+ -webkit-backdrop-filter:blur(4.7px) saturate(115%)!important;
+ backdrop-filter:blur(4.7px) saturate(115%)!important;
+ border:1px solid transparent!important;
+ box-shadow:inset 1px 2px 4px rgba(255,255,255,.35),inset -1px -2px 4px rgba(255,255,255,.35),inset 5px 5px 11px -8px rgba(255,255,255,.20),inset -5px -7px 20px -7px rgba(255,255,255,.20),inset -2px -4px 18px rgba(0,0,0,.045),inset 1.67px 3.33px 18px rgba(0,0,0,.045),0 4px 14px rgba(45,65,90,.12)!important;
+ background-image:radial-gradient(ellipse at 12% 0%,rgba(255,255,255,.45),transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(255,255,255,.30),transparent 55%),radial-gradient(ellipse at center,transparent 60%,rgba(255,255,255,.14) 88%,rgba(255,255,255,.55) 100%)!important;
+}
+
+html body #folder-add-dock #folder-add-options > button svg{width:17px!important;height:17px!important;stroke-width:1.25!important;}
+html body #folder-add-dock #folder-add-options > button svg *{stroke-width:1.25!important;}
+html body #folder-add-button{transition:transform 380ms cubic-bezier(.22,1.5,.36,1)!important;}
+html body #folder-add-button[aria-expanded=true]{transform:rotate(45deg)!important;}
+#folder-add-options:not([hidden]) > button{animation:hk-option-rise 380ms cubic-bezier(.22,1.3,.36,1) both;}
+#folder-add-options > button:nth-last-child(2){animation-delay:45ms;}
+#folder-add-options > button:nth-last-child(3){animation-delay:90ms;}
+#folder-add-options > button:nth-last-child(4){animation-delay:135ms;}
+#folder-add-options > button:nth-last-child(5){animation-delay:180ms;}
+@keyframes hk-option-rise{from{opacity:0;transform:translateY(18px) scale(.65)}to{opacity:1;transform:translateY(0) scale(1)}}
+#app .overview-panel .sum-ic,#app .overview-panel .sum-ic::before,#app .overview-panel .sum-ic::after,#app .overview-f .sum-ic{border:0!important;outline:0!important;box-shadow:none!important;}
+#app#app .overview-panel .fl3-ticket{padding:14px 14px 10px!important;border-radius:14px!important;}
+#app .fl3-ticket .winter-ticket-topline{display:flex;justify-content:space-between;font-size:9px;letter-spacing:1px;color:#8296aa;padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid #e8edf2;}
+#app .fl3-ticket .fl3-ticket-header{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+#app .fl3-ticket .fl3-airline{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;}
+#app .fl3-ticket .fl3-airline b{font-size:12px;color:#354b60;}
+#app .fl3-ticket .fl3-route{display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr);padding:16px 0;gap:6px;}
+#app .fl3-ticket .fl3-place{display:flex;flex-direction:column;gap:4px;}
+#app .fl3-ticket .fl3-place b{order:-1;font-size:13px;margin:0;letter-spacing:1.4px;color:#71889e;}
+#app .fl3-ticket .fl3-place strong{font-size:22px;font-weight:650;letter-spacing:-.6px;}
+#app .fl3-ticket .fl3-place span{margin:0;font-size:10px;white-space:normal;line-height:1.4;}
+#app .fl3-ticket .fl3-route-center{position:relative;align-self:center;}
+#app .fl3-ticket .fl3-route-center:before{content:'';position:absolute;left:0;right:0;top:14px;border-top:1px dashed #a9bacb;z-index:0;}
+#app .fl3-ticket .fl3-route-center svg{position:relative;background:white;z-index:1;padding:2px;width:24px;height:24px;}
+#app .fl3-ticket .fl3-baggage{background:#f4f7fa;border:0;border-radius:8px;}
+#app .fl3-ticket .fl3-ticket-footer{border-top:1px dashed #dce5ec;padding-top:9px;}
+#app .fl3-ticket:before,#app .fl3-ticket:after{display:none!important;}
+@media(prefers-reduced-motion:reduce){#folder-add-options > button{animation:none!important;}#folder-add-button{transition:none!important;}}
 </style>
 </body></html>
