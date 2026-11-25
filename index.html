@@ -6974,9 +6974,9 @@ const fl3Ticket=(flightNo)=>{
  const bag=FLIGHT_BAGGAGE[flightNo];
  const bagView=bag?'<details class="fl3-baggage"><summary>'+iconSvg('suitcase')+'<span>隨身 <b>'+esc(bag.carry)+'</b>　｜　托運 <b>'+esc(bag.checked)+'</b></span>'+iconSvg('chevron')+'</summary><div class="fl3-baggage-body">'+bag.detail.map(x=>'<div><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join('')+'<small>依訂單資料整理，實際依航空公司最新確認額度為準。</small></div></details>':'';
  const pass=FLIGHT_OUTBOUND_IDS.has(flightNo)?'<div class="fl2-pass-inline fl3-pass"><div class="fl3-pass-row"><div class="fl2-pass-preview" data-flight-preview="'+esc(flightNo)+'" aria-label="已上傳的登機證縮圖"></div><button type="button" class="fl2-pass-button" data-a="flight-pass-open" data-flight-id="'+esc(flightNo)+'" aria-label="上傳或管理 '+esc(flightNo)+' 登機證">'+fl3QrCode+'<span>登機證／QR Code</span><span class="fl2-pass-count" aria-hidden="true"></span><b class="fl3-pass-action">+ 新增</b></button></div></div>':'';
- return '<article class="fl3-ticket" data-flight-no="'+esc(flightNo)+'"><div class="winter-ticket-topline"><span>HOKKAIDO · AIR PASS</span><b>DECEMBER 2026</b></div><div class="fl3-ticket-header"><div class="fl3-airline"><b>'+esc(f.company)+'</b><span>'+esc(flightNo)+'</span></div><div class="fl3-flight-duration">'+fl3Clock+' '+esc(f.duration)+'</div></div>'+ 
- '<div class="fl3-route"><div class="fl3-place"><strong>'+esc(f.d)+'</strong><b>'+esc(f.dc)+'</b><span>'+esc(f.dep)+'</span></div><div class="fl3-route-center">'+fl3DirectPlane+'<small>'+(f.direct?'直飛':'航段')+'</small></div><div class="fl3-place fl3-place-end"><strong>'+esc(f.a)+'</strong><b>'+esc(f.ac)+'</b><span>'+esc(f.arr)+'</span></div></div>'+bagView+pass+
- '<footer class="fl3-ticket-footer"><span>航班時間為當地時間</span><b>'+esc(flightNo)+' · 2026</b></footer></article>';
+ return '<article class="fl3-ticket" data-flight-no="'+esc(flightNo)+'"><div class="fl3-ticket-header"><div class="fl3-airline"><b>'+esc(f.company)+'</b><span>'+esc(flightNo)+'</span></div><div class="fl3-flight-duration">'+fl3Clock+' '+esc(f.duration)+'</div></div>'+ 
+ '<div class="fl3-route"><div class="fl3-place"><strong>'+esc(f.d)+'</strong><b>'+esc(f.dc)+'</b><span>'+esc(f.dep)+'</span></div><div class="fl3-route-center">'+fl3DirectPlane+'</div><div class="fl3-place fl3-place-end"><strong>'+esc(f.a)+'</strong><b>'+esc(f.ac)+'</b><span>'+esc(f.arr)+'</span></div></div>'+bagView+pass+
+ '</article>';
 };
 const fl3Transfer=(duration)=>'<div class="fl3-transfer">'+iconSvg('route')+'<div><b>東京成田轉機 · '+esc(duration)+'</b><small>需重新託運行李，請預留辦理手續時間</small></div></div>';
 const fl3Leg=(key,type,route,summary,flights,notes,connection)=>{
@@ -6987,7 +6987,7 @@ const fl3Leg=(key,type,route,summary,flights,notes,connection)=>{
  flights.map((no,i)=>(i===1?fl3Transfer(connection):'')+fl3Ticket(no)).join('')+ 
  (notes?'<p class="fl3-note">'+esc(notes)+'</p>':'')+'</div></details>';
 };
-const fl3Group=(name,type,legs)=>'<div class="fl3-group"><div class="fl3-group-head"><div><b>'+esc(name)+'</b><small>2026 / 12 / 18 — 12 / 27</small></div><span class="fl3-group-kind">'+esc(type)+'</span></div>'+legs.join('')+'</div>';
+const fl3Group=(name,type,legs)=>'<div class="fl3-group"><div class="fl3-group-head"><div><b>'+esc(name)+'</b></div></div>'+legs.join('')+'</div>';
 const alternateFlightBoard=()=>fl3Group('廈門出發 · 廈門返程','成田轉機',[
  fl3Leg('xiamen-out','去程','廈門 → 成田 → 札幌','09:20 XMN → CTS 18:40',['MF815','MM575'],'','3 小時 5 分'),
  fl3Leg('xiamen-return','回程','札幌 → 成田 → 廈門','10:05 CTS → XMN 18:25',['MM570','MF816'],'','3 小時')]);
@@ -9038,5 +9038,18 @@ html body #app#app .overview-f .fl3-baggage{background:transparent!important;bor
 html body #app#app .overview-f .fl3-ticket-footer{border:0!important;padding-top:6px!important;}
 html body #app#app .overview-f .fl3-collapsed{background:transparent!important;border:0!important;box-shadow:none!important;}
 @media(prefers-reduced-motion:reduce){html body #app#app main details.overview-panel[open]>.bd{animation:none!important;}html body #app#app main details.overview-panel::details-content{transition:none!important;}}
+</style>
+<style id="hk-unified-shadow-clean-flight">
+html body #app#app main details.card.overview-panel,html body #app#app main details.card.overview-panel[open],html body #app#app main details.card.overview-panel:has(>summary:active){box-shadow:0 4px 16px rgba(55,78,99,.075),0 1px 3px rgba(55,78,99,.035)!important;}
+html body #app#app .overview-f .fl3-group{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;}
+html body #app#app .overview-f .fl3-group-head{background:transparent!important;border:0!important;padding:8px 0!important;box-shadow:none!important;}
+html body #app#app .overview-f .fl3-leg[open] .fl3-leg-route{display:none!important;}
+html body #app#app .overview-f .fl3-leg[open] .fl3-collapsed{display:none!important;}
+html body #app#app .overview-f .fl3-ticket{margin:0!important;padding:10px 0!important;border-radius:0!important;}
+html body #app#app .overview-f .fl3-airline{flex-direction:row!important;align-items:baseline!important;gap:6px!important;flex-wrap:wrap!important;}
+html body #app#app .overview-f .fl3-route{padding:9px 0!important;}
+html body #app#app .overview-f .fl3-place strong{font-size:19px!important;}
+html body #app#app .overview-f .fl3-transfer{background:transparent!important;box-shadow:none!important;border:0!important;padding:8px 0!important;}
+html body #app#app .overview-f .fl2-pass-button{background:transparent!important;box-shadow:none!important;border:1px dashed #d5dfe6!important;}
 </style>
 </body></html>
