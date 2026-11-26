@@ -5636,7 +5636,7 @@ function shortTripDate(value){
 }
 const homeMapAnchor=url=>{
  const valid=safeLink(url||'');
- return valid?'<a class="home-map-link" href="'+esc(valid)+'" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>開啟地圖</a>':'';
+ return valid?'<a class="home-map-link" href="'+esc(valid)+'" target="_blank" rel="noopener noreferrer">開啟地圖</a>':'';
 };
 const homeDragGrip=(kind,i,name)=>'<button type="button" class="home-drag-handle" data-a="home-drag" data-kind="'+kind+'" data-i="'+i+'" title="長按拖曳排序" aria-label="長按拖曳「'+esc(name)+'」排序；鍵盤 Alt 加上下鍵調整"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5.5" r="1.3"/><circle cx="15" cy="5.5" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18.5" r="1.3"/><circle cx="15" cy="18.5" r="1.3"/></svg></button>';
 const homeListData=kind=>kind==='stays'?stays:kind==='dining'?dining:tickets;
@@ -9316,4 +9316,12 @@ html body .hk-music:not(.open) .hk-player{width:38px!important;right:0!important
 html body #app#app .home-map-link{display:inline-flex!important;align-items:center!important;gap:4px!important;border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;border-radius:0!important;}.home-map-link svg{width:14px;height:14px;flex:none;}
 .hk-dining-dots{display:flex;justify-content:center;align-items:center;gap:5px;margin-top:auto;flex-wrap:wrap;}.hk-dining-dots button{width:6px!important;height:6px!important;min-width:0!important;min-height:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:#d4dfe7!important;box-shadow:none!important;}.hk-dining-dots button[aria-current="true"]{background:#607f96!important;}
 .hk-dining-card.hk-dining-switched .hk-dining-open,.hk-dining-card.hk-dining-switched .home-map-link{animation:hkDiningFade .18s ease-out;}@keyframes hkDiningFade{from{opacity:.35}to{opacity:1}}@media(prefers-reduced-motion:reduce){.hk-dining-card.hk-dining-switched *{animation:none!important;}}
-</style><style id="hk-dining-swipe-v3">.hk-dining-open{gap:0!important}.hk-dining-card{touch-action:pan-y!important}.hk-dining-open:after{display:none!important}.hk-dining-dots{position:relative;align-self:center;width:max-content;max-width:100%;flex-wrap:nowrap;gap:5px;}.hk-dining-dots button[aria-current="true"]{background:#d4dfe7!important}.hk-dining-indicator{position:absolute;left:0;top:50%;margin-top:-3px;width:6px;height:6px;border-radius:50%;background:#607f96;pointer-events:none;transition:transform 280ms cubic-bezier(.22,.8,.25,1);z-index:2}.hk-dining-dots button{flex:none}@media(prefers-reduced-motion:reduce){.hk-dining-indicator{transition:none}}</style></body></html>
+</style><style id="hk-dining-swipe-v3">.hk-dining-open{gap:0!important}.hk-dining-card{touch-action:pan-y!important}.hk-dining-open:after{display:none!important}.hk-dining-dots{position:relative;align-self:center;width:max-content;max-width:100%;flex-wrap:nowrap;gap:5px;}.hk-dining-dots button[aria-current="true"]{background:#d4dfe7!important}.hk-dining-indicator{position:absolute;left:0;top:50%;margin-top:-3px;width:6px;height:6px;border-radius:50%;background:#607f96;pointer-events:none;transition:transform 280ms cubic-bezier(.22,.8,.25,1);z-index:2}.hk-dining-dots button{flex:none}@media(prefers-reduced-motion:reduce){.hk-dining-indicator{transition:none}}</style><style id="hk-map-tax-dots-final">
+html body #app#app .home-map-link,html body #app#app .hk-stay-minimal .home-map-link{border:1px solid #dce6ec!important;border-radius:10px!important;background:#f0f5f8!important;padding:5px 8px!important;box-shadow:none!important;}
+html body #app#app .home-map-link svg{display:none!important;}
+html body #app#app .hk-dining-dots{gap:5px!important;}
+html body #app#app .hk-dining-dots .hk-dining-indicator{display:none!important;}
+html body #app#app .hk-dining-dots button{width:6px!important;height:6px!important;border-radius:999px!important;background:#dce7ed!important;transition:background .2s,width .24s!important;}
+html body #app#app .hk-dining-dots button[aria-current="true"]{width:17px!important;background:#7f9db4!important;}
+@media(prefers-reduced-motion:reduce){html body #app#app .hk-dining-dots button{transition:none!important;}}
+</style></body></html>
