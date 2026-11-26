@@ -7040,7 +7040,8 @@ const travelLinksPanel=()=>{
  return '<section class="hk-pack-page hk-useful-page"><header><button class="shop-glass-add hk-pack-back" data-a="hk-useful-back" aria-label="返回總覽"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button><b>旅途中常用網站</b></header><div class="hk-pack-list hk-useful-body">'+body+'</div></section>'; 
 };
 
-function hkUsefulCard(){return '<button type="button" class="hk-useful-card" data-a="hk-useful-open"><b>常用網站</b><small>交通・景點・入境</small></button>';}
+function hkUsefulCard(){return '<section class="hk-useful-card"><button type="button" class="hk-useful-toggle" aria-expanded="false"><b>常用網站</b><small>交通・景點・入境</small></button><div class="hk-useful-inline" hidden>'+TRIP_WEBS.map(g=>'<div class="hk-inline-group"><b>'+esc(g.group)+'</b><small>'+esc(g.hint)+'</small>'+g.links.map(x=>'<a href="'+esc(safeLink(x.url))+'" target="_blank" rel="noopener noreferrer"><b>'+esc(x.name)+'</b><small>'+esc(x.desc)+'</small></a>').join('')+'</div>').join('')+'</div></section>';}
+
 let hkUsefulPage=false,hkUsefulScroll=0;
 let homeCategory='useful';
 const homeCategories=[['useful','常用網站'],['f','航班'],['h','住宿'],['r','餐廳'],['k','票券'],['p','行李']];
@@ -9420,4 +9421,18 @@ html body #app#app main .hk-bento-grid>.hk-useful-card{height:calc(100% - 10px)!
 html body #app#app main .hk-bento-grid>.hk-stay-timeline{height:118px!important;min-height:118px!important;max-height:118px!important;padding-top:12px!important;justify-content:flex-start!important;}
 html body #app#app main .hk-bento-grid>.hk-stay-timeline .hk-timeline-heading{margin-top:0!important;padding-top:0!important;}
 html body #app#app main .hk-bento-grid>.hk-useful-card{height:100%!important;align-self:stretch!important;margin:0!important;}
-</style></body></html>
+</style><style id="hk-useful-inline-expand">
+html body #app#app main .hk-bento-grid>.hk-useful-card{padding:0!important;transition:transform 260ms ease,opacity 260ms ease!important;}
+.hk-useful-toggle{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;width:100%;flex:1;border:0;background:transparent;padding:8px 12px;text-align:left;color:#435d71;}
+.hk-useful-inline[hidden]{display:none!important;}.hk-useful-inline{width:100%;padding:0 12px 12px;box-sizing:border-box;}
+.hk-inline-group{padding:10px 0;border-top:1px solid #e5edf3;}.hk-inline-group>a{display:flex;flex-direction:column;gap:3px;padding:8px 0;color:#435d71;text-decoration:none;}.hk-inline-group small{display:block;}
+html body #app#app main .hk-bento-grid.hk-useful-expanded{grid-template-rows:auto auto 120px auto!important;}
+html body #app#app main .hk-bento-grid.hk-useful-expanded>.hk-useful-card{grid-column:1/-1!important;height:auto!important;align-self:start!important;justify-content:flex-start!important;}
+html body #app#app main .hk-bento-grid.hk-useful-expanded>.hk-ticket-card{grid-row:3!important;height:120px!important;min-height:120px!important;max-height:120px!important;padding:12px!important;}
+html body #app#app main .hk-bento-grid.hk-useful-expanded .hk-ticket-card .hk-ticket-thumb,html body #app#app main .hk-bento-grid.hk-useful-expanded .hk-ticket-card .hk-dining-content:before{display:none!important;content:none!important;}
+html body #app#app main .hk-bento-grid.hk-useful-expanded .hk-ticket-card .hk-dining-content{grid-template-rows:30px 15px!important;align-content:center!important;}
+html body #app#app main .hk-bento-grid.hk-useful-expanded .hk-ticket-card .hk-dining-content strong{grid-row:1!important;padding:0!important;}
+html body #app#app main .hk-bento-grid.hk-useful-expanded .hk-ticket-card .hk-dining-content small{grid-row:2!important;padding:0!important;}
+</style><script id="hk-useful-inline-interaction">
+(()=>{function toggle(grid,open){const card=grid.querySelector('.hk-useful-card'),ticket=grid.querySelector('.hk-ticket-card');if(!card)return;const els=[card,ticket].filter(Boolean),before=els.map(e=>e.getBoundingClientRect());grid.classList.toggle('hk-useful-expanded',open);card.querySelector('.hk-useful-toggle').setAttribute('aria-expanded',String(open));card.querySelector('.hk-useful-inline').hidden=!open;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)els.forEach((e,i)=>{const a=before[i],b=e.getBoundingClientRect();if(b.width&&b.height&&e.animate)e.animate([{transformOrigin:'top left',transform:`translate(${a.left-b.left}px,${a.top-b.top}px) scale(${a.width/b.width},${a.height/b.height})`},{transformOrigin:'top left',transform:'none'}],{duration:280,easing:'cubic-bezier(.2,.75,.25,1)'});});}document.addEventListener('click',e=>{const grid=document.querySelector('.hk-bento-grid');if(!grid)return;const card=grid.querySelector('.hk-useful-card');if(!card)return;if(e.target.closest('.hk-useful-toggle')){toggle(grid,!grid.classList.contains('hk-useful-expanded'));return;}if(grid.classList.contains('hk-useful-expanded')&&!card.contains(e.target)){toggle(grid,false);}},true);})();
+</script></body></html>
