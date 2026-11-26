@@ -9278,4 +9278,13 @@ html body #app#app main .hk-flight-minimal .hk-flight-bottom{position:static!imp
 html body #app#app main .hk-bento-grid>.hk-pack-card{padding:12px!important;transition:transform 110ms ease-out!important;touch-action:pan-y;-webkit-tap-highlight-color:transparent;filter:none!important;}
 html body #app#app main .hk-pack-card:has(.hk-pack-link:active),html body #app#app main .hk-pack-card.hk-card-opening{transform:scale(.985)!important;filter:none!important;}
 @media(prefers-reduced-motion:reduce){html body #app#app main .hk-bento-grid>.hk-pack-card{transition:none!important;transform:none!important;}}
+</style><style id="hk-bento-compact-v21">
+html body #app#app main .hk-bento-grid{container-type:inline-size;}
+html body #app#app main .hk-bento-grid>.hk-flight-card.hk-flight-minimal,html body #app#app main .hk-bento-grid>.hk-pack-card{height:auto!important;aspect-ratio:4/3!important;min-height:0!important;max-height:none!important;}
+@supports (width:1cqw){html body #app#app main .hk-bento-grid>.hk-flight-card.hk-flight-minimal,html body #app#app main .hk-bento-grid>.hk-pack-card{height:calc(37.5cqw - 9.5px)!important;aspect-ratio:auto!important;}}
+html body #app#app main .hk-bento-grid>.hk-flight-card.hk-flight-minimal{display:grid!important;grid-template-rows:12px minmax(0,1fr) 12px!important;align-items:center!important;justify-items:start!important;padding:12px!important;gap:0!important;}
+html body #app#app main .hk-flight-minimal .hk-flight-centered-group{display:contents!important;}
+html body #app#app main .hk-flight-minimal .hk-flight-center{font-size:55px!important;line-height:1!important;margin:0!important;align-self:center!important;justify-self:start!important;}
+html body #app#app main .hk-flight-minimal .hk-flight-top,html body #app#app main .hk-flight-minimal .hk-flight-bottom{margin:0!important;align-self:center!important;}
+html body #app#app main .hk-flight-minimal .hk-flight-bottom{font-size:11px!important;letter-spacing:.25px!important;}
 </style></body></html>
