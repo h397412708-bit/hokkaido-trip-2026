@@ -9347,4 +9347,10 @@ html body #app#app main .hk-ticket-card .hk-dining-content small,html body #app#
 html body #app#app main .hk-ticket-card .hk-dining-dots button{background:#dce7ed!important;}html body #app#app main .hk-ticket-card .hk-dining-dots button[aria-current="true"]{background:#7f9db4!important;}
 </style><style id="hk-dining-independent-size">
 html body #app#app main .hk-bento-grid>.hk-dining-card:not(.hk-ticket-card){align-self:start!important;height:auto!important;min-height:105px!important;max-height:none!important;aspect-ratio:auto!important;}
+</style><style id="hk-square-ticket-fixed-header">
+html body #app#app main .hk-bento-grid>.hk-ticket-card{aspect-ratio:1/1!important;height:auto!important;min-height:0!important;max-height:none!important;align-self:start!important;}
+html body #app#app main .hk-ticket-card:before{inset:auto 0 0!important;height:40%!important;background:rgba(248,250,251,.48)!important;backdrop-filter:blur(18px) saturate(125%)!important;-webkit-backdrop-filter:blur(18px) saturate(125%)!important;mask-image:none!important;-webkit-mask-image:none!important;}
+html body #app#app main .hk-ticket-card:after{display:none!important;content:none!important;}
+html body .winter-browser-bar:not(.winter-browser-underlay):not(.winter-ledger-subpage){position:fixed!important;top:0!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;margin:0!important;z-index:1800!important;}
+html body:has(>.winter-browser-bar:not(.winter-browser-underlay):not(.winter-ledger-subpage)){padding-top:calc(50px + env(safe-area-inset-top,0px))!important;}
 </style></body></html>
