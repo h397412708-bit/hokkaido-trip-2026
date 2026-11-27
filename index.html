@@ -7655,6 +7655,7 @@ function syncWinterPage(){
   if(back)back.hidden=!sub;
 }
 function render(){
+  const homeEditorPosition=st.tab==='home'&&!dlg.open?hkHomeEditorScroll:null;
   const diningRefresh=st.tab==='home'&&(hkDiningPage||hkTicketPage)&&app.querySelector('.hk-dining-page,.hk-ticket-page');
   const diningY=diningRefresh?app.scrollTop:0, diningWindowY=diningRefresh?window.scrollY:0;
   syncWinterPage();
@@ -7714,12 +7715,32 @@ function render(){
   if(st.tab==='ledger')ledgerRefreshFx(false);
   if(st.tab==='home')flightPassCounts();
   if(diningRefresh){const page=app.querySelector('.hk-dining-page,.hk-ticket-page');if(page)page.classList.add('hk-dining-refresh');app.scrollTop=diningY;window.scrollTo(0,diningWindowY);}
+  if(homeEditorPosition)hkRestoreHomeEditorScroll(homeEditorPosition);
 }
 // 所有新增／編輯視窗先將焦點放在標題，而不是輸入框，避免 iOS 開啟表單時自動彈出鍵盤。
 // 使用可程式聚焦的標題 (autofocus) 確保 showModal() 自己的焦點流程也不會選中第一個 input。
 let nextDialogIsSheet=false;
+let hkHomeEditorScroll=null;
+function hkRestoreHomeEditorScroll(snapshot){
+ if(!snapshot||st.tab!=='home'||dlg.open)return;
+ app.scrollTop=snapshot.top; app.scrollLeft=snapshot.left;
+ window.scrollTo({top:snapshot.winY,left:snapshot.winX,behavior:'instant'});
+}
+dlg.addEventListener('close',()=>{
+ const snapshot=hkHomeEditorScroll;
+ if(!snapshot||dlg.open)return;
+ requestAnimationFrame(()=>{
+  if(hkHomeEditorScroll!==snapshot||dlg.open)return;
+  hkRestoreHomeEditorScroll(snapshot);
+  requestAnimationFrame(()=>{
+   if(hkHomeEditorScroll!==snapshot||dlg.open)return;
+   hkRestoreHomeEditorScroll(snapshot);hkHomeEditorScroll=null;
+  });
+ });
+});
 function useAddBottomSheet(){nextDialogIsSheet=true;}
 function openEditorDialogNoKeyboard(){
+  hkHomeEditorScroll=st.tab==='home'?{top:app.scrollTop,left:app.scrollLeft,winY:window.scrollY,winX:window.scrollX}:null;
   const sheet=nextDialogIsSheet;
   nextDialogIsSheet=false;
   dlg.classList.toggle('bottom-sheet',sheet);
