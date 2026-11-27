@@ -7077,7 +7077,7 @@ function home(){if(hkUsefulPage)return travelLinksPanel();if(hkTicketPage)return
  +hkTicketCard()
  +hkUsefulCard()+'</div><button class="add ghost" data-a="rs">還原預設內容</button>'+
  '<div class="home-add-quick-menu" id="home-add-quick-menu" aria-hidden="true"><button type="button" data-a="home-add-kind" data-kind="stays" tabindex="-1" aria-label="新增住宿" title="新增住宿">'+iconSvg('hotel')+'</button><button type="button" data-a="home-add-kind" data-kind="dining" tabindex="-1" aria-label="新增已訂餐廳" title="新增已訂餐廳">'+iconSvg('utensils')+'</button><button type="button" data-a="home-add-kind" data-kind="tickets" tabindex="-1" aria-label="新增已訂票券" title="新增已訂票券">'+iconSvg('ticket')+'</button><button type="button" data-a="home-add-kind" data-kind="packs" tabindex="-1" aria-label="新增行李清單" title="新增行李清單">'+iconSvg('bag')+'</button></div><button type="button" class="shop-glass-add home-add-fab" data-a="home-add-choose" aria-expanded="false" aria-controls="home-add-quick-menu" aria-label="新增總覽項目" title="新增總覽項目"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>'}
-const hero=()=> '<div class="summary winter-trip-summary" aria-label="旅程資訊"><div class="winter-duration"><span>旅程資訊 <i></i><small style="font-size:9px;letter-spacing:.12em;color:#8294a5">WINTER JOURNEY</small></span><strong aria-label="10 天 9 夜"><b>10</b><small>天</small><em></em><b>9</b><small>夜</small></strong></div><div class="winter-date"><span>旅行日期</span><strong>2026.12.18 – 12.27</strong></div><div class="winter-companions"><span>同行旅伴</span><strong>4 位旅伴</strong></div></div>';
+const hero=()=> '<div class="summary winter-trip-summary" aria-label="旅程資訊"><div class="winter-duration"><strong>10 天 9 夜</strong></div><div class="winter-companions"><span>同行旅伴</span><strong>4 位旅伴</strong></div><div class="winter-date"><span>旅行日期</span><strong>2026.12.18 – 12.27</strong></div></div>';
 // Never replace the date-strip element when switching days: keeping the same
 // element also preserves touch momentum, horizontal scroll, and keyboard focus.
 let planDayScrollLeft=0;
@@ -9781,4 +9781,14 @@ html body #app#app .sh-product.done .sh-product-name.hk-shop-strike{position:rel
 html body #app#app .sh-product.done .sh-product-name.hk-shop-strike::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:currentColor;transform-origin:left;animation:hkShopStrike .24s ease-out both;}
 @keyframes hkShopStrike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @media(prefers-reduced-motion:reduce){.hk-shop-strike::after{animation:none!important;}}
-</style><style id="hk-ledger-raw-action-guard">.ld-item:not(.swipe-host) > .ld-item-actions{display:none!important;}</style></body></html>
+</style><style id="hk-ledger-raw-action-guard">.ld-item:not(.swipe-host) > .ld-item-actions{display:none!important;}</style><style id="cover-reference-layout">
+html body #app#app .summary.winter-trip-summary{container-type:inline-size;justify-content:flex-end!important;align-items:stretch!important;gap:0!important;padding:0 4% 4.5%!important;text-align:left!important;}
+html body #app#app .summary.winter-trip-summary>div.winter-duration{display:flex!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;padding:0!important;margin:0 0 2.1cqw!important;border:0!important;}
+html body #app#app .summary.winter-trip-summary .winter-duration>strong{display:block!important;font-size:clamp(23px,7.1cqw,46px)!important;font-weight:650!important;line-height:1.2!important;letter-spacing:.025em!important;color:white!important;}
+html body #app#app .summary.winter-trip-summary>div:is(.winter-companions,.winter-date){display:grid!important;grid-template-columns:15cqw minmax(0,1fr)!important;gap:1.8cqw!important;align-items:center!important;justify-content:start!important;text-align:left!important;padding:0!important;margin:0!important;border:0!important;}
+html body #app#app .summary.winter-trip-summary>div.winter-date{margin-top:2.2cqw!important;}
+html body #app#app .summary.winter-trip-summary :is(.winter-companions,.winter-date) :is(span,strong){font-size:clamp(10px,3.45cqw,22px)!important;line-height:1.4!important;letter-spacing:.015em!important;color:#fff!important;white-space:nowrap!important;margin:0!important;}
+html body #app#app .summary.winter-trip-summary :is(.winter-companions,.winter-date) span{font-weight:400!important;}
+html body #app#app .summary.winter-trip-summary :is(.winter-companions,.winter-date) strong{font-weight:650!important;}
+</style>
+</body></html>
