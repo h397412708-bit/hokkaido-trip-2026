@@ -9966,4 +9966,10 @@ html body.ld-ledger-overlay-open #app#app main.ledger-layered-main > [data-ledge
  document.addEventListener('scroll',e=>{if(e.target===current||e.target.matches?.(selector))sync();},true);
  new MutationObserver(sync).observe(app,{childList:true,subtree:true});window.addEventListener('resize',sync);sync();
 })();</script>
+<style id="hk-itinerary-no-duration-center">
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:not(:has(.row-summary-duration)),
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:not(:has(.row-summary-duration))>.swipe-face{align-items:center!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:not(:has(.row-summary-duration)) .row-summary-main{align-self:center!important;justify-content:center!important;margin-block:0!important;padding-block:0!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:not(:has(.row-summary-duration)) .row-summary-heading{align-items:center!important;margin-block:0!important;}
+</style>
 </body></html>
