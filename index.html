@@ -6345,7 +6345,7 @@ function ledgerMountLiveSubpage(view){
   .map(node=>({node,top:node.scrollTop,left:node.scrollLeft}));
  const previousWindowY=window.scrollY||(document.getElementById("app")?.scrollTop||0);
  const chrome=[];
- if(ledgerNavStack.at(-1)?.view==='main'){
+ if(view!=='detail'&&ledgerNavStack.at(-1)?.view==='main'){
   for(const el of document.querySelectorAll('body > .winter-browser-bar, body > .winter-address-row, body > nav.bottom-nav')){
    const r=el.getBoundingClientRect(); if(r.bottom<=0||r.top>=innerHeight)continue;
    const copy=el.cloneNode(true);copy.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));copy.removeAttribute('id');
@@ -6425,7 +6425,7 @@ function ledgerReturnUnderlay(){
  return '<div class="ld-return-underlay" aria-hidden="true" inert>'+content+'</div>';
 }
 function ledgerHeaderMotion(transform,transition){
- const bar=document.querySelector('.winter-browser-bar:not(.winter-browser-underlay)');
+ const bar=document.querySelector('body > .winter-browser-bar:not(.winter-browser-underlay):not(.ld-return-chrome)');
  if(!bar)return;
  if(ledgerView==='detail'){document.body.classList.add('hk-detail-return-blank');document.querySelector('.winter-browser-underlay')?.remove();bar.style.setProperty('transition',transition,'important');bar.style.transform=transform;return;}
  if(!document.querySelector('.winter-browser-underlay')&&!app.querySelector('main > .ld-preserved-underlay > .ld-return-chrome.winter-browser-bar')){
@@ -6441,7 +6441,7 @@ function ledgerHeaderMotion(transform,transition){
 }
 function ledgerHeaderReset(){
  requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!app.querySelector('.ld-exiting')&&!ledgerSubSwipe?.active)document.body.classList.remove('hk-detail-return-blank');}));
- const bar=document.querySelector('.winter-browser-bar:not(.winter-browser-underlay)');
+ const bar=document.querySelector('body > .winter-browser-bar:not(.winter-browser-underlay):not(.ld-return-chrome)');
  if(bar){bar.style.setProperty('transition','none','important');bar.style.transform='';}
  document.querySelector('.winter-browser-underlay')?.remove();
 }
@@ -7653,7 +7653,7 @@ function syncWinterPage(){
   const address=document.getElementById('winter-address-field');
   const addressPath=({home:'overview',plan:'itinerary',todo:'todo',shop:'shopping',ledger:'expenses'}[st.tab]||'overview');
   if(address)address.textContent='http://hokkaido.locat/'+addressPath;
-  const bar=document.querySelector('.winter-browser-bar');
+  const bar=document.querySelector('body > .winter-browser-bar:not(.winter-browser-underlay):not(.ld-return-chrome)');
   if(bar)bar.classList.toggle('winter-ledger-subpage',sub&&ledgerView!=='detail');
   const back=document.getElementById('winter-ledger-back');
   if(back)back.hidden=!sub||ledgerView==='detail';
@@ -9946,5 +9946,16 @@ html body.hk-detail-return-blank #app main > :not([data-ledger-subpage="detail"]
 html body.hk-detail-return-blank #app main > .ld-preserved-underlay{display:none!important;}
 html body.hk-detail-return-blank #app main.ledger-layered-main{background:#F8FAFB!important;}
 html body #app#app [data-ledger-subpage="detail"] .ld-detail-fields .ld-inline-row .ld-inline-date-field{border:1px solid #e2e8f2!important;border-radius:10px!important;background:#f8faff!important;box-sizing:border-box!important;}
+</style>
+<style id="hk-detail-single-header">
+html body:has(#app main > [data-ledger-subpage="detail"]) #app main > .ld-return-underlay,
+html body:has(#app main > [data-ledger-subpage="detail"]) #app main .ld-return-chrome,
+html body:has(#app main > [data-ledger-subpage="detail"]) > .winter-browser-underlay{display:none!important;visibility:hidden!important;pointer-events:none!important;}
+html body:has(#app main > [data-ledger-subpage="detail"]) #app main .ld-return-underlay .winter-browser-bar{display:none!important;}
+</style>
+<style id="hk-detail-viewport-header-lock">
+html body:has(#app main > [data-ledger-subpage="detail"]):not(.hk-detail-return-blank){overflow:hidden!important;overscroll-behavior:none!important;}
+html body:has(#app main > [data-ledger-subpage="detail"]):not(.hk-detail-return-blank) > .winter-browser-bar:not(.winter-browser-underlay):not(.ld-return-chrome){position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:auto!important;margin:0 auto!important;width:min(100%,640px)!important;transform:none!important;transition:none!important;animation:none!important;z-index:1800!important;background:transparent!important;}
+html body:has(#app main > [data-ledger-subpage="detail"]) #app main > [data-ledger-subpage="detail"]{overflow-y:auto!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch;}
 </style>
 </body></html>
