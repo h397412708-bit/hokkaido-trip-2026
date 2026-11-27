@@ -9936,11 +9936,7 @@ html body #app#app .ld-detail-outside-header button.hk-pack-back{display:grid!im
 html body #app#app .ld-detail-outside-header .hk-pack-back svg{display:block!important;width:21px!important;height:21px!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round;stroke-linejoin:round;fill:none!important;}
 </style>
 
-<style id="hk-detail-fixed-transparent-top">
-html body:not(.hk-detail-return-blank):has(#app main > [data-ledger-subpage="detail"]) > .winter-browser-bar:not(.winter-browser-underlay){position:fixed!important;inset:0 0 auto 0!important;width:min(100%,640px)!important;margin:0 auto!important;transform:none!important;z-index:1800!important;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
-html body:not(.hk-detail-return-blank):has(#app main > [data-ledger-subpage="detail"]) > .winter-browser-bar:not(.winter-browser-underlay)::before,html body:not(.hk-detail-return-blank):has(#app main > [data-ledger-subpage="detail"]) > .winter-browser-bar:not(.winter-browser-underlay)::after{background:transparent!important;box-shadow:none!important;}
-html body.ld-ledger-overlay-open #app main.ledger-layered-main > [data-ledger-subpage="detail"]{top:calc(50px + env(safe-area-inset-top,0px))!important;height:calc(100dvh - 50px - env(safe-area-inset-top,0px))!important;min-height:0!important;max-height:calc(100dvh - 50px - env(safe-area-inset-top,0px))!important;}
-</style>
+
 <style id="hk-detail-blank-final">
 html body.hk-detail-return-blank #app main > :not([data-ledger-subpage="detail"]),html body.hk-detail-return-blank #app main > :not([data-ledger-subpage="detail"]) *,html body.hk-detail-return-blank > .winter-browser-bar,html body.hk-detail-return-blank > .winter-browser-bar *,html body.hk-detail-return-blank #app > :not(main){visibility:hidden!important;}
 html body.hk-detail-return-blank #app main > .ld-preserved-underlay{display:none!important;}
@@ -9953,10 +9949,21 @@ html body:has(#app main > [data-ledger-subpage="detail"]) #app main .ld-return-c
 html body:has(#app main > [data-ledger-subpage="detail"]) > .winter-browser-underlay{display:none!important;visibility:hidden!important;pointer-events:none!important;}
 html body:has(#app main > [data-ledger-subpage="detail"]) #app main .ld-return-underlay .winter-browser-bar{display:none!important;}
 </style>
-<style id="hk-detail-viewport-header-lock">
-html body:has(#app main > [data-ledger-subpage="detail"]):not(.hk-detail-return-blank){overflow:hidden!important;overscroll-behavior:none!important;}
-html body:has(#app main > [data-ledger-subpage="detail"]):not(.hk-detail-return-blank) > .winter-browser-bar:not(.winter-browser-underlay):not(.ld-return-chrome){position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:auto!important;margin:0 auto!important;width:min(100%,640px)!important;transform:none!important;transition:none!important;animation:none!important;z-index:1800!important;background:transparent!important;}
-html body:has(#app main > [data-ledger-subpage="detail"]) #app main > [data-ledger-subpage="detail"]{overflow-y:auto!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch;}
-</style>
 
+
+<style id="hk-detail-scroll-with-content">
+html body:has(#app main > [data-ledger-subpage="detail"]):not(.hk-detail-return-blank) > .winter-browser-bar:not(.winter-browser-underlay):not(.ld-return-chrome){position:fixed!important;inset:auto!important;top:calc(0px - var(--hk-detail-scroll,0px))!important;left:0!important;right:0!important;width:min(100%,640px)!important;margin:0 auto!important;transform:none!important;transition:none!important;animation:none!important;z-index:1800!important;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+html body:has(#app main > [data-ledger-subpage="detail"]) > .winter-browser-bar:not(.winter-browser-underlay)::before,html body:has(#app main > [data-ledger-subpage="detail"]) > .winter-browser-bar:not(.winter-browser-underlay)::after{background:transparent!important;box-shadow:none!important;}
+html body.ld-ledger-overlay-open #app#app main.ledger-layered-main > [data-ledger-subpage="detail"]{top:0!important;bottom:0!important;height:100dvh!important;min-height:0!important;max-height:100dvh!important;padding-top:calc(var(--hk-detail-header-height,calc(50px + env(safe-area-inset-top,0px))) + 14px)!important;overflow-y:auto!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch;}
+</style>
+<script id="hk-detail-scroll-sync">(()=>{
+ const app=document.getElementById('app');
+ const selector='main > [data-ledger-subpage="detail"]';
+ let current=null;
+ function sync(){const panel=app.querySelector(selector);const bar=document.querySelector('body > .winter-browser-bar:not(.winter-browser-underlay):not(.ld-return-chrome)');
+ if(!panel){if(current){document.body.style.removeProperty('--hk-detail-scroll');document.body.style.removeProperty('--hk-detail-header-height');}current=null;return;}
+ current=panel;document.body.style.setProperty('--hk-detail-scroll',Math.max(0,panel.scrollTop)+'px');if(bar&&bar.offsetHeight)document.body.style.setProperty('--hk-detail-header-height',bar.offsetHeight+'px');}
+ document.addEventListener('scroll',e=>{if(e.target===current||e.target.matches?.(selector))sync();},true);
+ new MutationObserver(sync).observe(app,{childList:true,subtree:true});window.addEventListener('resize',sync);sync();
+})();</script>
 </body></html>
