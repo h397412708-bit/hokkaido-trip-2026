@@ -6426,6 +6426,7 @@ function ledgerReturnUnderlay(){
 function ledgerHeaderMotion(transform,transition){
  const bar=document.querySelector('.winter-browser-bar:not(.winter-browser-underlay)');
  if(!bar)return;
+ if(ledgerView==='detail'){document.body.classList.add('hk-detail-return-blank');document.querySelector('.winter-browser-underlay')?.remove();bar.style.setProperty('transition',transition,'important');bar.style.transform=transform;return;}
  if(!document.querySelector('.winter-browser-underlay')&&!app.querySelector('main > .ld-preserved-underlay > .ld-return-chrome.winter-browser-bar')){
   const clone=bar.cloneNode(true);clone.classList.add('winter-browser-underlay');clone.inert=true;clone.setAttribute('aria-hidden','true');
   const previous=ledgerNavStack[ledgerNavStack.length-1]?.view||'main';
@@ -6438,6 +6439,7 @@ function ledgerHeaderMotion(transform,transition){
  bar.style.setProperty('transition',transition,'important');bar.style.transform=transform;
 }
 function ledgerHeaderReset(){
+ document.body.classList.remove('hk-detail-return-blank');
  const bar=document.querySelector('.winter-browser-bar:not(.winter-browser-underlay)');
  if(bar){bar.style.setProperty('transition','none','important');bar.style.transform='';}
  document.querySelector('.winter-browser-underlay')?.remove();
@@ -9903,5 +9905,13 @@ html body #app#app .ld-editorial-home .ld-fx-redesign .ld-fx-output{display:flex
 html body #app#app .ld-editorial-home .ld-fx-redesign .ld-result{font-size:17px!important;color:#43596d!important;overflow-wrap:anywhere;}
 html body #app#app .ld-editorial-home .ld-fx-redesign .ld-convert-btn{width:auto!important;flex:0 0 auto!important;min-height:32px!important;padding:6px 12px!important;border:0!important;border-radius:8px!important;background:#748CA3!important;color:white!important;}
 html body #app#app .ld-editorial-home .ld-fx-redesign .ld-hint{margin:0!important;font-size:9px!important;line-height:1.25!important;}
+</style>
+<style id="hk-ledger-detail-return-fix">
+html body #app#app .ld-editorial-home .ld-fx-redesign .ld-calculator input#ld-fx-amount,html body #app#app .ld-editorial-home .ld-fx-redesign .ld-calculator select,html body #app#app .ld-editorial-home .ld-fx-redesign .ld-result{font-size:11px!important;}
+html body #app#app .ld-all-screen :is(.ld-all-tabs,.ld-all-tabs>button,.ld-all-tabs .nav-lens-core,.ld-filter-row button,.ld-search-filters select,.ld-stat-tabs,.ld-stat-tabs button,.ld-stat-tabs .nav-lens-core){border:0!important;box-shadow:none!important;}
+html body.hk-detail-return-blank,html body.hk-detail-return-blank #app,html body.hk-detail-return-blank #app main{background:#F8FAFB!important;}
+html body.hk-detail-return-blank #app main > .ld-return-underlay,html body.hk-detail-return-blank > .winter-browser-underlay,html body.hk-detail-return-blank > #hk-bottom-frost,html body.hk-detail-return-blank > .bottom-nav,html body.hk-detail-return-blank > .winter-address-row{visibility:hidden!important;}
+html body.hk-detail-return-blank > .winter-browser-bar{background:#F8FAFB!important;box-shadow:none!important;}
+html body.hk-detail-return-blank > .winter-browser-bar::before,html body.hk-detail-return-blank > .winter-browser-bar::after{box-shadow:none!important;background:#F8FAFB!important;}
 </style>
 </body></html>
