@@ -9692,22 +9692,28 @@ html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)[open]
 <script>
 (()=>{
  const selector='main:has(> .plan-day-heading) .tlw>details.row:not(.mv):not(.no-spot-details)';
- const starts=new WeakMap(), running=new WeakMap();
+ const running=new WeakMap();
  document.addEventListener('click',e=>{
-  const summary=e.target.closest('summary'); const card=summary?.parentElement;
-  if(!card?.matches(selector)||card.open||e.target.closest('a,button,[data-a]'))return;
-  starts.set(card,{height:card.getBoundingClientRect().height,time:performance.now()});
- },true);
- document.addEventListener('toggle',e=>{
-  const card=e.target;if(!card.matches?.(selector))return;
-  const start=starts.get(card);starts.delete(card);
-  if(!card.open){running.get(card)?.cancel();return;}
-  if(!start||performance.now()-start.time>1000||matchMedia('(prefers-reduced-motion: reduce)').matches||!card.animate)return;
-  const end=card.getBoundingClientRect().height;if(end<=start.height)return;
-  running.get(card)?.cancel();
-  const a=card.animate([{height:start.height+'px',overflow:'hidden'},{height:end+'px',overflow:'hidden'}],{duration:320,easing:'cubic-bezier(.22,.75,.25,1)'});
-  running.set(card,a);a.onfinish=a.oncancel=()=>{if(running.get(card)===a)running.delete(card);};
- },true);
+  const summary=e.target.closest('summary'), card=summary?.parentElement;
+  if(e.defaultPrevented||!card?.matches(selector)||e.target.closest('a,button,[data-a]')||matchMedia('(prefers-reduced-motion: reduce)').matches||!card.animate)return;
+  const body=card.querySelector(':scope > .bd'); if(!body)return;
+  e.preventDefault();
+  const prev=running.get(card), opening=prev?!prev.opening:!card.open;
+  const from=card.open?body.getBoundingClientRect().height:0;
+  if(prev){prev.anim.onfinish=null;prev.anim.cancel();}
+  card.open=true;
+  const to=opening?body.getBoundingClientRect().height:0;
+  const anim=body.animate([{height:from+'px',overflow:'hidden'},{height:to+'px',overflow:'hidden'}],{duration:320,easing:'cubic-bezier(.22,.75,.25,1)'});
+  running.set(card,{anim,opening});
+  anim.onfinish=()=>{if(running.get(card)?.anim!==anim)return;card.open=opening;running.delete(card);};
+ },false);
 })();
 </script>
+<style id="hk-plan-bidirectional-motion">
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv){overflow:visible!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary:active{transform:none!important;opacity:1!important;}
+html body #app#app main > .plan-date-switcher.days:not(.cats) button,
+html body #app#app main > .plan-date-switcher.days:not(.cats) button.on{box-shadow:0 4px 16px rgba(55,78,99,.075),0 1px 3px rgba(55,78,99,.035)!important;}
+html body #app#app main > .plan-date-switcher.days:not(.cats){padding-top:6px!important;padding-bottom:12px!important;}
+</style>
 </body></html>
