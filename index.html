@@ -7092,17 +7092,7 @@ const hero=()=> '<div class="summary winter-trip-summary" aria-label="旅程資�
 // element also preserves touch momentum, horizontal scroll, and keyboard focus.
 let planDayScrollLeft=0;
 let pendingItineraryEntrance=false;
-function runItineraryEntrance(){
-  if(!pendingItineraryEntrance)return;
-  pendingItineraryEntrance=false;
-  const list=app.querySelector('.tlw');
-  if(!list||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
-  const entries=[...list.querySelectorAll(':scope > details.row')];
-  entries.forEach((item,i)=>{
-    const face=item.querySelector(':scope > summary');
-    if(face?.animate)face.animate([{opacity:0,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:180,delay:Math.min(42*i,420),fill:'backwards',easing:'ease-out'});
-  });
-}
+function runItineraryEntrance(){pendingItineraryEntrance=false;}
 let saveToastTimer=0;
 function showSavedToast(){
   const toast=document.getElementById('journal-save-toast');
@@ -9710,33 +9700,7 @@ html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)::afte
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv) *::before,
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv) *::after {animation:none!important;transition:none!important;will-change:auto!important;}
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary:active {transform:none!important;opacity:1!important;}
-</style><script id="hk-plan-open-only-motion">
-(function(){
- const selector='#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)';
- const active=new WeakMap();
- document.addEventListener('click',function(e){
-  const summary=e.target.closest('summary');
-  const card=summary&&summary.parentElement;
-  if(!card||!card.matches(selector)||card.open||e.target.closest('a,button,input,select,textarea,[data-a]')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  if(!card.querySelector(':scope > .bd img'))return;
-  const start=card.getBoundingClientRect().height;
-  requestAnimationFrame(function(){
-   if(!card.isConnected||!card.open)return;
-   const end=card.getBoundingClientRect().height;
-   if(end<=start)return;
-   const body=card.querySelector(':scope > .bd');
-   if(!body)return;
-   const old=active.get(card);if(old)old.cancel();
-   const animation=card.animate([{height:start+'px'},{height:end+'px'}],{duration:200,easing:'cubic-bezier(.2,.75,.25,1)'});
-   const clip=body.animate([{clipPath:'inset(0 0 100% 0)'},{clipPath:'inset(0 0 0 0)'}],{duration:200,easing:'cubic-bezier(.2,.75,.25,1)'});
-   active.set(card,animation);
-   const cleanup=()=>{clip.cancel();if(active.get(card)===animation)active.delete(card);};
-   animation.onfinish=cleanup;animation.oncancel=cleanup;
-  });
- },true);
- document.addEventListener('toggle',function(e){const card=e.target;if(card.matches?.(selector)&&!card.open)active.get(card)?.cancel();},true);
-})();
-</script><style id="hk-list-and-ledger-refinement">
+</style><style id="hk-list-and-ledger-refinement">
 html:has(#app main :is(.todo-list,.sh-list,.ld-page)),html body:has(#app main :is(.todo-list,.sh-list,.ld-page)),html body:has(#app main :is(.todo-list,.sh-list,.ld-page)) #app,html body:has(#app main :is(.todo-list,.sh-list,.ld-page)) #app > main{background:#F8FAFB!important;}
 html body:has(#app main :is(.todo-list,.sh-list,.ld-page)) > #hk-bottom-frost{background:linear-gradient(to top,#F8FAFB,rgba(248,250,251,.12) 65%,transparent)!important;}
 html body #app#app .hk-outside-filters{margin:0 0 8px!important;padding:6px 0!important;background:transparent!important;border:0!important;box-shadow:none!important;}
@@ -9745,4 +9709,35 @@ html body #app#app .sh-list .sh-tags{margin-bottom:2px!important;}
 html body #app#app .sh-list .sh-product-detail > .sh-tags + .sh-product-footer{margin-top:0!important;}
 html body:has(#app main > [data-ledger-subpage]) > .winter-browser-bar:not(.winter-browser-underlay){background:#F8FAFB!important;box-shadow:none!important;border:0!important;padding-inline:16px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
 html body #app#app main > [data-ledger-subpage]{background:#F8FAFB!important;}
-</style></body></html>
+</style><style id="hk-plan-static-all">
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row *,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row::before,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row::after,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row *::before,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row *::after{animation:none!important;transition:none!important;will-change:auto!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:active{transform:none!important;opacity:1!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row[open]>.bd{transform:none!important;opacity:1!important;clip-path:none!important;}
+</style><style id="hk-itinerary-motion-v3">html body #app#app main:has(> .plan-day-heading) .tlw>details.row{overflow:visible!important;} html body #app#app main:has(> .plan-day-heading) .tlw>details.row>.bd{box-sizing:border-box;min-height:0!important;}</style><script>(()=>{
+const listSelector='main:has(> .plan-day-heading) .tlw';
+const cardSelector=listSelector+' > details.row';
+const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const active=new WeakMap(); let lastList=null,lastDay=null;
+function reveal(){const list=document.querySelector(listSelector);const day=document.querySelector('.plan-date-switcher button.on')?.dataset.v;if(!list){lastList=null;lastDay=null;return;}const changed=lastList===null||day!==lastDay;lastList=list;lastDay=day;if(!changed||reduced())return;Array.from(list.children).filter(el=>el.matches('details.row')).forEach((card,i)=>{card.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:210,delay:Math.min(i*45,540),easing:'ease-out',fill:'backwards'});});}
+let queued=false;const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;reveal();});};
+new MutationObserver(schedule).observe(document.getElementById('app'),{childList:true,subtree:true});schedule();
+document.addEventListener('click',e=>{
+ const summary=e.target.closest?.('summary');const card=summary?.parentElement;
+ if(!card?.matches(cardSelector)||card.matches('.no-spot-details')||e.defaultPrevented||e.target.closest('a,button,input,select,textarea,[data-a],[data-itinerary-web],.drag-grip')||reduced())return;
+ const body=card.querySelector(':scope > .bd');if(!body||!body.animate)return;
+ e.preventDefault();const old=active.get(card);const opening=old?!old.opening:!card.open;
+ const from=card.open?body.getBoundingClientRect().height:0;
+ if(old){old.anim.cancel();active.delete(card);}
+ if(opening)card.open=true;
+ const to=opening?body.getBoundingClientRect().height:0;
+ const anim=body.animate([{height:from+'px',overflow:'hidden'},{height:to+'px',overflow:'hidden'}],{duration:220,easing:'cubic-bezier(.22,.65,.3,1)',fill:'both'});
+ const state={anim,opening};active.set(card,state);
+ anim.onfinish=()=>{if(active.get(card)!==state)return;active.delete(card);if(!opening)card.open=false;anim.cancel();};
+},false);
+})();
+</script></body></html>
