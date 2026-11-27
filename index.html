@@ -6627,8 +6627,8 @@ function ledgerPage(){
  const expenseEntries=ledger.entries.filter(ledgerIsExpense),incomeEntries=ledger.entries.filter(e=>ledgerType(e)==='income'),transferEntries=ledger.entries.filter(e=>ledgerType(e)==='transfer');
  const total=ledgerSum(expenseEntries,ledger.currency),taxRecords=expenseEntries.filter(x=>x.taxfree),taxPending=taxRecords.filter(x=>(x.refundStatus||'待海關確認')!=='已退款'&&(x.refundStatus||'')!=='不申請');
  const fxRate=ledgerHasRate()?'<span>臺銀即期中間價 · ¥1 ≈ NT$'+fxInfo.rates.TWD.toFixed(4)+' · CN¥'+fxInfo.rates.CNY.toFixed(4)+'</span>':'<span>尚無臺銀匯率，請更新後換算</span>';
- return '<div class="ld-page"><div class="ph sh-heading ld-heading"><button type="button" class="shop-glass-add" data-a="ledger-new" aria-label="新增記帳" title="新增記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
- '<section class="ld-total"><div class="ld-total-top"><span class="ld-total-label">整趟行程總消費</span><div class="ld-total-actions"><details class="ld-currency-picker"><summary aria-label="選擇顯示幣別"><span>'+({JPY:'¥',TWD:'NT$',CNY:'CN¥'}[ledger.currency])+'</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="ld-currency-menu">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="ledger-currency" data-v="'+code+'" class="'+(code===ledger.currency?'on':'')+'">'+LEDGER_CURRENCY_LABEL[code]+'</button>').join('')+'</div></details><button type="button" class="ld-tax-entry" data-a="ledger-tax-open" title="退稅" aria-label="開啟退稅：我的退稅、離境檢查、退稅資訊">'+iconSvg('receipt')+'</button></div></div><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div><p>支出 '+expenseEntries.length+' 筆 · 收入 '+incomeEntries.length+' 筆 · 轉帳 '+transferEntries.length+' 筆 · '+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+'<br>跨幣別以參考匯率估算，非刷卡結算金額</p></section>'+
+ return '<div class="ld-page ld-editorial-home"><div class="ph sh-heading ld-heading"><button type="button" class="shop-glass-add" data-a="ledger-new" aria-label="新增記帳" title="新增記帳"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
+ '<section class="ld-total"><div class="ld-total-top"><span class="ld-total-label">整趟行程總消費</span><div class="ld-total-actions"><details class="ld-currency-picker"><summary aria-label="選擇顯示幣別"><span>'+({JPY:'¥',TWD:'NT$',CNY:'CN¥'}[ledger.currency])+'</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="ld-currency-menu">'+LEDGER_CURRENCIES.map(code=>'<button type="button" data-a="ledger-currency" data-v="'+code+'" class="'+(code===ledger.currency?'on':'')+'">'+LEDGER_CURRENCY_LABEL[code]+'</button>').join('')+'</div></details><button type="button" class="ld-tax-entry" data-a="ledger-tax-open" title="退稅" aria-label="開啟退稅：我的退稅、離境檢查、退稅資訊">'+iconSvg('receipt')+'</button></div></div><div class="ld-grand">'+ledgerMoney(total,ledger.currency)+'</div><div class="ld-editorial-counts"><div><small>支出</small><b>'+expenseEntries.length+' <small>筆</small></b></div><div><small>收入</small><b>'+incomeEntries.length+' <small>筆</small></b></div><div><small>轉帳</small><b>'+transferEntries.length+' <small>筆</small></b></div></div><p>'+(ledgerHasRate()?ledgerRateLabel():'尚未載入匯率')+' · 跨幣別以參考匯率估算，非刷卡結算金額</p></section>'+
 
  '<section class="ld-panel"><div class="ld-section-head"><h3>匯率換算</h3><button type="button" class="ld-mini-link" data-a="ledger-fx-refresh">'+(fxInfo.loading?'更新中…':'⟳ 更新匯率')+'</button></div><div class="ld-rate-line">'+fxRate+'</div><div class="ld-calculator"><label>金額<span class="ld-fx-input-frame"><input type="number" id="ld-fx-amount" min="0" step="any" inputmode="decimal" value="'+esc(fxCalc.amount)+'"></span></label><label>原幣<select id="ld-fx-from">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.from===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label><label>換算<select id="ld-fx-to">'+LEDGER_CURRENCIES.map(c=>'<option value="'+c+'"'+(fxCalc.to===c?' selected':'')+'>'+c+'</option>').join('')+'</select></label></div><div class="ld-convert-row"><button type="button" data-a="ledger-convert" class="ld-convert-btn">按最新匯率換算</button><strong class="ld-result">'+(fxCalc.result||'—')+'</strong></div><p class="ld-hint">'+(fxInfo.error?esc(fxInfo.error)+' · ':'')+'資料來源：<a href="https://rate.bot.com.tw/xrt" target="_blank" rel="noopener noreferrer">臺灣銀行牌告匯率</a>（<a href="https://haotool.org/ratewise/open-data/" target="_blank" rel="noopener noreferrer">公開資料鏡像</a>）；以即期買賣均價估算，更新時間見上方，非銀行實際刷卡或現鈔成交價。</p></section>'+
 
@@ -9834,5 +9834,31 @@ html body #app#app main .ld-page :where(div,section,article,header,footer,button
 }
 html body #app#app main .ld-page :where(div,section,article,header,footer,button,a,details,summary,li,ul,span,label)::before,
 html body #app#app main .ld-page :where(div,section,article,header,footer,button,a,details,summary,li,ul,span,label)::after {border-color:transparent!important;}
+</style>
+<style id="hk-ledger-editorial-white">
+html body #app#app .ld-page :is(.ld-panel,.ld-total,.ld-tax-record,.ld-tax-overview,.ld-tax-overview>div,.ld-item,.ld-item>.swipe-face,.ld-filter-panel,.ld-currency-menu){background:#fff!important;border:0!important;box-shadow:none!important;border-radius:14px!important;}
+html body #app#app .ld-editorial-home{display:flex!important;flex-direction:column!important;gap:10px!important;color:#43596d;}
+html body #app#app .ld-editorial-home>.ld-total{order:1;padding:15px!important;}
+html body #app#app .ld-editorial-home>.ld-full-ledger-panel{order:2;}
+html body #app#app .ld-editorial-home>.ld-panel:has(.ld-calculator){order:3;}
+html body #app#app .ld-editorial-home>.ld-panel:has(.ld-backup-buttons){order:4;}
+html body #app#app .ld-editorial-home>.ld-panel{padding:13px 14px!important;margin:0!important;}
+html body #app#app .ld-editorial-home .ld-grand{font-size:25px!important;line-height:1.25!important;font-weight:650!important;letter-spacing:-.035em!important;margin:8px 0 12px!important;font-variant-numeric:tabular-nums;}
+html body #app#app .ld-editorial-home .ld-total-label{font-size:12px!important;letter-spacing:.02em!important;}
+.ld-editorial-counts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:10px 0;border-top:1px dashed #e3eaf0;}
+.ld-editorial-counts>div{display:flex;flex-direction:column;gap:3px;padding-left:8px;}.ld-editorial-counts>div:first-child{padding-left:0}.ld-editorial-counts small{font-size:10px;color:#8193a4;font-weight:500}.ld-editorial-counts b{font-size:15px;font-weight:650;color:#43596d;}
+html body #app#app .ld-editorial-home .ld-total p{font-size:10px!important;line-height:1.6!important;margin:2px 0 0!important;color:#8494a2!important;}
+html body #app#app .ld-page .ld-section-head h3{font-size:13px!important;font-weight:650!important;}
+html body #app#app .ld-page .ld-item-copy b{font-size:12px!important;line-height:1.4!important;}
+html body #app#app .ld-page .ld-item-right strong{font-size:13px!important;font-variant-numeric:tabular-nums;}
+html body #app#app .ld-page .ld-item{margin:0!important;border-radius:0!important;}
+html body #app#app .ld-page .ld-item+.ld-item{border-top:1px dashed #e2e9ef!important;}
+html body #app#app .ld-page .ld-item>.swipe-face{border-radius:0!important;}
+html body #app#app .ld-editorial-home .ld-date-divider{font-size:10px!important;margin:8px 0 3px!important;}
+html body #app#app .ld-editorial-home .ld-scroll-entry-list{max-height:none!important;overflow:visible!important;}
+html body #app#app .ld-editorial-home :is(.ld-calculator input,.ld-calculator select,.ld-fx-input-frame,.ld-backup-buttons button,.ld-convert-btn,.ld-tax-entry,.ld-currency-picker>summary){border:0!important;background:#f3f6f8!important;box-shadow:none!important;border-radius:8px!important;}
+html body #app#app .ld-editorial-home .ld-convert-btn{background:#748CA3!important;color:#fff!important;}
+html body #app#app .ld-editorial-home .ld-backup-buttons button{font-size:11px!important;}
+html body #app#app .ld-editorial-home .ld-hint{font-size:10px!important;line-height:1.6!important;}
 </style>
 </body></html>
