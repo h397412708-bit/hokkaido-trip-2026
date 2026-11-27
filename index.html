@@ -9674,4 +9674,40 @@ html body #app#app main > .plan-date-switcher.days:not(.cats) button:active{tran
 .plan-weather-static .wx-refresh{transition:transform 220ms cubic-bezier(.2,.75,.25,1),opacity 150ms ease!important;}.plan-weather-static .wx-refresh:active{transform:scale(.96);opacity:.75;}
 @media(prefers-reduced-motion:reduce){html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary,html body #app#app main:has(> .plan-day-heading) .tlw>details.row[open]>.bd,html body #app#app main > .plan-date-switcher.days:not(.cats) button,.plan-weather-static .wx-refresh{animation:none!important;transition:none!important;transform:none!important;}}
 </style><div id="hk-bottom-frost" aria-hidden="true"></div>
+<style id="hk-plan-card-surface-final">
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv),
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)[open],
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv):has(>summary:active){box-shadow:0 4px 16px rgba(55,78,99,.075),0 1px 3px rgba(55,78,99,.035)!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv[open],
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv>summary,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv>summary>.swipe-face,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv>.bd,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv .transport-details{background:transparent!important;border:0!important;outline:0!important;box-shadow:none!important;}
+</style>
+
+<style id="hk-plan-height-motion">
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)[open]>.bd{animation:none!important;opacity:1!important;transform:none!important;transition:none!important;}
+</style>
+<script>
+(()=>{
+ const selector='main:has(> .plan-day-heading) .tlw>details.row:not(.mv):not(.no-spot-details)';
+ const starts=new WeakMap(), running=new WeakMap();
+ document.addEventListener('click',e=>{
+  const summary=e.target.closest('summary'); const card=summary?.parentElement;
+  if(!card?.matches(selector)||card.open||e.target.closest('a,button,[data-a]'))return;
+  starts.set(card,{height:card.getBoundingClientRect().height,time:performance.now()});
+ },true);
+ document.addEventListener('toggle',e=>{
+  const card=e.target;if(!card.matches?.(selector))return;
+  const start=starts.get(card);starts.delete(card);
+  if(!card.open){running.get(card)?.cancel();return;}
+  if(!start||performance.now()-start.time>1000||matchMedia('(prefers-reduced-motion: reduce)').matches||!card.animate)return;
+  const end=card.getBoundingClientRect().height;if(end<=start.height)return;
+  running.get(card)?.cancel();
+  const a=card.animate([{height:start.height+'px',overflow:'hidden'},{height:end+'px',overflow:'hidden'}],{duration:320,easing:'cubic-bezier(.22,.75,.25,1)'});
+  running.set(card,a);a.onfinish=a.oncancel=()=>{if(running.get(card)===a)running.delete(card);};
+ },true);
+})();
+</script>
 </body></html>
