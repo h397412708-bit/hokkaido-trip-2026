@@ -9613,26 +9613,21 @@ html body #app#app .summary.winter-trip-summary{justify-content:flex-end!importa
 html body #app#app .summary.winter-trip-summary>div{flex:0 0 auto!important;}
 html body #app#app main .hk-bento-grid.hk-useful-expanded>.hk-ticket-card .hk-ticket-upcoming strong{font-size:13px!important;}
 </style>
-<style id="hk-itinerary-color-block-redesign">
-#app#app main:has(> .plan-day-heading) .tlw{padding-left:0!important;margin-left:0!important;}
-#app#app main:has(> .plan-day-heading) .tlw::before,#app#app main:has(> .plan-day-heading) .tlw>details.row::before,#app#app main:has(> .plan-day-heading) .tlw>details.row::after{display:none!important;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row{--block:#e7eff4;position:relative!important;margin:0 0 9px!important;width:100%!important;box-sizing:border-box!important;border:0!important;border-radius:15px!important;background:var(--block)!important;box-shadow:none!important;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row.mv{--block:#edf1f3;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row.mv:has(.mode-walk){--block:#e8efe7;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row.mv:has(.mode-jr){--block:#f1e8ed;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row.mv:has(.mode-bus){--block:#f3ede2;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row.mv:has(.mode-taxi){--block:#edeaf4;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row.mv:has(.mode-subway){--block:#e5edf5;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row.mv:has(.mode-flight){--block:#eee9e3;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row>summary.swipe-host{border:0!important;background:transparent!important;box-shadow:none!important;border-radius:15px!important;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row>summary.swipe-host>.swipe-face{background:var(--block)!important;border:0!important;box-shadow:none!important;gap:10px!important;padding:13px 12px!important;min-height:64px!important;align-items:center!important;border-radius:15px!important;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row.mv>summary.swipe-host>.swipe-face{min-height:48px!important;padding:9px 12px!important;}
-#app#app main:has(> .plan-day-heading) .tlw .row-inline-clock{flex:0 0 44px!important;min-width:44px!important;padding:0!important;align-self:center!important;font-size:12px!important;font-weight:750!important;color:#526b7e!important;}
-#app#app main:has(> .plan-day-heading) .tlw .row-summary-main{align-self:center!important;gap:3px!important;}
-#app#app main:has(> .plan-day-heading) .tlw .row-summary-title{font-size:13px!important;font-weight:700!important;line-height:1.45!important;}
-#app#app main:has(> .plan-day-heading) .tlw .mv .row-summary-title{font-size:12px!important;}
+<style id="hk-itinerary-white-block-redesign">
+#app#app main:has(> .plan-day-heading) .tlw{padding-left:23px!important;}
+#app#app main:has(> .plan-day-heading) .tlw::before{display:block!important;left:5px!important;width:1px!important;background:#cbd5e0!important;}
+#app#app main:has(> .plan-day-heading) .tlw>details.row{position:relative!important;margin:0 0 9px!important;box-sizing:border-box!important;border:0!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important;}
+#app#app main:has(> .plan-day-heading) .tlw>details.row::before{display:block!important;left:-22px!important;top:26px!important;width:9px!important;height:9px!important;box-sizing:border-box!important;background:#fff!important;border:1.5px solid #8da4b8!important;}
+#app#app main:has(> .plan-day-heading) .tlw>details.row.mv::before{left:-20px!important;top:19px!important;width:5px!important;height:5px!important;background:#9aafc0!important;border:0!important;}
+#app#app main:has(> .plan-day-heading) .tlw>details.row.mv{border-radius:10px!important;}
+#app#app main:has(> .plan-day-heading) .tlw>details.row>summary.swipe-host{border:0!important;background:transparent!important;box-shadow:none!important;}
+#app#app main:has(> .plan-day-heading) .tlw>details.row>summary.swipe-host>.swipe-face{background:#fff!important;border:0!important;box-shadow:none!important;gap:8px!important;padding:10px 12px!important;min-height:62px!important;align-items:center!important;border-radius:14px!important;}
+#app#app main:has(> .plan-day-heading) .tlw>details.row.mv>summary.swipe-host>.swipe-face{min-height:43px!important;padding:6px 10px!important;border-radius:10px!important;}
+#app#app main:has(> .plan-day-heading) .tlw .row-inline-clock{flex:0 0 38px!important;min-width:38px!important;font-size:11px!important;align-self:center!important;}
+#app#app main:has(> .plan-day-heading) .tlw .row-summary-title{font-size:13px!important;font-weight:700!important;}
+#app#app main:has(> .plan-day-heading) .tlw .mv .row-summary-title{font-size:12px!important;font-weight:500!important;color:#657b8c!important;}
 #app#app main:has(> .plan-day-heading) .tlw .transport-mode-badge{border:0!important;box-shadow:none!important;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row[open]>.bd{border:0!important;background:transparent!important;box-shadow:none!important;margin:0!important;padding:4px 14px 15px 66px!important;}
-#app#app main:has(> .plan-day-heading) .tlw>details.row[open] .transport-details,#app#app main:has(> .plan-day-heading) .tlw>details.row[open] .spot-intro{border:0!important;background:transparent!important;box-shadow:none!important;}
+#app#app main:has(> .plan-day-heading) .tlw>details.row[open]>.bd{border:0!important;background:transparent!important;box-shadow:none!important;margin:0!important;padding:4px 12px 14px 12px!important;}
+#app#app main:has(> .plan-day-heading) .tlw>details.row[open] .transport-details,#app#app main:has(> .plan-day-heading) .tlw>details.row[open] .spot-intro,#app#app main:has(> .plan-day-heading) .tlw>details.row .spot-card{border:0!important;box-shadow:none!important;}
 </style>
 </body></html>
