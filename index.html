@@ -6892,7 +6892,7 @@ function shopPage(){
      return '<article class="sh-product'+(p.done?' done':'')+(p.image?'':' sh-no-image')+'" data-shop-id="'+id+'">'+
        '<input class="sh-tick" type="checkbox" data-a="shop-check" data-id="'+id+'" aria-label="標記 '+esc(p.name)+' 已購買"'+(p.done?' checked':'')+'>'+
        (p.image?'<button type="button" class="sh-image sh-image-open" data-a="shop-zoom" data-id="'+id+'" aria-label="放大查看 '+esc(p.name)+' 的圖片">'+shopImageTag(p)+'</button>':'')+
-       '<div class="sh-product-detail"><div class="sh-product-name">'+esc(p.name)+'</div>'+
+       '<div class="sh-product-detail"><div class="sh-product-name"><span>'+esc(p.name)+'</span></div>'+
        '<div class="sh-tags">'+(p.store?'<span class="sh-tag">'+esc(p.store)+'</span>':'')+'<span class="sh-tag">'+(p.done?'已購買':'待購買')+'</span></div>'+
        (p.note?'<p class="sh-note">'+esc(p.note)+'</p>':'')+
        (url?'<a class="sh-link" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">開啟連結 '+shopExternalArt+'</a>':'')+
@@ -7697,6 +7697,7 @@ function render(){
       button.classList.toggle('on',selected);
       button.setAttribute('aria-pressed',String(selected));
     });
+    existingStrip.scrollLeft=planDayScrollLeft;
   }else{
     app.innerHTML=(st.tab==='home'?hero():'')+'<main'+(st.tab==='home'?'':st.tab==='ledger'&&(ledgerView==='stats'||ledgerView==='detail'||ledgerView==='all')?' class="top ledger-layered-main"':' class="top"')+'>'+(st.tab==='home'?home():st.tab==='plan'?plan():st.tab==='todo'?todo():st.tab==='shop'?shopPage():ledgerView==='stats'?ledgerReturnUnderlay()+ledgerStatPage():ledgerView==='detail'?ledgerReturnUnderlay()+ledgerDetailPage():ledgerView==='all'?ledgerReturnUnderlay()+ledgerAllPage():ledgerView==='tax'?'<div class="ld-tax-previous" aria-hidden="true" inert>'+ledgerPage()+'</div>'+ledgerTaxPageView():ledgerPage())+'</main>';
     const newDayStrip=app.querySelector('main .days:not(.cats)');
@@ -8332,7 +8333,7 @@ else if(a==='shop-zoom-preview'){if(shopPhotoTemp)shopShowImage(shopPhotoTemp,dl
 else if(a==='shop-zoom-close'){const popup=document.getElementById('sh-lightbox');if(popup?.open)popup.close()}
 else if(a==='shop-delete'){const p=shopping.find(x=>x.id===D.id);if(p&&confirm('確定刪除「'+p.name+'」嗎？')){const previous=shopping.slice();shopping=shopping.filter(x=>x.id!==D.id);if(shopPersist(previous))render()}}
 else if(a==='shop-qty-edit'){const input=dlg.querySelector('input[name="qty"]');if(input){const value=Math.floor(Number(input.value)||1);input.value=Math.max(1,Math.min(9999,value+Number(D.change)))}}
-else if(a==='shop-check'){const p=shopping.find(x=>x.id===D.id);if(p){p.done=!p.done;if(shopPersist()){render();if(p.done&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const row=Array.from(document.querySelectorAll('.sh-product')).find(el=>el.dataset.shopId===String(p.id));row?.querySelector('.sh-tick')?.animate?.([{transform:'scale(.78)'},{transform:'scale(1.17)',offset:.55},{transform:'scale(1)'}],{duration:240,easing:'ease-out'});row?.querySelector('.sh-product-name')?.classList.add('hk-shop-strike');}}else p.done=!p.done}}
+else if(a==='shop-check'){const p=shopping.find(x=>x.id===D.id);if(p){p.done=!p.done;if(shopPersist()){render();if(p.done&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const row=Array.from(document.querySelectorAll('.sh-product')).find(el=>el.dataset.shopId===String(p.id));row?.querySelector('.sh-tick')?.animate?.([{transform:'scale(.78)'},{transform:'scale(1.17)',offset:.55},{transform:'scale(1)'}],{duration:240,easing:'ease-out'});row?.querySelector('.sh-product-name > span')?.classList.add('hk-shop-strike');}}else p.done=!p.done}}
 else if(a==='shop-mode'){shopMode=D.v;render()}
 else if(a==='shop-hint'){if(D.field==='store'){const f=dlg.querySelector('[name="store"]');if(f){f.value=D.value;f.focus()}}}
 else if(a==='shop-photo-remove'){shopPhotoTemp='';const f=dlg.querySelector('#sh-photo-file');if(f)f.value='';shopPreviewUpdate()}
@@ -9811,5 +9812,16 @@ html body #app#app main .todo-list .td input[type=checkbox],html body #app#app m
 html body #app#app main .sh-list.sh-flat.card.pad{background:#fff!important;border:0!important;border-radius:14px!important;box-shadow:none!important;}
 html body #app#app main .sh-list .sh-product,html body #app#app main .sh-list .sh-product>.swipe-face{background:#fff!important;border:0!important;box-shadow:none!important;border-radius:0!important;}
 html body #app#app main .sh-list .sh-product + .sh-product{border-top:1px dashed #d5dfe7!important;}
+</style>
+<style id="hk-date-shop-fix">
+html body #app#app main > .plan-date-switcher.days:not(.cats){overflow-anchor:none;scroll-behavior:auto!important;}
+html body #app#app main > .plan-date-switcher.days:not(.cats) button{width:58px!important;min-width:58px!important;max-width:58px!important;flex:0 0 58px!important;transform:none!important;animation:none!important;transition:background-color .2s ease,color .2s ease!important;}
+html body #app#app main > .plan-date-switcher.days:not(.cats) button:is(.on,:active,.plan-date-pulse){transform:none!important;animation:none!important;}
+html body #app#app .sh-product.done .sh-product-name{text-decoration:none!important;}
+html body #app#app .sh-product-name > span{background-image:linear-gradient(currentColor,currentColor);background-repeat:no-repeat;background-position:left center;background-size:0% 1px;-webkit-box-decoration-break:clone;box-decoration-break:clone;}
+html body #app#app .sh-product.done .sh-product-name > span{background-size:100% 1px;}
+html body #app#app .sh-product.done .sh-product-name > span.hk-shop-strike{animation:hkShopLineSweep .42s ease-out both;}
+@keyframes hkShopLineSweep{from{background-size:0% 1px}to{background-size:100% 1px}}
+@media(prefers-reduced-motion:reduce){html body #app#app .sh-product.done .sh-product-name > span.hk-shop-strike{animation:none!important;}}
 </style>
 </body></html>
