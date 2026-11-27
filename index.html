@@ -6377,6 +6377,8 @@ function ledgerMountLiveSubpage(view){
  if(view==='all'&&ledgerNavStack.at(-1)?.view==='main'){preserved.classList.add('ld-all-return-snapshot');preserved.style.setProperty('--ld-return-top',previousMainTop+'px');preserved.style.setProperty('--ld-return-scroll',previousWindowY+'px');preserved.style.setProperty('--ld-return-left',previousMainRect.left+'px');preserved.style.setProperty('--ld-return-width',previousMainRect.width+'px');for(const side of ['Top','Right','Bottom','Left'])preserved.style.setProperty('padding-'+side.toLowerCase(),previousMainStyle['padding'+side]);}
  main.classList.add('ledger-layered-main');
  main.insertAdjacentHTML('beforeend',view==='all'?ledgerAllPage():view==='stats'?ledgerStatPage():ledgerDetailPage());
+ // Initialize newly mounted ledger rows before the first visible frame.
+ if(view==='all')applySwipeRows();
  document.body.classList.add('ld-ledger-overlay-open');
  // 若上一層是退稅，保留它原來的全螢幕及已捲動的位置。
  if(main.querySelector('.ld-preserved-underlay .ld-tax-screen'))document.body.classList.add('ld-tax-fullscreen-open');
@@ -7254,6 +7256,8 @@ function makeSwipeActions(host,buttonContainer,buttons){
  host.setAttribute('aria-description',host.classList.contains('ld-item')?'向左滑顯示刪除；鍵盤可使用方向鍵操作':'向左滑顯示編輯與刪除；鍵盤可使用方向鍵操作');
 }
 function applySwipeRows(){
+ if(currentlyOpenSwipe?.isConnected)setSwipeOpen(currentlyOpenSwipe,false);
+ if(swipePointer?.host?.isConnected){swipePointer.host.classList.remove('swipe-actively');swipePointer.face.style.transform='';}
  currentlyOpenSwipe=null;
  swipePointer=null;
  // 行程：只滑 summary，保留 <details> 原有展開內容、影像與拖曳把手。
@@ -9756,4 +9760,4 @@ html body #app#app .sh-product.done .sh-product-name.hk-shop-strike{position:rel
 html body #app#app .sh-product.done .sh-product-name.hk-shop-strike::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:currentColor;transform-origin:left;animation:hkShopStrike .24s ease-out both;}
 @keyframes hkShopStrike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @media(prefers-reduced-motion:reduce){.hk-shop-strike::after{animation:none!important;}}
-</style></body></html>
+</style><style id="hk-ledger-raw-action-guard">.ld-item:not(.swipe-host) > .ld-item-actions{display:none!important;}</style></body></html>
