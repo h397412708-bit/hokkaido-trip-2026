@@ -9613,30 +9613,27 @@ html body #app#app .summary.winter-trip-summary{justify-content:flex-end!importa
 html body #app#app .summary.winter-trip-summary>div{flex:0 0 auto!important;}
 html body #app#app main .hk-bento-grid.hk-useful-expanded>.hk-ticket-card .hk-ticket-upcoming strong{font-size:13px!important;}
 </style>
-<style id="hk-itinerary-white-block-redesign">
-#app#app main:has(.tlw) .plan-day-heading{border:0!important;padding:8px 2px 12px!important;margin-bottom:6px!important;}
-#app#app main:has(.tlw) .plan-day-heading h2{font-size:22px!important;font-weight:650!important;letter-spacing:-.03em!important;}
-#app#app main:has(.tlw) .plan-date-switcher.days button{border:0!important;box-shadow:none!important;border-radius:12px!important;}
-#app#app main:has(.tlw) .plan-list-heading{border:0!important;margin:12px 0 14px!important;}
-#app#app main:has(.tlw) .tlw{padding-left:22px!important;position:relative!important;}
-#app#app main:has(.tlw) .tlw::before{display:block!important;left:6px!important;width:1px!important;background:#bacbd7!important;}
-#app#app main:has(.tlw) .tlw>details.row{position:relative!important;overflow:visible!important;margin:0 0 8px!important;border:0!important;border-radius:16px!important;background:#fff!important;box-shadow:none!important;}
-#app#app main:has(.tlw) .tlw>details.row::before{display:block!important;position:absolute!important;left:-20px!important;top:22px!important;width:9px!important;height:9px!important;box-sizing:border-box!important;background:#fff!important;border:1.5px solid #8da4b8!important;border-radius:50%!important;}
-#app#app main:has(.tlw) .tlw>details.row.mv{background:transparent!important;border-radius:0!important;margin:0 0 8px!important;}
-#app#app main:has(.tlw) .tlw>details.row.mv::before{left:-18px!important;top:19px!important;width:5px!important;height:5px!important;background:#9aafc0!important;border:0!important;}
-#app#app main:has(.tlw) .tlw>details.row>summary.swipe-host{border:0!important;background:transparent!important;box-shadow:none!important;}
-#app#app main:has(.tlw) .tlw>details.row>summary.swipe-host>.swipe-face{background:#fff!important;border:0!important;box-shadow:none!important;display:flex!important;flex-wrap:wrap!important;gap:6px 10px!important;padding:13px 14px!important;min-height:72px!important;align-items:center!important;border-radius:16px!important;}
-#app#app main:has(.tlw) .tlw>details.row:not(.mv) .row-inline-clock{flex:0 0 100%!important;width:100%!important;padding:0!important;font-size:11px!important;font-weight:650!important;letter-spacing:.06em!important;color:#8095a5!important;}
-#app#app main:has(.tlw) .tlw>details.row.mv>summary.swipe-host>.swipe-face{background:transparent!important;min-height:42px!important;padding:5px 10px!important;flex-wrap:nowrap!important;border-radius:0!important;}
-#app#app main:has(.tlw) .tlw>details.row.mv .row-inline-clock{flex:0 0 39px!important;min-width:39px!important;padding:0!important;font-size:10px!important;align-self:center!important;color:#8b9dab!important;}
-#app#app main:has(.tlw) .tlw .row-summary-main{gap:4px!important;}
-#app#app main:has(.tlw) .tlw .row-summary-title{font-size:14px!important;font-weight:700!important;color:#354958!important;line-height:1.4!important;}
-#app#app main:has(.tlw) .tlw .mv .row-summary-title{font-size:12px!important;font-weight:500!important;color:#657b8c!important;}
-#app#app main:has(.tlw) .tlw .row-summary-duration{font-size:10px!important;color:#8497a6!important;}
-#app#app main:has(.tlw) .tlw .transport-mode-badge{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;font-size:10px!important;}
-#app#app main:has(.tlw) .tlw>details.row[open]>.bd{border:0!important;background:transparent!important;box-shadow:none!important;margin:0!important;padding:4px 14px 14px!important;}
-#app#app main:has(.tlw) .tlw>details.row.mv[open]>.bd{padding:2px 10px 10px 49px!important;}
-#app#app main:has(.tlw) .tlw>details.row[open] .transport-details,#app#app main:has(.tlw) .tlw>details.row[open] .spot-intro,#app#app main:has(.tlw) .tlw>details.row .spot-card{border:0!important;box-shadow:none!important;}
-#app#app main:has(.tlw) .tlw>details.row.mv[open] .transport-details{background:transparent!important;}
+
+<style id="plan-borderless-white-cards">
+html body #app#app main > .plan-date-switcher.days:not(.cats) button,
+html body #app#app main > .plan-date-switcher.days:not(.cats) button.on {
+  border:0!important; outline:0!important; background:#fff!important;
+  border-radius:12px!important; box-shadow:none!important;
+}
+html body #app#app main > .plan-date-switcher.days:not(.cats) button.on b,
+html body #app#app main > .plan-date-switcher.days:not(.cats) button.on small {color:#435d71!important;font-weight:800!important;}
+html body #app#app main > .plan-date-switcher.days:not(.cats) button:not(.on) b,
+html body #app#app main > .plan-date-switcher.days:not(.cats) button:not(.on) small {color:#8794a8!important;}
+html body #app#app main > .plan-day-heading {border:0!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv),
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)[open] {
+  background:#fff!important; border:0!important; outline:0!important;
+  border-radius:14px!important; box-shadow:none!important;
+}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary.swipe-host,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary.swipe-host>.swipe-face,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>.bd {
+  background:transparent!important; border:0!important; box-shadow:none!important;
+}
 </style>
 </body></html>
