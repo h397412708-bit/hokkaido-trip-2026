@@ -6325,8 +6325,9 @@ function ledgerDetailPage(){
   rows.push(choice('refundMethod','退款方式',LEDGER_REFUND_METHODS),choice('refundStatus','退稅進度',LEDGER_REFUND_STATES),inp('refundAmount','實際退款 JPY','number'));
  }
  return '<div class="ld-page ld-subpage ld-ledger-overlay" data-ledger-subpage="detail">'+
+  '<header class="ld-detail-outside-header"><button type="button" class="shop-glass-add hk-pack-back" data-a="ledger-back" aria-label="返回上一頁"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button><b>收支資訊</b><span class="ld-inline-save-hint">修改後自動儲存</span></header>'+
  (detailPhoto?'<section class="ld-detail-photo ld-photo-visible"><button type="button" data-a="ledger-photo-view" data-id="'+esc(e.id)+'" aria-label="放大支出照片"><img src="'+esc(detailPhoto)+'" alt="'+esc(e.name)+' 的照片" loading="eager" decoding="async"></button></section>':'')+
- '<section class="ld-panel"><div class="ld-section-head"><h3>收支資訊</h3><span class="ld-inline-save-hint">修改後自動儲存</span></div>'+
+ '<section class="ld-panel">'+
  ledgerNetSummary(e)+
  '<div class="ld-detail-fields">'+rows.join('')+'</div></section>'+
  '<div class="ld-photo-detail-actions"><label class="ld-detail-add-photo" for="ld-detail-photo-file">'+(detailPhoto?'更換照片':'＋ 上傳明細照片')+'</label><input id="ld-detail-photo-file" type="file" accept="image/*,.heic,.heif" data-ledger-detail-photo="'+esc(e.id)+'" hidden>'+(detailPhoto?'<button type="button" class="ld-detail-remove-photo" data-a="ledger-detail-photo-remove" data-id="'+esc(e.id)+'">移除照片</button>':'')+'</div>'+
@@ -7653,9 +7654,9 @@ function syncWinterPage(){
   const addressPath=({home:'overview',plan:'itinerary',todo:'todo',shop:'shopping',ledger:'expenses'}[st.tab]||'overview');
   if(address)address.textContent='http://hokkaido.locat/'+addressPath;
   const bar=document.querySelector('.winter-browser-bar');
-  if(bar)bar.classList.toggle('winter-ledger-subpage',sub);
+  if(bar)bar.classList.toggle('winter-ledger-subpage',sub&&ledgerView!=='detail');
   const back=document.getElementById('winter-ledger-back');
-  if(back)back.hidden=!sub;
+  if(back)back.hidden=!sub||ledgerView==='detail';
 }
 function render(){
   const homeEditorPosition=st.tab==='home'&&!dlg.open?hkHomeEditorScroll:null;
@@ -9926,5 +9927,12 @@ html body.hk-detail-return-blank > .winter-browser-bar::before,html body.hk-deta
 html body #app#app .ld-editorial-home .ld-fx-redesign .ld-calculator .ld-fx-input-frame{position:relative!important;display:block!important;height:32px!important;padding:0!important;overflow:hidden!important;}
 html body #app#app .ld-editorial-home .ld-fx-redesign .ld-calculator .ld-fx-input-frame input#ld-fx-amount{position:absolute!important;left:0!important;top:0!important;width:145.4545%!important;max-width:none!important;height:46.545px!important;line-height:normal!important;font-size:16px!important;font-weight:500!important;padding:0 10px!important;transform:scale(.6875)!important;transform-origin:top left!important;letter-spacing:0!important;-webkit-text-size-adjust:100%;}
 html body #app#app .ld-editorial-home .ld-fx-redesign .ld-calculator select{font-size:11px!important;font-weight:500!important;letter-spacing:0!important;}
+</style>
+<style id="hk-detail-outside-header">
+html body #app#app [data-ledger-subpage="detail"] > .ld-detail-outside-header{display:flex!important;align-items:center!important;gap:12px!important;margin:0 0 12px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;color:#354958!important;flex:none!important;}
+html body #app#app .ld-detail-outside-header b{font-size:14px!important;font-weight:700!important;}
+html body #app#app .ld-detail-outside-header .ld-inline-save-hint{margin-left:auto;font-size:10px!important;color:#8294a3!important;}
+html body #app#app .ld-detail-outside-header button.hk-pack-back{display:grid!important;place-items:center!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;position:relative!important;inset:auto!important;transform:none!important;clip-path:none!important;flex:0 0 44px!important;width:44px!important;height:44px!important;border-radius:50%!important;z-index:2!important;color:#526f85!important;}
+html body #app#app .ld-detail-outside-header .hk-pack-back svg{display:block!important;width:21px!important;height:21px!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round;stroke-linejoin:round;fill:none!important;}
 </style>
 </body></html>
