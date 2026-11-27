@@ -9689,26 +9689,7 @@ html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv .transport-
 <style id="hk-plan-height-motion">
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)[open]>.bd{animation:none!important;opacity:1!important;transform:none!important;transition:none!important;}
 </style>
-<script>
-(()=>{
- const selector='main:has(> .plan-day-heading) .tlw>details.row:not(.mv):not(.no-spot-details)';
- const running=new WeakMap();
- document.addEventListener('click',e=>{
-  const summary=e.target.closest('summary'), card=summary?.parentElement;
-  if(e.defaultPrevented||!card?.matches(selector)||e.target.closest('a,button,[data-a]')||matchMedia('(prefers-reduced-motion: reduce)').matches||!card.animate)return;
-  const body=card.querySelector(':scope > .bd'); if(!body)return;
-  e.preventDefault();
-  const prev=running.get(card), opening=prev?!prev.opening:!card.open;
-  const from=card.open?body.getBoundingClientRect().height:0;
-  if(prev){prev.anim.onfinish=null;prev.anim.cancel();}
-  card.open=true;
-  const to=opening?body.getBoundingClientRect().height:0;
-  const anim=body.animate([{height:from+'px',overflow:'hidden'},{height:to+'px',overflow:'hidden'}],{duration:240,easing:'cubic-bezier(.22,.75,.25,1)'});
-  running.set(card,{anim,opening});
-  anim.onfinish=()=>{if(running.get(card)?.anim!==anim)return;card.open=opening;running.delete(card);};
- },false);
-})();
-</script>
+
 <style id="hk-plan-bidirectional-motion">
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv){overflow:visible!important;}
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary:active{transform:none!important;opacity:1!important;}
@@ -9722,4 +9703,12 @@ html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summa
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv>summary{transition:transform 140ms ease-out!important;}
 html body #app#app main .plan-date-switcher button.plan-date-pulse{animation:planDatePulse .18s ease-out!important;}
 @media(prefers-reduced-motion:reduce){html body #app#app main .plan-date-switcher button.plan-date-pulse{animation:none!important;}}
+</style><style id="hk-plan-no-card-motion">
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv),
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv) *,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)::before,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)::after,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv) *::before,
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv) *::after {animation:none!important;transition:none!important;will-change:auto!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary:active {transform:none!important;opacity:1!important;}
 </style></body></html>
