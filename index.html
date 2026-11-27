@@ -9824,4 +9824,15 @@ html body #app#app .sh-product.done .sh-product-name > span.hk-shop-strike{anima
 @keyframes hkShopLineSweep{from{background-size:0% 1px}to{background-size:100% 1px}}
 @media(prefers-reduced-motion:reduce){html body #app#app .sh-product.done .sh-product-name > span.hk-shop-strike{animation:none!important;}}
 </style>
+
+<style id="ledger-borderless-final">
+/* 記帳及所有記帳子頁：移除外框，保留原有背景、圓角及表單操作。 */
+html body #app#app main .ld-page,
+html body #app#app main .ld-page :where(div,section,article,header,footer,button,a,details,summary,li,ul,span,label):not([role="checkbox"]):not(.ld-tax-check-icon) {
+ border-color:transparent!important;
+ outline:0!important;
+}
+html body #app#app main .ld-page :where(div,section,article,header,footer,button,a,details,summary,li,ul,span,label)::before,
+html body #app#app main .ld-page :where(div,section,article,header,footer,button,a,details,summary,li,ul,span,label)::after {border-color:transparent!important;}
+</style>
 </body></html>
