@@ -6439,7 +6439,7 @@ function ledgerHeaderMotion(transform,transition){
  bar.style.setProperty('transition',transition,'important');bar.style.transform=transform;
 }
 function ledgerHeaderReset(){
- document.body.classList.remove('hk-detail-return-blank');
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!app.querySelector('.ld-exiting')&&!ledgerSubSwipe?.active)document.body.classList.remove('hk-detail-return-blank');}));
  const bar=document.querySelector('.winter-browser-bar:not(.winter-browser-underlay)');
  if(bar){bar.style.setProperty('transition','none','important');bar.style.transform='';}
  document.querySelector('.winter-browser-underlay')?.remove();
@@ -6488,6 +6488,7 @@ function ledgerBack(){
   if(previous.view==='main'){const y=previous.windowScroll||0;window.scrollTo({top:y,behavior:'instant'});requestAnimationFrame(()=>window.scrollTo({top:y,behavior:'instant'}));}
  };
  if(panel){
+  if(ledgerView==='detail'){document.body.classList.add('hk-detail-return-blank');document.body.getBoundingClientRect();}
   panel.classList.add('ld-exiting');
   panel.style.animation='none';
   const exitDuration=300;
@@ -9913,5 +9914,17 @@ html body.hk-detail-return-blank,html body.hk-detail-return-blank #app,html body
 html body.hk-detail-return-blank #app main > .ld-return-underlay,html body.hk-detail-return-blank > .winter-browser-underlay,html body.hk-detail-return-blank > #hk-bottom-frost,html body.hk-detail-return-blank > .bottom-nav,html body.hk-detail-return-blank > .winter-address-row{visibility:hidden!important;}
 html body.hk-detail-return-blank > .winter-browser-bar{background:#F8FAFB!important;box-shadow:none!important;}
 html body.hk-detail-return-blank > .winter-browser-bar::before,html body.hk-detail-return-blank > .winter-browser-bar::after{box-shadow:none!important;background:#F8FAFB!important;}
+</style>
+<style id="hk-detail-return-compositing">
+html:has(body.hk-detail-return-blank),html body.hk-detail-return-blank,html body.hk-detail-return-blank #app,html body.hk-detail-return-blank #app main{background:#F8FAFB!important;box-shadow:none!important;}
+html body.hk-detail-return-blank #app main > .ld-return-underlay,html body.hk-detail-return-blank #app main > .ld-return-underlay *,html body.hk-detail-return-blank .ld-return-chrome,html body.hk-detail-return-blank .ld-return-chrome *,html body.hk-detail-return-blank > #winter-scroll-top{visibility:hidden!important;}
+html body.hk-detail-return-blank > .winter-browser-bar{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;filter:none!important;box-shadow:none!important;}
+html body.hk-detail-return-blank > .winter-browser-bar::before,html body.hk-detail-return-blank > .winter-browser-bar::after,html body.hk-detail-return-blank #app main::before,html body.hk-detail-return-blank #app main::after{visibility:hidden!important;}
+</style>
+<style id="hk-fx-amount-visual-size">
+/* Keep the native input at 16px to avoid iOS focus zoom; render at 11px. */
+html body #app#app .ld-editorial-home .ld-fx-redesign .ld-calculator .ld-fx-input-frame{position:relative!important;display:block!important;height:32px!important;padding:0!important;overflow:hidden!important;}
+html body #app#app .ld-editorial-home .ld-fx-redesign .ld-calculator .ld-fx-input-frame input#ld-fx-amount{position:absolute!important;left:0!important;top:0!important;width:145.4545%!important;max-width:none!important;height:46.545px!important;line-height:normal!important;font-size:16px!important;font-weight:500!important;padding:0 10px!important;transform:scale(.6875)!important;transform-origin:top left!important;letter-spacing:0!important;-webkit-text-size-adjust:100%;}
+html body #app#app .ld-editorial-home .ld-fx-redesign .ld-calculator select{font-size:11px!important;font-weight:500!important;letter-spacing:0!important;}
 </style>
 </body></html>
