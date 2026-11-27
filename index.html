@@ -9711,4 +9711,29 @@ html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)::afte
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv) *::before,
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv) *::after {animation:none!important;transition:none!important;will-change:auto!important;}
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>summary:active {transform:none!important;opacity:1!important;}
-</style></body></html>
+</style><script id="hk-plan-open-only-motion">
+(function(){
+ const selector='#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)';
+ const active=new WeakMap();
+ document.addEventListener('click',function(e){
+  const summary=e.target.closest('summary');
+  const card=summary&&summary.parentElement;
+  if(!card||!card.matches(selector)||card.open||e.target.closest('a,button,input,select,textarea,[data-a]')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const start=card.getBoundingClientRect().height;
+  requestAnimationFrame(function(){
+   if(!card.isConnected||!card.open)return;
+   const end=card.getBoundingClientRect().height;
+   if(end<=start)return;
+   const body=card.querySelector(':scope > .bd');
+   if(!body)return;
+   const old=active.get(card);if(old)old.cancel();
+   const animation=card.animate([{height:start+'px'},{height:end+'px'}],{duration:200,easing:'cubic-bezier(.2,.75,.25,1)'});
+   const clip=body.animate([{clipPath:'inset(0 0 100% 0)'},{clipPath:'inset(0 0 0 0)'}],{duration:200,easing:'cubic-bezier(.2,.75,.25,1)'});
+   active.set(card,animation);
+   const cleanup=()=>{clip.cancel();if(active.get(card)===animation)active.delete(card);};
+   animation.onfinish=cleanup;animation.oncancel=cleanup;
+  });
+ },true);
+ document.addEventListener('toggle',function(e){const card=e.target;if(card.matches?.(selector)&&!card.open)active.get(card)?.cancel();},true);
+})();
+</script></body></html>
