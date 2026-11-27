@@ -5266,7 +5266,7 @@ function wxCard(i){
  return '<section class="weather-card weather-mini" aria-label="12/'+esc(d.d)+' '+esc(loc.label)+' 當地天氣"><div class="wx-top"><span class="wx-kicker">'+iconSvg('weather')+'12/'+esc(d.d)+'｜當地天氣</span><span class="wx-area">'+iconSvg('pin')+esc(loc.label)+'</span></div>'+
  '<div class="wx-mini-line"><span class="wx-mini-emoji" aria-hidden="true">'+icon+'</span><div class="wx-mini-text"><div class="wx-mini-main">'+main+'</div><div class="wx-mini-desc">'+secondary+'</div></div></div>'+
  '<div class="wx-live-now">'+(live?iconSvg(wxDesc(live.code)[0])+' <b>當地即時 '+esc(Math.round(live.temp))+'°C</b> · '+esc(wxDesc(live.code)[1])+' · '+esc(live.time.replace('T',' '))+'（日本時間）':'當地即時天氣：'+(WX_INFO.loading?'正在更新…':'點擊更新可查詢現在的天氣'))+'</div>'+
- '<div class="wx-mini-bottom"><span class="wx-source">'+foot+'</span><button type="button" class="wx-refresh" data-a="weather-refresh">⟳ 更新</button></div></section>';
+ '<div class="wx-mini-bottom"><span class="wx-source">'+foot+'</span><button type="button" class="wx-refresh" data-a="weather-refresh" aria-busy="'+String(WX_INFO.loading)+'" '+(WX_INFO.loading?'disabled':'')+'><span class="wx-spin" aria-hidden="true">⟳</span> '+(WX_INFO.loading?'更新中…':'更新')+'</button></div></section>';
 }
 function wxOverview(){
  return '<details class="card weather-overview" data-k="wxhome"'+(ov.has('wxhome')?' open':'')+'><summary><span class="sum-ic">'+iconSvg('weather')+'</span><div><b>每日當地天氣</b><small>點一下展開／收合 10 天天氣總覽</small></div></summary><div class="bd"><div class="wx-overhead"><strong>'+iconSvg('weather')+'每日當地天氣</strong><button type="button" data-a="weather-refresh" class="wx-refresh">⟳ 更新</button></div><p class="wx-overview-note">10 天依當天所在地顯示；接近出發時會自動取得逐日預報，尚未開放的日期不顯示猜測天氣。</p>'+
@@ -5892,9 +5892,8 @@ const sub=snowBooked?d.sub.replace('雪地摩托車','雪地摩托車（已訂�
 let note=d.note;
 if(String(d.d)==='22'&&itemBooked('jr22'))note=note.replace('JR 車票還沒買。','JR 行程已標記為已訂，請確認實際車票。');
 if(String(d.d)==='24'&&itemBooked('jr24'))note=note.replace('登別 → 洞爺 JR 車次尚未確認。','登別 → 洞爺 JR 行程已標記為已訂。');
-return '<div class="days plan-date-switcher" role="group" aria-label="切換每日行程">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'" aria-label="12月'+esc(x.d)+'日 星期'+esc(x.week)+'" aria-pressed="'+(i===st.day?'true':'false')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+
+return '<div class="plan-weather-static">'+wxCard(st.day)+'</div><div class="days plan-date-switcher" role="group" aria-label="切換每日行程">'+days.map((x,i)=>'<button data-a="day" data-v="'+i+'" class="'+(i===st.day?'on':'')+'" aria-label="12月'+esc(x.d)+'日 星期'+esc(x.week)+'" aria-pressed="'+(i===st.day?'true':'false')+'"><b>'+esc(x.d)+'</b><small>週'+esc(x.week)+'</small></button>').join('')+
 '</div><section class="plan-day-heading" hidden aria-hidden="true"></section>'+
-'<details class="plan-weather-fold" data-k="planWeather"'+(ov.has('planWeather')?' open':'')+'><summary>'+iconSvg('weather')+'<span class="plan-weather-name">當地天氣 <small>'+esc(WX_LOCATION[WX_KEYS[st.day]]?.label||d.city)+'</small></span><span class="plan-weather-brief">'+(wxRecord(st.day)?esc(Math.round(wxRecord(st.day).max))+'° / '+esc(Math.round(wxRecord(st.day).min))+'°':'查看預報')+'</span><svg class="plan-weather-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="plan-weather-content">'+wxCard(st.day)+'</div></details>'+
 '<div class="plan-list-heading"><span>2026.12.'+esc(d.d)+' / DAY '+String(st.day+1).padStart(2,'0')+'</span></div><div class="tlw">'+d.items.map((a,i)=>row(a,i,d)).join('')+'</div><div class="itinerary-add-area"><div class="home-add-quick-menu plan-add-quick-menu" id="plan-add-quick-menu" aria-hidden="true"><button type="button" data-a="plan-add-kind" data-kind="交通" tabindex="-1" aria-label="新增交通" title="新增交通"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 12h16M8 16h.01M16 16h.01M7 19l-1 2m11-2 1 2"/></svg></button><button type="button" data-a="plan-add-kind" data-kind="觀光" tabindex="-1" aria-label="新增行程" title="新增行程">'+iconSvg('pin')+'</button></div><button type="button" class="shop-glass-add itinerary-add-trigger" data-a="add-choose" aria-label="新增交通或行程" aria-expanded="false" aria-controls="plan-add-quick-menu" title="新增交通或行程"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><p class="fn">營業時間與票價為概略參考，出發前請以官方公告為準。</p>'}
 
 // 購物清單以相同的 hk26v2_ 儲存空間保存。圖像會縮小為 JPEG，僅儲存在目前瀏覽器。
@@ -7099,7 +7098,7 @@ function runItineraryEntrance(){
   if(!list||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
   const entries=[...list.querySelectorAll(':scope > details.row')];
   entries.forEach((item,i)=>{
-    item.style.setProperty('--row-stagger-delay',Math.min(115*i,1380)+'ms');
+    item.style.setProperty('--row-stagger-delay',Math.min(35*i,210)+'ms');
   });
   list.classList.add('rows-entrance');
   // Clear animation styling after the last entry has settled.
@@ -7709,6 +7708,8 @@ function render(){
     // Keep the original strip in the DOM: only replace the day details below it.
     Array.from(main.childNodes).forEach(node=>{if(node!==existingStrip)node.remove()});
     main.appendChild(fragment.content);
+    const weatherAbove=main.querySelector('.plan-weather-static');
+    if(weatherAbove)main.insertBefore(weatherAbove,existingStrip);
     existingStrip.querySelectorAll('[data-a="day"]').forEach(button=>{
       const selected=Number(button.dataset.v)===st.day;
       button.classList.toggle('on',selected);
@@ -9636,4 +9637,26 @@ html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)>.bd {
   background:transparent!important; border:0!important; box-shadow:none!important;
 }
 </style>
+
+<style id="plan-interaction-v2">
+html body #app#app main > .plan-date-switcher.days:not(.cats) button.on{background:#304c69!important;color:#fff!important;}
+html body #app#app main > .plan-date-switcher.days:not(.cats) button.on :is(b,small){color:#fff!important;}
+html body #app#app main > .plan-date-switcher.days:not(.cats) button{transition:background-color .22s ease,transform .16s ease!important;}
+html body #app#app main > .plan-date-switcher.days:not(.cats) button:active{transform:scale(.94)!important;}
+.plan-weather-static{margin:0 0 12px;}
+html body #app#app main > .plan-weather-static .weather-card{margin:0!important;background:#fff!important;border:0!important;box-shadow:none!important;border-radius:14px!important;}
+.plan-weather-static .wx-spin{display:inline-block;}
+.plan-weather-static .wx-refresh[aria-busy="true"] .wx-spin{animation:planWxSpin .8s linear infinite;}
+.plan-weather-static .wx-refresh:active{transform:scale(.94);}
+.plan-weather-static .wx-refresh{transition:transform .15s ease;}
+@keyframes planWxSpin{to{transform:rotate(360deg)}}
+@keyframes planCardReveal{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes planDatePulse{0%{transform:scale(.94)}65%{transform:scale(1.025)}100%{transform:scale(1)}}
+html body #app#app main .plan-date-switcher button.plan-date-pulse{animation:planDatePulse .26s ease-out!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary{transition:transform .16s ease!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:active{transform:scale(.98)!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row[open]>.bd{animation:planCardReveal .24s ease-out;}
+@media(prefers-reduced-motion:reduce){html body #app#app main .plan-date-switcher button,html body #app#app main .tlw>details.row>summary,html body #app#app main .tlw>details.row[open]>.bd,.plan-weather-static .wx-spin{animation:none!important;transition:none!important;transform:none!important;}}
+</style>
+<script>document.addEventListener('click',function(e){const b=e.target.closest('.plan-date-switcher button[data-a="day"]');if(!b)return;b.classList.remove('plan-date-pulse');void b.offsetWidth;b.classList.add('plan-date-pulse');},true);document.addEventListener('animationend',function(e){if(e.animationName==='planDatePulse')e.target.classList.remove('plan-date-pulse');});</script>
 </body></html>
