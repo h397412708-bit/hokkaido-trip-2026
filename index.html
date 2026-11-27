@@ -6856,7 +6856,7 @@ async function ledgerClick(action,data){
  else if(action==='ledger-edit'){ledgerEdit(data.id)}
  else if(action==='ledger-delete'){
   const row=ledger.entries.find(x=>x.id===data.id);
-  if(row&&confirm('確定刪除「'+row.name+'」這筆記帳嗎？')){const old=structuredClone(ledger);ledger.entries=ledger.entries.filter(x=>x.id!==data.id);if(ledgerDetailId===data.id){ledgerView='main';ledgerDetailId=null;}ledgerPersistAfterChange(old)}
+  if(row&&confirm('確定刪除「'+row.name+'」這筆記帳嗎？')){const old=structuredClone(ledger);ledger.entries=ledger.entries.filter(x=>x.id!==data.id);if(currentlyOpenSwipe)setSwipeOpen(currentlyOpenSwipe,false);if(ledgerDetailId===data.id){ledgerView='main';ledgerDetailId=null;}ledgerPersistAfterChange(old)}
  }else if(action==='ledger-cancel'){dismissDialogDown()}
  else if(action==='ledger-photo-remove'){ledgerPhotoTemp='';ledgerUpdatePhotoPreview();const f=dlg.querySelector('#ld-photo-file');if(f)f.value=''}
  else if(action==='ledger-photo-view'){const x=ledger.entries.find(x=>x.id===data.id);const src=ledgerEntryPhotoSource(x);if(src)shopShowImage(src,x.name)}
@@ -7370,7 +7370,7 @@ document.addEventListener('touchcancel',e=>winterFinishTabSwipe(e,true),{passive
 let ledgerSubSwipe=null;
 document.addEventListener('touchstart',e=>{
  const sub=e.target.closest?.('[data-ledger-subpage]')||(e.target.closest?.('.winter-browser-bar')&&st.tab==='ledger'&&ledgerView!=='main'?app.querySelector('main > [data-ledger-subpage]'):null);
- if(!sub||e.touches.length!==1||e.target.closest('input,select,textarea'))return;
+ if(!sub||e.touches.length!==1||e.target.closest('input,select,textarea,.swipe-host,button,a,.ld-all-tabs'))return;
  ledgerSubSwipe={x:e.touches[0].clientX,y:e.touches[0].clientY,sub,active:false};
 },{passive:true});
 document.addEventListener('touchmove',e=>{
@@ -8307,7 +8307,7 @@ else if(a==='shop-zoom-preview'){if(shopPhotoTemp)shopShowImage(shopPhotoTemp,dl
 else if(a==='shop-zoom-close'){const popup=document.getElementById('sh-lightbox');if(popup?.open)popup.close()}
 else if(a==='shop-delete'){const p=shopping.find(x=>x.id===D.id);if(p&&confirm('確定刪除「'+p.name+'」嗎？')){const previous=shopping.slice();shopping=shopping.filter(x=>x.id!==D.id);if(shopPersist(previous))render()}}
 else if(a==='shop-qty-edit'){const input=dlg.querySelector('input[name="qty"]');if(input){const value=Math.floor(Number(input.value)||1);input.value=Math.max(1,Math.min(9999,value+Number(D.change)))}}
-else if(a==='shop-check'){const p=shopping.find(x=>x.id===D.id);if(p){p.done=!p.done;if(shopPersist())render();else p.done=!p.done}}
+else if(a==='shop-check'){const p=shopping.find(x=>x.id===D.id);if(p){p.done=!p.done;if(shopPersist()){render();if(p.done&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const row=Array.from(document.querySelectorAll('.sh-product')).find(el=>el.dataset.shopId===String(p.id));row?.querySelector('.sh-tick')?.animate?.([{transform:'scale(.78)'},{transform:'scale(1.17)',offset:.55},{transform:'scale(1)'}],{duration:240,easing:'ease-out'});row?.querySelector('.sh-product-name')?.classList.add('hk-shop-strike');}}else p.done=!p.done}}
 else if(a==='shop-mode'){shopMode=D.v;render()}
 else if(a==='shop-hint'){if(D.field==='store'){const f=dlg.querySelector('[name="store"]');if(f){f.value=D.value;f.focus()}}}
 else if(a==='shop-photo-remove'){shopPhotoTemp='';const f=dlg.querySelector('#sh-photo-file');if(f)f.value='';shopPreviewUpdate()}
@@ -9744,4 +9744,16 @@ html body #app#app main > .plan-date-switcher.days:not(.cats){gap:8px!important;
 html body #app#app main > .plan-date-switcher.days:not(.cats) button{flex:0 0 auto!important;min-width:58px!important;min-height:65px!important;padding:10px 8px!important;gap:5px!important;}
 html body #app#app main > .plan-date-switcher.days:not(.cats) button b{font-size:18px!important;}
 html body #app#app main > .plan-date-switcher.days:not(.cats) button small{font-size:11px!important;}
+</style><style id="hk-alignment-shop-ledger-fix">
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv>summary.swipe-host>.swipe-face{padding-top:7px!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv>summary .row-inline-clock{align-self:flex-start!important;line-height:14px!important;padding:0!important;margin-top:12px!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row.mv::before{top:23px!important;}
+html body #app#app .ld-expense-panel,html body #app#app .ld-full-ledger-panel{background:#fff!important;}
+html body #app#app .ld-item.swipe-host,html body #app#app .ld-item.swipe-host>.swipe-face{background:#fff!important;box-shadow:none!important;}
+html body #app#app .ld-item.swipe-host:not(.is-swiped):not(.swipe-actively)>.swipe-actions{visibility:hidden!important;pointer-events:none!important;}
+html body #app#app .ld-item.swipe-host:not(.is-swiped):not(.swipe-actively)>.swipe-actions button{opacity:0!important;pointer-events:none!important;}
+html body #app#app .sh-product.done .sh-product-name.hk-shop-strike{position:relative;text-decoration:none!important;display:table;}
+html body #app#app .sh-product.done .sh-product-name.hk-shop-strike::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:currentColor;transform-origin:left;animation:hkShopStrike .24s ease-out both;}
+@keyframes hkShopStrike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.hk-shop-strike::after{animation:none!important;}}
 </style></body></html>
