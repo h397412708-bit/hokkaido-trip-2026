@@ -9659,4 +9659,19 @@ html body #app#app main:has(> .plan-day-heading) .tlw>details.row[open]>.bd{anim
 @media(prefers-reduced-motion:reduce){html body #app#app main .plan-date-switcher button,html body #app#app main .tlw>details.row>summary,html body #app#app main .tlw>details.row[open]>.bd,.plan-weather-static .wx-spin{animation:none!important;transition:none!important;transform:none!important;}}
 </style>
 <script>document.addEventListener('click',function(e){const b=e.target.closest('.plan-date-switcher button[data-a="day"]');if(!b)return;b.classList.remove('plan-date-pulse');void b.offsetWidth;b.classList.add('plan-date-pulse');},true);document.addEventListener('animationend',function(e){if(e.animationName==='planDatePulse')e.target.classList.remove('plan-date-pulse');});</script>
+<style id="hk-bottom-motion-refinement">
+body > #hk-bottom-frost{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(100%,640px);height:calc(var(--folder-bottom,0px) + 60px);z-index:89;pointer-events:none;background:linear-gradient(to top,rgba(229,237,243,.65),rgba(229,237,243,.12) 65%,transparent);-webkit-backdrop-filter:blur(15px);backdrop-filter:blur(15px);-webkit-mask-image:linear-gradient(to top,#000 0%,#000 18%,rgba(0,0,0,.6) 50%,transparent 100%);mask-image:linear-gradient(to top,#000 0%,#000 18%,rgba(0,0,0,.6) 50%,transparent 100%);}
+body.ld-ledger-overlay-open > #hk-bottom-frost,body.ld-tax-fullscreen-open > #hk-bottom-frost,body:has(#app main > [data-ledger-subpage]) > #hk-bottom-frost{display:none;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv),html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv)[open]{box-shadow:0 5px 16px rgba(48,76,105,.10),0 1px 3px rgba(48,76,105,.055)!important;transition:box-shadow .22s ease!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row:not(.mv):has(>summary:active){box-shadow:0 5px 16px rgba(48,76,105,.10),0 1px 3px rgba(48,76,105,.055)!important;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary{transition:transform 240ms cubic-bezier(.2,.75,.25,1),opacity 150ms ease!important;transform-origin:center;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:active{transform:scale(.988)!important;opacity:.84;}
+html body #app#app main:has(> .plan-day-heading) .tlw>details.row[open]>.bd{animation:hkSoftReveal 280ms cubic-bezier(.2,.75,.25,1)!important;}
+@keyframes hkSoftReveal{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+html body #app#app main > .plan-date-switcher.days:not(.cats) button{transition:background-color 220ms ease,color 220ms ease,transform 200ms cubic-bezier(.2,.75,.25,1)!important;}
+html body #app#app main > .plan-date-switcher.days:not(.cats) button:active{transform:scale(.97)!important;}
+@keyframes planDatePulse{0%{transform:scale(.97)}70%{transform:scale(1.008)}100%{transform:scale(1)}}
+.plan-weather-static .wx-refresh{transition:transform 220ms cubic-bezier(.2,.75,.25,1),opacity 150ms ease!important;}.plan-weather-static .wx-refresh:active{transform:scale(.96);opacity:.75;}
+@media(prefers-reduced-motion:reduce){html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary,html body #app#app main:has(> .plan-day-heading) .tlw>details.row[open]>.bd,html body #app#app main > .plan-date-switcher.days:not(.cats) button,.plan-weather-static .wx-refresh{animation:none!important;transition:none!important;transform:none!important;}}
+</style><div id="hk-bottom-frost" aria-hidden="true"></div>
 </body></html>
