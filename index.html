@@ -7658,7 +7658,10 @@ function syncWinterPage(){
   const back=document.getElementById('winter-ledger-back');
   if(back)back.hidden=!sub||ledgerView==='detail';
 }
+let hkLastEntranceTab=null;
 function render(){
+  const hkEntranceChanged=hkLastEntranceTab!==st.tab;
+  hkLastEntranceTab=st.tab;
   const homeEditorPosition=st.tab==='home'&&!dlg.open?hkHomeEditorScroll:null;
   const diningRefresh=st.tab==='home'&&(hkDiningPage||hkTicketPage)&&app.querySelector('.hk-dining-page,.hk-ticket-page');
   const diningY=diningRefresh?app.scrollTop:0, diningWindowY=diningRefresh?window.scrollY:0;
@@ -7716,6 +7719,9 @@ function render(){
    if(st.tab==='ledger'&&ledgerView==='all')ledgerSyncAllLens(true);
   if(st.tab==='ledger'&&ledgerView==='tax'){ledgerSyncTaxLens(true);if(ledgerTaxTab==='check')ledgerSyncDepartureLens(true);}
   runItineraryEntrance();
+  if(hkEntranceChanged && ["home","todo","shop","ledger"].includes(st.tab) && (st.tab!=="ledger" || ledgerView==="main")){
+    app.querySelector("main")?.classList.add("hk-soft-page-enter");
+  }
   if(st.tab==='plan')getWxForecast(false);
   if(st.tab==='ledger')ledgerRefreshFx(false);
   if(st.tab==='home')flightPassCounts();
@@ -9971,5 +9977,15 @@ html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:not(:h
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:not(:has(.row-summary-duration))>.swipe-face{align-items:center!important;}
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:not(:has(.row-summary-duration)) .row-summary-main{align-self:center!important;justify-content:center!important;margin-block:0!important;padding-block:0!important;}
 html body #app#app main:has(> .plan-day-heading) .tlw>details.row>summary:not(:has(.row-summary-duration)) .row-summary-heading{align-items:center!important;margin-block:0!important;}
+</style>
+<style id="hk-soft-page-glass-20261128">
+@keyframes hkSoftPageEnter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+#app > main.hk-soft-page-enter{animation:hkSoftPageEnter 280ms cubic-bezier(.22,.7,.3,1) both;}
+html body > nav.bottom-nav .nav-glass-indicator .nav-lens-core{background:rgba(95,95,95,.14)!important;background-image:none!important;border:0!important;box-shadow:none!important;border-radius:999px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;}
+html body > nav.bottom-nav .nav-glass-indicator .nav-lens-core::before,html body > nav.bottom-nav .nav-glass-indicator .nav-lens-core::after{display:none!important;}
+html body dialog#dlg.bottom-sheet[open]{background:linear-gradient(to top,rgba(248,250,251,.94),rgba(248,250,251,.83) 45%,rgba(248,250,251,.68))!important;isolation:isolate;}
+html body dialog#dlg.bottom-sheet[open]::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);mask-image:linear-gradient(to top,#000 0%,#000b 45%,transparent 100%);-webkit-mask-image:linear-gradient(to top,#000 0%,#000b 45%,transparent 100%);}
+html body dialog#dlg.bottom-sheet[open] .sheet-grabber{background:transparent!important;}
+@media(prefers-reduced-motion:reduce){#app > main.hk-soft-page-enter{animation:none!important;}}
 </style>
 </body></html>
