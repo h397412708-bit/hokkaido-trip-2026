@@ -10014,11 +10014,11 @@ html body #app#app main .hk-bento-grid.hk-bento-entrance > :nth-child(n+5){anima
 @media(prefers-reduced-motion:reduce){html body #app#app main.hk-todo-entrance > :not(.todo-heading):not(.sh-filters),html body #app#app main .hk-bento-grid.hk-bento-entrance > *{animation:none!important;}}
 </style>
 <style id="hk-sheet-exit-and-shop-arrival">
-html body dialog#dlg.bottom-sheet[open]{background:#F8FAFB!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+html body dialog#dlg.bottom-sheet[open]{background:#F8FAFB!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border:0!important;outline:none!important;}
 html body dialog#dlg.bottom-sheet[open]::before{display:none!important;}
 html body dialog#dlg.bottom-sheet[open].sheet-dismissing{transform:translate3d(0,calc(100% + 16px),0)!important;transition:transform 360ms cubic-bezier(.32,.05,.65,1)!important;opacity:1!important;}
-html body dialog#dlg.bottom-sheet[open].sheet-dismissing::backdrop{background:rgba(42,60,75,.29)!important;backdrop-filter:blur(5px)!important;-webkit-backdrop-filter:blur(5px)!important;animation:hkBackdropReveal 360ms ease-in-out both!important;}
-@keyframes hkBackdropReveal{0%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(100% 0 0 0);opacity:0}}
+html body dialog#dlg.bottom-sheet[open].sheet-dismissing::backdrop{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;opacity:0!important;clip-path:none!important;}
+
 html body #app#app main.hk-shop-entrance .sh-list{animation:hkCardArrival 340ms cubic-bezier(.22,.75,.25,1) both!important;}
 html body #app#app main.hk-shop-entrance .sh-product{animation:hkCardArrival 320ms cubic-bezier(.22,.75,.25,1) both!important;}
 html body #app#app main.hk-shop-entrance .sh-product:nth-child(2){animation-delay:35ms!important;}
