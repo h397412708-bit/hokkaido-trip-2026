@@ -1599,19 +1599,21 @@ dialog#dlg.bottom-sheet form .fb{
   padding:27px 0 max(12px,env(safe-area-inset-bottom,0px))!important;
   border:0!important;
   box-shadow:none!important;
-  background:linear-gradient(to bottom,
-    rgba(251,252,255,0) 0%,
-    rgba(251,252,255,.55) 28%,
-    rgba(251,252,255,.92) 53%,
-    #fbfcff 79%)!important;
+  background:transparent!important;
 }
-dialog#dlg.bottom-sheet form .fb::before{
-  content:'';
-  position:absolute;
-  z-index:-1;
-  top:-30px;left:-3px;right:-3px;height:40px;
-  background:linear-gradient(to bottom,rgba(251,252,255,0),rgba(251,252,255,.12));
-  pointer-events:none;
+dialog#dlg.bottom-sheet form .fb::before,
+dialog#dlg.bottom-sheet form .fb::after{
+  content:'';position:absolute;z-index:-1;
+  inset:-36px -20px 0;pointer-events:none;
+  background:transparent;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  -webkit-mask-image:linear-gradient(to top,#000 0%,#000 25%,transparent 100%);
+  mask-image:linear-gradient(to top,#000 0%,#000 25%,transparent 100%);
+}
+dialog#dlg.bottom-sheet form .fb::after{
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  -webkit-mask-image:linear-gradient(to top,#000 0%,transparent 70%);
+  mask-image:linear-gradient(to top,#000 0%,transparent 70%);
 }
 dialog#dlg.bottom-sheet form .fb > button{
   flex:1;position:relative;
