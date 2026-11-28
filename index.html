@@ -10057,44 +10057,41 @@ html body dialog#dlg.bottom-sheet[open]:is(.sh-dialog,.ld-dialog) form .fb::afte
 }
 html body dialog#dlg.bottom-sheet.hk-keyboard-visible:is(.sh-dialog,.ld-dialog) form .fb{padding-bottom:12px!important;}
 </style>
-<style id="hk-keyboard-anchor-v2">
-html body dialog#dlg.bottom-sheet[open].hk-keyboard-visible:not(.sheet-dismissing){
- inset:var(--hk-anchor-top,0px) 0 auto 0!important;
- margin:0 auto!important;transform:none!important;animation:none!important;
- max-height:max(80px,calc(var(--hk-vv-height,100dvh) - 8px))!important;
+<style id="hk-keyboard-anchor-v3">
+html body dialog#dlg.bottom-sheet[open].hk-keyboard-visible{
+ inset:auto 0 var(--hk-vv-bottom,0px) 0!important;
+ margin:0 auto!important;
+ max-height:min(850px,max(100px,calc(var(--hk-vv-height,100dvh) - 8px)))!important;
+ overflow-y:auto!important;
  background:#F8FAFB!important;
 }
+html body dialog#dlg.bottom-sheet[open].hk-keyboard-visible:not(.sheet-dismissing):not(.sheet-pulling):not(.sheet-returning){animation:none!important;transform:none!important;opacity:1!important;}
 html body dialog#dlg.bottom-sheet[open].hk-keyboard-visible::backdrop{background:rgba(42,60,75,.38)!important;}
+html body dialog#dlg.bottom-sheet[open] :is(input:not([type=checkbox]):not([type=radio]),textarea,select){font-size:16px!important;}
 </style>
 <script id="hk-keyboard-viewport-fix">
 (()=>{
  const sheet=document.getElementById('dlg'),vv=window.visualViewport;
  if(!sheet||!vv)return;
- let raf=0, baseline=Math.max(innerHeight,vv.height), until=0;
- const editable=()=>sheet.contains(document.activeElement)&&document.activeElement.matches('textarea,input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=button]):not([type=submit]),[contenteditable=true]');
+ let raf=0, baseline=0;
  function sync(){
   raf=0;
-  const open=sheet.open&&sheet.classList.contains('bottom-sheet')&&!sheet.classList.contains('sheet-dismissing');
-  if(!open){sheet.classList.remove('hk-keyboard-visible');sheet.style.removeProperty('--hk-anchor-top');sheet.style.removeProperty('--hk-vv-height');baseline=Math.max(innerHeight,vv.height);return;}
-  if(!editable()&&!sheet.classList.contains('hk-keyboard-visible'))baseline=Math.max(innerHeight,vv.height);
-  const keyboard=Math.max(baseline,document.documentElement.clientHeight,innerHeight)-vv.height>85;
-  sheet.style.setProperty('--hk-vv-height',vv.height+'px');
-  sheet.style.setProperty('--hk-vv-bottom','0px');
+  if(!sheet.open||!sheet.classList.contains('bottom-sheet')){
+   sheet.classList.remove('hk-keyboard-visible');
+   sheet.style.removeProperty('--hk-vv-height');sheet.style.removeProperty('--hk-vv-bottom');baseline=0;return;
+  }
+  if(sheet.classList.contains('sheet-dismissing'))return;
+  const layout=Math.max(document.documentElement.clientHeight,innerHeight);
+  baseline=Math.max(baseline,layout,vv.height);
+  const keyboard=baseline-vv.height>85 && Math.abs(vv.scale-1)<0.05;
+  const bottom=keyboard?Math.max(0,Math.min(layout-100,layout-vv.offsetTop-vv.height)):0;
+  sheet.style.setProperty('--hk-vv-height',Math.max(100,vv.height)+'px');
+  sheet.style.setProperty('--hk-vv-bottom',bottom+'px');
   sheet.classList.toggle('hk-keyboard-visible',keyboard);
-  if(keyboard){
-   // Anchor using the actual rendered dialog geometry, not an assumed fixed-position origin.
-   const desired=vv.offsetTop+vv.height;
-   const current=parseFloat(sheet.style.getPropertyValue('--hk-anchor-top'))||0;
-   const rect=sheet.getBoundingClientRect();
-   const next=current+desired-rect.bottom;
-   if(Math.abs(desired-rect.bottom)>0.5)sheet.style.setProperty('--hk-anchor-top',next+'px');
-  }else{sheet.style.removeProperty('--hk-anchor-top');}
-  if(performance.now()<until)raf=requestAnimationFrame(sync);
  }
- function schedule(){until=performance.now()+750;if(!raf)raf=requestAnimationFrame(sync);}
+ function schedule(){if(!raf)raf=requestAnimationFrame(sync);}
  vv.addEventListener('resize',schedule);vv.addEventListener('scroll',schedule);
- window.addEventListener('resize',schedule);window.addEventListener('scroll',schedule,{passive:true});
- sheet.addEventListener('focusin',schedule);sheet.addEventListener('focusout',schedule);sheet.addEventListener('close',schedule);
+ window.addEventListener('resize',schedule);sheet.addEventListener('focusin',schedule);sheet.addEventListener('focusout',schedule);sheet.addEventListener('close',schedule);
  new MutationObserver(schedule).observe(sheet,{attributes:true,attributeFilter:['open','class']});
  schedule();
 })();
