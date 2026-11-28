@@ -10026,4 +10026,59 @@ html body #app#app main.hk-shop-entrance .sh-product:nth-child(3){animation-dela
 html body #app#app main.hk-shop-entrance .sh-product:nth-child(n+4){animation-delay:105ms!important;}
 @media(prefers-reduced-motion:reduce){html body dialog#dlg.bottom-sheet[open].sheet-dismissing{transition:none!important;}html body dialog#dlg.bottom-sheet[open].sheet-dismissing::backdrop,html body #app#app main.hk-shop-entrance :is(.sh-list,.sh-product){animation:none!important;}}
 </style>
+<style id="hk-keyboard-footer-continuity">
+html body dialog#dlg.bottom-sheet[open]{
+ inset:auto 0 var(--hk-vv-bottom,0px) 0!important;
+ max-height:min(86dvh,850px,var(--hk-vv-height,100dvh))!important;
+}
+html body dialog#dlg.bottom-sheet[open].hk-keyboard-visible{
+ max-height:min(850px,calc(var(--hk-vv-height) - 8px))!important;
+ scroll-padding-bottom:90px;
+}
+/* Keep the sticky footer flush with the scrollport, including the safe area. */
+html body dialog#dlg.bottom-sheet[open]:is(.sh-dialog,.ld-dialog){padding-bottom:0!important;overflow-x:hidden!important;}
+html body dialog#dlg.bottom-sheet[open]:is(.sh-dialog,.ld-dialog) form{padding-bottom:0!important;}
+html body dialog#dlg.bottom-sheet[open]:is(.sh-dialog,.ld-dialog) form .fb{
+ bottom:0!important;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))!important;
+ isolation:auto!important;background:transparent!important;z-index:30!important;
+}
+html body dialog#dlg.bottom-sheet[open]:is(.sh-dialog,.ld-dialog) form .fb::before{
+ inset:-40px -24px 0!important;z-index:-1!important;
+ background:linear-gradient(to top,rgba(248,250,251,.96),rgba(248,250,251,.76) 48%,transparent 100%)!important;
+ -webkit-backdrop-filter:blur(16px)!important;backdrop-filter:blur(16px)!important;
+ -webkit-mask-image:linear-gradient(to top,#000 0%,#000 65%,transparent 100%)!important;
+ mask-image:linear-gradient(to top,#000 0%,#000 65%,transparent 100%)!important;
+}
+html body dialog#dlg.bottom-sheet[open]:is(.sh-dialog,.ld-dialog) form .fb::after{
+ inset:-24px -24px 0!important;z-index:-1!important;
+ -webkit-backdrop-filter:blur(24px)!important;backdrop-filter:blur(24px)!important;
+ -webkit-mask-image:linear-gradient(to top,#000 0%,#000 55%,transparent 100%)!important;
+ mask-image:linear-gradient(to top,#000 0%,#000 55%,transparent 100%)!important;
+}
+html body dialog#dlg.bottom-sheet.hk-keyboard-visible:is(.sh-dialog,.ld-dialog) form .fb{padding-bottom:12px!important;}
+</style>
+<script id="hk-keyboard-viewport-fix">
+(()=>{
+ const sheet=document.getElementById('dlg'), vv=window.visualViewport;
+ if(!sheet||!vv)return;
+ let frame=0;
+ function sync(){
+  frame=0;
+  if(!sheet.open||!sheet.classList.contains('bottom-sheet')){
+   sheet.style.removeProperty('--hk-vv-bottom');sheet.style.removeProperty('--hk-vv-height');sheet.classList.remove('hk-keyboard-visible');return;
+  }
+  const layoutHeight=document.documentElement.clientHeight;
+  const bottom=Math.max(0,layoutHeight-vv.height-vv.offsetTop);
+  sheet.style.setProperty('--hk-vv-bottom',bottom+'px');
+  sheet.style.setProperty('--hk-vv-height',vv.height+'px');
+  sheet.classList.toggle('hk-keyboard-visible',layoutHeight-vv.height>100);
+ }
+ function schedule(){if(!frame)frame=requestAnimationFrame(sync);}
+ vv.addEventListener('resize',schedule);vv.addEventListener('scroll',schedule);
+ window.addEventListener('resize',schedule);
+ sheet.addEventListener('focusin',schedule);sheet.addEventListener('focusout',schedule);
+ sheet.addEventListener('close',schedule);
+ new MutationObserver(schedule).observe(sheet,{attributes:true,attributeFilter:['open','class']});
+})();
+</script>
 </body></html>
